@@ -116,7 +116,7 @@ const InputForm = () => {
     });
 
     try {
-      await axios.post("http://localhost:8000/api/v1/save", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/save`, {
         ...formData,
         momDate: formData.momDate ? [formData.momDate] : [],
       });

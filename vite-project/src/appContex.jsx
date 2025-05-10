@@ -20,7 +20,9 @@ export const AppProvider = ({ children }) => {
 
         for (let i = 1; i <= page; i++) {
           const res = await fetch(
-            `http://localhost:8000/api/v1/pagination?page=${i}&limit=${limit}`
+            `${
+              import.meta.env.VITE_API_URL
+            }/pagination?page=${i}&limit=${limit}`
           );
           const result = await res.json();
           allData.push(...result.data);
@@ -30,7 +32,9 @@ export const AppProvider = ({ children }) => {
         setHasMore(page < result.totalPages);
       } else {
         const res = await fetch(
-          `http://localhost:8000/api/v1/pagination?page=${page}&limit=${limit}`
+          `${
+            import.meta.env.VITE_API_URL
+          }/pagination?page=${page}&limit=${limit}`
         );
         const result = await res.json();
 
@@ -44,7 +48,9 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const fetchFUlldata = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/fetch");
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/fetch`
+        );
         const result = await response?.data?.data;
         setFullData(result);
       } catch (e) {
@@ -54,7 +60,7 @@ export const AppProvider = ({ children }) => {
     const fetchFUllWOrkStatusData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/worksts/all"
+          `${import.meta.env.VITE_API_URL}/worksts/all`
         );
         const result = await response?.data?.data;
         setFullWrksts(result);

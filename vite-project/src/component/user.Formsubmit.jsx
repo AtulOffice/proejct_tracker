@@ -85,7 +85,7 @@ const InputForm = () => {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/worksts/save",
+        `${import.meta.env.VITE_API_URL}/worksts/save`,
         formData
       );
       setIsDataFound(false);

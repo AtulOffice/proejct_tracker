@@ -125,7 +125,7 @@ const UpdateForm = () => {
             : formData.engineerName,
       };
 
-      await axios.put(`http://localhost:8000/api/v1/update/${id}`, finalData);
+      await axios.put(`${import.meta.env.VITE_API_URL}/update/${id}`, finalData);
       toast.success("Data updated successfully");
       fetchProjects(true);
       setToggle((prev) => !prev);

@@ -25,7 +25,7 @@ const CardWorkStatus = ({ project, indx, setToggle }) => {
   const handleDelete = async (id) => {
     setIsdisabled(true);
     try {
-      await axios.delete(`http://localhost:8000/api/v1/worksts/delete/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/worksts/delete/${id}`);
       toast.success(`Work Status deleted successfully`);
       setDeleteflag(false);
       setToggle((prev) => !prev);

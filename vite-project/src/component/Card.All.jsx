@@ -26,7 +26,7 @@ const CardAll = ({
   const handleDelete = async (id, jobNumber) => {
     setIsdisabled(true);
     try {
-      await axios.delete(`http://localhost:8000/api/v1/delete/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/delete/${id}`);
       toast.success(`JobId ${jobNumber} deleted successfully`);
       setDeleteflag(false);
       setToggle((prev) => !prev);
