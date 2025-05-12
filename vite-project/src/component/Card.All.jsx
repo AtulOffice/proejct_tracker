@@ -212,20 +212,19 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             <li>
               <strong>Bill Notice:</strong> {project?.billStatus}
             </li>
-            {project?.visitDate &&
-              project?.visitendDate(
-                <>
-                  <li>
-                    <strong>Visit Date:</strong>{" "}
-                    {new Date(project.visitDate).toLocaleDateString() || ""}
-                  </li>
+            {project?.visitDate && project?.visitendDate && (
+              <>
+                <li>
+                  <strong>Visit Date:</strong>{" "}
+                  {new Date(project.visitDate).toLocaleDateString() || ""}
+                </li>
 
-                  <li>
-                    <strong>Visit End Date:</strong>{" "}
-                    {new Date(project.visitendDate).toLocaleDateString() || ""}
-                  </li>
-                </>
-              )}
+                <li>
+                  <strong>Visit End Date:</strong>{" "}
+                  {new Date(project.visitendDate).toLocaleDateString() || ""}
+                </li>
+              </>
+            )}
             {project?.momDate?.length > 0 && (
               <li>
                 <strong>MOM Dates:</strong>{" "}
