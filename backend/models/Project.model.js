@@ -85,7 +85,7 @@ const projectSchema = new mongoose.Schema(
     },
     supplyStatus: {
       type: String,
-      enum: ["DISPATCHED", "PARTIAL DISPATCH", "NA", "ACTIVE", "CANCELED"],
+      enum: ["DISPATCHED", "PARTIAL DISPATCH", "NA", "ACTIVE", "CANCELED","DELIVERED"],
     },
     checklistStatus: {
       type: String,

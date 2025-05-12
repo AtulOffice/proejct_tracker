@@ -29,7 +29,7 @@ export const formval = {
   service: "Service not included",
   workScope: "",
   expenseScope: "",
-  supplyStatus: "DISPACHED",
+  supplyStatus: "DISPATCHED",
   deleveryDate: "",
   requestDate: "",
   checklistStatus: "N/A",
@@ -307,7 +307,7 @@ export const InputConst = [
     name: "supplyStatus",
     required: true,
     options: [
-      { value: "DISPACHED", label: "DISPACHED" },
+      { value: "DISPATCHED", label: "DISPATCHED" },
       { value: "DELIVERED", label: "DELIVERED" },
     ],
   },

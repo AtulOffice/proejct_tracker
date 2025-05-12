@@ -47,7 +47,7 @@ for (let i = 0; i < arrData.length; i++) {
 
 const saveData = async (data) => {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_API_URL}/save`, {
+    const response = await axios.post(`http://localhost:8000/api/v1/save`, {
       ...data,
       requestDate: "",
       entityType: "SI DELHI",
