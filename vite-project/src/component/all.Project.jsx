@@ -30,7 +30,7 @@ const ProjectsAll = () => {
         timeFilter,
       });
       setFilteredProjects(filtered);
-    }, 200);
+    }, 1500);
 
     return () => clearTimeout(debounceTimer.current);
   }, [searchTerm, timeFilter, data, fullData]);

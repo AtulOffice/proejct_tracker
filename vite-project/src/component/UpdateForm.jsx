@@ -30,16 +30,16 @@ const UpdateForm = () => {
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]:
-        name === "momsrNo" || name === "engineerName"
-          ? value
-              .split(",")
-              .map((item) => item.trim())
-              .filter((item) => item !== "")
-          : type === "checkbox"
-          ? checked
-          : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const handleMomDateChange = (newDate) => {
+    setFormData((prev) => {
+      const updatedDates = [...(prev.momDate || [])];
+      updatedDates.push(newDate);
+      return { ...prev, momDate: updatedDates };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -125,7 +125,10 @@ const UpdateForm = () => {
             : formData.engineerName,
       };
 
-      await axios.put(`${import.meta.env.VITE_API_URL}/update/${id}`, finalData);
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/update/${id}`,
+        finalData
+      );
       toast.success("Data updated successfully");
       fetchProjects(true);
       setToggle((prev) => !prev);
@@ -140,19 +143,6 @@ const UpdateForm = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-  const handleMomDateChange = (newDate) => {
-    setFormData((prev) => {
-      const updatedDates = [...(prev.momDate || [])];
-      updatedDates.push(newDate);
-      return { ...prev, momDate: updatedDates };
-    });
-  };
-  const handleChangeEngineerName = (value) => {
-    setFormData((prev) => ({
-      ...prev,
-      engineerName: value,
-    }));
   };
 
   if (!formData) {
@@ -326,13 +316,11 @@ const UpdateForm = () => {
               <InputFiled
                 {...UpdateConst[23]}
                 value={
-                  typeof formData.engineerName === "string"
-                    ? formData.engineerName
-                    : formData.engineerName.join(", ")
+                  Array.isArray(formData.engineerName)
+                    ? formData.engineerName.join(", ")
+                    : formData.engineerName
                 }
-                handleChange={(e) => {
-                  handleChangeEngineerName(e.target.value);
-                }}
+                handleChange={handleChange}
               />
             )}
 

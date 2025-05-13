@@ -27,15 +27,7 @@ const InputForm = () => {
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]:
-        name === "momsrNo" || name === "engineerName"
-          ? value
-              .split(",")
-              .map((item) => item.trim())
-              .filter((item) => item !== "")
-          : type === "checkbox"
-          ? checked
-          : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -110,24 +102,28 @@ const InputForm = () => {
         }
       }
     }
-    console.log({
-      ...formData,
-      momDate: formData.momDate ? [formData.momDate] : [],
-    });
 
     try {
+      const engineeerArray = formData.engineerName
+        ? formData.engineerName.split(",").map((item) => item.trim())
+        : [];
+      const momArray = formData.momsrNo
+        ? formData.momsrNo.split(",").map((item) => item.trim())
+        : [];
+
       await axios.post(`${import.meta.env.VITE_API_URL}/save`, {
         ...formData,
         momDate: formData.momDate ? [formData.momDate] : [],
+        engineerName: engineeerArray,
+        momsrNo: momArray,
       });
       toast.success("Data saved successfully");
-
       setFormData(formval);
     } catch (e) {
       if (e.response) {
         toast.error(e.response?.data?.message);
-      }else{
-        toast.error("something went wrong")
+      } else {
+        toast.error("something went wrong");
       }
       console.log(e);
     } finally {

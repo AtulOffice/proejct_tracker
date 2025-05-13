@@ -1,8 +1,8 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAppContext } from "../appContex";
 
 const FilterCompo = ({
-  setToggle,
   searchTerm,
   setSearchTerm,
   timeFilter,
@@ -13,6 +13,7 @@ const FilterCompo = ({
   setIsFilterOpen,
   filterRef,
 }) => {
+  const { setToggle } = useAppContext();
   return (
     <>
       <div className="flex flex-col lg:flex-row items-center justify-between mb-10 gap-6">
@@ -43,18 +44,21 @@ const FilterCompo = ({
         <div className="flex">
           <div className="mx-4 my-2">
             <button
-              onClick={() => {
+              onClick={async (e) => {
+                e.stopPropagation();
                 const refreshIcon = document.getElementById("refreshIcon");
                 refreshIcon.classList.add("animate-spin");
 
-                fetchProjects(true);
+                try {
+                  await fetchProjects(true);
+                } catch (err) {
+                  console.error("Refresh failed", err);
+                }
+
                 setTimeFilter("all");
                 setSearchTerm("");
                 setToggle((prev) => !prev);
-
-                setTimeout(() => {
-                  refreshIcon.classList.remove("animate-spin");
-                }, 1000);
+                refreshIcon.classList.remove("animate-spin");
               }}
               className="p-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-all duration-200 flex items-center justify-center shadow-sm relative overflow-hidden"
               title="Refresh tasks"

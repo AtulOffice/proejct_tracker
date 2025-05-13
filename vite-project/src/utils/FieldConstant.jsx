@@ -1,6 +1,6 @@
 export const formval = {
   projectName: "",
-  engineerName: [],
+  engineerName: "",
   entityType: "SI DELHI",
   finalMomnumber: "",
   actualStartDate: "",
@@ -14,7 +14,7 @@ export const formval = {
   visitDate: "",
   visitendDate: "",
   momDate: "",
-  momsrNo: [],
+  momsrNo: "",
   endUser: "",
   orderNumber: "",
   orderDate: "",

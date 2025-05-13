@@ -45,7 +45,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const { logout } = useAppContext();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeCard, setActiveCard] = useState("zero");
+  const [activeCard, setActiveCard] = useState("one");
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };

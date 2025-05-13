@@ -6,6 +6,11 @@ const FormField = ({ formData, handleChange }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <InputFiled
+        {...InputConst[7]}
+        value={formData.jobNumber}
+        handleChange={handleChange}
+      />
+      <InputFiled
         {...InputConst[0]}
         value={formData.projectName}
         handleChange={handleChange}
@@ -69,12 +74,6 @@ const FormField = ({ formData, handleChange }) => {
       />
 
       <InputFiled
-        {...InputConst[7]}
-        value={formData.jobNumber}
-        handleChange={handleChange}
-      />
-
-      <InputFiled
         {...InputConst[8]}
         value={formData.orderNumber}
         handleChange={handleChange}
@@ -96,11 +95,7 @@ const FormField = ({ formData, handleChange }) => {
       {formData.status !== "upcoming" && (
         <InputFiled
           {...InputConst[11]}
-          value={
-            Array.isArray(formData.momsrNo)
-              ? formData.momsrNo.join(", ")
-              : formData.momsrNo
-          }
+          value={formData.momsrNo}
           handleChange={handleChange}
         />
       )}
@@ -211,11 +206,7 @@ const FormField = ({ formData, handleChange }) => {
       {formData.status === "running" && (
         <InputFiled
           {...InputConst[23]}
-          value={
-            Array.isArray(formData.engineerName)
-              ? formData.engineerName.join(", ")
-              : formData.engineerName
-          }
+          value={formData.engineerName}
           handleChange={handleChange}
         />
       )}

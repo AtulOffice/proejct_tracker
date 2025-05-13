@@ -19,32 +19,38 @@ export const AppProvider = ({ children }) => {
         const allData = [];
 
         for (let i = 1; i <= page; i++) {
-          const res = await fetch(
-            `${
-              import.meta.env.VITE_API_URL
-            }/pagination?page=${i}&limit=${limit}`
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/pagination`,
+            {
+              params: {
+                page: i,
+                limit: limit,
+              },
+            }
           );
-          const result = await res.json();
-          allData.push(...result.data);
+          allData.push(...res.data.data);
         }
 
         setData(allData);
-        setHasMore(page < result.totalPages);
+        setHasMore(page < res.data.totalPages);
       } else {
-        const res = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }/pagination?page=${page}&limit=${limit}`
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/pagination`,
+          {
+            params: {
+              page: page,
+              limit: limit,
+            },
+          }
         );
-        const result = await res.json();
-
-        setData((prev) => [...prev, ...result.data]);
-        setHasMore(page < result.totalPages);
+        setData((prev) => [...prev, ...res.data.data]);
+        setHasMore(page < res.data.totalPages);
       }
     } catch (err) {
       console.error("Failed to fetch projects:", err);
     }
   };
+
   useEffect(() => {
     const fetchFUlldata = async () => {
       try {
