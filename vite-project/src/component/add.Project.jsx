@@ -7,8 +7,51 @@ import FormField from "./inputField";
 const InputForm = () => {
   const [formData, setFormData] = useState(formval);
   const [isLoading, setIsLoading] = useState(false);
+  const [debounceJobnumber, setdebounceJobNumber] = useState("");
 
   useEffect(() => {
+    console.log("dependency Check");
+    const handelJob = setTimeout(() => {
+      setdebounceJobNumber(formData.jobNumber);
+    }, 2000);
+    return () => clearTimeout(handelJob);
+  }, [formData.jobNumber]);
+
+  useEffect(() => {
+    console.log("dependency Check");
+    if (debounceJobnumber.length > 2) {
+      const firstChar = debounceJobnumber[0].toUpperCase();
+      const secondChar = debounceJobnumber[1].toUpperCase();
+
+      const entityMap = {
+        N: "SI NOIDA",
+        S: "SI DELHI",
+        P: "SI PUNE",
+        M: "MS DELHI",
+      };
+
+      const soTypeMap = {
+        P: "PROJECT",
+        A: "AMC",
+        R: "SERVICE",
+      };
+
+      const updated = {};
+      if (entityMap[firstChar]) {
+        updated.entityType = entityMap[firstChar];
+      }
+      if (soTypeMap[secondChar]) {
+        updated.soType = soTypeMap[secondChar];
+      }
+
+      if (Object.keys(updated).length > 0) {
+        setFormData((prev) => ({ ...prev, ...updated }));
+      }
+    }
+  }, [debounceJobnumber]);
+
+  useEffect(() => {
+    console.log("dependency Check");
     setFormData((prevData) => {
       const newData = { ...prevData };
       dateFields.forEach((field) => {
@@ -104,18 +147,16 @@ const InputForm = () => {
     }
 
     try {
-      const engineeerArray = formData.engineerName
-        ? formData.engineerName.split(",").map((item) => item.trim())
-        : [];
-      const momArray = formData.momsrNo
-        ? formData.momsrNo.split(",").map((item) => item.trim())
-        : [];
-
       await axios.post(`${import.meta.env.VITE_API_URL}/save`, {
         ...formData,
         momDate: formData.momDate ? [formData.momDate] : [],
-        engineerName: engineeerArray,
-        momsrNo: momArray,
+        engineerName: formData.engineerName
+          ? formData.engineerName.split(",").map((item) => item.trim())
+          : [],
+        momsrNo: formData.momsrNo
+          ? formData.momsrNo.split(",").map((item) => item.trim())
+          : [],
+        projectName: formData.client,
       });
       toast.success("Data saved successfully");
       setFormData(formval);

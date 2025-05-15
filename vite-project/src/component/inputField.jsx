@@ -11,49 +11,13 @@ const FormField = ({ formData, handleChange }) => {
         handleChange={handleChange}
       />
       <InputFiled
-        {...InputConst[0]}
-        value={formData.projectName}
+        {...InputConst[8]}
+        value={formData.orderNumber}
         handleChange={handleChange}
       />
-
       <SelectField
         {...InputConst[28]}
         value={formData.entityType}
-        handleChange={handleChange}
-      />
-      <InputFiled
-        {...InputConst[1]}
-        value={formData.duration}
-        handleChange={handleChange}
-      />
-
-      <SelectField
-        {...InputConst[29]}
-        value={formData.status}
-        handleChange={handleChange}
-      />
-
-      <InputFiled
-        {...InputConst[2]}
-        value={formData.actualVisitDuration}
-        handleChange={handleChange}
-      />
-
-      <InputFiled
-        {...InputConst[3]}
-        value={formData.expenseScope}
-        handleChange={handleChange}
-      />
-
-      <InputFiled
-        {...InputConst[4]}
-        value={formData.workScope}
-        handleChange={handleChange}
-      />
-
-      <SelectField
-        {...InputConst[26]}
-        value={formData.supplyStatus}
         handleChange={handleChange}
       />
       <SelectField
@@ -61,53 +25,173 @@ const FormField = ({ formData, handleChange }) => {
         value={formData.soType}
         handleChange={handleChange}
       />
+      <SelectField
+        {...InputConst[29]}
+        value={formData.status}
+        handleChange={handleChange}
+      />
       <InputFiled
         {...InputConst[5]}
         value={formData.client}
         handleChange={handleChange}
       />
-
       <InputFiled
         {...InputConst[6]}
         value={formData.endUser}
         handleChange={handleChange}
       />
-
       <InputFiled
-        {...InputConst[8]}
-        value={formData.orderNumber}
+        {...InputConst[22]}
+        value={formData.location}
         handleChange={handleChange}
       />
-
       <InputFiled
         {...InputConst[9]}
         value={formData.bill}
         handleChange={handleChange}
       />
-
-      {formData.status !== "upcoming" && (
+      {(formData.status !== "upcoming" || 1) && (
+        <>
+          {" "}
+          <InputFiled
+            {...InputConst[10]}
+            value={formData.dueBill}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...InputConst[25]}
+            value={formData.billStatus}
+            handleChange={handleChange}
+          />
+        </>
+      )}
+      <InputFiled
+        {...InputConst[21]}
+        value={formData.orderDate}
+        handleChange={handleChange}
+      />
+      {(formData.status === "running" ||
+        formData.status === "upcoming" ||
+        formData.status === "completed" ||
+        1) && (
         <InputFiled
-          {...InputConst[10]}
-          value={formData.dueBill}
+          {...InputConst[17]}
+          value={formData.deleveryDate}
           handleChange={handleChange}
         />
       )}
-      {formData.status !== "upcoming" && (
+      <InputFiled
+        {...InputConst[3]}
+        value={formData.expenseScope}
+        handleChange={handleChange}
+      />
+
+      <InputFiled
+        {...InputConst[1]}
+        value={formData.duration}
+        handleChange={handleChange}
+      />
+      <TextArea
+        {...InputConst[4]}
+        value={formData.workScope}
+        handleChange={handleChange}
+      />
+      {(formData.status === "running" || 1) && (
+        <InputFiled
+          {...InputConst[23]}
+          value={formData.engineerName}
+          handleChange={handleChange}
+        />
+      )}
+      {(formData.status === "running" ||
+        formData.status === "upcoming" ||
+        formData.status === "completed" ||
+        1) && (
+        <InputFiled
+          {...InputConst[16]}
+          value={formData.requestDate}
+          handleChange={handleChange}
+        />
+      )}
+
+      {(formData.status === "running" || 1) && (
+        <>
+          {" "}
+          <InputFiled
+            {...InputConst[18]}
+            value={formData.visitDate}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...InputConst[30]}
+            handleChange={handleChange}
+            value={formData.StartChecklist}
+          />
+          <InputFiled
+            {...InputConst[19]}
+            value={formData.visitendDate}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...InputConst[34]}
+            handleChange={handleChange}
+            value={formData.EndChecklist}
+          />
+        </>
+      )}
+      {(formData.status !== "upcoming" || 1) && (
         <InputFiled
           {...InputConst[11]}
           value={formData.momsrNo}
           handleChange={handleChange}
         />
       )}
+      {(formData.status === "running" ||
+        formData.status === "pending" ||
+        formData.status === "completed" ||
+        1) && (
+        <InputFiled
+          {...InputConst[20]}
+          value={formData.momDate}
+          handleChange={handleChange}
+        />
+      )}
+      {(formData.status === "running" ||
+        formData.status === "pending" ||
+        formData.status === "completed" ||
+        1) && (
+        <>
+          <SelectField
+            {...InputConst[37]}
+            handleChange={handleChange}
+            value={formData.BackupSubmission}
+          />
+          <SelectField
+            {...InputConst[38]}
+            handleChange={handleChange}
+            value={formData.ExpensSubmission}
+          />
+        </>
+      )}
+
+      {(formData.status === "completed" || 1) && (
+        <InputFiled
+          {...InputConst[2]}
+          value={formData.actualVisitDuration}
+          handleChange={handleChange}
+        />
+      )}
+
       <SelectField
-        {...InputConst[25]}
-        value={formData.billStatus}
+        {...InputConst[26]}
+        value={formData.supplyStatus}
         handleChange={handleChange}
       />
 
       {(formData.status === "upcoming" ||
         formData.status === "pending" ||
-        formData.status === "completed") && (
+        formData.status === "completed" ||
+        1) && (
         <InputFiled
           {...InputConst[12]}
           value={formData.startDate}
@@ -116,7 +200,8 @@ const FormField = ({ formData, handleChange }) => {
       )}
       {(formData.status === "upcoming" ||
         formData.status === "pending" ||
-        formData.status === "completed") && (
+        formData.status === "completed" ||
+        1) && (
         <InputFiled
           {...InputConst[13]}
           value={formData.endDate}
@@ -124,7 +209,7 @@ const FormField = ({ formData, handleChange }) => {
         />
       )}
 
-      {formData.status === "completed" && (
+      {(formData.status === "completed" || 1) && (
         <InputFiled
           {...InputConst[14]}
           value={formData.actualStartDate}
@@ -132,7 +217,7 @@ const FormField = ({ formData, handleChange }) => {
         />
       )}
 
-      {formData.status === "completed" && (
+      {(formData.status === "completed" || 1) && (
         <InputFiled
           {...InputConst[15]}
           value={formData.actualEndDate}
@@ -140,77 +225,16 @@ const FormField = ({ formData, handleChange }) => {
         />
       )}
 
-      {(formData.status === "running" ||
-        formData.status === "upcoming" ||
-        formData.status === "completed") && (
-        <InputFiled
-          {...InputConst[16]}
-          value={formData.requestDate}
+      <div className="md:col-span-2">
+        {" "}
+        <TextArea
+          {...InputConst[33]}
           handleChange={handleChange}
+          value={formData.description}
         />
-      )}
+      </div>
 
-      {(formData.status === "running" ||
-        formData.status === "upcoming" ||
-        formData.status === "completed") && (
-        <InputFiled
-          {...InputConst[17]}
-          value={formData.deleveryDate}
-          handleChange={handleChange}
-        />
-      )}
-
-      {formData.status === "running" && (
-        <InputFiled
-          {...InputConst[18]}
-          value={formData.visitDate}
-          handleChange={handleChange}
-        />
-      )}
-      {formData.status === "running" && (
-        <InputFiled
-          {...InputConst[19]}
-          value={formData.visitendDate}
-          handleChange={handleChange}
-        />
-      )}
-
-      {(formData.status === "running" ||
-        formData.status === "pending" ||
-        formData.status === "completed") && (
-        <InputFiled
-          {...InputConst[20]}
-          value={formData.momDate}
-          handleChange={handleChange}
-        />
-      )}
-
-      <InputFiled
-        {...InputConst[21]}
-        value={formData.orderDate}
-        handleChange={handleChange}
-      />
-
-      <TextArea
-        {...InputConst[33]}
-        handleChange={handleChange}
-        value={formData.description}
-      />
-
-      <InputFiled
-        {...InputConst[22]}
-        value={formData.location}
-        handleChange={handleChange}
-      />
-
-      {formData.status === "running" && (
-        <InputFiled
-          {...InputConst[23]}
-          value={formData.engineerName}
-          handleChange={handleChange}
-        />
-      )}
-      {formData.status === "completed" && (
+      {(formData.status === "completed" || 1) && (
         <InputFiled
           {...InputConst[24]}
           value={formData.finalMomnumber}
@@ -223,16 +247,21 @@ const FormField = ({ formData, handleChange }) => {
         handleChange={handleChange}
         value={formData.priority}
       />
-      <SelectField
-        {...InputConst[30]}
-        handleChange={handleChange}
-        value={formData.checklistStatus}
-      />
 
       <SelectField
         {...InputConst[32]}
         handleChange={handleChange}
         value={formData.service}
+      />
+      <InputFiled
+        {...InputConst[35]}
+        value={formData.ContactPersonName}
+        handleChange={handleChange}
+      />
+      <InputFiled
+        {...InputConst[36]}
+        value={formData.ContactPersonNumber}
+        handleChange={handleChange}
       />
     </div>
   );

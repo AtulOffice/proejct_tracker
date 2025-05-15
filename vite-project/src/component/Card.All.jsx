@@ -1,22 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import PopupConfirmation from "./PopuP.Page";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../appContex";
 import FootBarAll from "../utils/FootBarAll";
 
 const CardAll = ({
   project,
   indx,
-  fetchProjects,
+  setToggle,
   deleteButton = true,
   shortFlag = true,
 }) => {
-  const { setToggle } = useAppContext();
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
@@ -30,7 +28,6 @@ const CardAll = ({
       toast.success(`JobId ${jobNumber} deleted successfully`);
       setDeleteflag(false);
       setToggle((prev) => !prev);
-      fetchProjects(true);
     } catch (e) {
       if (e.response) {
         toast.error(e.response?.data?.message);

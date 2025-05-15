@@ -1,6 +1,5 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppContext } from "../appContex";
 
 const FilterCompo = ({
   searchTerm,
@@ -8,12 +7,11 @@ const FilterCompo = ({
   timeFilter,
   setTimeFilter,
   filteredProjects,
-  fetchProjects,
+  setToggle,
   isFilterOpen,
   setIsFilterOpen,
   filterRef,
 }) => {
-  const { setToggle } = useAppContext();
   return (
     <>
       <div className="flex flex-col lg:flex-row items-center justify-between mb-10 gap-6">
@@ -48,13 +46,6 @@ const FilterCompo = ({
                 e.stopPropagation();
                 const refreshIcon = document.getElementById("refreshIcon");
                 refreshIcon.classList.add("animate-spin");
-
-                try {
-                  await fetchProjects(true);
-                } catch (err) {
-                  console.error("Refresh failed", err);
-                }
-
                 setTimeFilter("all");
                 setSearchTerm("");
                 setToggle((prev) => !prev);

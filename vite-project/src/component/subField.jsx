@@ -43,7 +43,7 @@ export const InputFiled = ({
         id={id}
         name={name}
         readOnly={readOnly}
-        value={value}
+        value={value ?? ""}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onWheel={handleWheel}
@@ -82,14 +82,14 @@ export const SelectField = ({
       <select
         id={id}
         name={name}
-        value={value}
+        value={value ?? ""}
         onChange={handleChange}
         required={required}
         className="bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
       >
-        {options.map((item, index) => {
+        {options.map((item) => {
           return (
-            <option key={index} value={item.value}>
+            <option key={item.value} value={item.value}>
               {item.label}
             </option>
           );
@@ -112,7 +112,7 @@ export const TextArea = ({
   required,
 }) => {
   return (
-    <div className="md:col-span-2">
+    <div>
       <label
         htmlFor={htmlFor}
         className="block mb-2 text-sm font-medium text-white"
@@ -129,7 +129,7 @@ export const TextArea = ({
         type="text"
         id={id}
         name={name}
-        value={value}
+        value={value ?? ""}
         onChange={handleChange}
         rows={rows}
         required={required}

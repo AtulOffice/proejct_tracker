@@ -4,6 +4,7 @@ import {
   getAllWorkStatus,
   getWorkStatusById,
   updateWorkStatus,
+  workStatusPegination,
   WrkStatusSave,
 } from "../controller/WrkSts.controller.js";
 
@@ -14,3 +15,4 @@ WorkstsRouter.get("/all", getAllWorkStatus);
 WorkstsRouter.get("/find/:id", getWorkStatusById);
 WorkstsRouter.put("/updata/:id", updateWorkStatus);
 WorkstsRouter.delete("/delete/:id", deleteWorkStatus);
+WorkstsRouter.get("/pagination", workStatusPegination);

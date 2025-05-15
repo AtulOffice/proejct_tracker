@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import { RecordRouter } from "./routes/Recordrouter.js";
+import { RecordRouter } from "./routes/Record.route.js";
 import { ConnDB } from "./db.js";
 import { userRouter } from "./routes/user.route.js";
 import cors from "cors";

@@ -85,9 +85,33 @@ const projectSchema = new mongoose.Schema(
     },
     supplyStatus: {
       type: String,
-      enum: ["DISPATCHED", "PARTIAL DISPATCH", "NA", "ACTIVE", "CANCELED","DELIVERED"],
+      enum: [
+        "DISPATCHED",
+        "PARTIAL DISPATCH",
+        "N/A",
+        "ACTIVE",
+        "CANCELED",
+        "DELIVERED",
+        "PENDING",
+      ],
+      default: "N/A",
     },
-    checklistStatus: {
+    StartChecklist: {
+      type: String,
+      enum: ["YES", "NO", "N/A"],
+      default: "N/A",
+    },
+    EndChecklist: {
+      type: String,
+      enum: ["YES", "NO", "N/A"],
+      default: "N/A",
+    },
+    BackupSubmission: {
+      type: String,
+      enum: ["YES", "NO", "N/A"],
+      default: "N/A",
+    },
+    ExpensSubmission: {
       type: String,
       enum: ["YES", "NO", "N/A"],
       default: "N/A",
@@ -153,6 +177,14 @@ const projectSchema = new mongoose.Schema(
       required: true,
     },
     deleveryDate: {
+      type: String,
+      default: null,
+    },
+    ContactPersonName: {
+      type: String,
+      default: null,
+    },
+    ContactPersonNumber: {
       type: String,
       default: null,
     },

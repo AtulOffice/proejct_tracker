@@ -1,97 +1,25 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { FaBook } from "react-icons/fa";
 import { format } from "date-fns";
 import { PieChart } from "react-minimal-pie-chart";
 import { FaUser } from "react-icons/fa6";
-import { useAppContext } from "../appContex";
+import LollipopChart from "./overviewChart";
 
-const ProjectOverview = () => {
-  const { fullData } = useAppContext();
-
-  const sortedProjects = useMemo(() => {
-    if (!fullData || !Array.isArray(fullData)) return [];
-    return [...fullData]
-      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-      .slice(0, 3);
-  }, [fullData]);
-
-  const HighestPrioritiesCustomer = useMemo(() => {
-    if (!fullData || !Array.isArray(fullData)) return [];
-    return [...fullData]
-      .filter((item) => item.priority === "high")
-      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-      .slice(0, 3);
-  }, [fullData]);
-
-  const isWithinNext7Days = (dateString) => {
-    const inputDate = new Date(dateString);
-    const today = new Date();
-    inputDate.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-
-    const diffInMs = inputDate - today;
-    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-
-    return diffInDays >= 0 && diffInDays <= 7;
+const ProjectOverview = ({ overvew }) => {
+  const statusGroups = {
+    upcomming: { name: "UpComming Projects", cnt: 0 },
+    running: { name: "Active Projects", cnt: 0 },
+    urgent: { name: "Urgent Projects", cnt: 0 },
+    pending: { name: "Pending Projects", cnt: 0 },
+    complete: { name: "Completed Projects", cnt: 0 },
   };
-
-  const projects = useMemo(() => {
-    const statusGroups = {
-      upcomming: { name: "UpComming Projects", cnt: 0 },
-      running: { name: "Active Projects", cnt: 0 },
-      urgent: { name: "Urgent Projects", cnt: 0 },
-      pending: { name: "Pending Projects", cnt: 0 },
-      complete: { name: "Completed Projects", cnt: 0 },
-    };
-    if (fullData) {
-      fullData.forEach((project) => {
-        const { status, startDate } = project;
-        if (status === "completed") statusGroups.complete.cnt += 1;
-        if (status === "running") statusGroups.running.cnt += 1;
-        if (status === "upcoming") statusGroups.upcomming.cnt += 1;
-        if (status === "pending") statusGroups.pending.cnt += 1;
-        if (startDate) {
-          if (isWithinNext7Days(startDate)) statusGroups.urgent.cnt += 1;
-        }
-      });
-    }
-    return statusGroups;
-  }, [fullData]);
-
-  const chartData = useMemo(() => {
-    const statusGroups = {
-      complete: { name: "Completed", cnt: 0, color: "#fbbf24" },
-      running: { name: "Active", cnt: 0, color: "#6366f1" },
-      upcomming: { name: "Upcoming", cnt: 0, color: "#34d399" },
-      pending: { name: "Pending", cnt: 0, color: "#a78bfa" },
-      urgent: { name: "Urgent", cnt: 0, color: "#f87171" },
-    };
-
-    if (fullData) {
-      fullData.forEach((project) => {
-        const { status, startDate } = project;
-        if (status === "completed") statusGroups.complete.cnt += 1;
-        if (status === "running") statusGroups.running.cnt += 1;
-        if (status === "upcoming") statusGroups.upcomming.cnt += 1;
-        if (status === "pending") statusGroups.pending.cnt += 1;
-        if (startDate) {
-          if (isWithinNext7Days(startDate)) statusGroups.urgent.cnt += 1;
-        }
-      });
-    }
-
-    const total = Object.values(statusGroups).reduce(
-      (acc, curr) => acc + curr.cnt,
-      0
-    );
-    return Object.values(statusGroups)
-      .filter((item) => item.cnt > 0)
-      .map((item) => ({
-        title: item.name,
-        value: total ? Math.round((item.cnt / total) * 100) : 0,
-        color: item.color,
-      }));
-  }, [fullData]);
+  const statusGroupschart = {
+    complete: { name: "Completed", cnt: 0, color: "#fbbf24" },
+    running: { name: "Active", cnt: 0, color: "#6366f1" },
+    upcomming: { name: "Upcoming", cnt: 0, color: "#34d399" },
+    pending: { name: "Pending", cnt: 0, color: "#a78bfa" },
+    urgent: { name: "Urgent", cnt: 0, color: "#f87171" },
+  };
 
   return (
     <div className={`transition-all duration-300 lg:ml-64 pt-16 min-h-screen`}>
@@ -104,7 +32,10 @@ const ProjectOverview = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          {Object.values(projects).map((item, index) => (
+          {(overvew?.statusGroups
+            ? Object.values(overvew.statusGroups)
+            : Object.values(statusGroups)
+          ).map((item, index) => (
             <div
               key={index}
               className="relative overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]"
@@ -157,30 +88,32 @@ const ProjectOverview = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Top 3 with Hight Priority Customer
+              TOP 3 OLD WITH HIGH PRIORITY CUSOTMER
             </h3>
             <div className="space-y-4">
-              {HighestPrioritiesCustomer.map((project, indx) => (
-                <div className="flex items-start" key={indx}>
-                  <div className="bg-blue-100 p-2 rounded-full mr-4">
-                    <FaUser className="text-blue-500" size={18} />
+              {(overvew?.highPriority ? overvew.highPriority : []).map(
+                (project, indx) => (
+                  <div className="flex items-start" key={indx}>
+                    <div className="bg-blue-100 p-2 rounded-full mr-4">
+                      <FaUser className="text-blue-500" size={18} />
+                    </div>
+                    <div>
+                      <p className="text-gray-800 font-medium">
+                        {project.client}
+                      </p>
+                      <p className="text-gray-500 text-sm">
+                        {project.projectName}
+                      </p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {" "}
+                        {project?.endDate
+                          ? format(new Date(project.endDate), "dd MMM yyyy")
+                          : "PROJECT COMPLETION DATE NOT PROVIDED"}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-800 font-medium">
-                      {project.client}
-                    </p>
-                    <p className="text-gray-500 text-sm">
-                      {project.projectName}
-                    </p>
-                    <p className="text-gray-400 text-xs mt-1">
-                      {" "}
-                      {project?.endDate
-                        ? format(new Date(project.endDate), "dd MMM yyyy")
-                        : "PROJECT COMPLETION DATE NOT PROVIDED"}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
 
@@ -188,9 +121,9 @@ const ProjectOverview = () => {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Status Overview
             </h3>
-            <div className="h-64 flex items-center justify-center">
-              <PieChart
-                data={chartData}
+            <div className="h-70 flex items-center justify-center">
+              {/* <PieChart
+                data={overvew?.chart ? overvew.chart : statusGroupschart}
                 lineWidth={30}
                 rounded
                 animate
@@ -204,6 +137,11 @@ const ProjectOverview = () => {
                 }}
                 labelPosition={70}
                 style={{ height: "220px" }}
+              /> */}
+              <LollipopChart
+                statusGroupschart={
+                  overvew?.chart ? overvew.chart : statusGroupschart
+                }
               />
             </div>
           </div>
@@ -211,7 +149,7 @@ const ProjectOverview = () => {
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Recent Projects
+            RECENT PROJECTS
           </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
@@ -235,39 +173,41 @@ const ProjectOverview = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {sortedProjects.map((project, indx) => (
-                  <tr key={indx}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {project.projectName}
+                {(overvew?.latestProjects ? overvew.latestProjects : []).map(
+                  (project, indx) => (
+                    <tr key={indx}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">
+                              {project.projectName}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {project.priority}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        {project.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {project?.endDate
-                        ? format(new Date(project.endDate), "dd MMM yyyy")
-                        : "NOT PROVIDED"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="text-indigo-600 hover:text-indigo-900">
-                        {project.client}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {project.priority}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          {project.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {project?.endDate
+                          ? format(new Date(project.endDate), "dd MMM yyyy")
+                          : "NOT PROVIDED"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="text-indigo-600 hover:text-indigo-900">
+                          {project.client}
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>

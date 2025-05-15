@@ -41,6 +41,7 @@ const InputForm = () => {
   const lastFetchedRef = useRef("");
 
   useEffect(() => {
+    console.log("dependency Check");
     const jobNumber = debouncedJobNumber?.toLowerCase();
     if (debouncedJobNumber === "") {
       setIsDataFound(false);

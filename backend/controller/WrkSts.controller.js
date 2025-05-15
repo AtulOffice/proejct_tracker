@@ -1,4 +1,5 @@
 import ProjectModel from "../models/Project.model.js";
+import workStatusModel from "../models/WorkStatus.model.js";
 import workStratuModel from "../models/WorkStatus.model.js";
 
 export const WrkStatusSave = async (req, res) => {
@@ -111,5 +112,47 @@ export const deleteWorkStatus = async (req, res) => {
     res.status(200).json({ success: true, message: "Deleted successfully" });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+export const workStatusPegination = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
+
+  const skip = (page - 1) * limit;
+  console.log(search);
+  try {
+    let data = [];
+    let total = 0;
+
+    if (!search) {
+      data = await workStatusModel
+        .find()
+        .sort({ updatedAt: -1, createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      total = await workStatusModel.countDocuments();
+    } else {
+      const result = await workStatusModel.findOne({
+        jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
+      });
+
+      if (result) {
+        data = [result];
+        total = 1;
+      } else {
+        data = [];
+        total = 0;
+      }
+    }
+    return res.json({
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      data,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
   }
 };

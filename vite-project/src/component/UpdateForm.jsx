@@ -10,20 +10,25 @@ import LoadingSkeleton from "../utils/loaderForm";
 const UpdateForm = () => {
   const { id } = useParams();
 
-  const { fetchProjects, fullData, setToggle } = useAppContext();
-  const [isLoading, setIsLoading] = useState(true);
+  const { setToggle } = useAppContext();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (fullData && fullData.length > 0) {
-      const projectData = fullData.find((item) => item._id === id);
-      if (projectData) {
-        setFormData(projectData);
+    console.log("dependency Check");
+    const fetchByid = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/fetch/${id}`
+        );
+        res?.data?.data && setFormData(res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch projects:", err);
       }
-      setIsLoading(false);
-    }
-  }, [fullData, id]);
+    };
+    fetchByid();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,6 +48,7 @@ const UpdateForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("submit button");
     e.preventDefault();
     setIsLoading(true);
 
@@ -130,7 +136,6 @@ const UpdateForm = () => {
         finalData
       );
       toast.success("Data updated successfully");
-      fetchProjects(true);
       setToggle((prev) => !prev);
       navigate("/page");
     } catch (e) {
@@ -334,11 +339,6 @@ const UpdateForm = () => {
               {...UpdateConst[31]}
               handleChange={handleChange}
               value={formData.priority}
-            />
-            <SelectField
-              {...UpdateConst[30]}
-              handleChange={handleChange}
-              value={formData.checklistStatus}
             />
             <SelectField
               {...UpdateConst[32]}

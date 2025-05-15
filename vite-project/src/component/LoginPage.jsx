@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../appContex";
+import { login } from "../utils/apiCall";
 const LoginPage = () => {
-  const { login } = useAppContext();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: "",

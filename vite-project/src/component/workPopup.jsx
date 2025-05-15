@@ -9,6 +9,7 @@ const WorkStatusModal = ({ workStatus, onClose }) => {
     
 
   useEffect(() => {
+    console.log("dependency Check");
     if (workStatus) {
       const allLines = workStatus
         .split("\n")
