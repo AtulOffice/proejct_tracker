@@ -5,7 +5,8 @@ import { ConnDB } from "./db.js";
 import { userRouter } from "./routes/user.route.js";
 import cors from "cors";
 import { WorkstsRouter } from "./routes/WorkStatus.route.js";
-// import { setupCronJobs } from "./cronJobs.js";
+import rateLimit from "express-rate-limit";
+import { setupCronJobs } from "./cronJobs.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -18,8 +19,17 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use(cors(corsOptions));
-// app.use(cors());
+// app.use(cors(corsOptions));
+const limiter = rateLimit({
+  windowMs: 2 * 60 * 1000,
+  max: 240,
+  message: {
+    success: false,
+    message: "You hit too many requests. Please wait 2 minutes.",
+  },
+});
+// app.use(limiter);
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
