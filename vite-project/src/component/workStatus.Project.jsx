@@ -36,7 +36,6 @@ const ProjectWorkStatus = () => {
             page: currentPage,
             search: debounceSearchTerm,
           });
-          console.log(val);
           if (val?.data) {
             setData(val.data);
           }
@@ -114,9 +113,7 @@ const ProjectWorkStatus = () => {
       setTimeFilter("all");
     }
   };
-  {
-    data && console.log(data[0]);
-  }
+
   return (
     <div className="max-w-8xl min-h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">

@@ -54,14 +54,11 @@ export const loginUser = async (req, res) => {
         message: "Invalid password",
       });
     }
+    const { password: exceptpassword, ...safeUserData } = data;
 
-    const token = jwt.sign(
-      { id: data._id, email: data.email },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const token = jwt.sign({ user: safeUserData }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     return res.status(200).json({
       success: true,
