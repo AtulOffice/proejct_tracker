@@ -37,7 +37,6 @@ const ProjectsPending = () => {
             search: debounceSearchTerm,
             status: "pending",
           });
-          console.log(val);
           if (val?.data) {
             setData(val.data);
           }

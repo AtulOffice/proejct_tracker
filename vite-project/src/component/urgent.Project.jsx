@@ -39,7 +39,6 @@ const UrgentProjects = () => {
             status: "running",
             startDate: dayjs(Date.now()).format("YYYY-MM-DD"),
           });
-          console.log(val);
           if (val?.data) {
             setData(val.data);
           }

@@ -47,8 +47,6 @@ export const Recordsformave = async (req, res) => {
       BackupSubmission,
     } = req.body;
 
-    console.log(req.body);
-
     const ExistanceData = await ProjectModel.findOne({ jobNumber });
     if (ExistanceData) {
       return res

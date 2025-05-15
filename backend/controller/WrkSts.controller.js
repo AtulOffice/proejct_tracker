@@ -129,7 +129,6 @@ export const workStatusPegination = async (req, res) => {
   const search = req.query.search || "";
 
   const skip = (page - 1) * limit;
-  console.log(search);
   try {
     let data = [];
     let total = 0;

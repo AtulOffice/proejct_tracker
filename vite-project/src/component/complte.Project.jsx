@@ -37,7 +37,6 @@ const ProjectsComplete = () => {
             search: debounceSearchTerm,
             status: "completed",
           });
-          console.log(val);
           if (val?.data) {
             setData(val.data);
           }

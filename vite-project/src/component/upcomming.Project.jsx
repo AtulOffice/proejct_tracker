@@ -37,7 +37,6 @@ const ProjectsUpcomming = () => {
             search: debounceSearchTerm,
             status: "upcoming",
           });
-          console.log(val);
           if (val?.data) {
             setData(val.data);
           }

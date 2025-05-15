@@ -36,7 +36,6 @@ const ProjectsRunning = () => {
             search: debounceSearchTerm,
             status: "running",
           });
-          console.log(val);
           if (val?.data) {
             setData(val.data);
           }

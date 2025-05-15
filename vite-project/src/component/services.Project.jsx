@@ -37,7 +37,6 @@ const ServicesProj = () => {
             search: debounceSearchTerm,
             soType: "SERVICE",
           });
-          console.log(val);
           if (val?.data) {
             setData(val.data);
           }
