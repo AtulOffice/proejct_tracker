@@ -131,35 +131,6 @@ export const updateUserPassword = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
-export const updateUserpassword = async (params) => {
-  try {
-    const { id } = params;
-    const { password } = params.body;
-    const newpassword = await bcrypt.hash(password, 10);
-    const data = await UserModels.findByIdAndUpdate(
-      id,
-      { password: newpassword },
-      { new: true }
-    );
-    if (!data) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Password updated successfully",
-      data,
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({
-      success: false,
-      message: "Error while updating password",
-    });
-  }
-};
 export const findAlluser = async (req, res) => {
   try {
     const data = await UserModels.find({});
