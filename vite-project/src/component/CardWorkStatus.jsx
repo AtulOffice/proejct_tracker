@@ -25,7 +25,9 @@ const CardWorkStatus = ({ project, indx, setToggle }) => {
   const handleDelete = async (id) => {
     setIsdisabled(true);
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/worksts/delete/${id}`);
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/worksts/delete/${id}`
+      );
       toast.success(`Work Status deleted successfully`);
       setDeleteflag(false);
       setToggle((prev) => !prev);
@@ -133,6 +135,22 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                 <strong>Entity Type:</strong> {project.entityType}
               </li>
             }
+
+            <li>
+              <strong>Backup status:</strong> {project.BackupSubmission}
+            </li>
+
+            <li>
+              <strong>Expense status:</strong> {project.ExpensSubmission}
+            </li>
+
+            <li>
+              <strong>Start Checklist:</strong> {project.StartChecklist}
+            </li>
+            <li>
+              <strong>End Checklist:</strong> {project.EndChecklist}
+            </li>
+
             <>
               <li>
                 <strong>from</strong>{" "}

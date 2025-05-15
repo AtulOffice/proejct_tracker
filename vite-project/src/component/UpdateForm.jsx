@@ -163,8 +163,13 @@ const UpdateForm = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <InputFiled
-              {...UpdateConst[0]}
-              value={formData.projectName}
+              {...UpdateConst[7]}
+              value={formData.jobNumber}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[8]}
+              value={formData.orderNumber}
               handleChange={handleChange}
             />
             <SelectField
@@ -172,39 +177,14 @@ const UpdateForm = () => {
               value={formData.entityType}
               handleChange={handleChange}
             />
-            <InputFiled
-              {...UpdateConst[1]}
-              value={formData.duration}
+            <SelectField
+              {...UpdateConst[27]}
+              value={formData.soType}
               handleChange={handleChange}
             />
             <SelectField
               {...UpdateConst[29]}
               value={formData.status}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[2]}
-              value={formData.actualVisitDuration}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[3]}
-              value={formData.expenseScope}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[4]}
-              value={formData.workScope}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[26]}
-              value={formData.supplyStatus}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[27]}
-              value={formData.soType}
               handleChange={handleChange}
             />
             <InputFiled
@@ -218,13 +198,8 @@ const UpdateForm = () => {
               handleChange={handleChange}
             />
             <InputFiled
-              {...UpdateConst[7]}
-              value={formData.jobNumber}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[8]}
-              value={formData.orderNumber}
+              {...UpdateConst[22]}
+              value={formData.location}
               handleChange={handleChange}
             />
             <InputFiled
@@ -232,25 +207,99 @@ const UpdateForm = () => {
               value={formData.bill}
               handleChange={handleChange}
             />
-
             <InputFiled
               {...UpdateConst[10]}
               value={formData.dueBill}
               handleChange={handleChange}
             />
-            <InputFiled
-              {...UpdateConst[11]}
-              value={
-                Array.isArray(formData.momsrNo)
-                  ? formData.momsrNo.join(", ")
-                  : formData.momsrNo
-              }
-              handleChange={handleChange}
-            />
-
             <SelectField
               {...UpdateConst[25]}
               value={formData.billStatus}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[21]}
+              value={formData.orderDate}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[17]}
+              value={formData.deleveryDate}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[3]}
+              value={formData.expenseScope}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[1]}
+              value={formData.duration}
+              handleChange={handleChange}
+            />
+            <TextArea
+              {...UpdateConst[4]}
+              value={formData.workScope}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[23]}
+              value={formData.engineerName}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[16]}
+              value={formData.requestDate}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[18]}
+              value={formData.visitDate}
+              handleChange={handleChange}
+            />
+            <SelectField
+              {...UpdateConst[30]}
+              handleChange={handleChange}
+              value={formData.StartChecklist}
+            />
+            <InputFiled
+              {...UpdateConst[19]}
+              value={formData.visitendDate}
+              handleChange={handleChange}
+            />
+            <SelectField
+              {...UpdateConst[34]}
+              handleChange={handleChange}
+              value={formData.EndChecklist}
+            />
+            <InputFiled
+              {...UpdateConst[11]}
+              value={formData.momsrNo}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[20]}
+              value={formData.momDate}
+              handleChange={handleChange}
+            />
+            <SelectField
+              {...UpdateConst[37]}
+              handleChange={handleChange}
+              value={formData.BackupSubmission}
+            />
+            <SelectField
+              {...UpdateConst[38]}
+              handleChange={handleChange}
+              value={formData.ExpensSubmission}
+            />
+            <InputFiled
+              {...UpdateConst[2]}
+              value={formData.actualVisitDuration}
+              handleChange={handleChange}
+            />
+            <SelectField
+              {...UpdateConst[26]}
+              value={formData.supplyStatus}
               handleChange={handleChange}
             />
             <InputFiled
@@ -258,13 +307,11 @@ const UpdateForm = () => {
               value={formData.startDate}
               handleChange={handleChange}
             />
-
             <InputFiled
               {...UpdateConst[13]}
               value={formData.endDate}
               handleChange={handleChange}
             />
-
             <InputFiled
               {...UpdateConst[14]}
               value={formData.actualStartDate}
@@ -275,66 +322,18 @@ const UpdateForm = () => {
               value={formData.actualEndDate}
               handleChange={handleChange}
             />
-            <InputFiled
-              {...UpdateConst[16]}
-              value={formData.requestDate}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[17]}
-              value={formData.deleveryDate}
-              handleChange={handleChange}
-            />
-
-            <InputFiled
-              {...UpdateConst[18]}
-              value={formData.visitDate}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[19]}
-              value={formData.visitendDate}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[20]}
-              value={formData.momDate?.[formData.momDate.length - 1] || ""}
-              handleChange={(e) => handleMomDateChange(e.target.value)}
-            />
-
-            <InputFiled
-              {...UpdateConst[21]}
-              value={formData.orderDate}
-              handleChange={handleChange}
-            />
-            <TextArea
-              {...UpdateConst[33]}
-              handleChange={handleChange}
-              value={formData.description}
-            />
-            <InputFiled
-              {...UpdateConst[22]}
-              value={formData.location}
-              handleChange={handleChange}
-            />
-            {formData.status === "running" && (
-              <InputFiled
-                {...UpdateConst[23]}
-                value={
-                  Array.isArray(formData.engineerName)
-                    ? formData.engineerName.join(", ")
-                    : formData.engineerName
-                }
+            <div className="md:col-span-2">
+              <TextArea
+                {...UpdateConst[33]}
                 handleChange={handleChange}
+                value={formData.description}
               />
-            )}
-
+            </div>
             <InputFiled
               {...UpdateConst[24]}
               value={formData.finalMomnumber}
               handleChange={handleChange}
             />
-
             <SelectField
               {...UpdateConst[31]}
               handleChange={handleChange}
@@ -344,6 +343,16 @@ const UpdateForm = () => {
               {...UpdateConst[32]}
               handleChange={handleChange}
               value={formData.service}
+            />
+            <InputFiled
+              {...UpdateConst[35]}
+              value={formData.ContactPersonName}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[36]}
+              value={formData.ContactPersonNumber}
+              handleChange={handleChange}
             />
           </div>
           <div className="flex justify-center mt-8">

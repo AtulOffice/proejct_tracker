@@ -12,6 +12,10 @@ export const WrkStatusSave = async (req, res) => {
     statusEndDate,
     currentEngineerName,
     soType,
+    ExpensSubmission,
+    BackupSubmission,
+    EndChecklist,
+    StartChecklist,
     engineerName,
     entityType,
     client,
@@ -47,6 +51,10 @@ export const WrkStatusSave = async (req, res) => {
       fromDate: statusStartDate,
       toDate: statusEndDate,
       WorkStatus: workstatus,
+      ExpensSubmission,
+      BackupSubmission,
+      EndChecklist,
+      StartChecklist,
     });
     return res.status(201).json({
       success: true,

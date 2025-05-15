@@ -7,6 +7,7 @@ import { InputFiled, SelectField } from "./subField";
 import ExcelDocsInput from "../utils/Excelimport";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import { fetchSearchData } from "../utils/apiCall";
 
 const InputForm = () => {
   const userformval = {
@@ -20,6 +21,10 @@ const InputForm = () => {
     jobNumber: "",
     orderNumber: "",
     location: "",
+    EndChecklist: "N/A",
+    StartChecklist: "N/A",
+    ExpensSubmission: "N/A",
+    BackupSubmission: "N/A",
     // client: "",
     // visitDate: "",
     // entityType: "SI DELHI",
@@ -33,7 +38,6 @@ const InputForm = () => {
     // endDate: "",
     // duration: "",
   };
-  const { fullData } = useAppContext();
   const [formData, setFormData] = useState(userformval);
   const [isDataFound, setIsDataFound] = useState(false);
 
@@ -42,41 +46,43 @@ const InputForm = () => {
 
   useEffect(() => {
     console.log("dependency Check");
-    const jobNumber = debouncedJobNumber?.toLowerCase();
-    if (debouncedJobNumber === "") {
-      setIsDataFound(false);
-    }
-    if (!jobNumber || lastFetchedRef.current === jobNumber) return;
+    const SattledFun = async () => {
+      const jobNumber = debouncedJobNumber?.toLowerCase();
+      if (debouncedJobNumber === "") {
+        setIsDataFound(false);
+        return;
+      }
+      if (!jobNumber || lastFetchedRef.current === jobNumber) return;
 
-    const filteredData = fullData.find(
-      (item) =>
-        item.jobNumber?.toLowerCase() === jobNumber.toLowerCase() &&
-        item.status === "running"
-    );
-
-    if (filteredData) {
-      setIsDataFound(true);
-      toast.success("Data fetched successfully");
-      lastFetchedRef.current = jobNumber;
-      setFormData((prev) => ({
-        ...prev,
-        workstatus: filteredData.workstatus,
-        projectName: filteredData.projectName,
-        engineerName: filteredData.engineerName,
-        entityType: filteredData.entityType,
-        soType: filteredData.soType,
-        location: filteredData.location,
-        orderNumber: filteredData?.orderNumber,
-      }));
-    } else {
-      setIsDataFound(false);
-      toast.error(
-        "Either the job number is invalid or the project is not in running status"
-      );
-      setFormData((prev) => ({ ...userformval, jobNumber: prev.jobNumber }));
-      lastFetchedRef.current = "";
-    }
-  }, [debouncedJobNumber, fullData]);
+      const filteredData = await fetchSearchData({
+        jobNumber: debouncedJobNumber,
+      });
+      console.log(filteredData);
+      if (filteredData) {
+        setIsDataFound(true);
+        toast.success("Data fetched successfully");
+        lastFetchedRef.current = jobNumber;
+        setFormData((prev) => ({
+          ...prev,
+          workstatus: filteredData.workstatus,
+          projectName: filteredData.projectName,
+          engineerName: filteredData.engineerName,
+          entityType: filteredData.entityType,
+          soType: filteredData.soType,
+          location: filteredData.location,
+          orderNumber: filteredData?.orderNumber,
+        }));
+      } else {
+        setIsDataFound(false);
+        toast.error(
+          "Either the job number is invalid or the project is not in running status"
+        );
+        setFormData((prev) => ({ ...userformval, jobNumber: prev.jobNumber }));
+        lastFetchedRef.current = "";
+      }
+    };
+    SattledFun();
+  }, [debouncedJobNumber]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,6 +95,7 @@ const InputForm = () => {
         `${import.meta.env.VITE_API_URL}/worksts/save`,
         formData
       );
+      console.log(formData);
       setIsDataFound(false);
       lastFetchedRef.current = "";
       setFormData(userformval);
@@ -108,7 +115,6 @@ const InputForm = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  console.log(isDataFound);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-500 to-pink-200 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
@@ -127,7 +133,7 @@ const InputForm = () => {
               />
             </div>
             <AnimatePresence>
-              {isDataFound && (
+              {(isDataFound || 1) && (
                 <motion.div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2"
                   initial={{ opacity: 0, height: 0 }}
@@ -158,6 +164,28 @@ const InputForm = () => {
                     value={formData.location}
                     handleChange={handleChange}
                   />
+
+                  <SelectField
+                    {...UserSideConst[19]}
+                    value={formData.StartChecklist}
+                    handleChange={handleChange}
+                  />
+                  <SelectField
+                    {...UserSideConst[21]}
+                    value={formData.EndChecklist}
+                    handleChange={handleChange}
+                  />
+                  <SelectField
+                    {...UserSideConst[23]}
+                    value={formData.ExpensSubmission}
+                    handleChange={handleChange}
+                  />
+                  <SelectField
+                    {...UserSideConst[22]}
+                    value={formData.BackupSubmission}
+                    handleChange={handleChange}
+                  />
+
                   <InputFiled
                     {...UserSideConst[20]}
                     value={formData.currentEngineerName}

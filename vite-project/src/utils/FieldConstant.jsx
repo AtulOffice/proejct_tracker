@@ -318,6 +318,7 @@ export const InputConst = [
     options: [
       { value: "DISPATCHED", label: "DISPATCHED" },
       { value: "PENDING", label: "PENDING" },
+      { value: "N/A", label: "N/A" },
     ],
   },
   {
@@ -483,11 +484,11 @@ export const UpdateConst = [
   },
   {
     htmlFor: "duration",
-    title: "Project Duration",
+    title: "Service days involved",
     type: "text",
     id: "duration",
     name: "duration",
-    placeholder: "Enter the project duration",
+    placeholder: "Enter the service days involved",
     required: false,
   },
   {
@@ -515,7 +516,7 @@ export const UpdateConst = [
     id: "workScope",
     name: "workScope",
     placeholder: "Enter the work scope",
-    required: true,
+    required: false,
     maxLength: 500,
     rows: 3,
   },
@@ -539,12 +540,12 @@ export const UpdateConst = [
   },
   {
     htmlFor: "jobNumber",
-    title: "Project Job Number",
+    title: "Job Number",
     type: "text",
     id: "jobNumber",
     name: "jobNumber",
-    placeholder: "Enter the project job number",
-    required: false,
+    placeholder: "Enter the job number",
+    required: true,
   },
   {
     htmlFor: "orderNumber",
@@ -557,20 +558,20 @@ export const UpdateConst = [
   },
   {
     htmlFor: "bill",
-    title: "Total Bill",
+    title: "Order value",
     type: "number",
     id: "bill",
     name: "bill",
-    placeholder: "Enter the project Bill",
+    placeholder: "Enter the order value",
     required: false,
   },
   {
     htmlFor: "dueBill",
-    title: "Due Bill",
+    title: "Bill pending",
     type: "number",
     id: "dueBill",
     name: "dueBill",
-    placeholder: "Enter the project due Bill",
+    placeholder: "Enter the pending bill",
     required: false,
   },
   {
@@ -714,8 +715,9 @@ export const UpdateConst = [
     name: "supplyStatus",
     required: false,
     options: [
-      { value: "DISPACHED", label: "DISPACHED" },
+      { value: "DISPATCHED", label: "DISPATCHED" },
       { value: "PENDING", label: "PENDING" },
+      { value: "N/A", label: "N/A" },
     ],
   },
   {
@@ -757,7 +759,6 @@ export const UpdateConst = [
       { value: "pending", label: "pending" },
       { value: "completed", label: "completed" },
       { value: "running", label: "running" },
-      { value: "cancelled", label: "cancelled" },
     ],
   },
   {
@@ -814,7 +815,7 @@ export const UpdateConst = [
     type: "select",
     id: "EndChecklist",
     name: "EndChecklist",
-    required: true,
+    required: false,
     options: [
       { value: "N/A", label: "N/A" },
       { value: "YES", label: "YES" },
@@ -829,7 +830,7 @@ export const UpdateConst = [
     id: "ContactPersonName",
     name: "ContactPersonName",
     placeholder: "Enter the contact person name",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "ContactPersonNumber",
@@ -838,7 +839,7 @@ export const UpdateConst = [
     id: "ContactPersonNumber",
     name: "ContactPersonNumber",
     placeholder: "Enter the contact person number",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "BackupSubmission",
@@ -846,7 +847,7 @@ export const UpdateConst = [
     type: "select",
     id: "BackupSubmission",
     name: "BackupSubmission",
-    required: true,
+    required: false,
     options: [
       { value: "N/A", label: "N/A" },
       { value: "YES", label: "YES" },
@@ -860,7 +861,7 @@ export const UpdateConst = [
     type: "select",
     id: "ExpensSubmission",
     name: "ExpensSubmission",
-    required: true,
+    required: false,
     options: [
       { value: "N/A", label: "N/A" },
       { value: "YES", label: "YES" },
@@ -1042,6 +1043,7 @@ export const UserSideConst = [
     options: [
       { value: "DISPACHED", label: "DISPACHED" },
       { value: "PENDING", label: "PENDING" },
+      { value: "N/A", label: "N/A" },
     ],
     readOnly: false,
   },

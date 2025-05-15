@@ -32,6 +32,26 @@ const WrkStatusSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    StartChecklist: {
+      type: String,
+      enum: ["YES", "NO", "N/A"],
+      default: "N/A",
+    },
+    EndChecklist: {
+      type: String,
+      enum: ["YES", "NO", "N/A"],
+      default: "N/A",
+    },
+    BackupSubmission: {
+      type: String,
+      enum: ["YES", "NO", "N/A"],
+      default: "N/A",
+    },
+    ExpensSubmission: {
+      type: String,
+      enum: ["YES", "NO", "N/A"],
+      default: "N/A",
+    },
   },
   {
     timestamps: true,

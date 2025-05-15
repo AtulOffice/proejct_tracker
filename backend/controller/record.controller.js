@@ -295,10 +295,11 @@ export const findrecordbyJobnumber = async (req, res) => {
 
     const data = await ProjectModel.findOne({
       jobNumber: { $regex: new RegExp(`^${jobNumber}$`, "i") },
+      status: "running",
     });
 
     if (!data || data.length === 0) {
-      return res.status(200).json({
+      return res.status(400).json({
         success: true,
         message: "No matching record found",
         data: null,
@@ -385,7 +386,7 @@ export const getProjectOverview = async (req, res) => {
       .filter((p) => {
         const created = new Date(p.createdAt);
         const now = new Date();
-        const previousYear = now.getFullYear();  //  <-------
+        const previousYear = now.getFullYear(); //  <-------
         return p.priority === "high" && created.getFullYear() === previousYear;
       })
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))

@@ -101,18 +101,6 @@ export const logout = () => {
   sessionStorage.removeItem("token");
 };
 
-export const fetchWorkStatusOld = async ({ jobNumber }) => {
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/fetchbyjob?jobNumber=${jobNumber}`,
-      { username, password }
-    );
-    return response.data.data;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export const fetchWorkStatus = async ({ page, search }) => {
   try {
     const res = await axios.get(
@@ -128,12 +116,11 @@ export const fetchWorkStatus = async ({ page, search }) => {
 
 export const fetchSearchData = async ({ jobNumber }) => {
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/fetchbyjob?jobNumber=${jobNumber}`,
-      { username, password }
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/fetchbyjob?jobNumber=${jobNumber}`
     );
     return response.data.data;
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
   }
 };
