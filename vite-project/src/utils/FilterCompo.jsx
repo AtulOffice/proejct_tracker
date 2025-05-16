@@ -49,7 +49,9 @@ const FilterCompo = ({
                 setTimeFilter("all");
                 setSearchTerm("");
                 setToggle((prev) => !prev);
-                refreshIcon.classList.remove("animate-spin");
+                setTimeout(() => {
+                  refreshIcon.classList.remove("animate-spin");
+                }, 1000);
               }}
               className="p-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-all duration-200 flex items-center justify-center shadow-sm relative overflow-hidden"
               title="Refresh tasks"

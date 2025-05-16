@@ -35,7 +35,6 @@ const AdminDashboard = () => {
   const { toggle } = useAppContext();
   const [overvew, setOverview] = useState();
   useEffect(() => {
-    console.log("dependency Check");
     const fetchData = async () => {
       const data = await fetchProjectOveriew();
       data && setOverview(data);
@@ -90,7 +89,6 @@ const AdminDashboard = () => {
     }
   };
   useEffect(() => {
-    console.log("dependency Check");
     sessionStorage.setItem("activeCard", activeCard);
   }, [activeCard]);
   const handleActiveBar = (val) => {

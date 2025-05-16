@@ -20,7 +20,6 @@ const ProjectWorkStatus = () => {
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
 
   useEffect(() => {
-    console.log("dependency Check");
     const handler = setTimeout(() => {
       setdebounceSerchTerm(searchTerm);
     }, 2000);
@@ -28,7 +27,6 @@ const ProjectWorkStatus = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    console.log("dependency Check");
     const getProjects = async () => {
       if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
         try {
@@ -66,12 +64,12 @@ const ProjectWorkStatus = () => {
   }, [currentPage, toggle, debounceSearchTerm]);
 
   useEffect(() => {
-    console.log("dependency Check");
     if (!data) return;
     const filterfun = setTimeout(() => {
       const filtered = filterProjectsUtils({
         data: data,
         timeFilter,
+        workBool: true,
       });
       setFilteredProjects(filtered);
     }, 100);
@@ -81,7 +79,6 @@ const ProjectWorkStatus = () => {
 
   const filterRef = useRef(null);
   useEffect(() => {
-    console.log("dependency Check");
     function handleClickOutside(event) {
       if (filterRef.current && !filterRef.current.contains(event.target)) {
         setIsFilterOpen(false);

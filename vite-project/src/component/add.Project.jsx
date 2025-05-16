@@ -10,7 +10,6 @@ const InputForm = () => {
   const [debounceJobnumber, setdebounceJobNumber] = useState("");
 
   useEffect(() => {
-    console.log("dependency Check");
     const handelJob = setTimeout(() => {
       setdebounceJobNumber(formData.jobNumber);
     }, 2000);
@@ -18,7 +17,6 @@ const InputForm = () => {
   }, [formData.jobNumber]);
 
   useEffect(() => {
-    console.log("dependency Check");
     if (debounceJobnumber.length > 2) {
       const firstChar = debounceJobnumber[0].toUpperCase();
       const secondChar = debounceJobnumber[1].toUpperCase();
@@ -51,7 +49,6 @@ const InputForm = () => {
   }, [debounceJobnumber]);
 
   useEffect(() => {
-    console.log("dependency Check");
     setFormData((prevData) => {
       const newData = { ...prevData };
       dateFields.forEach((field) => {

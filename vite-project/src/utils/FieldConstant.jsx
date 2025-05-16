@@ -401,7 +401,7 @@ export const InputConst = [
     ],
   },
   {
-    title: "Description",
+    title: "Key Notes",
     id: "description",
     name: "description",
     htmlFor: "description",
@@ -469,6 +469,15 @@ export const InputConst = [
       { value: "NO", label: "NO" },
     ],
     readOnly: false,
+  },
+  {
+    htmlFor: "daysspendsite",
+    title: "Days spend on site",
+    type: "text",
+    id: "daysspendsite",
+    name: "daysspendsite",
+    placeholder: "Enter the value",
+    required: true,
   },
 ];
 
@@ -800,7 +809,7 @@ export const UpdateConst = [
     ],
   },
   {
-    title: "Description",
+    title: "Key Notes",
     id: "description",
     name: "description",
     htmlFor: "description",
@@ -868,6 +877,15 @@ export const UpdateConst = [
       { value: "NO", label: "NO" },
     ],
     readOnly: false,
+  },
+  {
+    htmlFor: "daysspendsite",
+    title: "Days spend on site",
+    type: "text",
+    id: "daysspendsite",
+    name: "daysspendsite",
+    placeholder: "Enter the value",
+    required: true,
   },
 ];
 
@@ -1141,5 +1159,14 @@ export const UserSideConst = [
       { value: "NO", label: "NO" },
     ],
     readOnly: false,
+  },
+  {
+    htmlFor: "daysspendsite",
+    title: "Days spend on site",
+    type: "text",
+    id: "daysspendsite",
+    name: "daysspendsite",
+    placeholder: "Enter the value",
+    required: true,
   },
 ];

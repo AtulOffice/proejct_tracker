@@ -119,7 +119,7 @@ const ProjectOverview = ({ overvew }) => {
 
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Status Overview
+              STATUS OVERVIEW
             </h3>
             <div className="h-70 flex items-center justify-center">
               {/* <PieChart

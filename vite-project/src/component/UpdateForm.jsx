@@ -16,7 +16,6 @@ const UpdateForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("dependency Check");
     const fetchByid = async () => {
       try {
         const res = await axios.get(
@@ -75,7 +74,7 @@ const UpdateForm = () => {
       actualEndDate &&
       new Date(actualStartDate) >= new Date(actualEndDate)
     ) {
-      toast.error("Actual Start date must be less than Acual end date");
+      toast.error("Actual Start date must be less than Actual end date");
       setIsLoading(false);
       return;
     }
@@ -291,6 +290,11 @@ const UpdateForm = () => {
               {...UpdateConst[38]}
               handleChange={handleChange}
               value={formData.ExpensSubmission}
+            />
+            <InputFiled
+              {...UpdateConst[39]}
+              value={formData.daysspendsite}
+              handleChange={handleChange}
             />
             <InputFiled
               {...UpdateConst[2]}

@@ -63,28 +63,3 @@ const saveData = async (data) => {
     console.log(e);
   }
 };
-
-const sendData = {
-  jobNumber: "NP224087",
-  soType: "PROJECT",
-  projectName: "Pernod Ricard India Pvt. Ltd.",
-  client: "Pernod Ricard India Pvt. Ltd.",
-  endUser: "RLL Derabassi",
-  location: "RLL Derabassi",
-  bill: 33.17,
-  dueBill: 33.17,
-  workScope: "Plan not required",
-  supplyStatus: "DISPATCHED",
-  orderDate: null,
-  deleveryDate: null,
-  billStatus: "ALL BILLED",
-  description: "N/A",
-  requestDate: "",
-  entityType: "SI DELHI",
-  status: "completed",
-  priority: "high",
-  service: "Service not included",
-  expenseScope: "company",
-  duration: 0,
-  checklistStatus: "N/A",
-};
