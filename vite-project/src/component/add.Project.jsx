@@ -76,8 +76,6 @@ const InputForm = () => {
     setIsLoading(true);
 
     const {
-      startDate,
-      endDate,
       actualEndDate,
       actualStartDate,
       visitDate,
@@ -87,11 +85,11 @@ const InputForm = () => {
       orderDate,
     } = formData;
 
-    if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
-      toast.error("Start date must be less than end date");
-      setIsLoading(false);
-      return;
-    }
+    // if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+    //   toast.error("Start date must be less than end date");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     if (
       actualStartDate &&
@@ -123,8 +121,8 @@ const InputForm = () => {
     }
 
     const dateFields = [
-      { key: "startDate", value: startDate },
-      { key: "endDate", value: endDate },
+      // { key: "startDate", value: startDate },
+      // { key: "endDate", value: endDate },
       { key: "actualStartDate", value: actualStartDate },
       { key: "actualEndDate", value: actualEndDate },
       { key: "visitDate", value: visitDate },
@@ -154,6 +152,8 @@ const InputForm = () => {
           ? formData.momsrNo.split(",").map((item) => item.trim())
           : [],
         projectName: formData.client,
+        startDate: formData?.requestDate ?? null,
+        endDate: formData?.deleveryDate ?? null,
       });
       toast.success("Data saved successfully");
       setFormData(formval);

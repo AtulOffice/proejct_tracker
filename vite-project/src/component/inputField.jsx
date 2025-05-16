@@ -200,7 +200,7 @@ const FormField = ({ formData, handleChange }) => {
         value={formData.supplyStatus}
         handleChange={handleChange}
       />
-      {formData.status === "upcoming" && (
+      {/* {formData.status === "upcoming" && (
         <InputFiled
           {...InputConst[12]}
           value={formData.startDate}
@@ -213,7 +213,7 @@ const FormField = ({ formData, handleChange }) => {
           value={formData.endDate}
           handleChange={handleChange}
         />
-      )}
+      )} */}
       {(formData.status === "closed" ||
         formData.status === "completed" ||
         formData.status === "running") && (

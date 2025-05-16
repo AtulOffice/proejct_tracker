@@ -9,7 +9,6 @@ import LoadingSkeleton from "../utils/loaderForm";
 
 const UpdateForm = () => {
   const { id } = useParams();
-
   const { setToggle } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState();
@@ -47,13 +46,9 @@ const UpdateForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("submit button");
     e.preventDefault();
     setIsLoading(true);
-
     const {
-      startDate,
-      endDate,
       actualEndDate,
       actualStartDate,
       visitDate,
@@ -62,12 +57,6 @@ const UpdateForm = () => {
       requestDate,
       orderDate,
     } = formData;
-
-    if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
-      toast.error("Start date must be less than end date");
-      setIsLoading(false);
-      return;
-    }
 
     if (
       actualStartDate &&
@@ -99,8 +88,6 @@ const UpdateForm = () => {
     }
 
     const dateFields = [
-      { key: "startDate", value: startDate },
-      { key: "endDate", value: endDate },
       { key: "actualStartDate", value: actualStartDate },
       { key: "actualEndDate", value: actualEndDate },
       { key: "visitDate", value: visitDate },
@@ -128,6 +115,13 @@ const UpdateForm = () => {
                 .map((name) => name.trim())
                 .filter((name) => name.length > 0)
             : formData.engineerName,
+        momsrNo:
+          typeof formData.momsrNo === "string"
+            ? formData.momsrNo
+                .split(",")
+                .map((name) => name.trim())
+                .filter((name) => name.length > 0)
+            : formData.momsrNo,
       };
 
       await axios.put(
@@ -278,8 +272,12 @@ const UpdateForm = () => {
             />
             <InputFiled
               {...UpdateConst[20]}
-              value={formData.momDate}
-              handleChange={handleChange}
+              value={
+                formData.momDate.length >= 0
+                  ? formData.momDate[formData.momDate.length - 1]
+                  : ""
+              }
+              handleChange={(e) => handleMomDateChange(e.target.value)}
             />
             <SelectField
               {...UpdateConst[37]}
@@ -306,7 +304,7 @@ const UpdateForm = () => {
               value={formData.supplyStatus}
               handleChange={handleChange}
             />
-            <InputFiled
+            {/* <InputFiled
               {...UpdateConst[12]}
               value={formData.startDate}
               handleChange={handleChange}
@@ -315,7 +313,7 @@ const UpdateForm = () => {
               {...UpdateConst[13]}
               value={formData.endDate}
               handleChange={handleChange}
-            />
+            /> */}
             <InputFiled
               {...UpdateConst[14]}
               value={formData.actualStartDate}
