@@ -152,15 +152,124 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           </div>
 
           <ul className="text-sm text-gray-700 space-y-1 mb-4">
-            <li>
+            {/* <li>
               <strong>Project Name:</strong> {project.projectName}
+            </li> */}
+            <li>
+              <strong>Client:</strong> {project?.client}
             </li>
+            {project?.endUser && shortFlag && (
+              <li>
+                <strong>End User:</strong> {project.endUser}
+              </li>
+            )}
+            <li>
+              <strong>Location:</strong> {project?.location || "not mentioned"}
+            </li>
+            <li>
+              <strong>Order Value:(lacs)</strong> ₹
+              {project?.bill ?? "not mentioned"}
+            </li>
+            <li>
+              <li>
+                <strong>Pending Bill(lacs):</strong> ₹
+                {project?.dueBill ?? "not mentioned"}
+              </li>
+              <strong>Billing status:</strong>{" "}
+              {project?.billStatus ?? "Not provided"}
+            </li>
+            {project.orderDate && (
+              <li>
+                <strong>Order Date:</strong>{" "}
+                {new Date(project.orderDate).toLocaleDateString() || ""}
+              </li>
+            )}
+            {project.deleveryDate && (
+              <li>
+                <strong>Delivery Date:</strong>{" "}
+                {new Date(project.deleveryDate).toLocaleDateString() || ""}
+              </li>
+            )}
+            {project?.expenseScope && (
+              <li>
+                <strong>Expense scope:</strong> {project?.expenseScope}
+              </li>
+            )}
+            {project?.duration !== "0" && (
+              <li>
+                <strong>Service Days:</strong>{" "}
+                {project?.duration || "not mentioned"}
+              </li>
+            )}
+            {project?.workScope !== "0" && (
+              <li>
+                <strong>work Scope:</strong>{" "}
+                {project?.workScope || "not mentioned"}
+              </li>
+            )}
             {project.engineerName.length > 0 && (
               <li>
-                <strong>Engineer Name:</strong>
+                <strong>Engineer Assigned:</strong>
                 {project.engineerName.join(", ")}
               </li>
             )}
+            {project.requestDate && (
+              <li>
+                <strong>Request Date:</strong>{" "}
+                {new Date(project.requestDate).toLocaleDateString() || ""}
+              </li>
+            )}
+            {project?.visitDate && (
+              <li>
+                <strong>Visit Start Date:</strong>{" "}
+                {new Date(project.visitDate).toLocaleDateString() || ""}
+              </li>
+            )}
+            {project?.StartChecklist && (
+              <li>
+                <strong>Start Checklist:</strong>{" "}
+                {project?.StartChecklist || "not mentioned"}
+              </li>
+            )}
+
+            {project?.visitendDate && (
+              <li>
+                <strong>Visit End Date:</strong>{" "}
+                {new Date(project.visitendDate).toLocaleDateString() || ""}
+              </li>
+            )}
+            {project?.EndChecklist && (
+              <li>
+                <strong>End Checklist:</strong>{" "}
+                {project?.EndChecklist || "not mentioned"}
+              </li>
+            )}
+            {project?.momsrNo.length > 0 && (
+              <li>
+                <strong>MOM SR No:</strong> {project.momsrNo}
+              </li>
+            )}
+            {project?.momDate?.length > 0 && (
+              <li>
+                <strong>MOM Dates:</strong>{" "}
+                {project.momDate
+                  .map((dateStr) => new Date(dateStr).toLocaleDateString())
+                  .join(", ")}
+              </li>
+            )}
+            {project?.BackupSubmission && (
+              <li>
+                <strong>Backup submission:</strong>{" "}
+                {project?.BackupSubmission || "not mentioned"}
+              </li>
+            )}
+            {project?.ExpensSubmission && (
+              <li>
+                <strong>Expense submission:</strong>{" "}
+                {project?.ExpensSubmission || "not mentioned"}
+              </li>
+            )}
+
             {shortFlag && (
               <li>
                 <strong>Entity Type:</strong> {project.entityType}
@@ -191,62 +300,13 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                 <strong>SO Type:</strong> {project?.soType}
               </li>
             )}
-            <li>
-              <strong>Client:</strong> {project?.client}
-            </li>
+
             {project?.orderNumber && (
               <li>
                 <strong>Po No:</strong> {project?.orderNumber}
               </li>
             )}
-            <li>
-              <strong>Bill:(lacs)</strong> ₹{project?.bill ?? "not mentioned"}
-            </li>
-            <li>
-              <strong>Due Bill(lacs):</strong> ₹
-              {project?.dueBill ?? "not mentioned"}
-            </li>
-            <li>
-              <strong>Bill Notice:</strong> {project?.billStatus}
-            </li>
-            {project?.visitDate && project?.visitendDate && (
-              <>
-                <li>
-                  <strong>Visit Date:</strong>{" "}
-                  {new Date(project.visitDate).toLocaleDateString() || ""}
-                </li>
 
-                <li>
-                  <strong>Visit End Date:</strong>{" "}
-                  {new Date(project.visitendDate).toLocaleDateString() || ""}
-                </li>
-              </>
-            )}
-            {project?.momDate?.length > 0 && (
-              <li>
-                <strong>MOM Dates:</strong>{" "}
-                {project.momDate
-                  .map((dateStr) => new Date(dateStr).toLocaleDateString())
-                  .join(", ")}
-              </li>
-            )}
-
-            {project?.momsrNo.length > 0 && (
-              <li>
-                <strong>MOM SR No:</strong> {project.momsrNo}
-              </li>
-            )}
-            {project?.endUser && shortFlag && (
-              <li>
-                <strong>End User:</strong> {project.endUser}
-              </li>
-            )}
-            {project.orderDate && (
-              <li>
-                <strong>Order Date:</strong>{" "}
-                {new Date(project.orderDate).toLocaleDateString() || ""}
-              </li>
-            )}
             <li>
               <strong>Days Spent On Site:</strong>{" "}
               {project.daysspendsite || "not mentioned"}
@@ -263,18 +323,10 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                 </li>
               </>
             )}
-            <li>
-              <strong>Location:</strong> {project?.location || "not mentioned"}
-            </li>
+
             {project.description !== "N/A" && shortFlag && (
               <li>
-                <strong>Remarks:</strong> {project.description || ""}
-              </li>
-            )}
-            {project?.duration !== "0" && (
-              <li>
-                <strong>Duration:</strong>{" "}
-                {project?.duration || "not mentioned"}
+                <strong>Key notes:</strong> {project.description || ""}
               </li>
             )}
           </ul>
