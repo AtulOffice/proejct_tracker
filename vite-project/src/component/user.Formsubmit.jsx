@@ -45,7 +45,6 @@ const InputForm = () => {
   const lastFetchedRef = useRef("");
 
   useEffect(() => {
-    
     const SattledFun = async () => {
       const jobNumber = debouncedJobNumber?.toLowerCase();
       if (debouncedJobNumber === "") {
@@ -133,7 +132,7 @@ const InputForm = () => {
               />
             </div>
             <AnimatePresence>
-              {(isDataFound || 1) && (
+              {isDataFound && (
                 <motion.div
                   className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2"
                   initial={{ opacity: 0, height: 0 }}
