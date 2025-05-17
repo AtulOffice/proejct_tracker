@@ -332,6 +332,7 @@ export const InputConst = [
       { value: "PROJECT", label: "PROJECT" },
       { value: "SERVICE", label: "SERVICE" },
       { value: "AMC", label: "AMC" },
+      { value: "SUPPLY", label: "SUPPLY" },
     ],
   },
   {
@@ -357,9 +358,12 @@ export const InputConst = [
     required: true,
     options: [
       { value: "upcoming", label: "Up Coming" },
-      { value: "pending", label: "pending" },
-      { value: "completed", label: "completed" },
-      { value: "running", label: "running" },
+      { value: "pending", label: "Pending" },
+      { value: "completed", label: "Completed" },
+      { value: "running", label: "Running" },
+      { value: "norequest", label: "No Request" },
+      { value: "closed", label: "Closed" },
+      { value: "cancelled", label: "Cancelled" },
     ],
   },
   {
@@ -765,9 +769,12 @@ export const UpdateConst = [
     required: false,
     options: [
       { value: "upcoming", label: "Up Coming" },
-      { value: "pending", label: "pending" },
-      { value: "completed", label: "completed" },
-      { value: "running", label: "running" },
+      { value: "pending", label: "Pending" },
+      { value: "completed", label: "Completed" },
+      { value: "running", label: "Running" },
+      { value: "norequest", label: "No Request" },
+      { value: "closed", label: "Closed" },
+      { value: "cancelled", label: "Cancelled" },
     ],
   },
   {
@@ -1076,6 +1083,7 @@ export const UserSideConst = [
       { value: "PROJECT", label: "PROJECT" },
       { value: "SERVICE", label: "SERVICE" },
       { value: "AMC", label: "AMC" },
+      { value: "SUPPLY", label: "SUPPLY" },
     ],
     readOnly: false,
   },

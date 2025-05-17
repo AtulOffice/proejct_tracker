@@ -51,7 +51,7 @@ const saveData = async (data) => {
       ...data,
       requestDate: "",
       entityType: "SI DELHI",
-      status: "completed",
+      status: "norequest",
       priority: "high",
       service: "Service not included",
       expenseScope: "company",
