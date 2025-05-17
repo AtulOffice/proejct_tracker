@@ -431,11 +431,14 @@ export const getProjectOverview = async (req, res) => {
       .slice(0, 3);
 
     const statusGroups = {
-      upcomming: { name: "UpComming Projects", cnt: 0 },
-      running: { name: "Active Projects", cnt: 0 },
-      urgent: { name: "Urgent Projects", cnt: 0 },
-      pending: { name: "Pending Projects", cnt: 0 },
-      complete: { name: "Completed Projects", cnt: 0 },
+      upcomming: { name: "UpComming", cnt: 0 },
+      running: { name: "Active", cnt: 0 },
+      urgent: { name: "Urgent", cnt: 0 },
+      pending: { name: "Pending", cnt: 0 },
+      complete: { name: "Completed", cnt: 0 },
+      closed: { name: "Closed", cnt: 0 },
+      norequest: { name: "No Request", cnt: 0 },
+      cancelled: { name: "Cancelled", cnt: 0 },
     };
 
     const today = new Date();
@@ -455,6 +458,9 @@ export const getProjectOverview = async (req, res) => {
       const { status, startDate } = project;
 
       if (status === "completed") statusGroups.complete.cnt += 1;
+      if (status === "closed") statusGroups.closed.cnt += 1;
+      if (status === "cancelled") statusGroups.cancelled.cnt += 1;
+      if (status === "norequest") statusGroups.norequest.cnt += 1;
       if (status === "running") statusGroups.running.cnt += 1;
       if (status === "upcoming") statusGroups.upcomming.cnt += 1;
       if (status === "pending") statusGroups.pending.cnt += 1;
@@ -475,14 +481,31 @@ export const getProjectOverview = async (req, res) => {
         value: statusGroups.complete.cnt,
         color: "#fbbf24",
       },
-      { title: "Active", value: statusGroups.running.cnt, color: "#6366f1" },
+      {
+        title: "Active",
+        value: statusGroups.running.cnt,
+        color: "#6366f1",
+      },
       {
         title: "Upcoming",
         value: statusGroups.upcomming.cnt,
         color: "#34d399",
       },
-      { title: "Pending", value: statusGroups.pending.cnt, color: "#a78bfa" },
-      { title: "Urgent", value: statusGroups.urgent.cnt, color: "#f87171" },
+      {
+        title: "Pending",
+        value: statusGroups.pending.cnt,
+        color: "#a78bfa",
+      },
+      {
+        title: "Urgent",
+        value: statusGroups.urgent.cnt,
+        color: "#f87171",
+      },
+      {
+        title: "closed",
+        value: statusGroups.closed.cnt,
+        color: "#facc15",
+      },
     ];
 
     const total = chartData.reduce((sum, item) => sum + item.value, 0);
