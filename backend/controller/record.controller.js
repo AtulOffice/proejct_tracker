@@ -424,7 +424,7 @@ export const getProjectOverview = async (req, res) => {
       .filter((p) => {
         const created = new Date(p.createdAt);
         const now = new Date();
-        const previousYear = now.getFullYear(); //  <-------
+        const previousYear = now.getFullYear() - 1; //  <-------
         return p.priority === "high" && created.getFullYear() === previousYear;
       })
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
@@ -502,9 +502,19 @@ export const getProjectOverview = async (req, res) => {
         color: "#f87171",
       },
       {
-        title: "closed",
+        title: "Cancelled",
+        value: statusGroups.cancelled.cnt,
+        color: "#9ca3af",
+      },
+      {
+        title: "Closed",
         value: statusGroups.closed.cnt,
         color: "#facc15",
+      },
+      {
+        title: "No request",
+        value: statusGroups.norequest.cnt,
+        color: "#60a5fa",
       },
     ];
 
@@ -520,7 +530,13 @@ export const getProjectOverview = async (req, res) => {
     res.json({
       latestProjects,
       highPriority,
-      statusGroups,
+      statusGroups: {
+        upcomming: statusGroups.upcomming,
+        urgent: statusGroups.urgent,
+        running: statusGroups.running,
+        pending: statusGroups.pending,
+        closed: statusGroups.closed,
+      },
       chart,
       todayNotice: count,
     });
