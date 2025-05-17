@@ -53,7 +53,7 @@ const projectSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ["PROJECT", "AMC", "SERVICE", "WARRANTY"],
+      enum: ["PROJECT", "AMC", "SERVICE", "WARRANTY","SUPPLY"],
     },
     billStatus: {
       type: String,
@@ -63,7 +63,6 @@ const projectSchema = new mongoose.Schema(
         "PART BILLED",
         "N/A",
         "CLOSED",
-        "ALL BILLED",
         "CANCELED",
       ],
       default: "N/A",
@@ -71,7 +70,15 @@ const projectSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ["upcoming", "pending", "completed", "cancelled", "running","closed"],
+      enum: [
+        "upcoming",
+        "pending",
+        "completed",
+        "cancelled",
+        "running",
+        "closed",
+        "norequest",
+      ],
     },
     priority: {
       type: String,
