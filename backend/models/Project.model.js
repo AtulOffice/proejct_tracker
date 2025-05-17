@@ -77,7 +77,7 @@ const projectSchema = new mongoose.Schema(
         "cancelled",
         "running",
         "closed",
-        "norequest",
+        "no request",
       ],
     },
     priority: {

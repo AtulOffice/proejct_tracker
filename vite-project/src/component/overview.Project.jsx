@@ -6,7 +6,6 @@ import { FaUser } from "react-icons/fa6";
 import LollipopChart from "./overviewChart";
 
 const ProjectOverview = ({ overvew }) => {
-  console.log(overvew?.statusGroups);
   const statusGroups = {
     upcomming: { name: "UpComming Projects", cnt: 0 },
     running: { name: "Active Projects", cnt: 0 },

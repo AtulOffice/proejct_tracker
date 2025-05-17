@@ -424,7 +424,7 @@ export const getProjectOverview = async (req, res) => {
       .filter((p) => {
         const created = new Date(p.createdAt);
         const now = new Date();
-        const previousYear = now.getFullYear() - 1; //  <-------
+        const previousYear = now.getFullYear(); //  <-------
         return p.priority === "high" && created.getFullYear() === previousYear;
       })
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
@@ -460,7 +460,7 @@ export const getProjectOverview = async (req, res) => {
       if (status === "completed") statusGroups.complete.cnt += 1;
       if (status === "closed") statusGroups.closed.cnt += 1;
       if (status === "cancelled") statusGroups.cancelled.cnt += 1;
-      if (status === "norequest") statusGroups.norequest.cnt += 1;
+      if (status === "no request") statusGroups.norequest.cnt += 1;
       if (status === "running") statusGroups.running.cnt += 1;
       if (status === "upcoming") statusGroups.upcomming.cnt += 1;
       if (status === "pending") statusGroups.pending.cnt += 1;

@@ -171,10 +171,10 @@ focus:outline-none focus:ring-4 focus:ring-red-400
               {project?.bill ?? "not mentioned"}
             </li>
             <li>
-              <li>
-                <strong>Pending Bill(lacs):</strong> ₹
-                {project?.dueBill ?? "not mentioned"}
-              </li>
+              <strong>Pending Bill(lacs):</strong> ₹
+              {project?.dueBill ?? "not mentioned"}
+            </li>
+            <li>
               <strong>Billing status:</strong>{" "}
               {project?.billStatus ?? "Not provided"}
             </li>
