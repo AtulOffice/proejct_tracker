@@ -158,6 +158,46 @@ export const deleteRecord = async (req, res) => {
   }
 };
 
+export const LatestProjectPagination = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
+
+  const skip = (page - 1) * limit;
+  try {
+    let data = [];
+    let total = 0;
+
+    if (!search) {
+      data = await ProjectModel.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      total = await ProjectModel.countDocuments();
+    } else {
+      const result = await ProjectModel.findOne({
+        jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
+      });
+
+      if (result) {
+        data = [result];
+        total = 1;
+      } else {
+        data = [];
+        total = 0;
+      }
+    }
+    return res.json({
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      data,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 export const Pagination = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;

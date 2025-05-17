@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  LatestProjectPagination,
   Pagination,
   PaginationCatogary,
   Paginationsotype,
@@ -23,6 +24,7 @@ RecordRouter.get("/fetchbyjob", findrecordbyJobnumber);
 RecordRouter.put("/update/:id", updateRecords);
 RecordRouter.delete("/delete/:id", deleteRecord);
 RecordRouter.get("/pagination", Pagination);
+RecordRouter.get("/latestProjectpagination", LatestProjectPagination);
 RecordRouter.get("/catogray/pagination", PaginationCatogary);
 RecordRouter.get("/sotype/pagination", Paginationsotype);
 RecordRouter.get("/urgentProject/pagination", UrgentProjectPegination);
