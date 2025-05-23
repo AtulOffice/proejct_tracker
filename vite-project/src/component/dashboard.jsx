@@ -18,7 +18,7 @@ import {
 import OneCard from "./add.Project";
 import ZeroCard from "./overview.Project";
 import TwoCard from "./all.Project";
-import ThreeCard from "./upcomming.Project";
+import ThreeCard from "./upcoming.Project";
 import FourCard from "./pending.Project";
 import SixCard from "./services.Project";
 import FiveCard from "./complte.Project";

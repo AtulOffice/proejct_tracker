@@ -7,7 +7,7 @@ import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import { fetchProjectsCatogary } from "../utils/apiCall";
 
-const ProjectsUpcomming = () => {
+const ProjectsUpcoming = () => {
   const { setToggle, toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -119,7 +119,7 @@ const ProjectsUpcomming = () => {
   return (
     <div className="max-w-8xl min-h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">
-        UPCOMMING
+        UPCOMING
       </h2>
 
       <FilterCompo
@@ -204,4 +204,4 @@ const ProjectsUpcomming = () => {
   );
 };
 
-export default ProjectsUpcomming;
+export default ProjectsUpcoming;

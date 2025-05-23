@@ -7,14 +7,14 @@ import LollipopChart from "./overviewChart";
 
 const ProjectOverview = ({ overvew, setActiveCard }) => {
   const statusGroups = {
-    upcomming: { name: "UpComming", cnt: 0 },
+    upcoming: { name: "UpComing", cnt: 0 },
     running: { name: "Active", cnt: 0 },
     urgent: { name: "Urgent", cnt: 0 },
     pending: { name: "Pending", cnt: 0 },
-    complete: { name: "Completed", cnt: 0 },
+    norequest: { name: "No Request", cnt: 0 },
   };
   const router = {
-    UpComming: "three",
+    UpComing: "three",
     Active: "ten",
     Urgent: "seven",
     Pending: "four",
@@ -26,7 +26,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
   const statusGroupschart = {
     complete: { name: "Completed", cnt: 0, color: "#fbbf24" },
     running: { name: "Active", cnt: 0, color: "#6366f1" },
-    upcomming: { name: "Upcoming", cnt: 0, color: "#34d399" },
+    upcoming: { name: "Upcoming", cnt: 0, color: "#34d399" },
     pending: { name: "Pending", cnt: 0, color: "#a78bfa" },
     urgent: { name: "Urgent", cnt: 0, color: "#f87171" },
   };
@@ -43,57 +43,61 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           {(overvew?.statusGroups
-            ? Object.values(overvew.statusGroups)
-            : Object.values(statusGroups)
-          ).map((item, index) => (
-            <div
-              onClick={() => setActiveCard(router[item.name])}
-              key={index}
-              className="cursor-pointer relative overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]"
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100/40 to-purple-100/30 rounded-bl-[100px] -z-10"></div>
+            ? Object.entries(overvew.statusGroups)
+            : Object.entries(statusGroups)
+          )
+            .filter(
+              ([key]) => !["closed", "cancelled", "complete"].includes(key)
+            )
+            .map(([_, item], index) => (
+              <div
+                onClick={() => setActiveCard(router[item.name])}
+                key={index}
+                className="cursor-pointer relative overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100/40 to-purple-100/30 rounded-bl-[100px] -z-10"></div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium uppercase tracking-wider text-gray-500">
-                    TOTAL
-                  </p>
-                  <h3 className="text-3xl font-bold text-gray-800 mt-1">
-                    <span className="inline-block animate-fadeIn">
-                      {item.cnt}
-                    </span>
-                  </h3>
-                </div>
-                <div className="flex items-center justify-center rounded-full p-3 bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20">
-                  <FaBook className="text-white" size={26} />
-                </div>
-              </div>
-              <div className="mt-5 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full width-full"></div>
-              </div>
-
-              <div className="mt-3 flex items-center">
-                <div className="flex items-center text-green-500 font-medium">
-                  <svg
-                    className="w-4 h-4 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium uppercase tracking-wider text-gray-500">
+                      TOTAL
+                    </p>
+                    <h3 className="text-3xl font-bold text-gray-800 mt-1">
+                      <span className="inline-block animate-fadeIn">
+                        {item.cnt}
+                      </span>
+                    </h3>
+                  </div>
+                  <div className="flex items-center justify-center rounded-full p-3 bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20">
+                    <FaBook className="text-white" size={26} />
+                  </div>
                 </div>
 
-                <span className="ml-auto bg-indigo-50 text-indigo-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                  {item.name}
-                </span>
+                <div className="mt-5 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full width-full"></div>
+                </div>
+
+                <div className="mt-3 flex items-center">
+                  <div className="flex items-center text-green-500 font-medium">
+                    <svg
+                      className="w-4 h-4 mr-1"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="ml-auto bg-indigo-50 text-indigo-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                    {item.name}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">

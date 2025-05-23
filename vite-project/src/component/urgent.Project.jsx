@@ -125,7 +125,6 @@ const UrgentProjects = () => {
       <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">
         URGENT
       </h2>
-
       <FilterCompo
         setToggle={setToggle}
         searchTerm={searchTerm}
@@ -137,7 +136,6 @@ const UrgentProjects = () => {
         setIsFilterOpen={setIsFilterOpen}
         filterRef={filterRef}
       />
-
       <div
         layout="true"
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"

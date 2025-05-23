@@ -431,7 +431,7 @@ export const getProjectOverview = async (req, res) => {
       .slice(0, 3);
 
     const statusGroups = {
-      upcomming: { name: "UpComming", cnt: 0 },
+      upcoming: { name: "UpComing", cnt: 0 },
       running: { name: "Active", cnt: 0 },
       urgent: { name: "Urgent", cnt: 0 },
       pending: { name: "Pending", cnt: 0 },
@@ -462,7 +462,7 @@ export const getProjectOverview = async (req, res) => {
       if (status === "cancelled") statusGroups.cancelled.cnt += 1;
       if (status === "no request") statusGroups.norequest.cnt += 1;
       if (status === "running") statusGroups.running.cnt += 1;
-      if (status === "upcoming") statusGroups.upcomming.cnt += 1;
+      if (status === "upcoming") statusGroups.upcoming.cnt += 1;
       if (status === "pending") statusGroups.pending.cnt += 1;
 
       if (startDate) {
@@ -488,7 +488,7 @@ export const getProjectOverview = async (req, res) => {
       },
       {
         title: "Upcoming",
-        value: statusGroups.upcomming.cnt,
+        value: statusGroups.upcoming.cnt,
         color: "#34d399",
       },
       {
@@ -530,13 +530,7 @@ export const getProjectOverview = async (req, res) => {
     res.json({
       latestProjects,
       highPriority,
-      statusGroups: {
-        upcomming: statusGroups.upcomming,
-        urgent: statusGroups.urgent,
-        running: statusGroups.running,
-        pending: statusGroups.pending,
-        closed: statusGroups.closed,
-      },
+      statusGroups: statusGroups,
       chart,
       todayNotice: count,
     });

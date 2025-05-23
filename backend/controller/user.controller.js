@@ -64,6 +64,7 @@ export const loginUser = async (req, res) => {
       success: true,
       message: "Login successful",
       token,
+      user: data.username,
     });
   } catch (e) {
     console.log(e);
