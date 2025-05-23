@@ -81,7 +81,7 @@ export const fetchProjectsUrgent = async ({
   }
 };
 
-export const login = async ({ username, password, navigate }) => {
+export const login = async ({ username, password, navigate, setUser }) => {
   if (!username || !password) {
     toast.error("Please enter both username and password");
     return;
@@ -92,9 +92,12 @@ export const login = async ({ username, password, navigate }) => {
       { username, password }
     );
     const token = response?.data?.token;
-    if (token) {
+    const user = response?.data?.user;
+    if (token || user) {
       sessionStorage.setItem("token", token);
+      sessionStorage.setItem("user", user);
       toast.success("Login successful!");
+      setUser(user);
       navigate("/page");
     } else {
       toast.error("Login failed: Token not received");

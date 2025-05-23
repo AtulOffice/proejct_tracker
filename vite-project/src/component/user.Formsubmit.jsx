@@ -56,7 +56,6 @@ const InputForm = () => {
       const filteredData = await fetchSearchData({
         jobNumber: debouncedJobNumber,
       });
-      console.log(filteredData);
       if (filteredData) {
         setIsDataFound(true);
         toast.success("Data fetched successfully");
@@ -94,7 +93,6 @@ const InputForm = () => {
         `${import.meta.env.VITE_API_URL}/worksts/save`,
         formData
       );
-      console.log(formData);
       setIsDataFound(false);
       lastFetchedRef.current = "";
       setFormData(userformval);

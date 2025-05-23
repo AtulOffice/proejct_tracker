@@ -58,7 +58,6 @@ const saveData = async (data) => {
       duration: 0,
       checklistStatus: "N/A",
     });
-    console.log(response.data);
   } catch (e) {
     console.log(e);
   }

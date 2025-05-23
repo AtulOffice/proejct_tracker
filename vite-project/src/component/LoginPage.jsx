@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../appContex";
 import { login } from "../utils/apiCall";
 const LoginPage = () => {
+  const { setUser } = useAppContext();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: "",
@@ -17,12 +18,13 @@ const LoginPage = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     login({
-      username: loginData.username,
+      username: loginData.username.trim().toLowerCase(),
       password: loginData.password,
       navigate: navigate,
+      setUser: setUser,
     });
   };
 
@@ -33,7 +35,7 @@ const LoginPage = () => {
           <h2 className="text-2xl font-bold tracking-tight italic">LOGIN</h2>
         </div>
         <div className="p-6 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <label
                 htmlFor="username"

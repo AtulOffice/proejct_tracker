@@ -4,8 +4,10 @@ import { format } from "date-fns";
 import { PieChart } from "react-minimal-pie-chart";
 import { FaUser } from "react-icons/fa6";
 import LollipopChart from "./overviewChart";
+import { useAppContext } from "../appContex";
 
 const ProjectOverview = ({ overvew, setActiveCard }) => {
+  const userSessionName = sessionStorage.getItem("user");
   const statusGroups = {
     upcoming: { name: "UpComing", cnt: 0 },
     running: { name: "Active", cnt: 0 },
@@ -39,7 +41,10 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
           <h2 className="text-2xl font-bold text-gray-800">
             Dashboard Overview
           </h2>
-          <p className="text-gray-600 mt-1">Welcome back, Admin!</p>
+          <p className="text-gray-600 mt-1">
+            Welcome back,{" "}
+            {userSessionName ? userSessionName.toUpperCase() : "Admin!"}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
