@@ -24,6 +24,18 @@ export const fetchProjects = async ({ page, search }) => {
     console.error("Failed to fetch projects:", err);
   }
 };
+export const fetchProjectslatest = async ({ page, search }) => {
+  try {
+    const res = await axios.get(
+      `${
+        import.meta.env.VITE_API_URL
+      }/latestProjectpagination?page=${page}&limit=15&search=${search}`
+    );
+    return { data: res.data.data, hashMore: page < res.data.totalPages };
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+  }
+};
 
 export const fetchProjectsCatogary = async ({ status, page, search }) => {
   try {

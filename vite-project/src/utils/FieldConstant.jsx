@@ -892,7 +892,7 @@ export const UpdateConst = [
     id: "daysspendsite",
     name: "daysspendsite",
     placeholder: "Enter the value",
-    required: true,
+    required: false,
   },
 ];
 

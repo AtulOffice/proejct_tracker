@@ -30,6 +30,7 @@ import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { fetchProjectOveriew, logout } from "../utils/apiCall";
+import ElevenCard from "./latest.project";
 
 const AdminDashboard = () => {
   const { toggle } = useAppContext();
@@ -84,6 +85,8 @@ const AdminDashboard = () => {
         return <NineCard />;
       case "ten":
         return <TenCard />;
+      case "eleven":
+        return <ElevenCard />;
       default:
         return <ZeroCard />;
     }
@@ -204,6 +207,17 @@ const AdminDashboard = () => {
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   RUNNING PROJECTS
+                </div>
+              </li>
+              <li>
+                <div
+                  onClick={() => handleActiveBar("eleven")}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                    activeCard === "eleven" ? "bg-indigo-50 rounded-md" : ""
+                  }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  LATEST PROJECTS
                 </div>
               </li>
               <li>
