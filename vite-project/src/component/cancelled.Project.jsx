@@ -19,7 +19,6 @@ const ProjectsCancelled = () => {
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
 
   useEffect(() => {
-    
     const handler = setTimeout(() => {
       setdebounceSerchTerm(searchTerm);
     }, 2000);
@@ -27,7 +26,6 @@ const ProjectsCancelled = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    
     const getProjects = async () => {
       if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
         try {
@@ -67,7 +65,6 @@ const ProjectsCancelled = () => {
   }, [currentPage, toggle, debounceSearchTerm]);
 
   useEffect(() => {
-    
     if (!data) return;
     const filterfun = setTimeout(() => {
       const filtered = filterProjectsUtils({
@@ -82,7 +79,6 @@ const ProjectsCancelled = () => {
 
   const filterRef = useRef(null);
   useEffect(() => {
-    
     function handleClickOutside(event) {
       if (filterRef.current && !filterRef.current.contains(event.target)) {
         setIsFilterOpen(false);
@@ -117,9 +113,7 @@ const ProjectsCancelled = () => {
 
   return (
     <div className="max-w-8xl min-h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
-      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">
-        CANCELLED PROJECTS
-      </h2>
+      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">CANCELLED</h2>
 
       <FilterCompo
         setToggle={setToggle}

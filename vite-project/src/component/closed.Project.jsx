@@ -7,7 +7,7 @@ import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import { fetchProjectsCatogary } from "../utils/apiCall";
 
-const ProjectsPending = () => {
+const ProjectsClosed = () => {
   const { setToggle, toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -33,7 +33,7 @@ const ProjectsPending = () => {
           const val = await fetchProjectsCatogary({
             page: currentPage,
             search: debounceSearchTerm,
-            status: "pending",
+            status: "closed",
           });
           if (val?.data) {
             setData(val.data);
@@ -48,7 +48,7 @@ const ProjectsPending = () => {
         const val = await fetchProjectsCatogary({
           page: currentPage,
           search: "",
-          status: "pending",
+          status: "closed",
         });
         if (val?.data) {
           setData(val.data);
@@ -113,8 +113,10 @@ const ProjectsPending = () => {
   };
 
   return (
-    <div className="max-w-8xl h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
-      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">PENDING</h2>
+    <div className="max-w-8xl min-h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">
+        CLOSED
+      </h2>
 
       <FilterCompo
         setToggle={setToggle}
@@ -198,4 +200,4 @@ const ProjectsPending = () => {
   );
 };
 
-export default ProjectsPending;
+export default ProjectsClosed;

@@ -31,6 +31,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { fetchProjectOveriew, logout } from "../utils/apiCall";
 import ElevenCard from "./latest.project";
+import ProjectsNoRequest from "./norequest";
+import ProjectsClosed from "./closed.Project";
 
 const AdminDashboard = () => {
   const { toggle } = useAppContext();
@@ -64,7 +66,7 @@ const AdminDashboard = () => {
   const renderCard = () => {
     switch (activeCard) {
       case "zero":
-        return <ZeroCard overvew={overvew} />;
+        return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
       case "one":
         return <OneCard />;
       case "two":
@@ -87,8 +89,12 @@ const AdminDashboard = () => {
         return <TenCard />;
       case "eleven":
         return <ElevenCard />;
+      case "twelve":
+        return <ProjectsNoRequest />;
+      case "thirteen":
+        return <ProjectsClosed />;
       default:
-        return <ZeroCard />;
+        return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
   };
   useEffect(() => {
@@ -173,7 +179,7 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <FaRegSquarePlus className="mr-3" size={20} />
-                  ADD NEW PROJECT
+                  ADD NEW
                 </div>
               </li>
               <li>
@@ -184,7 +190,7 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
-                  ALL PROJECTS
+                  ALL
                 </div>
               </li>
               <li>
@@ -195,7 +201,7 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
-                  UPCOMING PROJECTS
+                  UPCOMING
                 </div>
               </li>
               <li>
@@ -206,7 +212,18 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
-                  RUNNING PROJECTS
+                  RUNNING
+                </div>
+              </li>
+              <li>
+                <div
+                  onClick={() => handleActiveBar("twelve")}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                    activeCard === "twelve" ? "bg-indigo-50 rounded-md" : ""
+                  }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  NO REQUEST
                 </div>
               </li>
               <li>
@@ -217,7 +234,7 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
-                  LATEST PROJECTS
+                  LATEST
                 </div>
               </li>
               <li>
@@ -228,7 +245,7 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <MdOutlinePendingActions className="mr-3" size={20} />
-                  PENDING PROJECTS
+                  PENDING
                 </div>
               </li>
               <li>
@@ -239,7 +256,18 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
-                  COMPLTED PROJECTS
+                  COMPLTED
+                </div>
+              </li>
+              <li>
+                <div
+                  onClick={() => handleActiveBar("thirteen")}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                    activeCard === "thirteen" ? "bg-indigo-50 rounded-md" : ""
+                  }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  CLOSED
                 </div>
               </li>
               <li>
@@ -250,7 +278,7 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <TbUrgent className="mr-3" size={20} />
-                  URGENT PROJECTS
+                  URGENT
                 </a>
               </li>
               <li>
@@ -272,7 +300,7 @@ const AdminDashboard = () => {
                   }`}
                 >
                   <MdCancel className="mr-3" size={20} />
-                  CANCELLED PROJECT
+                  CANCELLED
                 </a>
               </li>
               <li>

@@ -5,13 +5,23 @@ import { PieChart } from "react-minimal-pie-chart";
 import { FaUser } from "react-icons/fa6";
 import LollipopChart from "./overviewChart";
 
-const ProjectOverview = ({ overvew }) => {
+const ProjectOverview = ({ overvew, setActiveCard }) => {
   const statusGroups = {
-    upcomming: { name: "UpComming Projects", cnt: 0 },
-    running: { name: "Active Projects", cnt: 0 },
-    urgent: { name: "Urgent Projects", cnt: 0 },
-    pending: { name: "Pending Projects", cnt: 0 },
-    complete: { name: "Completed Projects", cnt: 0 },
+    upcomming: { name: "UpComming", cnt: 0 },
+    running: { name: "Active", cnt: 0 },
+    urgent: { name: "Urgent", cnt: 0 },
+    pending: { name: "Pending", cnt: 0 },
+    complete: { name: "Completed", cnt: 0 },
+  };
+  const router = {
+    UpComming: "three",
+    Active: "ten",
+    Urgent: "seven",
+    Pending: "four",
+    Completed: "five",
+    Closed: "thirteen",
+    norequest: "twelve",
+    Cancelled: "eight",
   };
   const statusGroupschart = {
     complete: { name: "Completed", cnt: 0, color: "#fbbf24" },
@@ -37,8 +47,9 @@ const ProjectOverview = ({ overvew }) => {
             : Object.values(statusGroups)
           ).map((item, index) => (
             <div
+              onClick={() => setActiveCard(router[item.name])}
               key={index}
-              className="relative overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]"
+              className="cursor-pointer relative overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100/40 to-purple-100/30 rounded-bl-[100px] -z-10"></div>
 

@@ -179,7 +179,7 @@ const InputForm = () => {
     <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-white drop-shadow-md">
-          PROJECT DETAILS
+          DETAILS
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <FormField formData={formData} handleChange={handleChange} />
