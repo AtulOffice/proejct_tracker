@@ -6,10 +6,8 @@ const WorkStatusModal = ({ workStatus, onClose }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 7;
-    
 
   useEffect(() => {
-    
     if (workStatus) {
       const allLines = workStatus
         .split("\n")
@@ -52,48 +50,57 @@ const WorkStatusModal = ({ workStatus, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 backdrop-blur-xs p-4">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl shadow-2xl p-8 w-120 max-w-md  border-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] border-gradient-to-r from-pink-500 via-red-500 to-yellow-500 flex flex-col"
       >
-        <div className="min-h-[320px]">
-          {getCurrentPageLines().map((line, index) => (
-            <p key={index} className={`text-base mb-2 ${getEmojiColor(line)}`}>
-              {line}
-            </p>
-          ))}
+        <div className="p-6 pb-0 flex-shrink-0">
+          <h2 className="text-xl font-bold text-gray-800">Work Status</h2>
         </div>
-
-        <div className="flex justify-between items-center mt-6 border-t pt-4">
-          <div className="text-sm text-gray-500">
-            Page {currentPage} of {totalPages}
-          </div>
-          <div className="flex space-x-3">
-            <button
-              onClick={goToPrevPage}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded-lg bg-gray-200 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Previous
-            </button>
-            <button
-              onClick={goToNextPage}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <div className="space-y-2">
+            {getCurrentPageLines().map((line, index) => (
+              <p
+                key={index}
+                className={`text-base break-words ${getEmojiColor(line)}`}
+              >
+                {line}
+              </p>
+            ))}
           </div>
         </div>
+        <div className="p-6 pt-4 border-t bg-gray-50 rounded-b-3xl flex-shrink-0">
+          <div className="flex justify-between items-center mb-4">
+            <div className="text-sm text-gray-500">
+              Page {currentPage} of {totalPages}
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={goToPrevPage}
+                disabled={currentPage === 1}
+                className="px-3 py-1 rounded-lg bg-gray-200 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-300 transition-colors"
+              >
+                Previous
+              </button>
+              <button
+                onClick={goToNextPage}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:from-red-600 hover:to-pink-600 transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          </div>
 
-        <div className="flex justify-end mt-4">
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-lg bg-gradient-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-900 font-semibold transition shadow-md"
-          >
-            Close
-          </button>
+          <div className="flex justify-end">
+            <button
+              onClick={onClose}
+              className="px-5 py-2 rounded-lg bg-gradient-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-900 font-semibold transition shadow-md"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
