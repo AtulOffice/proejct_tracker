@@ -93,6 +93,7 @@ export const login = async ({ username, password, navigate, setUser }) => {
     );
     const token = response?.data?.token;
     const user = response?.data?.user;
+    // nothing
     if (token || user) {
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("user", user);
