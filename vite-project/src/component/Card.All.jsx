@@ -170,6 +170,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
               <strong>Order Value:(lacs)</strong> ₹
               {project?.bill ?? "not mentioned"}
             </li>
+            {/* this is comment */}
             <li>
               <strong>Pending Bill(lacs):</strong> ₹
               {project?.dueBill ?? "not mentioned"}
