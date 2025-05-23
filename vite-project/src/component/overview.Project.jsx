@@ -22,6 +22,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
     Closed: "thirteen",
     norequest: "twelve",
     Cancelled: "eight",
+    "No Request": "twelve",
   };
   const statusGroupschart = {
     complete: { name: "Completed", cnt: 0, color: "#fbbf24" },

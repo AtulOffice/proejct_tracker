@@ -6,12 +6,15 @@ const Context = createContext();
 
 export const AppProvider = ({ children }) => {
   const [toggle, setToggle] = useState(false);
+  const [user, setUser] = useState();
 
   return (
     <Context.Provider
       value={{
         setToggle,
         toggle,
+        setUser,
+        user,
       }}
     >
       {children}
