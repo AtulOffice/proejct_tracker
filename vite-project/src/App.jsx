@@ -21,7 +21,11 @@ function App() {
     <AppProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<InputForm />} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <TaskDisplay />
+            </ProtectedRoute>
+          } />
           <Route
             path="/page"
             element={
@@ -30,11 +34,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/engineer"
+            element={<InputForm />
+            }
+          />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<Navigate to="/" />} />
           <Route path="/update/:id" element={<ProtectedRoute><UpdateForm /></ProtectedRoute>} />
           <Route path="/develop/:jobnumber" element={<ProtectedRoute><ProjectdevlopForm /></ProtectedRoute>} />
           <Route path="/develop/update/:id" element={<ProtectedRoute><UpdatedevForm /></ProtectedRoute>} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </AppProvider>
