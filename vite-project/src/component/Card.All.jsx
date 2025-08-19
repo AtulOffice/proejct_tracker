@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
+import { FaDev } from "react-icons/fa";
 import PopupConfirmation from "./PopuP.Page";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -52,6 +53,18 @@ const CardAll = ({
     }
   };
 
+  const handleUpdateStatus = (id) => {
+    setIsdisabled(true);
+    try {
+      navigate(`/update/${id}`);
+      setUpdateflag(false);
+    } catch (error) {
+      console.error("Navigation error:", error);
+    } finally {
+      setIsdisabled(false);
+    }
+  };
+
   return (
     <div>
       {deleteFlag && (
@@ -69,6 +82,7 @@ const CardAll = ({
       {updateFlag && (
         <PopupConfirmation
           setCancelflag={setUpdateflag}
+          deleteFlag={false}
           isDisabled={isDisabled}
           handleConfirm={() => handleUpdate(project._id)}
           title="Are you sure?"
@@ -101,6 +115,28 @@ const CardAll = ({
               </svg>
               {project.jobNumber}
             </span>
+
+            <div
+              onClick={() => navigate(`/develop/${project.jobNumber}`)}
+              className="relative group "
+            >
+              <button
+                className="
+flex items-center justify-center
+bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
+hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
+text-white p-2 rounded-full shadow-lg
+transition-all duration-200
+hover:scale-110 hover:-rotate-6
+ring-2 ring-transparent hover:ring-blue-300
+focus:outline-none focus:ring-4 focus:ring-blue-400
+"
+                aria-label="Update"
+                type="button"
+              >
+                <FaDev className="w-5 h-5 drop-shadow" />
+              </button>
+            </div>
 
             <div
               onClick={() => setUpdateflag(true)}

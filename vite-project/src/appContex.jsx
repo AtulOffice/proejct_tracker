@@ -6,6 +6,7 @@ const Context = createContext();
 
 export const AppProvider = ({ children }) => {
   const [toggle, setToggle] = useState(false);
+  const [toggleDev, setToggleDev] = useState(false);
   const [user, setUser] = useState();
 
   return (
@@ -15,6 +16,7 @@ export const AppProvider = ({ children }) => {
         toggle,
         setUser,
         user,
+        toggleDev, setToggleDev
       }}
     >
       {children}

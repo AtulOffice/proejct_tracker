@@ -33,6 +33,7 @@ import { fetchProjectOveriew, logout } from "../utils/apiCall";
 import ElevenCard from "./latest.project";
 import ProjectsNoRequest from "./norequest";
 import ProjectsClosed from "./closed.Project";
+import ProjectDev from "./project.Devlopment";
 
 const AdminDashboard = () => {
   const { toggle } = useAppContext();
@@ -93,6 +94,8 @@ const AdminDashboard = () => {
         return <ProjectsNoRequest />;
       case "thirteen":
         return <ProjectsClosed />;
+      case "fourteen":
+        return <ProjectDev />;
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -150,9 +153,8 @@ const AdminDashboard = () => {
       </header>
 
       <aside
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex flex-col h-full">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
@@ -163,9 +165,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("zero")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <RiDashboardLine className="mr-3 text-indigo-500" size={20} />
                   DASHBOARD
@@ -174,9 +175,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("one")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "one" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "one" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <FaRegSquarePlus className="mr-3" size={20} />
                   ADD NEW
@@ -185,9 +185,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("two")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   ALL
@@ -196,9 +195,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("three")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   UPCOMING
@@ -207,9 +205,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("ten")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   RUNNING
@@ -218,9 +215,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("twelve")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "twelve" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twelve" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   NO REQUEST
@@ -229,9 +225,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("eleven")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "eleven" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eleven" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   LATEST
@@ -240,9 +235,8 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("four")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "four" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "four" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <MdOutlinePendingActions className="mr-3" size={20} />
                   PENDING
@@ -251,20 +245,18 @@ const AdminDashboard = () => {
               <li>
                 <div
                   onClick={() => handleActiveBar("five")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "five" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "five" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
-                  COMPLTED
+                  COMPLETED
                 </div>
               </li>
               <li>
                 <div
                   onClick={() => handleActiveBar("thirteen")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "thirteen" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "thirteen" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   CLOSED
@@ -273,9 +265,8 @@ const AdminDashboard = () => {
               <li>
                 <a
                   onClick={() => handleActiveBar("seven")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <TbUrgent className="mr-3" size={20} />
                   URGENT
@@ -284,20 +275,28 @@ const AdminDashboard = () => {
               <li>
                 <a
                   onClick={() => handleActiveBar("six")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <RiCustomerServiceFill className="mr-3" size={20} />
                   SERVICES
                 </a>
               </li>
               <li>
+                <div
+                  onClick={() => handleActiveBar("fourteen")}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fourteen" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  PROJECT DEV STATUS
+                </div>
+              </li>
+              <li>
                 <a
                   onClick={() => handleActiveBar("eight")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <MdCancel className="mr-3" size={20} />
                   CANCELLED
@@ -306,9 +305,8 @@ const AdminDashboard = () => {
               <li>
                 <a
                   onClick={() => handleActiveBar("nine")}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                    activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
-                  }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
                 >
                   <RiProgress2Line className="mr-3" size={20} />
                   WORK STATUS

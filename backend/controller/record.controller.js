@@ -188,6 +188,8 @@ export const LatestProjectPagination = async (req, res) => {
       }
     }
     return res.json({
+      success: true,
+      message: "Data fetched successfully",
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
@@ -228,6 +230,8 @@ export const Pagination = async (req, res) => {
       }
     }
     return res.json({
+      success: true,
+      message: "data fetched successfully",
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
@@ -271,6 +275,8 @@ export const PaginationCatogary = async (req, res) => {
       }
     }
     return res.json({
+      success: true,
+      message: "data fetched successfully",
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
@@ -311,13 +317,15 @@ export const Paginationsotype = async (req, res) => {
       }
     }
     return res.json({
+      success: true,
+      message: "Data fetched successfully",
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
       data,
     });
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ success: false, error: "Server error" });
   }
 };
 export const findrecordbyJobnumber = async (req, res) => {
@@ -402,6 +410,8 @@ export const UrgentProjectPegination = async (req, res) => {
     }
 
     return res.json({
+      success: true,
+      message: "data fetched successfully",
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
@@ -409,7 +419,7 @@ export const UrgentProjectPegination = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ success: false, error: "Server error" });
   }
 };
 

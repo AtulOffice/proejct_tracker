@@ -161,7 +161,7 @@ const ProjectsAll = () => {
             <span>Prev</span>
           </button>
 
-          <button
+          {hasMore && <button
             onClick={handleNextPage}
             className="mb-10 bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-500 hover:from-indigo-700 hover:via-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out flex items-center gap-3 border-2 border-transparent hover:border-white"
           >
@@ -180,7 +180,7 @@ const ProjectsAll = () => {
                 d="M9 5l7 7-7 7"
               />
             </svg>
-          </button>
+          </button>}
         </div>
       )}
     </div>

@@ -82,7 +82,8 @@ export const getAllWorkStatus = async (req, res) => {
 export const getWorkStatusById = async (req, res) => {
   try {
     const status = await workStratuModel.findById(req.params.id);
-    if (!status) return res.status(404).json({ error: "Not found" });
+    if (!status)
+      return res.status(404).json({ success: false, error: "Not found" });
     res.status(200).json({
       success: true,
       message: "data fetches successfully",
@@ -154,6 +155,8 @@ export const workStatusPegination = async (req, res) => {
       }
     }
     return res.json({
+      success: true,
+      message: "data fetched successfully",
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,

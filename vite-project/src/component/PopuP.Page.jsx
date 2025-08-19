@@ -7,10 +7,17 @@ const PopupConfirmation = ({
   btnval,
   handleConfirm,
   isDisabled,
+  deleteFlag = true
 }) => {
+  console.log(deleteFlag);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center  bg-opacity-40 backdrop-blur-xs">
-      <div className="bg-white rounded-3xl shadow-2xl p-8 w-120 max-w-md animate-fade-in border-4 border-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
+      <div className={
+        deleteFlag
+          ?
+          "bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-3xl shadow-2xl p-8 w-120 max-w-md animate-fade-in border-4 border-gradient-to-r"
+          :
+          "bg-white rounded-3xl shadow-2xl p-8 w-120 max-w-md animate-fade-in border-4 border-gradient-to-r from-pink-500 via-red-500 to-yellow-500"}>
         <h2 className="text-2xl font-extrabold text-red-600 mb-4 flex items-center">
           <svg
             className="w-7 h-7 mr-3 text-red-500 animate-pulse"
@@ -51,7 +58,7 @@ const PopupConfirmation = ({
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

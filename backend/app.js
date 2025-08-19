@@ -7,6 +7,7 @@ import cors from "cors";
 import { WorkstsRouter } from "./routes/WorkStatus.route.js";
 import rateLimit from "express-rate-limit";
 import { setupCronJobs } from "./cronJobs.js";
+import { ProjectDevRouter } from "./routes/projectDev.route.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1", RecordRouter);
 app.use("/api/v1", userRouter);
 app.use("/api/v1/worksts", WorkstsRouter);
+app.use("/api/v1/projectDev", ProjectDevRouter);
 
 app.listen(port, () => {
   ConnDB({ str: process.env.DBSTR });
