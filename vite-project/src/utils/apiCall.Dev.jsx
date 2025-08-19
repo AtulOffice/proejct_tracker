@@ -15,7 +15,6 @@ export const fetchProjectsDev = async ({ page, search }) => {
 };
 
 export const statusSave = async (data) => {
-    console.log("Saving project status with data:", data);
     try {
         const res = await axios.post(
             `${import.meta.env.VITE_API_URL}/projectDev/save`,
@@ -53,7 +52,6 @@ export const statusupdate = async (data, id) => {
             `${import.meta.env.VITE_API_URL}/projectDev/updatebyid/${id}`,
             data
         );
-        console.log("Project status updated successfully api call page :", res.data);
         return res.data;
     } catch (err) {
         if (err.response) {

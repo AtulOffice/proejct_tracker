@@ -6,6 +6,10 @@ import toast from "react-hot-toast";
 import { useAppContext } from "../appContex";
 import { CheckboxField, InputField, SelectField } from "../utils/dev.add";
 import { documentRows, logicRows, projectRows, screenRows, testingRows } from "../utils/dev.context";
+import { mapFrontendToBackend } from "../utils/frontToback";
+import { calculateConsumedDays } from "../utils/calcDays";
+import { validateFormData } from "../utils/validator";
+import { ProgressBar } from "../utils/progressBar";
 
 
 
@@ -115,137 +119,13 @@ const ProjectdevlopForm = () => {
         }));
     };
 
-    const calculateConsumedDays = (startDate, endDate) => {
-        if (!startDate || !endDate) return "0";
-
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        if (isNaN(start) || isNaN(end) || end < start) return "0";
-
-        const diffMs = end - start;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24)) + 1;
-
-        return diffDays.toString();
-    };
-
-
-    const mapFrontendToBackend = (formData) => {
-        const backend = {
-            status: formData.project.rows[0]?.completed || false,
-            JobNumber: jobnumber || "",
-            startDate: formData.project.rows[0]?.startDate || "",
-            endDate: formData.project.rows[0]?.endDate || "",
-            DaysConsumed: formData.project.rows[0]?.daysConsumed || "0",
-
-            fileReading: toBackendObj(formData.document.rows[0]),
-            pId: toBackendObj(formData.document.rows[1]),
-            systemConfig: toBackendObj(formData.document.rows[2]),
-            generalArrangement: toBackendObj(formData.document.rows[3]),
-            powerWiring: toBackendObj(formData.document.rows[4]),
-            moduleWiring: toBackendObj(formData.document.rows[5]),
-            ioList: toBackendObj(formData.document.rows[6]),
-
-            alarm: toBackendBoolObj(formData.screen.rows[1]),
-            scadaScreen: [
-                {
-                    title: formData.screen.rows[0]?.title || "SCADA Screen",
-                    scadastartDate: formData.screen.rows[0]?.startDate || "",
-                    scadaendDate: formData.screen.rows[0]?.endDate || "",
-                    scadaconsumedDays: formData.screen.rows[0]?.daysConsumed || "0",
-                    status: formData.screen.rows[0]?.completed || false,
-                }
-            ],
-            Trend: toBackendBoolObj(formData.screen.rows[2]),
-            dataLog: toBackendBoolObj(formData.screen.rows[3]),
-
-
-            aiMapping: toBackendBoolObj(formData.logic.rows[0]),
-            aoMapping: toBackendBoolObj(formData.logic.rows[1]),
-            diMapping: toBackendBoolObj(formData.logic.rows[2]),
-            doMapping: toBackendBoolObj(formData.logic.rows[3]),
-            oprationalLogic: toBackendBoolObj(formData.logic.rows[4]),
-            moduleStatus: toBackendBoolObj(formData.logic.rows[5]),
-            redundencyStatus: toBackendBoolObj(formData.logic.rows[6]),
-
-            rangeSet: toBackendObj(formData.testing.rows[0]),
-            ioTesting: toBackendObj(formData.testing.rows[1]),
-            alarmTest: toBackendObj(formData.testing.rows[2]),
-            trendsTest: toBackendObj(formData.testing.rows[3]),
-            operationLogic: toBackendObj(formData.testing.rows[4]),
-            moduleStatusTest: toBackendObj(formData.testing.rows[5]),
-            dlrStatusTest: toBackendObj(formData.testing.rows[6]),
-            redundencyStatusTest: toBackendObj(formData.testing.rows[7]),
-            // summary: {}
-        };
-
-        return backend;
-    };
-
-    const toBackendObj = (row) => ({
-        ...(row?.Reqiredval && { requireMent: row.Reqiredval }),
-        ...(row?.title && { title: row.title }),
-        startDate: row?.startDate || "",
-        endDate: row?.endDate || "",
-        consumedDays: row?.daysConsumed || "0",
-        status: row?.completed || false,
-    });
-
-
-    const toBackendBoolObj = (row) => ({
-        startDate: row?.startDate || "",
-        ...(row?.title && { title: row.title }),
-        endDate: row?.endDate || "",
-        consumedDays: row?.daysConsumed || "0",
-        status: row?.completed || false
-    });
-
-
-
-
-
-    const validateFormData = (formData) => {
-        let isValid = true;
-
-        const checkRow = (row, isProject = false, isTime = true) => {
-            if (!row) return true;
-
-            const { startDate, endDate, daysConsumed, completed } = row;
-
-            if (isProject && !startDate) {
-                isValid = false;
-                return false;
-            }
-
-            if (isTime && (startDate && endDate && new Date(endDate) < new Date(startDate))) {
-                isValid = false;
-                return false;
-            }
-
-            if (isTime && completed) {
-                if (!startDate || !endDate || !daysConsumed || daysConsumed === "0") {
-                    isValid = false;
-                    return false;
-                }
-            }
-
-            return true;
-        };
-
-        checkRow(formData.project.rows?.[0], true);
-        formData.document.rows.forEach(row => checkRow(row));
-        formData.screen.rows.forEach(row => checkRow(row));
-        formData.logic.rows.forEach(row => checkRow(row));
-        formData.testing.rows.forEach(row => checkRow(row, false, false));
-        return isValid;
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const isValid = validateFormData(formData);
         if (!isValid) {
-            toast.error("⚠️ Please check the form: some required fields are missing, start date is after end date, or Project Start Date is missing.");
+            toast.error("⚠️ Please check the form: some fields are missing");
             return;
         }
 
@@ -261,7 +141,6 @@ const ProjectdevlopForm = () => {
                     project: { rows: projectRows() }
                 });
 
-                console.log("Form submitted successfully: status ", response.success);
                 nevigate(`/page`);
                 setToggleDev(prev => !prev);
                 toast.success("Data saved successfully!");
@@ -785,43 +664,9 @@ const ProjectdevlopForm = () => {
                     </div >
                 </form >
 
-                < div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4" >
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Document</span>
-                            <span className="text-lg">📄</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.document.rows.filter(row => row.completed).length}/7</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.document.rows.filter(row => row.completed).length / 7) * 100)}% Complete</div>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Screen</span>
-                            <span className="text-lg">🖥️</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.screen.rows.filter(row => row.completed).length}/7</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.screen.rows.filter(row => row.completed).length / 7) * 100)}% Complete</div>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Logic</span>
-                            <span className="text-lg">⚡</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.logic.rows.filter(row => row.completed).length}/7</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.logic.rows.filter(row => row.completed).length / 7) * 100)}% Complete</div>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Testing</span>
-                            <span className="text-lg">🧪</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.testing.rows.filter(row => row.completed).length}/8</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.testing.rows.filter(row => row.completed).length / 8) * 100)}% Complete</div>
-                    </div>
-                </div >
+                  <ProgressBar
+                  formData={formData}
+                  />
             </div >
         </div >
     );

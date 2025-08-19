@@ -6,101 +6,20 @@ import toast from "react-hot-toast";
 import { useAppContext } from "../appContex";
 import { CheckboxField, InputField, SelectField } from "../utils/dev.add";
 import { documentRows, logicRows, projectRows, screenRows, testingRows } from "../utils/dev.context";
-import { mapFrontendToBackend } from "../utils/backTofront";
-
-
+import { mapFrontendToBackend } from "../utils/frontToback";
+import { mapBackendToFrontend } from "../utils/backTofront";
+import { calculateConsumedDays } from "../utils/calcDays";
+import { validateFormData } from "../utils/validator";
+import { ProgressBar } from "../utils/progressBar";
 
 const ProjectdevlopForm = () => {
     const nevigate = useNavigate()
     const { id } = useParams();
     const { setToggleDev } = useAppContext();
-
-    const mapBackendToFrontend = (backend) => {
-        return {
-            project: {
-                rows: [
-                    {
-                        jobNumber: backend.JobNumber || "",
-                        startDate: backend.startDate || "",
-                        endDate: backend.endDate || "",
-                        daysConsumed: backend.DaysConsumed || "0",
-                        completed: backend.status || false,
-                    }
-                ]
-            },
-            document: {
-                rows: [
-                    fromBackendObj(backend.fileReading),
-                    fromBackendObj(backend.pId),
-                    fromBackendObj(backend.systemConfig),
-                    fromBackendObj(backend.generalArrangement),
-                    fromBackendObj(backend.powerWiring),
-                    fromBackendObj(backend.moduleWiring),
-                    fromBackendObj(backend.ioList),
-                ]
-            },
-            screen: {
-                rows: [
-                    {
-                        title: backend.scadaScreen?.[0]?.title || "SCREENS",
-                        startDate: backend.scadaScreen?.[0]?.scadastartDate || "",
-                        endDate: backend.scadaScreen?.[0]?.scadaendDate || "",
-                        daysConsumed: backend.scadaScreen?.[0]?.scadaconsumedDays || "0",
-                        completed: backend.scadaScreen?.[0]?.status || false,
-                    },
-                    fromBackendBoolObj(backend.alarm),
-                    fromBackendBoolObj(backend.Trend),
-                    fromBackendBoolObj(backend.dataLog),
-                ]
-            },
-            logic: {
-                rows: [
-                    fromBackendBoolObj(backend.aiMapping),
-                    fromBackendBoolObj(backend.aoMapping),
-                    fromBackendBoolObj(backend.diMapping),
-                    fromBackendBoolObj(backend.doMapping),
-                    fromBackendBoolObj(backend.oprationalLogic),
-                    fromBackendBoolObj(backend.moduleStatus),
-                    fromBackendBoolObj(backend.redundencyStatus),
-                ]
-            },
-            testing: {
-                rows: [
-                    fromBackendObj(backend.rangeSet),
-                    fromBackendObj(backend.ioTesting),
-                    fromBackendObj(backend.alarmTest),
-                    fromBackendObj(backend.trendsTest),
-                    fromBackendObj(backend.operationLogic),
-                    fromBackendObj(backend.moduleStatusTest),
-                    fromBackendObj(backend.dlrStatusTest),
-                    fromBackendObj(backend.redundencyStatusTest),
-                ]
-            }
-        };
-    };
-
-    const fromBackendObj = (row) => ({
-        title: row?.title || "",
-        Reqiredval: row?.requireMent || "",
-        startDate: row?.startDate || "",
-        endDate: row?.endDate || "",
-        daysConsumed: row?.consumedDays || "0",
-        completed: row?.status || false,
-    });
-
-    const fromBackendBoolObj = (row) => ({
-        title: row?.title || "",
-        startDate: row?.startDate || "",
-        endDate: row?.endDate || "",
-        daysConsumed: row?.consumedDays || "0",
-        completed: row?.status || false,
-    });
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const backendData = await getStatus(id);
-                console.log(backendData)
                 const frontendData = mapBackendToFrontend(backendData?.data);
                 setFormData(frontendData);
                 toast.success("Data fetched successfully!");
@@ -112,7 +31,6 @@ const ProjectdevlopForm = () => {
 
         fetchData();
     }, []);
-
 
 
     const [formData, setFormData] = useState({
@@ -134,19 +52,7 @@ const ProjectdevlopForm = () => {
     });
 
 
-    const calculateConsumedDays = (startDate, endDate) => {
-        if (!startDate || !endDate) return "0";
 
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        if (isNaN(start) || isNaN(end) || end < start) return "0";
-
-        const diffMs = end - start;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24)) + 1;
-
-        return diffDays.toString();
-    };
     const handleDocumentRowChange = (rowIndex, newRowData) => {
         const updatedRow = {
             ...newRowData,
@@ -230,59 +136,16 @@ const ProjectdevlopForm = () => {
 
 
 
-
-
-
-
-    const validateFormData = (formData) => {
-        let isValid = true;
-
-        const checkRow = (row, isProject = false, isTime = true) => {
-            if (!row) return true;
-
-            const { startDate, endDate, daysConsumed, completed } = row;
-
-            if (isProject && !startDate) {
-                isValid = false;
-                return false;
-            }
-
-            if (isTime && (startDate && endDate && new Date(endDate) < new Date(startDate))) {
-                isValid = false;
-                return false;
-            }
-
-            if (isTime && completed) {
-                if (!startDate || !endDate || !daysConsumed || daysConsumed === "0") {
-                    isValid = false;
-                    return false;
-                }
-            }
-
-            return true;
-        };
-
-        checkRow(formData.project.rows?.[0], true);
-        formData.document.rows.forEach(row => checkRow(row));
-        formData.screen.rows.forEach(row => checkRow(row));
-        formData.logic.rows.forEach(row => checkRow(row));
-        formData.testing.rows.forEach(row => checkRow(row, false, false));
-        return isValid;
-    };
-
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         const isValid = validateFormData(formData);
         if (!isValid) {
-            toast.error("⚠️ Please check the form: some required fields are missing, start date is after end date, or Project Start Date is missing.");
+            toast.error("⚠️ Please check the form: some fields are missing");
             return;
         }
         try {
             const data = mapFrontendToBackend(formData);
-            console.log("updated data:", data);
-
             const response = await statusupdate(data, id);
-            console.log("Response from API:", response);
             if (response) {
                 setFormData({
                     document: { rows: documentRows() },
@@ -292,10 +155,9 @@ const ProjectdevlopForm = () => {
                     project: { rows: projectRows() }
                 });
             }
-
-            console.log("Form updated successfully: status ", response?.success);
-            response?.success && nevigate(`/page`);
             setToggleDev(prev => !prev);
+
+            response?.success && nevigate(`/page`);
             toast.success(" Data updated successfully!");
         } catch (error) {
             console.error("Error submitting form:", error);
@@ -321,7 +183,7 @@ const ProjectdevlopForm = () => {
 
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleUpdate} className="space-y-8">
 
                     {/* DOCUMENT SECTION */}
                     <motion.div
@@ -735,7 +597,7 @@ const ProjectdevlopForm = () => {
                                         className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-gradient-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
                                     >
                                         <span className="text-sm font-semibold text-gray-800 bg-blue-200 px-3 py-2 rounded-lg border border-blue-100">
-                                            {row.jobNumber || ""}
+                                            {row.JobNumber || ""}
                                         </span>
                                         <InputField
                                             type="date"
@@ -820,43 +682,9 @@ const ProjectdevlopForm = () => {
                         </button>
                     </div >
                 </form >
-                < div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4" >
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Document</span>
-                            <span className="text-lg">📄</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.document.rows.filter(row => row.completed).length}/7</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.document.rows.filter(row => row.completed).length / 7) * 100)}% Complete</div>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Screen</span>
-                            <span className="text-lg">🖥️</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.screen.rows.filter(row => row.completed).length}/7</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.screen.rows.filter(row => row.completed).length / 7) * 100)}% Complete</div>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Logic</span>
-                            <span className="text-lg">⚡</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.logic.rows.filter(row => row.completed).length}/7</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.logic.rows.filter(row => row.completed).length / 7) * 100)}% Complete</div>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Testing</span>
-                            <span className="text-lg">🧪</span>
-                        </div>
-                        <div className="text-2xl font-bold text-gray-800">{formData.testing.rows.filter(row => row.completed).length}/8</div>
-                        <div className="text-sm text-gray-500">{Math.round((formData.testing.rows.filter(row => row.completed).length / 8) * 100)}% Complete</div>
-                    </div>
-                </div >
+                <ProgressBar
+                    formData={formData}
+                />
             </div >
         </div >
     );

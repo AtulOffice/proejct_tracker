@@ -62,7 +62,7 @@ export const WrkStatusSave = async (req, res) => {
       data,
     });
   } catch (e) {
-    console.log(e.message);
+    console.log(e?.message);
     return res.status(400).json({ success: false, message: e.message });
   }
 };

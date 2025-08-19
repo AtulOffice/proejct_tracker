@@ -9,7 +9,6 @@ const PopupConfirmation = ({
   isDisabled,
   deleteFlag = true
 }) => {
-  console.log(deleteFlag);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center  bg-opacity-40 backdrop-blur-xs">
       <div className={

@@ -40,7 +40,6 @@ function convertDateFormat(obj) {
 
 for (let i = 0; i < arrData.length; i++) {
   setTimeout(() => {
-    console.log(i);
     saveData(convertDateFormat(arrData[i]));
   }, i * 500);
 }

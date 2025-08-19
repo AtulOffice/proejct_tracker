@@ -173,8 +173,6 @@ export const projectDevStatusUpdatebyId = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    console.log("Update data:", updateData);
-    console.log(id);
     if (!updateData) {
       return res.status(400).json({
         success: false,
