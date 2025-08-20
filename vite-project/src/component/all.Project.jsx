@@ -131,6 +131,7 @@ const ProjectsAll = () => {
               project={project}
               indx={indx}
               setToggle={setToggle}
+              cardAllflag={true}
             />
           ))
         ) : (

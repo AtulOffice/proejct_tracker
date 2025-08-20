@@ -15,6 +15,7 @@ const CardAll = ({
   setToggle,
   deleteButton = true,
   shortFlag = true,
+  cardAllflag = false
 }) => {
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
@@ -116,7 +117,7 @@ const CardAll = ({
               {project.jobNumber}
             </span>
 
-            <div
+            {cardAllflag && <div
               onClick={() => navigate(`/develop/${project.jobNumber}`)}
               className="relative group "
             >
@@ -136,7 +137,7 @@ focus:outline-none focus:ring-4 focus:ring-blue-400
               >
                 <FaDev className="w-5 h-5 drop-shadow" />
               </button>
-            </div>
+            </div>}
 
             <div
               onClick={() => setUpdateflag(true)}
