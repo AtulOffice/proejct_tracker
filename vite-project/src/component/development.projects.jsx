@@ -135,6 +135,7 @@ const ProjectsDevlopment = () => {
                 {filteredProjects.length > 0 ? (
                     filteredProjects.map((project, indx) => (
                         <CardAll
+                            editoptionflag={false}
                             cardAllflag={true}
                             key={indx}
                             deleteButton={false}

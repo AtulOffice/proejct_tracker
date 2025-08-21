@@ -128,10 +128,9 @@ const CardStatus = ({
         } finally {
             setIsdisabled(false);
         }
+
     };
-
-
-
+  
     const handleUpdateToggle = async (project) => {
         setIsdisabled(true);
         try {

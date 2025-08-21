@@ -14,7 +14,8 @@ const CardAll = ({
   setToggle,
   deleteButton = true,
   shortFlag = true,
-  cardAllflag = false
+  cardAllflag = false,
+  editoptionflag = true
 }) => {
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
@@ -144,7 +145,7 @@ focus:outline-none focus:ring-4 focus:ring-blue-400
               </button>
             </div>}
 
-            <div
+            {editoptionflag && <div
               onClick={() => setUpdateflag(true)}
               className="relative group "
             >
@@ -164,7 +165,7 @@ focus:outline-none focus:ring-4 focus:ring-blue-400
               >
                 <MdEdit className="w-5 h-5 drop-shadow" />
               </button>
-            </div>
+            </div>}
 
             {deleteButton && (
               <div
