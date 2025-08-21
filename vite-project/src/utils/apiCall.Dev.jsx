@@ -14,6 +14,20 @@ export const fetchProjectsDev = async ({ page, search }) => {
     }
 };
 
+export const fetchProjectsDevprogress = async ({ page, search, statusFilter }) => {
+    try {
+        const res = await axios.get(
+            `${import.meta.env.VITE_API_URL
+            }/projectDev/paginationdevprog?page=${page}&limit=6&search=${search}&statusprog=${statusFilter}`
+        );
+        console.log(res.data)
+        return { data: res.data.data, hashMore: page < res.data.totalPages };
+    } catch (err) {
+        console.error("Failed to fetch projects:", err);
+        throw err
+    }
+};
+
 export const statusSave = async (data) => {
     try {
         const res = await axios.post(

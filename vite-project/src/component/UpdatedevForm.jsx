@@ -140,7 +140,7 @@ const ProjectdevlopForm = () => {
                                         <SelectField
                                             value={row.Reqiredval || "YES"}
                                             onChange={(e) =>
-                                                handleDocumentRowChange(i, { ...row, Reqiredval: e.target.value })
+                                                handleDocumentRowChange(i, { ...row, Reqiredval: e.target.value }, setFormData)
                                             }
                                             options={[
                                                 { value: "YES", label: "✅ YES" },
@@ -153,7 +153,7 @@ const ProjectdevlopForm = () => {
                                                 type="date"
                                                 value={row.startDate}
                                                 onChange={(e) =>
-                                                    handleDocumentRowChange(i, { ...row, startDate: e.target.value })
+                                                    handleDocumentRowChange(i, { ...row, startDate: e.target.value }, setFormData)
                                                 }
                                             />
 
@@ -167,7 +167,7 @@ const ProjectdevlopForm = () => {
                                                 value={row.endDate}
 
                                                 onChange={(e) =>
-                                                    handleDocumentRowChange(i, { ...row, endDate: e.target.value })
+                                                    handleDocumentRowChange(i, { ...row, endDate: e.target.value }, setFormData)
                                                 }
                                                 disabled={!row.completed}
                                             />
@@ -183,7 +183,7 @@ const ProjectdevlopForm = () => {
                                                     handleDocumentRowChange(i, {
                                                         ...row,
                                                         daysConsumed: e.target.value,
-                                                    })
+                                                    }, setFormData)
                                                 }
                                                 placeholder="0"
                                                 disabled={!row.completed}
@@ -202,7 +202,7 @@ const ProjectdevlopForm = () => {
                                                             ...row,
                                                             completed: e.target.checked,
                                                             ...(e.target.checked ? {} : { endDate: "", daysConsumed: "" }),
-                                                        })
+                                                        }, setFormData)
                                                     }
                                                 />
                                             </div>
@@ -262,7 +262,7 @@ const ProjectdevlopForm = () => {
                                             type="date"
                                             value={row.startDate}
                                             onChange={(e) =>
-                                                handleScreenRowChange(i, { ...row, startDate: e.target.value })
+                                                handleScreenRowChange(i, { ...row, startDate: e.target.value }, setFormData)
                                             }
                                         />
                                         <div
@@ -273,7 +273,7 @@ const ProjectdevlopForm = () => {
                                                 type="date"
                                                 value={row.endDate}
                                                 onChange={(e) =>
-                                                    handleScreenRowChange(i, { ...row, endDate: e.target.value })
+                                                    handleScreenRowChange(i, { ...row, endDate: e.target.value }, setFormData)
                                                 }
                                                 disabled={!row.completed}
                                             />
@@ -289,7 +289,7 @@ const ProjectdevlopForm = () => {
                                                     handleScreenRowChange(i, {
                                                         ...row,
                                                         daysConsumed: e.target.value,
-                                                    })
+                                                    }, setFormData)
                                                 }
                                                 placeholder="0"
                                                 disabled={!row.completed}
@@ -297,15 +297,20 @@ const ProjectdevlopForm = () => {
                                         </div>
 
                                         <div className="flex flex-col gap-3">
-                                            <div
-                                                className={`bg-white rounded-lg p-2 border border-gray-200 shadow-sm`}
-                                            >
-                                                c
+                                            <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+                                                <CheckboxField
+                                                    label="Complete"
+                                                    checked={row.completed}
+                                                    onChange={(e) =>
+                                                        handleScreenRowChange(i, {
+                                                            ...row,
+                                                            completed: e.target.checked,
+                                                            ...(e.target.checked ? {} : { endDate: "", daysConsumed: "" }),
+                                                        }, setFormData)
+                                                    }
+                                                />
                                             </div>
-                                            <div
-                                                className={`${!row.completed ? "invisible h-0" : ""
-                                                    }`}
-                                            >
+                                            <div className={`${!row.completed ? "invisible h-0" : ""}`}>
                                                 <div className="w-full bg-gray-200 rounded-full h-2">
                                                     <div
                                                         className={`h-2 rounded-full transition-all duration-300 ${row.completed
@@ -356,7 +361,7 @@ const ProjectdevlopForm = () => {
                                             type="date"
                                             value={row.startDate}
                                             onChange={(e) =>
-                                                handleLogicRowChange(i, { ...row, startDate: e.target.value })
+                                                handleLogicRowChange(i, { ...row, startDate: e.target.value }, setFormData)
                                             }
                                         />
 
@@ -368,7 +373,7 @@ const ProjectdevlopForm = () => {
                                                 type="date"
                                                 value={row.endDate}
                                                 onChange={(e) =>
-                                                    handleLogicRowChange(i, { ...row, endDate: e.target.value })
+                                                    handleLogicRowChange(i, { ...row, endDate: e.target.value }, setFormData)
                                                 }
                                                 disabled={!row.completed}
                                             />
@@ -384,7 +389,7 @@ const ProjectdevlopForm = () => {
                                                     handleLogicRowChange(i, {
                                                         ...row,
                                                         daysConsumed: e.target.value,
-                                                    })
+                                                    }, setFormData)
                                                 }
                                                 placeholder="0"
                                                 disabled={!row.completed}
@@ -400,7 +405,7 @@ const ProjectdevlopForm = () => {
                                                             ...row,
                                                             completed: e.target.checked,
                                                             ...(e.target.checked ? {} : { endDate: "", daysConsumed: "" }),
-                                                        })
+                                                        }, setFormData)
                                                     }
                                                 />
                                             </div>
@@ -462,7 +467,7 @@ const ProjectdevlopForm = () => {
                                                             ...row,
                                                             completed: e.target.checked,
                                                             ...(e.target.checked ? {} : { endDate: "", daysConsumed: "" }),
-                                                        })
+                                                        }, setFormData)
                                                     }
                                                 />
                                             </div>
@@ -514,7 +519,7 @@ const ProjectdevlopForm = () => {
                                             type="date"
                                             value={row.startDate}
                                             onChange={(e) =>
-                                                handleProjectRowChange(i, { ...row, startDate: e.target.value })
+                                                handleProjectRowChange(i, { ...row, startDate: e.target.value }, setFormData)
                                             }
                                         />
 
@@ -526,7 +531,7 @@ const ProjectdevlopForm = () => {
                                                 type="date"
                                                 value={row.endDate}
                                                 onChange={(e) =>
-                                                    handleProjectRowChange(i, { ...row, endDate: e.target.value })
+                                                    handleProjectRowChange(i, { ...row, endDate: e.target.value }, setFormData)
                                                 }
                                                 disabled={!row.completed}
                                             />
@@ -542,7 +547,7 @@ const ProjectdevlopForm = () => {
                                                     handleProjectRowChange(i, {
                                                         ...row,
                                                         daysConsumed: e.target.value,
-                                                    })
+                                                    }, setFormData)
                                                 }
                                                 placeholder="0"
                                                 disabled={!row.completed}
@@ -558,7 +563,7 @@ const ProjectdevlopForm = () => {
                                                             ...row,
                                                             completed: e.target.checked,
                                                             ...(e.target.checked ? {} : { endDate: "", daysConsumed: "" }),
-                                                        })
+                                                        }, setFormData)
                                                     }
                                                 />
                                             </div>

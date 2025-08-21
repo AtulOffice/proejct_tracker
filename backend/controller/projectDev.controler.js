@@ -151,7 +151,6 @@ export const PaginationStatus = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const search = req.query.search || "";
-
   const skip = (page - 1) * limit;
   try {
     let data = [];
@@ -183,6 +182,45 @@ export const PaginationStatus = async (req, res) => {
       data,
     });
   } catch (err) {
+    res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
+export const PaginationStatusprog = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const search = req.query.search || "";
+  const statusprogress = req.query.statusprog || "";
+  console.log("statusprogress:", statusprogress);
+
+  const skip = (page - 1) * limit;
+
+  try {
+    let query = {};
+
+    if (statusprogress && statusprogress !== "ALL") {
+      query.statusprogress = statusprogress;
+    }
+
+    if (search) {
+      query.JobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+    }
+
+    const data = await ProjectDevModel.find(query)
+      .sort({ updatedAt: -1, createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await ProjectDevModel.countDocuments(query);
+
+    return res.json({
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      data,
+    });
+  } catch (err) {
+    console.error("Pagination error:", err);
     res.status(500).json({ success: false, error: "Server error" });
   }
 };

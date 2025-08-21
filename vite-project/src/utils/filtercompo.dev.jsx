@@ -4,23 +4,20 @@ import { motion, AnimatePresence } from "framer-motion";
 const FilterCompo = ({
     searchTerm,
     setSearchTerm,
-    timeFilter,
-    setTimeFilter,
+    statusFilter,
+    setStatusFilter,
     filteredProjects,
     setToggle,
     isFilterOpen,
     setIsFilterOpen,
     filterRef,
 }) => {
-
     const mapTime = {
-        all: "All TIME",
-        today: "TODAY",
-        thisWeek: "THIS WEEK",
-        thisMonth: "THIS MONTH",
-        thisYear: "THIS YEAR"
+        ALL: "All DEV",
+        RUNNING: "RUNNING",
+        PENDING: "PENDING",
+        COMPLETED: "COMPLETED",
     }
-
 
     return (
         <>
@@ -56,7 +53,7 @@ const FilterCompo = ({
                                 e.stopPropagation();
                                 const refreshIcon = document.getElementById("refreshIcon");
                                 refreshIcon.classList.add("animate-spin");
-                                setTimeFilter("all");
+                                setStatusFilter("all");
                                 setSearchTerm("");
                                 setToggle((prev) => !prev);
                                 setTimeout(() => {
@@ -102,7 +99,7 @@ const FilterCompo = ({
                                         clipRule="evenodd"
                                     ></path>
                                 </svg>
-                                {mapTime[timeFilter] || "Filter by time"}
+                                {mapTime[statusFilter] || "Filter by Status"}
                                 <svg
                                     className="w-4 h-4 ml-2"
                                     fill="none"
@@ -129,32 +126,30 @@ const FilterCompo = ({
                                     >
                                         <ul className="p-4 space-y-2 text-sm text-gray-700 dark:text-gray-200">
                                             {[
-                                                "all",
-                                                "today",
-                                                "thisWeek",
-                                                "thisMonth",
-                                                "thisYear",
+                                                "ALL",
+                                                "RUNNING",
+                                                "PENDING",
+                                                "COMPLETED",
                                             ].map((filter) => (
                                                 <li key={filter}>
                                                     <div className="flex p-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors">
                                                         <input
                                                             type="radio"
                                                             id={`filter-${filter}`}
-                                                            name="timeFilter"
+                                                            name="statusFilter"
                                                             value={filter}
-                                                            checked={timeFilter === filter}
-                                                            onChange={() => { setIsFilterOpen(false); setTimeFilter(filter) }}
+                                                            checked={statusFilter === filter}
+                                                            onChange={() => { setIsFilterOpen(false); setStatusFilter(filter) }}
                                                             className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-700"
                                                         />
                                                         <label
                                                             htmlFor={`filter-${filter}`}
                                                             className="ml-2 w-full text-md font-medium text-gray-900 dark:text-gray-300"
                                                         >
-                                                            {filter === "all" && "All time"}
-                                                            {filter === "today" && "Today"}
-                                                            {filter === "thisWeek" && "This week"}
-                                                            {filter === "thisMonth" && "This month"}
-                                                            {filter === "thisYear" && "This year"}
+                                                            {filter === "ALL" && "All"}
+                                                            {filter === "RUNNING" && "RUNNING"}
+                                                            {filter === "PENDING" && "PENDING"}
+                                                            {filter === "COMPLETED" && "COMPLETED"}
                                                         </label>
                                                     </div>
                                                 </li>

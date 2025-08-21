@@ -4,11 +4,11 @@ import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import FilterCompo from "../utils/filtercompo.dev"
 import CardStatus from "./Card.Status";
-import { fetchProjectsDev } from "../utils/apiCall.Dev";
+import { fetchProjectsDevprogress } from "../utils/apiCall.Dev";
 
 const ProjectsAll = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [timeFilter, setTimeFilter] = useState("all");
+    const [statusFilter, setStatusFilter] = useState("ALL");
     const [hasMore, setHasMore] = useState(true);
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -16,42 +16,6 @@ const ProjectsAll = () => {
     const [data, setData] = useState();
     const { toggleDev, setToggleDev } = useAppContext();
     const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
-
-
-    const filterProjectsUtils = ({ data, timeFilter, workBool = false }) => {
-        return data.filter((project) => {
-            const projectDate = new Date(
-                workBool ? project.createdAt : project.createdAt
-            );
-            const currentDate = new Date();
-
-            if (timeFilter === "all") return data;
-
-            if (timeFilter === "today") {
-                return data && projectDate.toDateString() === currentDate.toDateString();
-            }
-
-            if (timeFilter === "thisWeek") {
-                const weekAgo = new Date();
-                weekAgo.setDate(currentDate.getDate() - 7);
-                return data && projectDate >= weekAgo;
-            }
-
-            if (timeFilter === "thisMonth") {
-                const monthAgo = new Date();
-                monthAgo.setMonth(currentDate.getMonth() - 1);
-                return data && projectDate >= monthAgo;
-            }
-
-            if (timeFilter === "thisYear") {
-                const projectYear = projectDate.getFullYear();
-                const currentYear = currentDate.getFullYear();
-                return data && projectYear === currentYear;
-            }
-
-            return data;
-        });
-    };
 
 
     useEffect(() => {
@@ -65,9 +29,10 @@ const ProjectsAll = () => {
         const getProjects = async () => {
             if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
                 try {
-                    const val = await fetchProjectsDev({
+                    const val = await fetchProjectsDevprogress({
                         page: currentPage,
                         search: debounceSearchTerm,
+                        statusFilter: statusFilter
                     });
                     if (val?.data) {
                         setData(val.data);
@@ -78,7 +43,7 @@ const ProjectsAll = () => {
                     console.error("Failed to fetch by jobNumber", error);
                 }
             } else {
-                const val = await fetchProjectsDev({ page: currentPage, search: "" });
+                const val = await fetchProjectsDevprogress({ page: currentPage, search: "", statusFilter: statusFilter });
                 if (val?.data) {
                     setData(val.data);
                 }
@@ -92,20 +57,17 @@ const ProjectsAll = () => {
             }
         };
         getProjects();
-    }, [currentPage, toggleDev, debounceSearchTerm]);
+    }, [currentPage, toggleDev, debounceSearchTerm, statusFilter]);
 
     useEffect(() => {
         if (!data) return;
         const filterfun = setTimeout(() => {
-            const filtered = filterProjectsUtils({
-                data: data,
-                timeFilter,
-            });
+            const filtered = data
             setFilteredProjects(filtered);
         }, 100);
 
         return () => clearTimeout(filterfun);
-    }, [timeFilter, data]);
+    }, [statusFilter, data]);
 
     const filterRef = useRef(null);
     useEffect(() => {
@@ -129,7 +91,7 @@ const ProjectsAll = () => {
         if (hasMore) {
             setCurrentPage((prev) => prev + 1);
             setSearchTerm("");
-            setTimeFilter("all");
+            setStatusFilter("all");
         }
     };
 
@@ -137,7 +99,7 @@ const ProjectsAll = () => {
         if (currentPage > 1) {
             setCurrentPage((prev) => prev - 1);
             setSearchTerm("");
-            setTimeFilter("all");
+            setStatusFilter("all");
         }
     };
     return (
@@ -146,8 +108,8 @@ const ProjectsAll = () => {
             <FilterCompo
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
-                timeFilter={timeFilter}
-                setTimeFilter={setTimeFilter}
+                statusFilter={statusFilter}
+                setStatusFilter={setStatusFilter}
                 filteredProjects={filteredProjects}
                 setToggle={setToggleDev}
                 isFilterOpen={isFilterOpen}

@@ -1,6 +1,6 @@
 import { calculateConsumedDays } from "./calcDays";
 
-export const handleDocumentRowChange = (rowIndex, newRowData) => {
+export const handleDocumentRowChange = (rowIndex, newRowData, setFormData) => {
     const updatedRow = {
         ...newRowData,
         daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
@@ -17,7 +17,7 @@ export const handleDocumentRowChange = (rowIndex, newRowData) => {
 };
 
 
-export const handleScreenRowChange = (rowIndex, newRowData) => {
+export const handleScreenRowChange = (rowIndex, newRowData, setFormData) => {
     const updatedRow = {
         ...newRowData,
         daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
@@ -33,7 +33,7 @@ export const handleScreenRowChange = (rowIndex, newRowData) => {
     }));
 };
 
-export const handleLogicRowChange = (rowIndex, newRowData) => {
+export const handleLogicRowChange = (rowIndex, newRowData, setFormData) => {
     const updatedRow = {
         ...newRowData,
         daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
@@ -50,7 +50,7 @@ export const handleLogicRowChange = (rowIndex, newRowData) => {
 };
 
 
-export const handleTestingRowChange = (rowIndex, newRowData) => {
+export const handleTestingRowChange = (rowIndex, newRowData, setFormData) => {
     const updatedRow = {
         ...newRowData,
         daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
@@ -66,7 +66,7 @@ export const handleTestingRowChange = (rowIndex, newRowData) => {
     }));
 };
 
-export const handleProjectRowChange = (rowIndex, newRowData) => {
+export const handleProjectRowChange = (rowIndex, newRowData, setFormData) => {
     const updatedRow = {
         ...newRowData,
         daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)

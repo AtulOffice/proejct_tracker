@@ -94,6 +94,12 @@ const ProjectDevSchema = new mongoose.Schema(
     dlrStatusTest: StatusTaskSchema,
     redundencyStatusTest: StatusTaskSchema,
 
+    statusprogress: {
+      type: String,
+      enum: ["RUNNING", "PENDING", "COMPLETED"],
+      default: "PENDING",
+    },
+
     summary: {
       type: Object,
       default: {},
@@ -104,7 +110,7 @@ const ProjectDevSchema = new mongoose.Schema(
   }
 );
 
-function calculateSummary(doc) {
+function calculateSummaryAndStatus(doc) {
   const groups = {
     document: [
       "fileReading",
@@ -161,17 +167,30 @@ function calculateSummary(doc) {
     result[group] = total > 0 ? ((completed / total) * 100).toFixed(2) : "0.00";
   }
 
-  return result;
+  const percentages = Object.values(result).map((v) => parseFloat(v));
+  let statusprogress = "PENDING";
+
+  if (percentages.every((v) => v === 100)) {
+    statusprogress = "COMPLETED";
+  } else if (percentages.every((v) => v === 0)) {
+    statusprogress = "PENDING";
+  } else {
+    statusprogress = "RUNNING";
+  }
+
+  return { summary: result, statusprogress };
 }
 ProjectDevSchema.pre("save", function (next) {
-  this.summary = calculateSummary(this);
+  const { summary, statusprogress } = calculateSummaryAndStatus(this);
+  this.summary = summary;
+  this.statusprogress = statusprogress;
   next();
 });
 
 ProjectDevSchema.post("findOneAndUpdate", async function (doc) {
   if (doc) {
-    const summary = calculateSummary(doc);
-    await this.model.updateOne({ _id: doc._id }, { $set: { summary } });
+    const { summary, statusprogress } = calculateSummaryAndStatus(doc);
+    await this.model.updateOne({ _id: doc._id }, { $set: { summary, statusprogress } });
   }
 });
 

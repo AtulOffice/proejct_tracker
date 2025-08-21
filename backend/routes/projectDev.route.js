@@ -10,6 +10,7 @@ import {
   ProjectStatusfetchbyId,
   ProjectStatusfetchbyJobnumber,
   ProjectStatusSave,
+  PaginationStatusprog,
 } from "../controller/projectDev.controler.js";
 
 export const ProjectDevRouter = express.Router();
@@ -23,6 +24,7 @@ ProjectDevRouter.get("/existancecheck/:JobNumber", isProjectstatusExistFun);
 ProjectDevRouter.get("/existancedevelop/:JobNumber", isProjectExistFun);
 ProjectDevRouter.get("/fetch", allProjectStatusfetch);
 ProjectDevRouter.get("/paginationdev", PaginationStatus);
+ProjectDevRouter.get("/paginationdevprog", PaginationStatusprog);
 ProjectDevRouter.put("/update/:JobNumber", projectDevStatusUpdate);
 ProjectDevRouter.put("/updatebyid/:id", projectDevStatusUpdatebyId);
 ProjectDevRouter.get("/fetch/:id", ProjectStatusfetchbyId);
