@@ -15,8 +15,7 @@ export const fetchProjectOveriew = async () => {
 export const fetchProjects = async ({ page, search }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/pagination?page=${page}&limit=15&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
@@ -27,8 +26,7 @@ export const fetchProjects = async ({ page, search }) => {
 export const fetchProjectslatest = async ({ page, search }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/latestProjectpagination?page=${page}&limit=15&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
@@ -40,9 +38,20 @@ export const fetchProjectslatest = async ({ page, search }) => {
 export const fetchProjectsCatogary = async ({ status, page, search }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/catogray/pagination?page=${page}&limit=15&status=${status}&search=${search}`
+    );
+    return { data: res.data.data, hashMore: page < res.data.totalPages };
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+  }
+};
+
+export const fetchProjectsDevelopment = async ({ devstatus, page, search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL
+      }/devlopment/pagination?page=${page}&limit=15&devstatus=${devstatus}&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
@@ -53,8 +62,7 @@ export const fetchProjectsCatogary = async ({ status, page, search }) => {
 export const fetchProjectsSotype = async ({ soType, page, search }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/sotype/pagination?page=${page}&limit=15&soType=${soType}&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
@@ -71,8 +79,7 @@ export const fetchProjectsUrgent = async ({
 }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/urgentProject/pagination?page=${page}&limit=15&status=${status}&startDate=${startDate}&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
@@ -120,8 +127,7 @@ export const logout = () => {
 export const fetchWorkStatus = async ({ page, search }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/worksts/pagination?page=${page}&limit=15&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };

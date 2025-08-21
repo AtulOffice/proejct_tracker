@@ -53,18 +53,11 @@ const projectSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ["PROJECT", "AMC", "SERVICE", "WARRANTY","SUPPLY"],
+      enum: ["PROJECT", "AMC", "SERVICE", "WARRANTY", "SUPPLY"],
     },
     billStatus: {
       type: String,
-      enum: [
-        "TBB",
-        "ALL BILLED",
-        "PART BILLED",
-        "N/A",
-        "CLOSED",
-        "CANCELED",
-      ],
+      enum: ["TBB", "ALL BILLED", "PART BILLED", "N/A", "CLOSED", "CANCELED"],
       default: "N/A",
     },
     status: {
@@ -112,6 +105,10 @@ const projectSchema = new mongoose.Schema(
       type: String,
       enum: ["YES", "NO", "N/A"],
       default: "N/A",
+    },
+    Development: {
+      type: Boolean,
+      default: false,
     },
     BackupSubmission: {
       type: String,

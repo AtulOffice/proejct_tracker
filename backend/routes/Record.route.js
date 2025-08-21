@@ -3,6 +3,7 @@ import {
   LatestProjectPagination,
   Pagination,
   PaginationCatogary,
+  PaginationDevStatus,
   Paginationsotype,
   Recordsformave,
   UrgentProjectPegination,
@@ -26,5 +27,6 @@ RecordRouter.delete("/delete/:id", deleteRecord);
 RecordRouter.get("/pagination", Pagination);
 RecordRouter.get("/latestProjectpagination", LatestProjectPagination);
 RecordRouter.get("/catogray/pagination", PaginationCatogary);
+RecordRouter.get("/devlopment/pagination", PaginationDevStatus);
 RecordRouter.get("/sotype/pagination", Paginationsotype);
 RecordRouter.get("/urgentProject/pagination", UrgentProjectPegination);

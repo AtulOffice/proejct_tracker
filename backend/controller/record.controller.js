@@ -242,6 +242,51 @@ export const Pagination = async (req, res) => {
   }
 };
 
+export const PaginationDevStatus = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const Development = req.query.devstatus || "";
+  const search = req.query.search || "";
+
+  const skip = (page - 1) * limit;
+
+  try {
+    let data = [];
+    let total = 0;
+    if (!search) {
+      const filter = Development ? { Development } : {};
+
+      data = await ProjectModel.find(filter)
+        .sort({ updatedAt: -1, createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      total = await ProjectModel.countDocuments(filter);
+    } else {
+      const result = await ProjectModel.findOne({
+        jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
+        ...(status && { status }),
+      });
+      if (result) {
+        data = [result];
+        total = 1;
+      } else {
+        data = [];
+        total = 0;
+      }
+    }
+    return res.json({
+      success: true,
+      message: "data fetched successfully",
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      data,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 export const PaginationCatogary = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;

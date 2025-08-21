@@ -130,10 +130,31 @@ const CardStatus = ({
         }
     };
 
+
+
+    const handleUpdateToggle = async (project) => {
+        setIsdisabled(true);
+        try {
+            const res = await axios.get(
+                `${import.meta.env.VITE_API_URL}/projectDev/existancedevelop/${project.JobNumber}`
+            );
+            const exists = res?.data?.exists;
+            if (!exists) {
+                toast.error(res?.data?.message || "Project status does not exist");
+            } else {
+                setUpdateflag(true);
+            }
+        } catch (error) {
+            console.error("Navigation error:", error);
+        } finally {
+            setIsdisabled(false);
+        }
+    };
+
     const handleUpdate = (id) => {
         setIsdisabled(true);
         try {
-            navigate(`/develop/update/${id}`);
+            navigate(`/develop/update/${id}`, { state: { fromButton: true, recordId: id } });
             setUpdateflag(false);
         } catch (error) {
             console.error("Navigation error:", error);
@@ -141,6 +162,7 @@ const CardStatus = ({
             setIsdisabled(false);
         }
     };
+
 
     return (
         <div>
@@ -194,7 +216,7 @@ const CardStatus = ({
                         </span>
 
                         <div
-                            onClick={() => setUpdateflag(true)}
+                            onClick={() => handleUpdateToggle(project)}
                             className="relative group "
                         >
                             <button

@@ -1,21 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../appContex";
+import CardAll from "./Card.All";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
-import CardStatus from "./Card.Status";
-import { fetchProjectsDev } from "../utils/apiCall.Dev";
+import { fetchProjectsDevelopment } from "../utils/apiCall";
 
-const ProjectsAll = () => {
+const ProjectsDevlopment = () => {
+    const { setToggle, toggle } = useAppContext();
     const [searchTerm, setSearchTerm] = useState("");
     const [timeFilter, setTimeFilter] = useState("all");
-    const [hasMore, setHasMore] = useState(true);
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
     const [data, setData] = useState();
-    const { toggleDev, setToggleDev } = useAppContext();
+
     const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
 
     useEffect(() => {
@@ -29,20 +30,26 @@ const ProjectsAll = () => {
         const getProjects = async () => {
             if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
                 try {
-                    const val = await fetchProjectsDev({
+                    const val = await fetchProjectsDevelopment({
                         page: currentPage,
                         search: debounceSearchTerm,
+                        devstatus: true,
                     });
                     if (val?.data) {
                         setData(val.data);
                     }
-
-                    setHasMore(val?.hashMore ?? false);
+                    if (val?.hashMore !== undefined) {
+                        setHasMore(val.hashMore);
+                    }
                 } catch (error) {
                     console.error("Failed to fetch by jobNumber", error);
                 }
             } else {
-                const val = await fetchProjectsDev({ page: currentPage, search: "" });
+                const val = await fetchProjectsDevelopment({
+                    page: currentPage,
+                    search: "",
+                    devstatus: true,
+                });
                 if (val?.data) {
                     setData(val.data);
                 }
@@ -56,7 +63,7 @@ const ProjectsAll = () => {
             }
         };
         getProjects();
-    }, [currentPage, toggleDev, debounceSearchTerm]);
+    }, [currentPage, toggle, debounceSearchTerm]);
 
     useEffect(() => {
         if (!data) return;
@@ -104,38 +111,45 @@ const ProjectsAll = () => {
             setTimeFilter("all");
         }
     };
+
     return (
-        <div className="max-w-8xl min-h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
-            <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">PROJECT DEVEVLOPMENT STATUS</h2>
+        <div className="max-w-8xl h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+            <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">PROJECTS INCLUDED DEVELOPMENT</h2>
+
             <FilterCompo
+                setToggle={setToggle}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 timeFilter={timeFilter}
                 setTimeFilter={setTimeFilter}
                 filteredProjects={filteredProjects}
-                setToggle={setToggleDev}
-                isFilterOpen={isFilterOpen} 
+                isFilterOpen={isFilterOpen}
                 setIsFilterOpen={setIsFilterOpen}
                 filterRef={filterRef}
             />
+
             <div
                 layout="true"
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
                 {filteredProjects.length > 0 ? (
                     filteredProjects.map((project, indx) => (
-                        <CardStatus
+                        <CardAll
+                            cardAllflag={true}
                             key={indx}
+                            deleteButton={false}
                             project={project}
                             indx={indx}
-                            setToggleDev={setToggleDev}
+                            id={project._id}
+                            setToggle={setToggle}
+                            shortFlag={false}
                         />
                     ))
                 ) : (
                     <Notfound />
                 )}
             </div>
-            {filteredProjects.length !== 0 && (
+            {hasMore && filteredProjects.length !== 0 && (
                 <div className="flex justify-between w-full mt-12 px-4">
                     <button
                         onClick={handlePrevPage}
@@ -159,32 +173,30 @@ const ProjectsAll = () => {
                         <span>Prev</span>
                     </button>
 
-                    {
-                        hasMore && <button
-                            onClick={handleNextPage}
-                            className="mb-10 bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-500 hover:from-indigo-700 hover:via-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out flex items-center gap-3 border-2 border-transparent hover:border-white"
+                    <button
+                        onClick={handleNextPage}
+                        className="mb-10 bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-500 hover:from-indigo-700 hover:via-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out flex items-center gap-3 border-2 border-transparent hover:border-white"
+                    >
+                        <span>Next</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                         >
-                            <span>Next</span>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M9 5l7 7-7 7"
-                                />
-                            </svg>
-                        </button>
-                    }
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
+                    </button>
                 </div>
             )}
         </div>
     );
 };
 
-export default ProjectsAll;
+export default ProjectsDevlopment;

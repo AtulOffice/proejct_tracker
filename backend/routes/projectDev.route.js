@@ -1,6 +1,8 @@
 import express from "express";
 import {
   allProjectStatusfetch,
+  isProjectExistFun,
+  isProjectstatusExistFun,
   PaginationStatus,
   projectDevStatusDelete,
   projectDevStatusUpdate,
@@ -13,7 +15,12 @@ import {
 export const ProjectDevRouter = express.Router();
 
 ProjectDevRouter.post("/save", ProjectStatusSave);
-ProjectDevRouter.get("/fetchbyid/:JobNumber", ProjectStatusfetchbyJobnumber);
+ProjectDevRouter.get(
+  "/fetchbyjobnumber/:JobNumber",
+  ProjectStatusfetchbyJobnumber
+);
+ProjectDevRouter.get("/existancecheck/:JobNumber", isProjectstatusExistFun);
+ProjectDevRouter.get("/existancedevelop/:JobNumber", isProjectExistFun);
 ProjectDevRouter.get("/fetch", allProjectStatusfetch);
 ProjectDevRouter.get("/paginationdev", PaginationStatus);
 ProjectDevRouter.put("/update/:JobNumber", projectDevStatusUpdate);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getStatus, statusupdate } from "../utils/apiCall.Dev";
 import toast from "react-hot-toast";
 import { useAppContext } from "../appContex";
@@ -8,12 +8,13 @@ import { CheckboxField, InputField, SelectField } from "../utils/dev.add";
 import { documentRows, logicRows, projectRows, screenRows, testingRows } from "../utils/dev.context";
 import { mapFrontendToBackend } from "../utils/frontToback";
 import { mapBackendToFrontend } from "../utils/backTofront";
-import { calculateConsumedDays } from "../utils/calcDays";
 import { validateFormData } from "../utils/validator";
 import { ProgressBar } from "../utils/progressBar";
+import { handleDocumentRowChange, handleLogicRowChange, handleProjectRowChange, handleScreenRowChange, handleTestingRowChange } from "../utils/handeler.dev";
 
 const ProjectdevlopForm = () => {
     const nevigate = useNavigate()
+    const location = useLocation();
     const { id } = useParams();
     const { setToggleDev } = useAppContext();
     useEffect(() => {
@@ -52,90 +53,6 @@ const ProjectdevlopForm = () => {
     });
 
 
-
-    const handleDocumentRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            document: {
-                ...prev.document,
-                rows: prev.document.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-
-    const handleScreenRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            screen: {
-                ...prev.screen,
-                rows: prev.screen.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-    const handleLogicRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            logic: {
-                ...prev.logic,
-                rows: prev.logic.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-    const handleTestingRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            testing: {
-                ...prev.testing,
-                rows: prev.testing.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-    const handleProjectRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            project: {
-                ...prev.logic,
-                rows: prev.project.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-
-
     const handleUpdate = async (e) => {
         e.preventDefault();
         const isValid = validateFormData(formData);
@@ -171,6 +88,10 @@ const ProjectdevlopForm = () => {
             }
         }
     };
+
+    if (!location.state?.fromButton) {
+        return <Navigate to="/" replace />;
+    }
 
 
     return (
@@ -379,17 +300,7 @@ const ProjectdevlopForm = () => {
                                             <div
                                                 className={`bg-white rounded-lg p-2 border border-gray-200 shadow-sm`}
                                             >
-                                                <CheckboxField
-                                                    label="Complete"
-                                                    checked={row.completed}
-                                                    onChange={(e) =>
-                                                        handleScreenRowChange(i, {
-                                                            ...row,
-                                                            completed: e.target.checked,
-                                                            ...(e.target.checked ? {} : { endDate: "", daysConsumed: "" }),
-                                                        })
-                                                    }
-                                                />
+                                                c
                                             </div>
                                             <div
                                                 className={`${!row.completed ? "invisible h-0" : ""

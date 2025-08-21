@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { dateFields, formval } from "../utils/FieldConstant";
 import FormField from "./inputField";
+import { useAppContext } from "../appContex";
 
 const InputForm = () => {
+  const { setToggle, setToggleDev } = useAppContext();
   const [formData, setFormData] = useState(formval);
   const [isLoading, setIsLoading] = useState(false);
   const [debounceJobnumber, setdebounceJobNumber] = useState("");
@@ -93,7 +95,7 @@ const InputForm = () => {
 
     // if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
     //   toast.error("Start date must be less than end date");
-    //   setIsLoading(false);
+    //    (false);
     //   return;
     // }
 
@@ -162,6 +164,7 @@ const InputForm = () => {
         endDate: formData?.deleveryDate ?? null,
       });
       toast.success("Data saved successfully");
+      setToggleDev((prev) => !prev);
       setFormData(formval);
     } catch (e) {
       if (e.response) {

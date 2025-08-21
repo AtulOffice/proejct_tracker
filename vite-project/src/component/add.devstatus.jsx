@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { redirect, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { statusSave } from "../utils/apiCall.Dev";
 import toast from "react-hot-toast";
 import { useAppContext } from "../appContex";
 import { CheckboxField, InputField, SelectField } from "../utils/dev.add";
 import { documentRows, logicRows, projectRows, screenRows, testingRows } from "../utils/dev.context";
 import { mapFrontendToBackend } from "../utils/frontToback";
-import { calculateConsumedDays } from "../utils/calcDays";
 import { validateFormData } from "../utils/validator";
 import { ProgressBar } from "../utils/progressBar";
+import { handleDocumentRowChange, handleLogicRowChange, handleProjectRowChange, handleScreenRowChange, handleTestingRowChange } from "../utils/handeler.dev";
 
 
 
 const ProjectdevlopForm = () => {
     const nevigate = useNavigate()
+    const location = useLocation();
     const { jobnumber } = useParams();
     const { setToggleDev } = useAppContext();
-
-
 
     const [formData, setFormData] = useState({
         document: {
@@ -37,87 +36,6 @@ const ProjectdevlopForm = () => {
             rows: projectRows()
         }
     });
-    const handleDocumentRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            document: {
-                ...prev.document,
-                rows: prev.document.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-
-    const handleScreenRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            screen: {
-                ...prev.screen,
-                rows: prev.screen.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-    const handleLogicRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            logic: {
-                ...prev.logic,
-                rows: prev.logic.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-
-    const handleTestingRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            testing: {
-                ...prev.testing,
-                rows: prev.testing.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
-
-    const handleProjectRowChange = (rowIndex, newRowData) => {
-        const updatedRow = {
-            ...newRowData,
-            daysConsumed: calculateConsumedDays(newRowData.startDate, newRowData.endDate)
-        };
-        setFormData(prev => ({
-            ...prev,
-            project: {
-                ...prev.logic,
-                rows: prev.project.rows.map((row, index) =>
-                    index === rowIndex ? updatedRow : row
-                )
-            }
-        }));
-    };
 
 
     const handleSubmit = async (e) => {
@@ -156,7 +74,9 @@ const ProjectdevlopForm = () => {
         }
     };
 
-
+    if (!location.state?.fromButton) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6" >
@@ -664,9 +584,9 @@ const ProjectdevlopForm = () => {
                     </div >
                 </form >
 
-                  <ProgressBar
-                  formData={formData}
-                  />
+                <ProgressBar
+                    formData={formData}
+                />
             </div >
         </div >
     );

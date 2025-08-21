@@ -34,6 +34,7 @@ import ElevenCard from "./latest.project";
 import ProjectsNoRequest from "./norequest";
 import ProjectsClosed from "./closed.Project";
 import ProjectDev from "./project.Devlopment";
+import ProjectsDevlopment from "./development.projects";
 
 const AdminDashboard = () => {
   const { toggle } = useAppContext();
@@ -96,6 +97,8 @@ const AdminDashboard = () => {
         return <ProjectsClosed />;
       case "fourteen":
         return <ProjectDev />;
+      case "fifteen":
+        return <ProjectsDevlopment />;
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -281,6 +284,16 @@ const AdminDashboard = () => {
                   <RiCustomerServiceFill className="mr-3" size={20} />
                   SERVICES
                 </a>
+              </li>
+              <li>
+                <div
+                  onClick={() => handleActiveBar("fifteen")}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fifteen" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  PROJECTS UNDER DEVLOPMENT
+                </div>
               </li>
               <li>
                 <div

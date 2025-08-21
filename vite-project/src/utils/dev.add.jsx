@@ -10,6 +10,7 @@ export const InputField = ({ label, type = "text", value, onChange, placeholder,
             onChange={onChange}
             placeholder={placeholder}
             disabled={disabled}
+            {...(type === "date" && { max: new Date().toISOString().split("T")[0] })}
             className={`
                 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
                 shadow-md border-2 backdrop-blur-sm

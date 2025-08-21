@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { FaDev } from "react-icons/fa";
 import PopupConfirmation from "./PopuP.Page";
@@ -45,7 +44,7 @@ const CardAll = ({
   const handleUpdate = (id) => {
     setIsdisabled(true);
     try {
-      navigate(`/update/${id}`);
+      navigate(`/update/${id}`, { state: { fromButton: true, recordId: id } });
       setUpdateflag(false);
     } catch (error) {
       console.error("Navigation error:", error);
@@ -54,17 +53,23 @@ const CardAll = ({
     }
   };
 
-  const handleUpdateStatus = (id) => {
-    setIsdisabled(true);
+  const handleDevelop = async (project) => {
     try {
-      navigate(`/update/${id}`);
-      setUpdateflag(false);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.jobNumber}`
+      );
+      const exists = res?.data?.exists === true;
+      if (exists) {
+        toast.error("Project development status already exists");
+      } else {
+        navigate(`/develop/${project.jobNumber}`, { state: { fromButton: true } });
+      }
     } catch (error) {
-      console.error("Navigation error:", error);
-    } finally {
-      setIsdisabled(false);
+      console.error("Error checking project existence:", error);
+      toast.error("Failed to fetch project data");
     }
   };
+
 
   return (
     <div>
@@ -117,8 +122,8 @@ const CardAll = ({
               {project.jobNumber}
             </span>
 
-            {cardAllflag && <div
-              onClick={() => navigate(`/develop/${project.jobNumber}`)}
+            {cardAllflag && project?.Development && <div
+              onClick={() => handleDevelop(project)}
               className="relative group "
             >
               <button
@@ -287,6 +292,19 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                 <strong>MOM SR No:</strong> {project.momsrNo}
               </li>
             )}
+            <li className="flex items-center space-x-2">
+              <strong className="text-gray-700">DEVELOPMENT:</strong>
+              <span
+                className={`px - 2 py - 1 text - xs font - semibold rounded - md ${project?.Development
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+                  }`}
+              >
+                {project?.Development ? "YES" : "NO"}
+              </span>
+            </li>
+
+
             {project?.momDate?.length > 0 && (
               <li>
                 <strong>MOM Dates:</strong>{" "}

@@ -1,4 +1,4 @@
-import ProjectDevModel from "../models/Project.Dev.js";
+import ProjectDevModel from "../models/Project.Dev.model.js";
 import ProjectModel from "../models/Project.model.js";
 
 export const ProjectStatusSave = async (req, res) => {
@@ -35,6 +35,7 @@ export const ProjectStatusSave = async (req, res) => {
 export const ProjectStatusfetchbyJobnumber = async (req, res) => {
   try {
     const { JobNumber } = req.params;
+    console.log("JobNumber:", JobNumber);
     if (!JobNumber) {
       return res
         .status(400)
@@ -46,12 +47,81 @@ export const ProjectStatusfetchbyJobnumber = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Project status not found" });
     }
-    res.status(200).json(projectStatus);
+    res.status(200).json({
+      success: true,
+      message: "Project status fetched successfully",
+      data: projectStatus,
+    });
   } catch (error) {
     console.error("Error fetching project status:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
+
+export const isProjectstatusExistFun = async (req, res) => {
+  try {
+    const { JobNumber } = req.params;
+
+    if (!JobNumber) {
+      return res
+        .status(400)
+        .json({ success: false, message: "JobNumber is required" });
+    }
+
+    const projectStatus = await ProjectDevModel.findOne({ JobNumber });
+
+    if (!projectStatus) {
+      return res.status(200).json({
+        success: false,
+        exists: false,
+        message: "Project status does not exist",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      exists: true,
+      message: "Project status exists",
+    });
+  } catch (error) {
+    console.error("Error checking project existence:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const isProjectExistFun = async (req, res) => {
+  try {
+    const { JobNumber } = req.params;
+
+    if (!JobNumber) {
+      return res
+        .status(400)
+        .json({ success: false, message: "JobNumber is required" });
+    }
+
+    const projectStatus = await ProjectModel.findOne({
+      jobNumber: JobNumber,
+      Development: true,
+    });
+    if (!projectStatus) {
+      return res.status(200).json({
+        success: false,
+        exists: false,
+        message: "Project not under development",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      exists: true,
+      message: "project under development",
+    });
+  } catch (error) {
+    console.error("Error checking project existence:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 export const ProjectStatusfetchbyId = async (req, res) => {
   try {
     const { id } = req.params;

@@ -4,12 +4,14 @@ import toast from "react-hot-toast";
 import { UpdateConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField, TextArea } from "./subField";
 import { useAppContext } from "../appContex";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import LoadingSkeleton from "../utils/loaderForm";
+
 
 const UpdateForm = () => {
   const { id } = useParams();
-  const { setToggle } = useAppContext();
+  const location = useLocation();
+  const { setToggle, setToggleDev } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState();
   const navigate = useNavigate();
@@ -111,16 +113,16 @@ const UpdateForm = () => {
         engineerName:
           typeof formData.engineerName === "string"
             ? formData.engineerName
-                .split(",")
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
+              .split(",")
+              .map((name) => name.trim())
+              .filter((name) => name.length > 0)
             : formData.engineerName,
         momsrNo:
           typeof formData.momsrNo === "string"
             ? formData.momsrNo
-                .split(",")
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
+              .split(",")
+              .map((name) => name.trim())
+              .filter((name) => name.length > 0)
             : formData.momsrNo,
       };
 
@@ -130,6 +132,7 @@ const UpdateForm = () => {
       );
       toast.success("Data updated successfully");
       setToggle((prev) => !prev);
+      setToggleDev((prev) => !prev);
       navigate("/page");
     } catch (e) {
       if (e.response) {
@@ -147,6 +150,9 @@ const UpdateForm = () => {
     return <LoadingSkeleton />;
   }
 
+  if (!location.state?.fromButton) {
+    return <Navigate to="/" replace />;
+  }
   return (
     <div className="transition-all duration-300  pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
@@ -255,6 +261,7 @@ const UpdateForm = () => {
               handleChange={handleChange}
               value={formData.StartChecklist}
             />
+
             <InputFiled
               {...UpdateConst[19]}
               value={formData.visitendDate}
@@ -299,6 +306,18 @@ const UpdateForm = () => {
               value={formData.actualVisitDuration}
               handleChange={handleChange}
             />
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-white to-gray-100 rounded-2xl w-64 shadow-sm">
+              <label className="text-sm font-semibold text-gray-100">
+                Project Development
+              </label>
+              <input
+                type="checkbox"
+                name="Development"
+                checked={formData.Development}
+                onChange={handleChange}
+                className="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 cursor-pointer"
+              />
+            </div>
             <SelectField
               {...UpdateConst[26]}
               value={formData.supplyStatus}
