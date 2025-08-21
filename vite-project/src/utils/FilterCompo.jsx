@@ -12,6 +12,14 @@ const FilterCompo = ({
   setIsFilterOpen,
   filterRef,
 }) => {
+
+  const mapTime = {
+    all: "All TIME",
+    today: "TODAY",
+    thisWeek: "THIS WEEK",
+    thisMonth: "THIS MONTH",
+    thisYear: "THIS YEAR"
+  }
   return (
     <>
       <div className="flex flex-col lg:flex-row items-center justify-between mb-10 gap-6">
@@ -92,7 +100,7 @@ const FilterCompo = ({
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                Filter by time
+                {mapTime[timeFilter] || "Filter by time"}
                 <svg
                   className="w-4 h-4 ml-2"
                   fill="none"
@@ -133,7 +141,7 @@ const FilterCompo = ({
                               name="timeFilter"
                               value={filter}
                               checked={timeFilter === filter}
-                              onChange={() => setTimeFilter(filter)}
+                              onChange={() => { setIsFilterOpen(false); setTimeFilter(filter) }}
                               className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-700"
                             />
                             <label

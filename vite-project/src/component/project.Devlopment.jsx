@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../appContex";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
-import { filterProjectsUtils } from "../utils/filterUtils";
-import FilterCompo from "../utils/FilterCompo";
+import FilterCompo from "../utils/filtercompo.dev"
 import CardStatus from "./Card.Status";
 import { fetchProjectsDev } from "../utils/apiCall.Dev";
 
@@ -17,6 +16,43 @@ const ProjectsAll = () => {
     const [data, setData] = useState();
     const { toggleDev, setToggleDev } = useAppContext();
     const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
+
+
+    const filterProjectsUtils = ({ data, timeFilter, workBool = false }) => {
+        return data.filter((project) => {
+            const projectDate = new Date(
+                workBool ? project.createdAt : project.createdAt
+            );
+            const currentDate = new Date();
+
+            if (timeFilter === "all") return data;
+
+            if (timeFilter === "today") {
+                return data && projectDate.toDateString() === currentDate.toDateString();
+            }
+
+            if (timeFilter === "thisWeek") {
+                const weekAgo = new Date();
+                weekAgo.setDate(currentDate.getDate() - 7);
+                return data && projectDate >= weekAgo;
+            }
+
+            if (timeFilter === "thisMonth") {
+                const monthAgo = new Date();
+                monthAgo.setMonth(currentDate.getMonth() - 1);
+                return data && projectDate >= monthAgo;
+            }
+
+            if (timeFilter === "thisYear") {
+                const projectYear = projectDate.getFullYear();
+                const currentYear = currentDate.getFullYear();
+                return data && projectYear === currentYear;
+            }
+
+            return data;
+        });
+    };
+
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -114,7 +150,7 @@ const ProjectsAll = () => {
                 setTimeFilter={setTimeFilter}
                 filteredProjects={filteredProjects}
                 setToggle={setToggleDev}
-                isFilterOpen={isFilterOpen} 
+                isFilterOpen={isFilterOpen}
                 setIsFilterOpen={setIsFilterOpen}
                 filterRef={filterRef}
             />
