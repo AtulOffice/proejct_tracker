@@ -29,8 +29,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-600 flex items-center justify-center p-4 sm:p-6 md:p-8">
-      <div className="w-full max-w-md mx-auto overflow-hidden bg-white dark:bg-gray-800 rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl border border-gray-100 dark:border-gray-700">
+    <div className="min-h-screen bg-blue-200  flex items-center justify-center p-4 sm:p-6 md:p-8">
+      <div className="w-full max-w-md mx-auto overflow-hidden bg-white   rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl border border-gray-100 ">
         <div className="bg-gradient-to-r from-blue-400 to-indigo-400 p-6 text-white text-center">
           <h2 className="text-2xl font-bold tracking-tight italic">LOGIN</h2>
         </div>
@@ -39,7 +39,7 @@ const LoginPage = () => {
             <div className="space-y-2">
               <label
                 htmlFor="username"
-                className="text-sm font-medium text-gray-600 dark:text-gray-300 flex items-center gap-2"
+                className="text-sm font-medium text-gray-600  flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ const LoginPage = () => {
                   id="username"
                   value={loginData.username}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 rounded-xl text-gray-200 dark:text-white bg-gray-50 dark:bg-gray-700 border border-transparent focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30 focus:outline-none transition-all duration-200 placeholder-gray-400"
+                  className="block w-full px-4 py-3 rounded-xl text-gray-200  bg-gray-200 border border-transparent focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30 focus:outline-none transition-all duration-200 placeholder-gray-400"
                   placeholder="Enter your username"
                   required
                   autoComplete="username"
@@ -71,7 +71,7 @@ const LoginPage = () => {
             <div className="space-y-2">
               <label
                 htmlFor="password"
-                className="text-sm font-medium text-gray-200 dark:text-gray-300 flex items-center gap-2"
+                className="text-sm font-medium text-gray-200  flex items-center gap-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +93,7 @@ const LoginPage = () => {
                   id="password"
                   value={loginData.password}
                   onChange={handleChange}
-                  className="block w-full px-4 py-3 rounded-xl text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-700 border border-transparent focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30 focus:outline-none transition-all duration-200 placeholder-gray-400"
+                  className="block w-full px-4 py-3 rounded-xl text-gray-800  bg-gray-200  border border-transparent focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30 focus:outline-none transition-all duration-200 placeholder-gray-400"
                   placeholder="Enter your password"
                   required
                   autoComplete="current-password"
@@ -116,7 +116,7 @@ const LoginPage = () => {
                 type="button"
                 disabled={true}
                 onClick={() => navigate("/")}
-                className="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-not-allowed"
+                className="text-gray-500 hover:text-blue-500 transition-colors cursor-not-allowed"
               >
                 Create an account
               </button>
@@ -124,7 +124,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 onClick={() => navigate("/")}
-                className="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+                className="text-gray-500  hover:text-blue-500  transition-colors"
               >
                 Back to form
               </button>

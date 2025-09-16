@@ -35,7 +35,6 @@ export const ProjectStatusSave = async (req, res) => {
 export const ProjectStatusfetchbyJobnumber = async (req, res) => {
   try {
     const { JobNumber } = req.params;
-    console.log("JobNumber:", JobNumber);
     if (!JobNumber) {
       return res
         .status(400)
