@@ -14,7 +14,7 @@ const ProjectsAll = () => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState();
-    const { toggleDev, setToggleDev } = useAppContext();
+    const { toggleDev, setToggleDev, user } = useAppContext();
     const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
 
 
@@ -127,6 +127,7 @@ const ProjectsAll = () => {
                             project={project}
                             indx={indx}
                             setToggleDev={setToggleDev}
+                            userRole={user?.role === "admin"}
                         />
                     ))
                 ) : (

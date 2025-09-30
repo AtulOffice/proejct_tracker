@@ -100,12 +100,11 @@ export const login = async ({ username, password, navigate, setUser }) => {
     );
     const token = response?.data?.token;
     const user = response?.data?.user;
-    // nothing
+    setUser(user)
     if (token || user) {
       sessionStorage.setItem("token", token);
-      sessionStorage.setItem("user", user);
-      toast.success("Login successful!");
       setUser(user);
+      toast.success("Login successful");
       navigate("/page");
     } else {
       toast.error("Login failed: Token not received");
@@ -144,5 +143,23 @@ export const fetchSearchData = async ({ jobNumber }) => {
     return response.data.data;
   } catch (e) {
     console.log(e.message);
+  }
+};
+
+export const UserCall = async () => {
+  try {
+    const sessionJwt = sessionStorage.getItem('token');
+    if (!sessionJwt) throw new Error("No token found");
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/fetchUserDeatails?jwtval=${sessionJwt}`
+    );
+    console.log(response.data)
+    return response.data;
+  } catch (e) {
+    console.error("Error fetching user:", e);
+    if (e.response) {
+      console.log(e.response.data)
+    }
+    throw e;
   }
 };

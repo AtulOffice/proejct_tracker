@@ -253,6 +253,7 @@ export const PaginationDevStatus = async (req, res) => {
   try {
     let data = [];
     let total = 0;
+
     if (!search) {
       const filter = Development ? { Development } : {};
 
@@ -264,9 +265,9 @@ export const PaginationDevStatus = async (req, res) => {
     } else {
       const result = await ProjectModel.findOne({
         jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
-        ...(status && { status }),
       });
-      if (result) {
+      console.log(result);
+      if (result?.Development) {
         data = [result];
         total = 1;
       } else {

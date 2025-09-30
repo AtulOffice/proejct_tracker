@@ -7,7 +7,7 @@ import LollipopChart from "./overviewChart";
 import { useAppContext } from "../appContex";
 
 const ProjectOverview = ({ overvew, setActiveCard }) => {
-  const userSessionName = sessionStorage.getItem("user");
+  const { user } = useAppContext()
   const statusGroups = {
     upcoming: { name: "UpComing", cnt: 0 },
     running: { name: "Active", cnt: 0 },
@@ -43,7 +43,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
           </h2>
           <p className="text-gray-600 mt-1">
             Welcome back,{" "}
-            {userSessionName ? userSessionName.toUpperCase() : "Admin!"}
+            {user ? user?.username.toUpperCase() : "Admin!"}
           </p>
         </div>
 

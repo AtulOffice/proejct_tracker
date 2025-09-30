@@ -16,7 +16,7 @@ const ProjectdevlopForm = () => {
     const nevigate = useNavigate()
     const location = useLocation();
     const { id } = useParams();
-    const { setToggleDev } = useAppContext();
+    const { setToggleDev, user } = useAppContext();
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -94,6 +94,7 @@ const ProjectdevlopForm = () => {
     }
 
 
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6" >
             <div className="max-w-7xl mx-auto">
@@ -107,7 +108,7 @@ const ProjectdevlopForm = () => {
                 <form onSubmit={handleUpdate} className="space-y-8">
 
                     {/* DOCUMENT SECTION */}
-                    <motion.div
+                    {user?.role === "admin" && (<motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
@@ -224,7 +225,7 @@ const ProjectdevlopForm = () => {
                                 ))}
                             </div>
                         </div>
-                    </motion.div>
+                    </motion.div>)}
 
                     {/* SCREEN SECTION */}
                     <motion.div
@@ -328,7 +329,7 @@ const ProjectdevlopForm = () => {
                     </motion.div>
 
                     {/* LOGIC SECTION */}
-                    <motion.div
+                    {user?.role === "admin" && (<motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
@@ -424,11 +425,11 @@ const ProjectdevlopForm = () => {
                                 ))}
                             </div>
                         </div>
-                    </motion.div>
+                    </motion.div>)}
 
 
                     {/* TESTING SECTION */}
-                    <motion.div
+                    {user?.role === "admin" && (<motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
@@ -486,10 +487,10 @@ const ProjectdevlopForm = () => {
                                 ))}
                             </div>
                         </div>
-                    </motion.div>
+                    </motion.div>)}
 
                     {/* the project details */}
-                    <motion.div
+                    {user?.role === "admin" && (<motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
@@ -583,7 +584,7 @@ const ProjectdevlopForm = () => {
                                 ))}
                             </div>
                         </div>
-                    </motion.div>
+                    </motion.div>)}
 
 
 

@@ -4,6 +4,69 @@ import bcrypt from "bcryptjs";
 // import "../config/env.js";
 import dotenv from "dotenv";
 dotenv.config();
+import crypto from "crypto";
+import { sendMail } from "./mailer.js";
+import { otpHtml } from "./html.js";
+
+export const forgotUser = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log("this api called");
+    const user = await UserModels.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User does not exist" });
+    }
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    user.resetOtp = {
+      hash: crypto.createHash("sha256").update(otp).digest("hex"),
+      expires: Date.now() + 10 * 60 * 1000,
+      used: false,
+    };
+    await user.save();
+    await sendMail({
+      to: email,
+      subject: "Password Reset OTP",
+      text: otp,
+      html: otpHtml(otp),
+    });
+    res.json({ success: true, message: "OTP sent successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err || "Server error" });
+  }
+};
+
+export const resetUser = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    console.log(req.body);
+   
+    const user = await UserModels.findOne({ email });
+    if (!user || !user.resetOtp) {
+      return res.status(400).json({ success: false, error: "Invalid" });
+    }
+
+    const hash = crypto.createHash("sha256").update(otp).digest("hex");
+    if (
+      user.resetOtp.hash !== hash ||
+      user.resetOtp.expires < Date.now() ||
+      user.resetOtp.used
+    ) {
+      return res.status(400).json({ error: "OTP invalid/expired" });
+    }
+
+    user.resetOtp.used = true;
+    user.password = await bcrypt.hash(newPassword, 12);
+    await user.save();
+
+    res.json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 export const CreateUser = async (req, res) => {
   try {
@@ -47,24 +110,22 @@ export const loginUser = async (req, res) => {
       });
     }
     const isPasswordValid = await bcrypt.compare(password, data.password);
-
+    // console.log("this is the data ",data);
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
         message: "Invalid password",
       });
     }
-    const { password: exceptpassword, ...safeUserData } = data;
+    const plainUser = data.toObject();
+    const { password: _, ...safeUserData } = plainUser;
 
-    const token = jwt.sign({ user: safeUserData }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
+    const token = jwt.sign({ user: safeUserData }, process.env.JWT_SECRET);
     return res.status(200).json({
       success: true,
       message: "Login successful",
       token,
-      user: data.username,
+      user: safeUserData,
     });
   } catch (e) {
     console.log(e);
@@ -97,6 +158,7 @@ export const finduser = async (req, res) => {
     });
   }
 };
+
 export const updateUserPassword = async (req, res) => {
   try {
     const { id } = req.params;
@@ -129,6 +191,7 @@ export const updateUserPassword = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 export const findAlluser = async (req, res) => {
   try {
     const data = await UserModels.find({});
@@ -171,6 +234,45 @@ export const deleteUser = async (req, res) => {
     return res.status(400).json({
       success: false,
       message: "Error while deleting user",
+    });
+  }
+};
+
+export const findUserDetails = async (req, res) => {
+  try {
+    const tokenval = req.query.jwtval;
+    if (!tokenval) {
+      return res.status(400).json({
+        success: false,
+        message: "token is invalid",
+      });
+    }
+    const token = jwt.verify(req.query.jwtval || "", process.env.JWT_SECRET);
+    if (!token || !token.user) {
+      return res.status(400).json({
+        success: false,
+        user: null,
+        message: "Invalid token",
+      });
+    }
+
+    const UserData = await UserModels.findOne({ _id: token.user._id });
+    if (!UserData) {
+      return res.status(404).json({
+        success: false,
+        user: null,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      user: UserData,
+    });
+  } catch (e) {
+    console.log("some error occurred", e);
+    return res.status(401).json({
+      success: false,
+      message: "Token invalid or expired",
     });
   }
 };

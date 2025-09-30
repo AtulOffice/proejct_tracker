@@ -104,6 +104,7 @@ const CardStatus = ({
     setToggleDev,
     deleteButton = true,
     shortFlag = true,
+    userRole = false,
 }) => {
     const [deleteFlag, setDeleteflag] = useState(false);
     const [updateFlag, setUpdateflag] = useState(false);
@@ -130,7 +131,7 @@ const CardStatus = ({
         }
 
     };
-  
+
     const handleUpdateToggle = async (project) => {
         setIsdisabled(true);
         try {
@@ -236,7 +237,7 @@ focus:outline-none focus:ring-4 focus:ring-emerald-400
                             </button>
                         </div>
 
-                        {deleteButton && (
+                        {deleteButton && userRole && (
                             <div
                                 onClick={() => setDeleteflag(true)}
                                 className="relative group

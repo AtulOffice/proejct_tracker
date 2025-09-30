@@ -59,7 +59,7 @@ export const ProjectStatusfetchbyJobnumber = async (req, res) => {
 
 export const isProjectstatusExistFun = async (req, res) => {
   try {
-    const { JobNumber } = req.params;
+    const { JobNumber } = req.params;   
 
     if (!JobNumber) {
       return res
@@ -88,7 +88,7 @@ export const isProjectstatusExistFun = async (req, res) => {
   }
 };
 
-export const isProjectExistFun = async (req, res) => {
+export const isProjectExistFun = async (req, res) => {  
   try {
     const { JobNumber } = req.params;
 
@@ -190,8 +190,6 @@ export const PaginationStatusprog = async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
   const search = req.query.search || "";
   const statusprogress = req.query.statusprog || "";
-  console.log("statusprogress:", statusprogress);
-
   const skip = (page - 1) * limit;
 
   try {

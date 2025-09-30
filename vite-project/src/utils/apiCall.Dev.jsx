@@ -20,7 +20,6 @@ export const fetchProjectsDevprogress = async ({ page, search, statusFilter }) =
             `${import.meta.env.VITE_API_URL
             }/projectDev/paginationdevprog?page=${page}&limit=6&search=${search}&statusprog=${statusFilter}`
         );
-        console.log(res.data)
         return { data: res.data.data, hashMore: page < res.data.totalPages };
     } catch (err) {
         console.error("Failed to fetch projects:", err);

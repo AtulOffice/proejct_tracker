@@ -48,9 +48,16 @@ const AdminDashboard = () => {
   }, [toggle]);
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const [activeCard, setActiveCard] = useState(() => {
     return sessionStorage.getItem("activeCard") || "zero";
   });
+  const { user, userLoading } = useAppContext();
+  useEffect(() => {
+    if (!userLoading && user?.role === "design" && activeCard !== "fourteen") {
+      setActiveCard("fourteen");
+    }
+  }, [user, userLoading, activeCard]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -103,9 +110,12 @@ const AdminDashboard = () => {
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
   };
-  useEffect(() => {
-    sessionStorage.setItem("activeCard", activeCard);
-  }, [activeCard]);
+
+
+  // useEffect(() => {
+  //   sessionStorage.setItem("activeCard", activeCard);
+  // }, [activeCard]);
+
   const handleActiveBar = (val) => {
     setActiveCard(val);
   };
