@@ -12,8 +12,7 @@ import { createAccessToken, createRefreshToken } from "../utils/utils.js";
 export const forgotUser = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log("this api called");
-    const user = await UserModels.findOne({ email });
+    const user = await UserModels.findOne({ email }).select("+resetOtp");
     if (!user) {
       return res
         .status(400)
@@ -42,9 +41,7 @@ export const forgotUser = async (req, res) => {
 export const resetUser = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
-    console.log(req.body);
-
-    const user = await UserModels.findOne({ email });
+    const user = await UserModels.findOne({ email }).select("+resetOtp");
     if (!user || !user.resetOtp) {
       return res.status(400).json({ success: false, error: "Invalid" });
     }
