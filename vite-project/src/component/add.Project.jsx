@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { dateFields, formval } from "../utils/FieldConstant";
 import FormField from "./inputField";
 import { useAppContext } from "../appContex";
+import { addProject } from "../utils/apiCall";
 
 const InputForm = () => {
   const { setToggle, setToggleDev } = useAppContext();
@@ -93,11 +93,11 @@ const InputForm = () => {
       orderDate,
     } = formData;
 
-    // if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
-    //   toast.error("Start date must be less than end date");
-    //    (false);
-    //   return;
-    // }
+    if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+      toast.error("Start date must be less than end date");
+       (false);
+      return;
+    }
 
     if (
       actualStartDate &&
@@ -118,15 +118,15 @@ const InputForm = () => {
       setIsLoading(false);
       return;
     }
-    if (
-      requestDate &&
-      deleveryDate &&
-      new Date(requestDate) >= new Date(deleveryDate)
-    ) {
-      toast.error("requested date must be less than delivery date");
-      setIsLoading(false);
-      return;
-    }
+    // if (
+    //   requestDate &&
+    //   deleveryDate &&
+    //   new Date(requestDate) >= new Date(deleveryDate)
+    // ) {
+    //   toast.error("requested date must be less than delivery date");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     const dateFields = [
       // { key: "startDate", value: startDate },
@@ -139,40 +139,21 @@ const InputForm = () => {
       { key: "requestDate", value: requestDate },
     ];
 
-    if (orderDate) {
-      for (const { key, value } of dateFields) {
-        if (value && new Date(orderDate) >= new Date(value)) {
-          toast.error(`Order date must be less than ${key}`);
-          setIsLoading(false);
-          return;
-        }
-      }
-    }
-
+    // if (orderDate) {
+    //   for (const { key, value } of dateFields) {
+    //     if (value && new Date(orderDate) >= new Date(value)) {
+    //       toast.error(`Order date must be less than ${key}`);
+    //       setIsLoading(false);
+    //       return;
+    //     }
+    //   }
+    // }
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/save`, {
-        ...formData,
-        momDate: formData.momDate ? [formData.momDate] : [],
-        engineerName: formData.engineerName
-          ? formData.engineerName.split(",").map((item) => item.trim())
-          : [],
-        momsrNo: formData.momsrNo
-          ? formData.momsrNo.split(",").map((item) => item.trim())
-          : [],
-        projectName: formData.client,
-        startDate: formData?.requestDate ?? null,
-        endDate: formData?.deleveryDate ?? null,
-      });
-      toast.success("Data saved successfully");
+      await addProject({ formData: formData })
       setToggleDev((prev) => !prev);
       setFormData(formval);
     } catch (e) {
-      if (e.response) {
-        toast.error(e.response?.data?.message);
-      } else {
-        toast.error("something went wrong");
-      }
-      console.log(e);
+      console.log(e)
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+const resetOtpSchema = new mongoose.Schema(
+  {
+    hash: { type: String },
+    expires: { type: Date },
+    used: { type: Boolean, default: false },
+  },
+  { _id: false }
+);
+
 const Userschema = new mongoose.Schema(
   {
     username: {
@@ -22,9 +31,8 @@ const Userschema = new mongoose.Schema(
       default: "user",
     },
     resetOtp: {
-      hash: { type: String },
-      expires: { type: Date },
-      used: { type: Boolean, default: false },
+      type: resetOtpSchema,
+      select: false,
     },
   },
   { timestamps: true }

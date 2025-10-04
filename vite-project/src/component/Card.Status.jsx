@@ -115,7 +115,7 @@ const CardStatus = ({
     const handleDelete = async (id, jobNumber) => {
         setIsdisabled(true);
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/projectDev/delete/${id}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/projectDev/delete/${id}`, { withCredentials: true });
             toast.success(`JobId ${jobNumber} deleted successfully`);
             setDeleteflag(false);
             setToggleDev((prev) => !prev);
@@ -136,7 +136,8 @@ const CardStatus = ({
         setIsdisabled(true);
         try {
             const res = await axios.get(
-                `${import.meta.env.VITE_API_URL}/projectDev/existancedevelop/${project.JobNumber}`
+                `${import.meta.env.VITE_API_URL}/projectDev/existancedevelop/${project.JobNumber}`, { withCredentials: true }
+
             );
             const exists = res?.data?.exists;
             if (!exists) {

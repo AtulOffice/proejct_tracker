@@ -56,7 +56,7 @@ const saveData = async (data) => {
       expenseScope: "company",
       duration: 0,
       checklistStatus: "N/A",
-    });
+    }, { withCredentials: true });
   } catch (e) {
     console.log(e);
   }

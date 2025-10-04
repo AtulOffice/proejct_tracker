@@ -91,7 +91,7 @@ const InputForm = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/worksts/save`,
-        formData
+        formData, { withCredentials: true }
       );
       setIsDataFound(false);
       lastFetchedRef.current = "";

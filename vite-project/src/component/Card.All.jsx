@@ -3,10 +3,9 @@ import { motion } from "framer-motion";
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { FaDev } from "react-icons/fa";
 import PopupConfirmation from "./PopuP.Page";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import FootBarAll from "../utils/FootBarAll";
+import { deleteProject, updateProject } from "../utils/apiCall";
 
 const CardAll = ({
   project,
@@ -26,16 +25,10 @@ const CardAll = ({
   const handleDelete = async (id, jobNumber) => {
     setIsdisabled(true);
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/delete/${id}`);
-      toast.success(`JobId ${jobNumber} deleted successfully`);
+      await deleteProject(id, jobNumber);
       setDeleteflag(false);
       setToggle((prev) => !prev);
     } catch (e) {
-      if (e.response) {
-        toast.error(e.response?.data?.message);
-      } else {
-        toast.error("something went wrong");
-      }
       console.log(e);
     } finally {
       setIsdisabled(false);
@@ -56,18 +49,9 @@ const CardAll = ({
 
   const handleDevelop = async (project) => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.jobNumber}`
-      );
-      const exists = res?.data?.exists === true;
-      if (exists) {
-        toast.error("Project development status already exists");
-      } else {
-        navigate(`/develop/${project.jobNumber}`, { state: { fromButton: true } });
-      }
+      await updateProject(project, navigate)
     } catch (error) {
-      console.error("Error checking project existence:", error);
-      toast.error("Failed to fetch project data");
+      console.error(error);
     }
   };
 

@@ -8,6 +8,7 @@ import { WorkstsRouter } from "./routes/WorkStatus.route.js";
 import rateLimit from "express-rate-limit";
 import { setupCronJobs } from "./cronJobs.js";
 import { ProjectDevRouter } from "./routes/projectDev.route.js";
+import cookieParser from "cookie-parser";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -18,9 +19,10 @@ const corsOptions = {
   origin: process.env.FRONT_PORT,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 const limiter = rateLimit({
   windowMs: 2 * 60 * 1000,
   max: 240,
@@ -30,8 +32,8 @@ const limiter = rateLimit({
   },
 });
 // app.use(limiter);
-app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("hello i am server of form submission");

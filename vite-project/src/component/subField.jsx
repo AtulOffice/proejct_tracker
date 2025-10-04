@@ -45,7 +45,7 @@ export const InputFiled = ({
         readOnly={readOnly}
         value={value ?? ""}
         onChange={handleChange}
-        {...(type === "date" && { max: new Date().toISOString().split("T")[0] })}
+        // {...(type === "date" && { max: new Date().toISOString().split("T")[0] })}
         onKeyDown={handleKeyDown}
         onWheel={handleWheel}
         className="bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-black/70"

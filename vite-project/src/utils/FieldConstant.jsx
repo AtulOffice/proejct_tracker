@@ -109,7 +109,7 @@ export const InputConst = [
     id: "expenseScope",
     name: "expenseScope",
     placeholder: "Enter the Expense Scope",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "workScope",
@@ -118,7 +118,7 @@ export const InputConst = [
     id: "workScope",
     name: "workScope",
     placeholder: "Enter the work scope",
-    required: true,
+    required: false,
     maxLength: 500,
     rows: 3,
   },
@@ -174,7 +174,7 @@ export const InputConst = [
     id: "dueBill",
     name: "dueBill",
     placeholder: "Enter the pending bill",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "momsrNo",
@@ -286,7 +286,7 @@ export const InputConst = [
     id: "engineerName",
     name: "engineerName",
     placeholder: "Enter the Engineer Name",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "finalMomnumber",
@@ -413,7 +413,7 @@ export const InputConst = [
     maxLength: 400,
     rows: 4,
     placeholder: "Enter the project Description",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "EndChecklist",
@@ -436,7 +436,7 @@ export const InputConst = [
     id: "ContactPersonName",
     name: "ContactPersonName",
     placeholder: "Enter the contact person name",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "ContactPersonNumber",
@@ -445,7 +445,7 @@ export const InputConst = [
     id: "ContactPersonNumber",
     name: "ContactPersonNumber",
     placeholder: "Enter the contact person number",
-    required: true,
+    required: false,
   },
   {
     htmlFor: "BackupSubmission",

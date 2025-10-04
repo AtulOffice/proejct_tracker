@@ -20,7 +20,7 @@ const UpdateForm = () => {
     const fetchByid = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/fetch/${id}`
+          `${import.meta.env.VITE_API_URL}/fetch/${id}`, { withCredentials: true }
         );
         res?.data?.data && setFormData(res.data.data);
       } catch (err) {
@@ -128,7 +128,7 @@ const UpdateForm = () => {
 
       await axios.put(
         `${import.meta.env.VITE_API_URL}/update/${id}`,
-        finalData
+        finalData, { withCredentials: true }
       );
       toast.success("Data updated successfully");
       setToggle((prev) => !prev);

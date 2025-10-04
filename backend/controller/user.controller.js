@@ -7,6 +7,7 @@ dotenv.config();
 import crypto from "crypto";
 import { sendMail } from "./mailer.js";
 import { otpHtml } from "./html.js";
+import { createAccessToken, createRefreshToken } from "../utils/utils.js";
 
 export const forgotUser = async (req, res) => {
   try {
@@ -42,7 +43,7 @@ export const resetUser = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
     console.log(req.body);
-   
+
     const user = await UserModels.findOne({ email });
     if (!user || !user.resetOtp) {
       return res.status(400).json({ success: false, error: "Invalid" });
@@ -100,9 +101,7 @@ export const CreateUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
-
     const data = await UserModels.findOne({ username }).select("+password");
-
     if (!data) {
       return res.status(404).json({
         success: false,
@@ -110,7 +109,6 @@ export const loginUser = async (req, res) => {
       });
     }
     const isPasswordValid = await bcrypt.compare(password, data.password);
-    // console.log("this is the data ",data);
     if (!isPasswordValid) {
       return res.status(401).json({
         success: false,
@@ -120,11 +118,24 @@ export const loginUser = async (req, res) => {
     const plainUser = data.toObject();
     const { password: _, ...safeUserData } = plainUser;
 
-    const token = jwt.sign({ user: safeUserData }, process.env.JWT_SECRET);
+    const accessToken = createAccessToken(safeUserData);
+    const refreshToken = createRefreshToken(safeUserData);
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+      maxAge: 10 * 60 * 1000,
+    });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      token,
       user: safeUserData,
     });
   } catch (e) {
@@ -135,6 +146,33 @@ export const loginUser = async (req, res) => {
     });
   }
 };
+
+export const logoutUser = (req, res) => {
+  try {
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error while logging out",
+    });
+  }
+};
+
 export const finduser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -240,23 +278,14 @@ export const deleteUser = async (req, res) => {
 
 export const findUserDetails = async (req, res) => {
   try {
-    const tokenval = req.query.jwtval;
-    if (!tokenval) {
+    const { _id } = req.user;
+    if (!_id) {
       return res.status(400).json({
         success: false,
-        message: "token is invalid",
+        message: "Please Login first",
       });
     }
-    const token = jwt.verify(req.query.jwtval || "", process.env.JWT_SECRET);
-    if (!token || !token.user) {
-      return res.status(400).json({
-        success: false,
-        user: null,
-        message: "Invalid token",
-      });
-    }
-
-    const UserData = await UserModels.findOne({ _id: token.user._id });
+    const UserData = await UserModels.findById(_id);
     if (!UserData) {
       return res.status(404).json({
         success: false,
@@ -264,12 +293,13 @@ export const findUserDetails = async (req, res) => {
         message: "User not found",
       });
     }
+
     return res.status(200).json({
       success: true,
       user: UserData,
     });
   } catch (e) {
-    console.log("some error occurred", e);
+    console.error("Some error occurred:", e);
     return res.status(401).json({
       success: false,
       message: "Token invalid or expired",

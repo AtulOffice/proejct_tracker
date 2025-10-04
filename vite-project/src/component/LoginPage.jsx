@@ -79,7 +79,7 @@ const LoginPage = () => {
       setIsOtopLoading(true)
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/forgetuser`,
-        { email: generatePassword?.email }
+        { email: generatePassword?.email }, { withCredentials: true }
       );
       toast.success(response?.data?.message || "check mail for otp")
       console.log(response?.data?.message);
@@ -102,7 +102,7 @@ const LoginPage = () => {
       setIsOtopLoading(true)
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/resetuser`,
-        { email: generatePassword?.email, otp: otp ? otp.join("") : "", newPassword: generatePassword?.newPassword }
+        { email: generatePassword?.email, otp: otp ? otp.join("") : "", newPassword: generatePassword?.newPassword }, { withCredentials: true }
       );
       toast.success(response?.data?.message || "check mail for otp")
       console.log(response?.data?.message);

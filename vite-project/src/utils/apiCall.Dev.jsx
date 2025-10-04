@@ -5,7 +5,7 @@ export const fetchProjectsDev = async ({ page, search }) => {
     try {
         const res = await axios.get(
             `${import.meta.env.VITE_API_URL
-            }/projectDev/paginationdev?page=${page}&limit=6&search=${search}`
+            }/projectDev/paginationdev?page=${page}&limit=6&search=${search}`, { withCredentials: true }
         );
         return { data: res.data.data, hashMore: page < res.data.totalPages };
     } catch (err) {
@@ -18,7 +18,7 @@ export const fetchProjectsDevprogress = async ({ page, search, statusFilter }) =
     try {
         const res = await axios.get(
             `${import.meta.env.VITE_API_URL
-            }/projectDev/paginationdevprog?page=${page}&limit=6&search=${search}&statusprog=${statusFilter}`
+            }/projectDev/paginationdevprog?page=${page}&limit=6&search=${search}&statusprog=${statusFilter}`, { withCredentials: true }
         );
         return { data: res.data.data, hashMore: page < res.data.totalPages };
     } catch (err) {
@@ -31,7 +31,7 @@ export const statusSave = async (data) => {
     try {
         const res = await axios.post(
             `${import.meta.env.VITE_API_URL}/projectDev/save`,
-            data
+            data, { withCredentials: true }
         );
         return res.data;
     } catch (err) {
@@ -46,7 +46,7 @@ export const statusSave = async (data) => {
 export const getStatus = async (id) => {
     try {
         const res = await axios.get(
-            `${import.meta.env.VITE_API_URL}/projectDev/fetch/${id}`
+            `${import.meta.env.VITE_API_URL}/projectDev/fetch/${id}`, { withCredentials: true }
         );
         return res.data;
     } catch (err) {
@@ -63,7 +63,7 @@ export const statusupdate = async (data, id) => {
     try {
         const res = await axios.put(
             `${import.meta.env.VITE_API_URL}/projectDev/updatebyid/${id}`,
-            data
+            data, { withCredentials: true }
         );
         return res.data;
     } catch (err) {
