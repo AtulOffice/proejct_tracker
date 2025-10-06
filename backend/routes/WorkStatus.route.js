@@ -26,7 +26,7 @@ WorkstsRouter.get(
   getWorkStatusById
 );
 WorkstsRouter.put(
-  "/updata/:id",
+  "/update/:id",
   refreshTokenMiddleware,
   authenticate,
   updateWorkStatus

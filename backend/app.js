@@ -16,7 +16,10 @@ const app = express();
 // setupCronJobs();
 
 const corsOptions = {
-  origin: process.env.FRONT_PORT,
+  origin: [
+    `${process.env.FRONT_PORT}`,
+    "https://warlike-unlubricative-angelo.ngrok-free.dev",
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
