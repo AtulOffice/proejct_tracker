@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import EngineerForm from "./ProjectFormAction";
 
 const ProjectTable = ({ data }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const formRef = useRef(null);
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -17,10 +17,8 @@ const ProjectTable = ({ data }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   return (
     <div className="relative col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
-
       <div className="overflow-x-auto">
         <table className="w-full table-fixed">
           <thead>
@@ -41,17 +39,13 @@ const ProjectTable = ({ data }) => {
                 Visit
               </th>
               <th className="w-1/5 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                Engineer
+                ALL Engineer List
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-blue-100">
             {data.map((project, indx) => (
               <tr
-                onClick={() => {
-                  setOpen(true);
-                  setSelectedProject(project);
-                }}
                 key={indx}
                 className={`hover:bg-blue-50/60 transition-colors duration-150 ${
                   indx % 2 === 0
@@ -74,7 +68,13 @@ const ProjectTable = ({ data }) => {
                     <span className="ml-2">{project.status}</span>
                   </span>
                 </td>
-                <td className="px-6 py-4 text-base font-semibold text-blue-700 whitespace-nowrap">
+                <td
+                  onClick={() => {
+                    setOpen(true);
+                    setSelectedProject(project);
+                  }}
+                  className="px-6 py-4 text-base font-semibold text-blue-700 whitespace-nowrap cursor-pointer"
+                >
                   {project.jobNumber}
                 </td>
                 <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
@@ -85,10 +85,10 @@ const ProjectTable = ({ data }) => {
                 </td>
                 <td className="px-6 py-4">
                   <div
-                    className="text-base font-semibold text-blue-900 break-words max-w-xs"
+                    className="text-[12px] text-blue-900 break-words max-w-xs"
                     title={project.engineerName || "Not assigned"}
                   >
-                    {project.engineerName || "—"}
+                    {project.engineerName.join(" , ") || "—"}
                   </div>
                 </td>
               </tr>
@@ -97,7 +97,6 @@ const ProjectTable = ({ data }) => {
         </table>
       </div>
 
-      {/* Footer */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
           <p className="text-base text-blue-700">
@@ -108,7 +107,6 @@ const ProjectTable = ({ data }) => {
         </div>
       </div>
 
-      {/* Popup Form */}
       {open && (
         <EngineerForm
           setOpen={setOpen}

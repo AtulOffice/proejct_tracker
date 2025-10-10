@@ -415,7 +415,7 @@ const UpdateForm = () => {
           <div className="flex justify-center mt-8">
             <button
               type="submit"
-              // disabled={isLoading}
+              disabled={isLoading}
               className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               Update

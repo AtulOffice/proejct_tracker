@@ -1,47 +1,97 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useAppContext } from "../appContex";
+import { EngineerAssignment } from "./engineerInpt";
 
 const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
-  console.log(selectedProject);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [engineerData, setEngineerData] = useState([]);
+  const { setToggle, setToggleDev } = useAppContext();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsDisabled(true);
+    try {
+      const finalData = {
+        engineerName: Array.from(
+          new Set([
+            ...(selectedProject?.engineerName || []),
+            ...(engineerData
+              ?.map((eng) => eng.engineerName?.trim())
+              .filter(Boolean) || []),
+          ])
+        ),
+        engineerData: engineerData.map((eng) => ({
+          ...eng,
+          assignedAt: selectedProject?.visitDate || null,
+          endTime: selectedProject?.visitendDate || null,
+        })),
+      };
+
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/update/${selectedProject._id}`,
+        finalData,
+        { withCredentials: true }
+      );
+      toast.success("Data updated successfully");
+      setToggle((prev) => !prev);
+      setOpen(false);
+      setToggleDev((prev) => !prev);
+    } catch (e) {
+      if (e.response) {
+        toast.error(e.response?.data?.message || "Update failed");
+      } else {
+        toast.error("Something went wrong");
+      }
+      console.error(e);
+    } finally {
+      setIsDisabled(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div ref={formRef} className="bg-white p-6 rounded-2xl shadow-xl w-96">
-        <h2 className="text-lg font-bold mb-4">
-          {selectedProject?.jobNumber || ""}
-        </h2>
-        <form className="space-y-4">
-          <input
-            type="text"
-            placeholder="Engineer Name"
-            className="w-full px-4 py-2 border rounded-lg"
+      <div
+        ref={formRef}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 scrollbar-glass"
+      >
+        <div className="p-6">
+          <h2 className="text-lg font-bold mb-4 text-center text-gray-800">
+            {selectedProject?.jobNumber || "Assign Engineers"}
+          </h2>
+
+          <EngineerAssignment
+            engineerData={engineerData}
+            setEngineerData={setEngineerData}
           />
-          <input
-            type="text"
-            placeholder="duration"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          <input
-            type="text"
-            placeholder="work Scope"
-            className="w-full px-4 py-2 border rounded-lg"
-          />
-          <div className="flex justify-end space-x-2 mt-4">
+
+          <div className="flex justify-end space-x-2 mt-6 sticky bottom-0 bg-white pt-2">
             <button
               type="button"
-              className="px-4 py-2 bg-gray-300 rounded-lg"
+              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg transition"
               onClick={() => setOpen(false)}
             >
               Cancel
             </button>
+
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+              onClick={handleSubmit}
+              disabled={isDisabled}
+              className={`px-4 py-2 rounded-lg text-white transition ${
+                isDisabled
+                  ? "bg-blue-300 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
             >
-              Save
+              {isDisabled ? "Saving..." : "Save"}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
+
 export default EngineerProjectForm;
