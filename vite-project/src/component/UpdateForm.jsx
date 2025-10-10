@@ -147,7 +147,7 @@ const UpdateForm = () => {
         })),
       };
 
-      await axios.put(
+      const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/update/${id}`,
         finalData,
         { withCredentials: true }

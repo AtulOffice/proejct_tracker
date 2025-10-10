@@ -127,7 +127,6 @@ const EngineerTable = ({ data }) => {
     }
   };
 
-  console.log(showData?.assignments);
   return (
     <div className="relative col-span-full w-full overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
       {open && (
