@@ -4,9 +4,14 @@ import toast from "react-hot-toast";
 import { UpdateConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField, TextArea } from "./subField";
 import { useAppContext } from "../appContex";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import LoadingSkeleton from "../utils/loaderForm";
-
+import { EngineerAssignment } from "./engineerInpt";
 
 const UpdateForm = () => {
   const { id } = useParams();
@@ -15,12 +20,14 @@ const UpdateForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState();
   const navigate = useNavigate();
+  const [engineerData, setEngineerData] = useState([]);
 
   useEffect(() => {
     const fetchByid = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/fetch/${id}`, { withCredentials: true }
+          `${import.meta.env.VITE_API_URL}/fetch/${id}`,
+          { withCredentials: true }
         );
         res?.data?.data && setFormData(res.data.data);
       } catch (err) {
@@ -79,15 +86,15 @@ const UpdateForm = () => {
       setIsLoading(false);
       return;
     }
-    if (
-      requestDate &&
-      deleveryDate &&
-      new Date(requestDate) >= new Date(deleveryDate)
-    ) {
-      toast.error("requested date must be less than delivery date");
-      setIsLoading(false);
-      return;
-    }
+    // if (
+    //   requestDate &&
+    //   deleveryDate &&
+    //   new Date(requestDate) >= new Date(deleveryDate)
+    // ) {
+    //   toast.error("requested date must be less than delivery date");
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     const dateFields = [
       { key: "actualStartDate", value: actualStartDate },
@@ -98,37 +105,48 @@ const UpdateForm = () => {
       { key: "requestDate", value: requestDate },
     ];
 
-    if (orderDate) {
-      for (const { key, value } of dateFields) {
-        if (value && new Date(orderDate) >= new Date(value)) {
-          toast.error(`Order date must be less than ${key}`);
-          setIsLoading(false);
-          return;
-        }
-      }
-    }
+    // if (orderDate) {
+    //   for (const { key, value } of dateFields) {
+    //     if (value && new Date(orderDate) >= new Date(value)) {
+    //       toast.error(`Order date must be less than ${key}`);
+    //       setIsLoading(false);
+    //       return;
+    //     }
+    //   }
+    // }
     try {
       const finalData = {
         ...formData,
-        engineerName:
-          typeof formData.engineerName === "string"
-            ? formData.engineerName
-              .split(",")
-              .map((name) => name.trim())
-              .filter((name) => name.length > 0)
-            : formData.engineerName,
+        // engineerName:
+        //   typeof formData.engineerName === "string"
+        //     ? formData.engineerName
+        //         .split(",")
+        //         .map((name) => name.trim())
+        //         .filter((name) => name.length > 0)
+        //     : formData.engineerName,
+
+        engineerName: Array.from(
+          new Set([
+            ...(formData.engineerName || []),
+            ...(engineerData
+              ?.map((eng) => eng.engineerName?.trim())
+              .filter(Boolean) || []),
+          ])
+        ),
         momsrNo:
           typeof formData.momsrNo === "string"
             ? formData.momsrNo
-              .split(",")
-              .map((name) => name.trim())
-              .filter((name) => name.length > 0)
+                .split(",")
+                .map((name) => name.trim())
+                .filter((name) => name.length > 0)
             : formData.momsrNo,
+        engineerData,
       };
 
       await axios.put(
         `${import.meta.env.VITE_API_URL}/update/${id}`,
-        finalData, { withCredentials: true }
+        finalData,
+        { withCredentials: true }
       );
       toast.success("Data updated successfully");
       setToggle((prev) => !prev);
@@ -153,6 +171,7 @@ const UpdateForm = () => {
   if (!location.state?.fromButton) {
     return <Navigate to="/" replace />;
   }
+
   return (
     <div className="transition-all duration-300  pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
@@ -241,11 +260,25 @@ const UpdateForm = () => {
               value={formData.workScope}
               handleChange={handleChange}
             />
-            <InputFiled
+            {/* <InputFiled
               {...UpdateConst[23]}
               value={formData.engineerName}
               handleChange={handleChange}
-            />
+            /> */}
+
+            <div className="flex flex-col mb-3">
+              <label className="text-sm font-semibold text-gray-700 mb-1">
+                All Assigned Engineers List
+              </label>
+              <div className="h-[20vh] border border-gray-300 rounded-md px-2 py-1 bg-gradient-to-r from-blue-50 to-white text-gray-800 text-sm font-medium shadow-sm overflow-y-auto">
+                {formData?.engineerName?.length
+                  ? formData.engineerName.join(", ")
+                  : "No engineer assigned"}
+              </div>
+            </div>
+
+            <EngineerAssignment setEngineerData={setEngineerData} />
+
             <InputFiled
               {...UpdateConst[16]}
               value={formData.requestDate}
@@ -261,7 +294,6 @@ const UpdateForm = () => {
               handleChange={handleChange}
               value={formData.StartChecklist}
             />
-
             <InputFiled
               {...UpdateConst[19]}
               value={formData.visitendDate}
@@ -379,7 +411,7 @@ const UpdateForm = () => {
           <div className="flex justify-center mt-8">
             <button
               type="submit"
-              disabled={isLoading}
+              // disabled={isLoading}
               className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
               Update

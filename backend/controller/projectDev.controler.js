@@ -4,6 +4,7 @@ import ProjectModel from "../models/Project.model.js";
 export const ProjectStatusSave = async (req, res) => {
   try {
     const data = req.body;
+
     const { JobNumber } = data;
     if (!JobNumber) {
       return res
@@ -59,7 +60,7 @@ export const ProjectStatusfetchbyJobnumber = async (req, res) => {
 
 export const isProjectstatusExistFun = async (req, res) => {
   try {
-    const { JobNumber } = req.params;   
+    const { JobNumber } = req.params;
 
     if (!JobNumber) {
       return res
@@ -88,7 +89,7 @@ export const isProjectstatusExistFun = async (req, res) => {
   }
 };
 
-export const isProjectExistFun = async (req, res) => {  
+export const isProjectExistFun = async (req, res) => {
   try {
     const { JobNumber } = req.params;
 

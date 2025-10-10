@@ -35,6 +35,8 @@ import ProjectsNoRequest from "./norequest";
 import ProjectsClosed from "./closed.Project";
 import ProjectDev from "./project.Devlopment";
 import ProjectsDevlopment from "./development.projects";
+import ProejctACtions from "./ProejctACtions.projects";
+import EngineerAction from "./EngineerActions.projects";
 
 const AdminDashboard = () => {
   const { toggle, user, userLoading } = useAppContext();
@@ -52,7 +54,7 @@ const AdminDashboard = () => {
   // const [activeCard, setActiveCard] = useState(() => {
   //   return sessionStorage.getItem("activeCard") || "zero";
   // });
-  const [activeCard, setActiveCard] = useState("zero");
+  const [activeCard, setActiveCard] = useState("seventeen");
 
   useEffect(() => {
     if (!userLoading && user?.role === "design" && activeCard !== "fourteen") {
@@ -107,6 +109,10 @@ const AdminDashboard = () => {
         return <ProjectDev />;
       case "fifteen":
         return <ProjectsDevlopment />;
+      case "sixteen":
+        return <ProejctACtions />;
+      case "seventeen":
+        return <EngineerAction />;
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -225,6 +231,32 @@ const AdminDashboard = () => {
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       ALL
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => handleActiveBar("seventeen")}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "seventeen"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ENGINEERS
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => handleActiveBar("sixteen")}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "sixteen"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      PROJECT ACTIONS
                     </div>
                   </li>
                   <li>

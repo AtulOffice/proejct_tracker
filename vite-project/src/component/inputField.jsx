@@ -1,8 +1,9 @@
 import React from "react";
 import { InputConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField, TextArea } from "./subField";
+import { EngineerAssignment } from "./engineerInpt";
 
-const FormField = ({ formData, handleChange }) => {
+const FormField = ({ formData, handleChange, setEngineerData }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <InputFiled
@@ -85,17 +86,7 @@ const FormField = ({ formData, handleChange }) => {
         value={formData.workScope}
         handleChange={handleChange}
       />
-      {(formData.status === "running" ||
-        formData.status === "upcoming" ||
-        formData.status === "completed" ||
-        formData.status === "cancelled" ||
-        formData.status === "closed") && (
-          <InputFiled
-            {...InputConst[23]}
-            value={formData.engineerName}
-            handleChange={handleChange}
-          />
-        )}
+
       {formData.status === "pending" && (
         <InputFiled
           {...InputConst[16]}
@@ -103,43 +94,40 @@ const FormField = ({ formData, handleChange }) => {
           handleChange={handleChange}
         />
       )}
-      {(formData.status === "running" ||
-        formData.status === "completed" ||
-        formData.status === "cancelled" ||
-        formData.status === "closed") && (
-          <>
-            <InputFiled
-              {...InputConst[18]}
-              value={formData.visitDate}
+      {(formData.status === "running" || formData.status === "upcoming") && (
+        <>
+          <InputFiled
+            {...InputConst[18]}
+            value={formData.visitDate}
+            handleChange={handleChange}
+          />
+          {(formData.status === "running" ||
+            formData.status === "upcoming" ||
+            formData.status === "completed" ||
+            formData.status === "cancelled" ||
+            formData.status === "closed") && (
+            <SelectField
+              {...InputConst[30]}
               handleChange={handleChange}
+              value={formData.StartChecklist}
             />
-            {(formData.status === "running" ||
-              formData.status === "upcoming" ||
-              formData.status === "completed" ||
-              formData.status === "cancelled" ||
-              formData.status === "closed") && (
-                <SelectField
-                  {...InputConst[30]}
-                  handleChange={handleChange}
-                  value={formData.StartChecklist}
-                />
-              )}
-            <InputFiled
-              {...InputConst[19]}
-              value={formData.visitendDate}
+          )}
+          <InputFiled
+            {...InputConst[19]}
+            value={formData.visitendDate}
+            handleChange={handleChange}
+          />
+          {(formData.status === "completed" ||
+            formData.status === "cancelled" ||
+            formData.status === "closed") && (
+            <SelectField
+              {...InputConst[34]}
               handleChange={handleChange}
+              value={formData.EndChecklist}
             />
-            {(formData.status === "completed" ||
-              formData.status === "cancelled" ||
-              formData.status === "closed") && (
-                <SelectField
-                  {...InputConst[34]}
-                  handleChange={handleChange}
-                  value={formData.EndChecklist}
-                />
-              )}
-          </>
-        )}
+          )}
+        </>
+      )}
       {(formData.status === "completed" || formData.status === "closed") && (
         <InputFiled
           {...InputConst[11]}
@@ -158,27 +146,27 @@ const FormField = ({ formData, handleChange }) => {
         formData.status === "pending" ||
         formData.status === "completed" ||
         1) && (
-          <>
-            {(formData.status === "completed" ||
-              formData.status === "cancelled" ||
-              formData.status === "closed") && (
-                <SelectField
-                  {...InputConst[37]}
-                  handleChange={handleChange}
-                  value={formData.BackupSubmission}
-                />
-              )}
-            {(formData.status === "completed" ||
-              formData.status === "cancelled" ||
-              formData.status === "closed") && (
-                <SelectField
-                  {...InputConst[38]}
-                  handleChange={handleChange}
-                  value={formData.ExpensSubmission}
-                />
-              )}
-          </>
-        )}
+        <>
+          {(formData.status === "completed" ||
+            formData.status === "cancelled" ||
+            formData.status === "closed") && (
+            <SelectField
+              {...InputConst[37]}
+              handleChange={handleChange}
+              value={formData.BackupSubmission}
+            />
+          )}
+          {(formData.status === "completed" ||
+            formData.status === "cancelled" ||
+            formData.status === "closed") && (
+            <SelectField
+              {...InputConst[38]}
+              handleChange={handleChange}
+              value={formData.ExpensSubmission}
+            />
+          )}
+        </>
+      )}
       {(formData.status === "completed" || formData.status === "closed") && (
         <InputFiled
           {...InputConst[39]}
@@ -189,13 +177,13 @@ const FormField = ({ formData, handleChange }) => {
       {(formData.status === "completed" ||
         formData.status === "cancelled" ||
         formData.status === "closed") && (
-          <InputFiled
-            {...InputConst[2]}
-            value={formData.actualVisitDuration}
-            handleChange={handleChange}
-          />
-        )}
-      <div className="flex items-center justify-between p-2 bg-gradient-to-r from-white to-gray-100 rounded-2xl w-64 shadow-sm">
+        <InputFiled
+          {...InputConst[2]}
+          value={formData.actualVisitDuration}
+          handleChange={handleChange}
+        />
+      )}
+      <div className="flex items-center justify-between p-2 bg-gradient-to-r from-white to-gray-100 rounded-2xl w-64 h-20 shadow-sm">
         <label className="text-sm font-semibold text-gray-100">
           Project Development
         </label>
@@ -207,7 +195,6 @@ const FormField = ({ formData, handleChange }) => {
           className="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 cursor-pointer"
         />
       </div>
-
 
       <SelectField
         {...InputConst[26]}
@@ -231,12 +218,12 @@ const FormField = ({ formData, handleChange }) => {
       {(formData.status === "closed" ||
         formData.status === "completed" ||
         formData.status === "running") && (
-          <InputFiled
-            {...InputConst[14]}
-            value={formData.actualStartDate}
-            handleChange={handleChange}
-          />
-        )}
+        <InputFiled
+          {...InputConst[14]}
+          value={formData.actualStartDate}
+          handleChange={handleChange}
+        />
+      )}
       {(formData.status === "completed" || formData.status === "closed") && (
         <InputFiled
           {...InputConst[15]}
@@ -251,6 +238,15 @@ const FormField = ({ formData, handleChange }) => {
           value={formData.description}
         />
       </div>
+
+      {(formData.status === "running" || formData.status === "upcoming") && (
+        // <InputFiled
+        //   {...InputConst[23]}
+        //   value={formData.engineerName}
+        //   handleChange={handleChange}
+        // />
+        <EngineerAssignment setEngineerData={setEngineerData} />
+      )}
       {(formData.status === "completed" || formData.status === "closed") && (
         <InputFiled
           {...InputConst[24]}

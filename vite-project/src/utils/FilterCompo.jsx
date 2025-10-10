@@ -11,15 +11,15 @@ const FilterCompo = ({
   isFilterOpen,
   setIsFilterOpen,
   filterRef,
+  EngHandle = false,
 }) => {
-
   const mapTime = {
     all: "All TIME",
     today: "TODAY",
     thisWeek: "THIS WEEK",
     thisMonth: "THIS MONTH",
-    thisYear: "THIS YEAR"
-  }
+    thisYear: "THIS YEAR",
+  };
   return (
     <>
       <div className="flex flex-col lg:flex-row items-center justify-between mb-10 gap-6">
@@ -141,7 +141,10 @@ const FilterCompo = ({
                               name="timeFilter"
                               value={filter}
                               checked={timeFilter === filter}
-                              onChange={() => { setIsFilterOpen(false); setTimeFilter(filter) }}
+                              onChange={() => {
+                                setIsFilterOpen(false);
+                                setTimeFilter(filter);
+                              }}
                               className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-700"
                             />
                             <label
@@ -165,12 +168,14 @@ const FilterCompo = ({
           </div>
         </div>
       </div>
-      <div className="mb-6 flex items-center">
-        <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-3 py-1 rounded-full mr-2">
-          {filteredProjects.length}
-        </span>
-        <p className="text-gray-600">projects found</p>
-      </div>
+      {!EngHandle && (
+        <div className="mb-6 flex items-center">
+          <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-3 py-1 rounded-full mr-2">
+            {filteredProjects.length}
+          </span>
+          <p className="text-gray-600">projects found</p>
+        </div>
+      )}
     </>
   );
 };

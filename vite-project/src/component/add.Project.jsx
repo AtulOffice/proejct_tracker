@@ -10,6 +10,7 @@ const InputForm = () => {
   const [formData, setFormData] = useState(formval);
   const [isLoading, setIsLoading] = useState(false);
   const [debounceJobnumber, setdebounceJobNumber] = useState("");
+  const [engineerData, setEngineerData] = useState([]);
 
   useEffect(() => {
     const handelJob = setTimeout(() => {
@@ -85,6 +86,8 @@ const InputForm = () => {
 
     const {
       actualEndDate,
+      startDate,
+      endDate,
       actualStartDate,
       visitDate,
       visitendDate,
@@ -95,7 +98,7 @@ const InputForm = () => {
 
     if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
       toast.error("Start date must be less than end date");
-       (false);
+      false;
       return;
     }
 
@@ -149,11 +152,12 @@ const InputForm = () => {
     //   }
     // }
     try {
-      await addProject({ formData: formData })
+      await addProject({ formData: formData, engineerData: engineerData });
       setToggleDev((prev) => !prev);
       setFormData(formval);
+      setToggle((prev) => !prev);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     } finally {
       setIsLoading(false);
     }
@@ -166,7 +170,11 @@ const InputForm = () => {
           DETAILS
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <FormField formData={formData} handleChange={handleChange} />
+          <FormField
+            formData={formData}
+            handleChange={handleChange}
+            setEngineerData={setEngineerData}
+          />
           <div className="flex justify-center mt-8">
             <button
               type="submit"

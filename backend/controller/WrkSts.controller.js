@@ -16,20 +16,7 @@ export const WrkStatusSave = async (req, res) => {
     BackupSubmission,
     EndChecklist,
     StartChecklist,
-    engineerName,
-    entityType,
-    client,
-    visitDate,
-    visitendDate,
-    momDate,
-    momsrNo,
-    endUser,
-    orderNumber,
-    orderDate,
-    daysspendsite,
-    startDate,
-    endDate,
-    duration,
+    ...otheData
   } = req.body;
   try {
     const RelatedProject = await ProjectModel.findOne({

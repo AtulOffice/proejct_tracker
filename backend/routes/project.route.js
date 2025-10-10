@@ -7,98 +7,106 @@ import {
   Paginationsotype,
   Recordsformave,
   UrgentProjectPegination,
+  UrgentProjectAction,
   deleteRecord,
   findrecord,
   findrecordbyId,
   findrecordbyJobnumber,
   getProjectOverview,
   updateRecords,
-} from "../controller/record.controller.js";
+} from "../controller/project.controller.js";
 import { authenticate } from "../middlware/authaticate.js";
 import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
 import { authorizeRole } from "../middlware/authRole.js";
 
-export const RecordRouter = express.Router();
+export const ProjectRouter = express.Router();
 
-RecordRouter.post(
+ProjectRouter.post(
   "/save",
-  refreshTokenMiddleware,
-  authenticate,
-  authorizeRole("admin"),
+  // refreshTokenMiddleware,
+  // authenticate,
+  // authorizeRole("admin"),
   Recordsformave
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/getProjectOverview",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   getProjectOverview
 );
-RecordRouter.get("/fetch", refreshTokenMiddleware, authenticate, findrecord);
-RecordRouter.get(
+ProjectRouter.get("/fetch", refreshTokenMiddleware, authenticate, findrecord);
+ProjectRouter.get(
   "/fetch/:id",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   findrecordbyId
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/fetchbyjob",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   findrecordbyJobnumber
 );
-RecordRouter.put(
+ProjectRouter.put(
   "/update/:id",
-  refreshTokenMiddleware,
-  authenticate,
-  authorizeRole("admin"),
+  // refreshTokenMiddleware,
+  // authenticate,
+  // authorizeRole("admin"),
   updateRecords
 );
-RecordRouter.delete(
+ProjectRouter.delete(
   "/delete/:id",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   deleteRecord
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/pagination",
   refreshTokenMiddleware,
   authenticate,
   Pagination
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/latestProjectpagination",
   authenticate,
   authorizeRole("admin"),
   LatestProjectPagination
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/catogray/pagination",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   PaginationCatogary
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/devlopment/pagination",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   PaginationDevStatus
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/sotype/pagination",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   Paginationsotype
 );
-RecordRouter.get(
+ProjectRouter.get(
   "/urgentProject/pagination",
   authenticate,
   authorizeRole("admin"),
   UrgentProjectPegination
+);
+
+ProjectRouter.get(
+  "/urgentProjectAction",
+  // authenticate,
+  // authorizeRole("admin"),
+  UrgentProjectAction
 );

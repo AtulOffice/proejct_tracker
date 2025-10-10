@@ -1,12 +1,10 @@
 import { UserModels } from "../models/user.model.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-// import "../config/env.js";
 import dotenv from "dotenv";
 dotenv.config();
 import crypto from "crypto";
-import { sendMail } from "./mailer.js";
-import { otpHtml } from "./html.js";
+import { sendMail } from "../utils/mailer.js";
+import { otpHtml } from "../utils/html.js";
 import { createAccessToken, createRefreshToken } from "../utils/utils.js";
 
 export const forgotUser = async (req, res) => {

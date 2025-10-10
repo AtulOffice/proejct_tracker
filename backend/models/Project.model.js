@@ -7,6 +7,19 @@ const projectSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    EngineerDetails: [
+      {
+        engineerId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "EngineerRecord",
+        },
+        name: { type: String, required: true },
+        empId: { type: String, trim: true },
+        assignedAt: { type: Date },
+        durationDays: { type: Number, default: 0 },
+        endTime: { type: Date },
+      },
+    ],
     engineerName: {
       type: [String],
       default: [],
@@ -178,7 +191,6 @@ const projectSchema = new mongoose.Schema(
     },
     expenseScope: {
       type: String,
-      required: true,
     },
     deleveryDate: {
       type: String,

@@ -14,7 +14,7 @@ const CardAll = ({
   deleteButton = true,
   shortFlag = true,
   cardAllflag = false,
-  editoptionflag = true
+  editoptionflag = true,
 }) => {
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
@@ -49,12 +49,11 @@ const CardAll = ({
 
   const handleDevelop = async (project) => {
     try {
-      await updateProject(project, navigate)
+      await updateProject(project, navigate);
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <div>
@@ -107,12 +106,13 @@ const CardAll = ({
               {project.jobNumber}
             </span>
 
-            {cardAllflag && project?.Development && <div
-              onClick={() => handleDevelop(project)}
-              className="relative group "
-            >
-              <button
-                className="
+            {cardAllflag && project?.Development && (
+              <div
+                onClick={() => handleDevelop(project)}
+                className="relative group "
+              >
+                <button
+                  className="
 flex items-center justify-center
 bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
 hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
@@ -122,19 +122,21 @@ hover:scale-110 hover:-rotate-6
 ring-2 ring-transparent hover:ring-blue-300
 focus:outline-none focus:ring-4 focus:ring-blue-400
 "
-                aria-label="Update"
-                type="button"
-              >
-                <FaDev className="w-5 h-5 drop-shadow" />
-              </button>
-            </div>}
+                  aria-label="Update"
+                  type="button"
+                >
+                  <FaDev className="w-5 h-5 drop-shadow" />
+                </button>
+              </div>
+            )}
 
-            {editoptionflag && <div
-              onClick={() => setUpdateflag(true)}
-              className="relative group "
-            >
-              <button
-                className="
+            {editoptionflag && (
+              <div
+                onClick={() => setUpdateflag(true)}
+                className="relative group "
+              >
+                <button
+                  className="
 flex items-center justify-center
 bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
 hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
@@ -144,12 +146,13 @@ hover:scale-110 hover:-rotate-6
 ring-2 ring-transparent hover:ring-blue-300
 focus:outline-none focus:ring-4 focus:ring-blue-400
 "
-                aria-label="Update"
-                type="button"
-              >
-                <MdEdit className="w-5 h-5 drop-shadow" />
-              </button>
-            </div>}
+                  aria-label="Update"
+                  type="button"
+                >
+                  <MdEdit className="w-5 h-5 drop-shadow" />
+                </button>
+              </div>
+            )}
 
             {deleteButton && (
               <div
@@ -280,15 +283,15 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             <li className="flex items-center space-x-2">
               <strong className="text-gray-700">DEVELOPMENT:</strong>
               <span
-                className={`px - 2 py - 1 text - xs font - semibold rounded - md ${project?.Development
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-                  }`}
+                className={`px - 2 py - 1 text - xs font - semibold rounded - md ${
+                  project?.Development
+                    ? "bg-green-100 text-green-700"
+                    : "bg-red-100 text-red-700"
+                }`}
               >
                 {project?.Development ? "YES" : "NO"}
               </span>
             </li>
-
 
             {project?.momDate?.length > 0 && (
               <li>
