@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+
+
+#  files
+backend/utils/updatemany.js
