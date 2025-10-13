@@ -721,6 +721,42 @@ export const UrgentProjectAction = async (req, res) => {
   }
 };
 
+export const allProjectsFetch = async (req, res) => {
+  const search = req.query.search || "";
+
+  try {
+    const filter = {};
+
+    if (search) {
+      filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+    }
+
+    const data = await ProjectModel.find(filter, {
+      projectName: 1,
+      status: 1,
+      jobNumber: 1,
+      deleveryDate: 1,
+      visitDate: 1,
+      engineerName: 1,
+      updatedAt: 1,
+      createdAt: 1,
+    }).sort({
+      updatedAt: -1,
+      createdAt: -1,
+    });
+
+    return res.json({
+      success: true,
+      message: "Data fetched successfully",
+      totalItems: data.length,
+      data,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
 export const getProjectOverview = async (req, res) => {
   try {
     // this is temp

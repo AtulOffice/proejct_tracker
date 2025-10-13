@@ -14,6 +14,7 @@ import {
   findrecordbyJobnumber,
   getProjectOverview,
   updateRecords,
+  allProjectsFetch,
 } from "../controller/project.controller.js";
 import { authenticate } from "../middlware/authaticate.js";
 import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
@@ -111,4 +112,11 @@ ProjectRouter.get(
   authenticate,
   authorizeRole("admin", "reception"),
   UrgentProjectAction
+);
+
+ProjectRouter.get(
+  "/allProjectsfetch",
+  authenticate,
+  authorizeRole("admin", "reception"),
+  allProjectsFetch
 );

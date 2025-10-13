@@ -40,6 +40,7 @@ import EngineerAction from "./EngineerActions.projects";
 import NotificationForm from "./notification";
 import { useRef } from "react";
 import WeeklyAssignmentForm from "./weeklyData";
+import ProjectList from "./projectList";
 
 const AdminDashboard = () => {
   const formRef = useRef(null);
@@ -59,7 +60,7 @@ const AdminDashboard = () => {
   // const [activeCard, setActiveCard] = useState(() => {
   //   return sessionStorage.getItem("activeCard") || "zero";
   // });
-  const [activeCard, setActiveCard] = useState("eighteen");
+  const [activeCard, setActiveCard] = useState("zero");
 
   useEffect(() => {
     if (!userLoading && user?.role === "design" && activeCard !== "fourteen") {
@@ -120,6 +121,8 @@ const AdminDashboard = () => {
         return <EngineerAction />;
       case "eighteen":
         return <WeeklyAssignmentForm />;
+      case "ninteen":
+        return <ProjectList />;
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -279,6 +282,19 @@ const AdminDashboard = () => {
                       </li>
                     </>
                   )}
+                  <li>
+                    <div
+                      onClick={() => handleActiveBar("ninteen")}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "ninteen"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ALL PROJECT LIST
+                    </div>
+                  </li>
                   <li>
                     <div
                       onClick={() => handleActiveBar("three")}

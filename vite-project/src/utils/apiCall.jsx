@@ -121,6 +121,19 @@ export const fetchProjectsUrgentAction = async ({ search }) => {
   }
 };
 
+export const fetfchProejctAll = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/allProjectsfetch?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
 export const saveAllEngineers = async (data) => {
   try {
     const res = await axios.post(

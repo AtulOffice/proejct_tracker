@@ -19,11 +19,37 @@ const NotificationForm = ({ setOpen, formRef }) => {
     };
   }, [formRef, setOpen]);
 
+  // useEffect(() => {
+  //   const getProjects = async () => {
+  //     try {
+  //       const val = await getAssignedEngineers();
+  //       setNotifications(val?.data || []);
+  //     } catch (error) {
+  //       console.error("Failed to fetch", error);
+  //     }
+  //   };
+  //   getProjects();
+  // }, [toggle]);
+
   useEffect(() => {
     const getProjects = async () => {
       try {
         const val = await getAssignedEngineers();
-        setNotifications(val?.data || []);
+        const data = val?.data || [];
+        console.log(data);
+        data.sort((a, b) => {
+          const aDate = a.assignments?.length
+            ? new Date(a.assignments[a.assignments.length - 1].assignedAt)
+            : new Date(0);
+
+          const bDate = b.assignments?.length
+            ? new Date(b.assignments[b.assignments.length - 1].assignedAt)
+            : new Date(0);
+
+          return aDate - bDate;
+        });
+
+        setNotifications(data);
       } catch (error) {
         console.error("Failed to fetch", error);
       }

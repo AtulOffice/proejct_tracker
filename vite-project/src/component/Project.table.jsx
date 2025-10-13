@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import EngineerForm from "./ProjectFormAction";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ProjectTable = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -17,6 +18,18 @@ const ProjectTable = ({ data }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const navigate = useNavigate();
+
+  const handleUpdate = (id) => {
+    try {
+      navigate(`/update/${id}`, {
+        state: { fromButton: true, recordId: id },
+      });
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  };
+
   return (
     <div className="relative col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
       <div className="overflow-x-auto">
@@ -55,7 +68,8 @@ const ProjectTable = ({ data }) => {
               >
                 <td className="px-6 py-4">
                   <div
-                    className="text-base font-medium text-blue-900 truncate"
+                    onClick={() => handleUpdate(project?._id)}
+                    className="text-base font-medium text-blue-900 truncate cursor-pointer"
                     title={project.projectName}
                   >
                     {project.projectName}
