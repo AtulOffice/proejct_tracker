@@ -251,7 +251,7 @@ const AdminDashboard = () => {
                       ALL
                     </div>
                   </li>
-                  {(user?.role == "admin" || usre?.role == "reception") && (
+                  {(user?.role == "admin" || user?.role == "reception") && (
                     <>
                       <li>
                         <div
