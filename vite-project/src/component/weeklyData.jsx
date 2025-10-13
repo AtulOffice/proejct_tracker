@@ -137,7 +137,6 @@ const WeeklyAssignmentForm = () => {
       engineers,
       tasksByDate,
     };
-    console.log("Saving data:", data);
     alert("Weekly assignments saved successfully!");
   };
 

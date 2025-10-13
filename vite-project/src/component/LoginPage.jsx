@@ -83,7 +83,6 @@ const LoginPage = () => {
       setIsfun(true);
     } catch (e) {
       if (e.response) {
-        console.log(e.response.data);
         toast.error(e?.response?.data?.message || "Some error occurred");
       } else {
         toast.error("Network error or otp server not reachable");
@@ -118,7 +117,6 @@ const LoginPage = () => {
       }));
     } catch (e) {
       if (e.response) {
-        console.log(e.response?.data);
         toast.error(e?.response?.data?.message || "Some error occurred");
       } else {
         toast.error("Network error or password generate server not reachable");

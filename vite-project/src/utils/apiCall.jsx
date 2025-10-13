@@ -10,6 +10,7 @@ export const fetchProjectOveriew = async () => {
     return res.data;
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -24,6 +25,7 @@ export const fetchProjects = async ({ page, search }) => {
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 export const fetchProjectslatest = async ({ page, search }) => {
@@ -37,6 +39,7 @@ export const fetchProjectslatest = async ({ page, search }) => {
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -51,6 +54,7 @@ export const fetchProjectsCatogary = async ({ status, page, search }) => {
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -65,6 +69,7 @@ export const fetchProjectsDevelopment = async ({ devstatus, page, search }) => {
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -79,6 +84,7 @@ export const fetchProjectsSotype = async ({ soType, page, search }) => {
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -98,6 +104,7 @@ export const fetchProjectsUrgent = async ({
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -110,6 +117,7 @@ export const fetchProjectsUrgentAction = async ({ search }) => {
     return res.data.data;
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -220,6 +228,7 @@ export const login = async ({ username, password, navigate, setUser }) => {
       console.log(error.message);
     }
     console.error("Login error:", error);
+    throw error;
   }
 };
 
@@ -230,7 +239,6 @@ export const logout = async () => {
     });
   } catch (e) {
     if (e.response) {
-      console.log(e.response.data);
       toast.error(e.response?.data?.message || "Logout failed");
     }
     console.error("Logout error:", e);
@@ -249,6 +257,7 @@ export const fetchWorkStatus = async ({ page, search }) => {
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
     console.error("Failed to fetch projects:", err);
+    throw err;
   }
 };
 
@@ -261,6 +270,7 @@ export const fetchSearchData = async ({ jobNumber }) => {
     return response.data.data;
   } catch (e) {
     console.log(e.message);
+    throw e;
   }
 };
 
@@ -309,11 +319,10 @@ export const addProject = async ({ formData, engineerData }) => {
   } catch (e) {
     if (e.response) {
       toast.error(e.response?.data?.message);
-    } else {
-      toast.error("something went wrong");
-      throw e;
     }
+    toast.error("something went wrong");
     console.log(e);
+    throw e;
   }
 };
 
@@ -326,10 +335,10 @@ export const deleteProject = async (id, jobNumber) => {
   } catch (e) {
     if (e.response) {
       toast.error(e.response?.data?.message);
-    } else {
-      toast.error("something went wrong");
     }
+    toast.error("something went wrong");
     console.log(e);
+    throw e;
   }
 };
 

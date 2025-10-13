@@ -13,7 +13,6 @@ const EngineerActions = () => {
     const getProjects = async () => {
       try {
         const val = await getAllEngineers();
-        console.log(val)
         if (val) {
           setData(val.data || []);
         }
