@@ -15,9 +15,9 @@ const ProjectTableAll = ({ data }) => {
   };
 
   return (
-    <div className="relative col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+    <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
       <div className="overflow-x-auto">
-        <div className="max-h-[400px] overflow-y-auto">
+        <div className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead>
               <tr className="bg-gradient-to-r from-purple-600 via-pink-500 to-pink-600 text-white shadow-lg">

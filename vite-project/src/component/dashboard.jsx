@@ -60,7 +60,7 @@ const AdminDashboard = () => {
   // const [activeCard, setActiveCard] = useState(() => {
   //   return sessionStorage.getItem("activeCard") || "zero";
   // });
-  const [activeCard, setActiveCard] = useState("zero");
+  const [activeCard, setActiveCard] = useState("ninteen");
 
   useEffect(() => {
     if (!userLoading && user?.role === "design" && activeCard !== "fourteen") {
