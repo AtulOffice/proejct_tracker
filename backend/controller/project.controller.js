@@ -13,21 +13,32 @@ export const Recordsformave = async (req, res) => {
         .json({ success: false, message: "Job number is already stored" });
     }
 
-    const EngineerDetails = engineerData.map((eng) => {
-      const assignedAt = eng.assignedAt ? new Date(eng.assignedAt) : new Date();
-      const durationDays = eng.days || 0;
-      const endTime = eng.endTime
-        ? new Date(eng.endTime)
-        : new Date(assignedAt.getTime() + durationDays * 24 * 60 * 60 * 1000);
-      return {
-        engineerId: eng.engineerId,
-        name: eng.engineerName || eng.name,
-        empId: eng.empId || "",
-        assignedAt,
-        durationDays,
-        endTime,
-      };
-    });
+    const EngineerDetails = Array.from(
+      engineerData
+        .reduce((map, eng) => {
+          const assignedAt = eng.assignedAt
+            ? new Date(eng.assignedAt)
+            : new Date();
+          const durationDays = eng.days || 0;
+          const endTime = eng.endTime
+            ? new Date(eng.endTime)
+            : new Date(
+                assignedAt.getTime() + durationDays * 24 * 60 * 60 * 1000
+              );
+
+          map.set(eng.engineerId, {
+            engineerId: eng.engineerId,
+            name: eng.engineerName || eng.name,
+            empId: eng.empId || "",
+            assignedAt,
+            durationDays,
+            endTime,
+          });
+          return map;
+        }, new Map())
+        .values()
+    );
+
     const project = await ProjectModel.create({
       ...projectFields,
       jobNumber,
@@ -179,7 +190,16 @@ export const updateRecords = async (req, res) => {
         };
       });
 
-      project.EngineerDetails.push(...transformedEngineers);
+      if (!Array.isArray(project.EngineerDetails)) {
+        project.EngineerDetails = [];
+      }
+
+      transformedEngineers.forEach((newEng) => {
+        project.EngineerDetails = project.EngineerDetails.filter(
+          (e) => e.engineerId.toString() !== newEng.engineerId.toString()
+        );
+        project.EngineerDetails.push(newEng);
+      });
     }
 
     const updatedProject = await project.save();
@@ -202,10 +222,13 @@ export const updateRecords = async (req, res) => {
           continue;
         }
 
+        await EngineerReocord.findByIdAndUpdate(eng.engineerId, {
+          $set: { isAssigned: true, manualOverride: false },
+          $pull: { assignments: { projectId: project._id } },
+        });
         await EngineerReocord.findByIdAndUpdate(
           eng.engineerId,
           {
-            $set: { isAssigned: true, manualOverride: false },
             $push: {
               assignments: {
                 projectId: project._id,
@@ -800,6 +823,10 @@ export const getProjectOverview = async (req, res) => {
       },
     });
 
+    const countEngineer = await EngineerReocord.countDocuments({
+      isAssigned: false,
+    });
+
     projects.forEach((project) => {
       const { status, startDate } = project;
 
@@ -887,7 +914,8 @@ export const getProjectOverview = async (req, res) => {
         urgent: { name: "Urgent", cnt: data.length },
       },
       chart,
-      todayNotice: count,
+      todayworkNotice: count,
+      todayNotice: countEngineer,
     });
   } catch (error) {
     console.error("Error in dashboard API:", error);

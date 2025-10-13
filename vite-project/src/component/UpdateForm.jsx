@@ -140,11 +140,12 @@ const UpdateForm = () => {
                 .map((name) => name.trim())
                 .filter((name) => name.length > 0)
             : formData.momsrNo,
-        engineerData: engineerData.map((eng) => ({
-          ...eng,
-          assignedAt: formData?.visitDate,
-          endTime: formData?.visitendDate,
-        })),
+        // engineerData: engineerData.map((eng) => ({
+        //   ...eng,
+        //   assignedAt: formData?.visitDate,
+        //   endTime: formData?.visitendDate,
+        // })),
+        engineerData,
       };
 
       const response = await axios.put(

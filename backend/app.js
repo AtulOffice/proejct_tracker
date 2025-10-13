@@ -10,12 +10,13 @@ import { engineerStatus } from "./cronJobs.js";
 import { ProjectDevRouter } from "./routes/projectDev.route.js";
 import cookieParser from "cookie-parser";
 import { EngineerRouter } from "./routes/engineer.route.js";
+import { DevRecordRouter } from "./routes/devlopment.Record.router.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
 const app = express();
 
-engineerStatus();
+// engineerStatus();
 
 const corsOptions = {
   origin: [
@@ -48,6 +49,7 @@ app.use("/api/v1", userRouter);
 app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/projectDev", ProjectDevRouter);
 app.use("/api/v1/engineer", EngineerRouter);
+app.use("/api/v1/devrecord", DevRecordRouter);
 
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });

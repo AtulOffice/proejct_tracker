@@ -31,4 +31,4 @@ userRouter.get(
 );
 userRouter.post("/forgetuser", forgotUser);
 userRouter.post("/resetuser", resetUser);
-userRouter.get("/logout", logoutUser);
+userRouter.get("/logout", refreshTokenMiddleware, authenticate, logoutUser);

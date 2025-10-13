@@ -22,11 +22,12 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
               .filter(Boolean) || []),
           ])
         ),
-        engineerData: engineerData.map((eng) => ({
-          ...eng,
-          assignedAt: selectedProject?.visitDate || null,
-          endTime: selectedProject?.visitendDate || null,
-        })),
+        // engineerData: engineerData.map((eng) => ({
+        //   ...eng,
+        //   assignedAt: selectedProject?.visitDate || null,
+        //   endTime: selectedProject?.visitendDate || null,
+        // })),
+        engineerData,
       };
 
       const response = await axios.put(

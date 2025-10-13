@@ -13,6 +13,7 @@ const Userschema = new mongoose.Schema(
   {
     username: {
       type: String,
+      trim: true,
       requred: true,
     },
     password: {
@@ -27,7 +28,7 @@ const Userschema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "design"],
+      enum: ["user", "admin", "design", "reception"],
       default: "user",
     },
     resetOtp: {

@@ -140,6 +140,19 @@ export const getavailableEngineers = async () => {
   }
 };
 
+export const getAssignedEngineers = async () => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineer/getAssignedEngineers`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("error while fetching all engineer", err);
+    throw err;
+  }
+};
+
 export const getAllEngineers = async () => {
   try {
     const res = await axios.get(
@@ -283,11 +296,12 @@ export const addProject = async ({ formData, engineerData }) => {
         projectName: formData.client,
         startDate: formData?.requestDate ?? null,
         endDate: formData?.deleveryDate ?? null,
-        engineerData: engineerData.map((eng) => ({
-          ...eng,
-          assignedAt: formData.visitDate,
-          endTime: formData.visitendDate,
-        })),
+        // engineerData: engineerData.map((eng) => ({
+        //   ...eng,
+        //   assignedAt: formData.visitDate,
+        //   endTime: formData.visitendDate,
+        // })),
+        engineerData,
       },
       { withCredentials: true }
     );

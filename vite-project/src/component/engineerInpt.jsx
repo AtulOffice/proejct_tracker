@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { X, UserPlus } from "lucide-react";
 import { Listbox } from "@headlessui/react";
-import { Fragment } from "react";
 import { getavailableEngineers } from "../utils/apiCall";
 import { useAppContext } from "../appContex";
-import { useEffect } from "react";
 
 export const EngineerAssignment = ({ setEngineerData, required = false }) => {
   const [selectedEngineer, setSelectedEngineer] = useState("");
   const [days, setDays] = useState("");
+  const [date, setDate] = useState("");
   const [engineers, setEngineer] = useState([]);
   const [currentAssignments, setCurrentAssignments] = useState([]);
 
@@ -23,19 +22,21 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
       : [];
 
   const handleAddEngineer = () => {
-    if (!selectedEngineer || !days || parseInt(days) <= 0) return;
-
+    if (!selectedEngineer || !days || parseInt(days) <= 0 || !date) return;
     const engineer = engineers.find(
       (e) => String(e.id) === String(selectedEngineer)
     );
-
     if (!engineer) return;
-
     const newAssignment = {
       engineerId: engineer.id,
       engineerName: engineer.name,
       days: parseInt(days),
       empId: engineer.empId,
+      date: date,
+      assignedAt: new Date(date).toISOString().split("T")[0],
+      endTime: new Date(new Date(date).getTime() + days * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
     };
 
     const updatedAssignments = [...currentAssignments, newAssignment];
@@ -43,6 +44,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
     setEngineerData(updatedAssignments);
     setSelectedEngineer("");
     setDays("");
+    setDate("");
   };
 
   const handleRemoveEngineer = (engineerId) => {
@@ -59,6 +61,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
     const getProjects = async () => {
       try {
         const val = await getavailableEngineers();
+
         if (val) {
           const engineers =
             val &&
@@ -81,6 +84,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
   useEffect(() => {
     setSelectedEngineer("");
     setDays("");
+    setDate("");
     setCurrentAssignments([]);
   }, [toggle]);
   return (
@@ -91,7 +95,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
       </label>
 
       <div className="bg-white/20 border border-white/40 rounded-lg p-4 mb-3">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div className="relative w-full max-w-xs">
             <Listbox value={selectedEngineer} onChange={setSelectedEngineer}>
               <Listbox.Button className="w-full py-2.5 px-4 text-base  rounded-lg shadow bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 text-white focus:outline-none transition">
@@ -110,12 +114,12 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
                     {({ selected, active }) => (
                       <li
                         className={`cursor-pointer select-none px-4 py-3 rounded-lg transition 
-                  ${
-                    active
-                      ? "bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 text-indigo-700"
-                      : "text-gray-900"
-                  }
-                  ${selected ? "font-bold" : ""}`}
+          ${
+            active
+              ? "bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 text-indigo-700"
+              : "text-gray-900"
+          }
+          ${selected ? "font-bold" : ""}`}
                       >
                         {engineer.name}
                         {selected && (
@@ -141,10 +145,20 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
           </div>
 
           <div>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            />
+          </div>
+          <div>
             <button
               type="button"
               onClick={handleAddEngineer}
-              disabled={!selectedEngineer || !days || parseInt(days) <= 0}
+              disabled={
+                !selectedEngineer || !days || parseInt(days) <= 0 || !date
+              }
               className="w-full bg-green-500 hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-4 py-2.5 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
             >
               <UserPlus size={18} />
@@ -171,6 +185,9 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
               </span>
               <span className="ml-1 px-2 py-0.5 rounded-full bg-white/30 text-white/90 text-[11px] font-bold shadow">
                 {assignment.days}d
+              </span>
+              <span className="ml-1 px-2 py-0.5 rounded-full bg-white/30 text-white/90 text-[11px]">
+                {assignment.date}
               </span>
               <button
                 type="button"

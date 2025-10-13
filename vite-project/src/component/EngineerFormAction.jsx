@@ -16,6 +16,7 @@ const EngineerProjectForm = ({
             type="text"
             name="empId"
             value={engineersdata.empId}
+            style={{ textTransform: "uppercase" }}
             onChange={handleChange}
             placeholder="ENGINEER EMPLOYEE CODE"
             className="w-full px-4 py-2 border rounded-lg"
@@ -23,6 +24,7 @@ const EngineerProjectForm = ({
           <input
             type="text"
             name="name"
+            style={{ textTransform: "uppercase" }}
             value={engineersdata.name}
             onChange={handleChange}
             placeholder="ENGINEER NAME"

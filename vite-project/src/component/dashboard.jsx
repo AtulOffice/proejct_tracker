@@ -37,10 +37,15 @@ import ProjectDev from "./project.Devlopment";
 import ProjectsDevlopment from "./development.projects";
 import ProejctACtions from "./ProejctACtions.projects";
 import EngineerAction from "./EngineerActions.projects";
+import NotificationForm from "./notification";
+import { useRef } from "react";
+import WeeklyAssignmentForm from "./weeklyData";
 
 const AdminDashboard = () => {
+  const formRef = useRef(null);
   const { toggle, user, userLoading } = useAppContext();
   const [overvew, setOverview] = useState();
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchProjectOveriew();
@@ -54,7 +59,7 @@ const AdminDashboard = () => {
   // const [activeCard, setActiveCard] = useState(() => {
   //   return sessionStorage.getItem("activeCard") || "zero";
   // });
-  const [activeCard, setActiveCard] = useState("sixteen");
+  const [activeCard, setActiveCard] = useState("eighteen");
 
   useEffect(() => {
     if (!userLoading && user?.role === "design" && activeCard !== "fourteen") {
@@ -113,6 +118,8 @@ const AdminDashboard = () => {
         return <ProejctACtions />;
       case "seventeen":
         return <EngineerAction />;
+      case "eighteen":
+        return <WeeklyAssignmentForm />;
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -128,6 +135,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-100">
+      {open && <NotificationForm formRef={formRef} setOpen={setOpen} />}
       <header className="bg-white shadow-md fixed w-full z-30">
         <div className="flex items-center justify-between px-6 h-16">
           <div className="flex items-center">
@@ -146,14 +154,21 @@ const AdminDashboard = () => {
               <h1 className="text-xl font-bold bg-gradient-to-r from-pink-500 via-indigo-600 to-teal-400 text-transparent bg-clip-text animate-pulse shadow-lg p-2 rounded-lg border-2 border-indigo-300 hover:border-indigo-500 transition-all duration-300 transform hover:scale-110 tracking-wider flex items-center">
                 {" "}
                 <span className="mr-2">✨</span>{" "}
-                {user.role === "admin" ? "ADMIN DASHBOARD" : "DESIGN DASHBOARD"}
+                {user.role === "admin"
+                  ? "ADMIN DASHBOARD"
+                  : user?.role === "reception"
+                  ? "RECEPTION DASHBOARD"
+                  : "DESIGN DASHBOARD"}
                 <span className="ml-2">✨</span>{" "}
               </h1>{" "}
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
-            <button className="text-gray-600 relative">
+            <button
+              onClick={() => setOpen(true)}
+              className="text-gray-600 relative cursor-pointer"
+            >
               <RiNotification3Line size={20} />
               <span className="absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">
                 {overvew?.todayNotice ?? 0}
@@ -170,7 +185,7 @@ const AdminDashboard = () => {
             </div>
 
             <button
-              className="group relative flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-500 transition-all duration-300 rounded-lg hover:bg-red-50 active:scale-95"
+              className="group relative flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-500 transition-all duration-300 rounded-lg hover:bg-red-50 active:scale-95 cursor-pointer"
               onClick={handleLogOut}
             >
               <RiLogoutBoxRLine
@@ -191,11 +206,11 @@ const AdminDashboard = () => {
       >
         <div className="flex flex-col h-full">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
-            <h2 className="text-xl font-bold text-indigo-600">ADMIN</h2>
+            <h2 className="text-xl font-bold text-indigo-600">{""}</h2>
           </div>
           <nav className="flex-1 px-4 py-6 overflow-y-auto">
             <ul className="space-y-2">
-              {user?.role === "admin" && (
+              {(user?.role === "reception" || user?.role == "admin") && (
                 <>
                   <li>
                     <div
@@ -233,32 +248,37 @@ const AdminDashboard = () => {
                       ALL
                     </div>
                   </li>
-                  <li>
-                    <div
-                      onClick={() => handleActiveBar("seventeen")}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                        activeCard === "seventeen"
-                          ? "bg-indigo-50 rounded-md"
-                          : ""
-                      }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ENGINEERS
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => handleActiveBar("sixteen")}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                        activeCard === "sixteen"
-                          ? "bg-indigo-50 rounded-md"
-                          : ""
-                      }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      PROJECT ACTIONS
-                    </div>
-                  </li>
+                  {user?.role == "admin" && (
+                    <>
+                      {" "}
+                      <li>
+                        <div
+                          onClick={() => handleActiveBar("seventeen")}
+                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                            activeCard === "seventeen"
+                              ? "bg-indigo-50 rounded-md"
+                              : ""
+                          }`}
+                        >
+                          <GoProjectRoadmap className="mr-3" size={20} />
+                          ENGINEERS
+                        </div>
+                      </li>
+                      <li>
+                        <div
+                          onClick={() => handleActiveBar("sixteen")}
+                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                            activeCard === "sixteen"
+                              ? "bg-indigo-50 rounded-md"
+                              : ""
+                          }`}
+                        >
+                          <GoProjectRoadmap className="mr-3" size={20} />
+                          PROJECT ACTIONS
+                        </div>
+                      </li>
+                    </>
+                  )}
                   <li>
                     <div
                       onClick={() => handleActiveBar("three")}
@@ -386,7 +406,7 @@ const AdminDashboard = () => {
                   PROJECT DEV STATUS
                 </div>
               </li>
-              {user?.role == "admin" && (
+              {(user?.role == "admin" || user?.role == "reception") && (
                 <>
                   <li>
                     <a

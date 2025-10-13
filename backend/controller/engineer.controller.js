@@ -54,6 +54,23 @@ export const getAvailableEngineers = async (req, res) => {
     res.status(500).json({ success: false, message: "Error fetching data" });
   }
 };
+
+export const getAssignedEngineers = async (req, res) => {
+  try {
+    const AssignedleEngineers = await EngineerReocord.find({
+      isAssigned: true,
+    });
+
+    return res.status(200).json({
+      success: true,
+      totalEngineer: AssignedleEngineers.length,
+      data: AssignedleEngineers,
+    });
+  } catch (e) {
+    console.error("Error fetching available engineers:", e);
+    res.status(500).json({ success: false, message: "Error fetching data" });
+  }
+};
 export const getAllEngineers = async (req, res) => {
   try {
     const availableEngineers = await EngineerReocord.find({});
@@ -79,16 +96,18 @@ export const saveEngineerRecord = async (req, res) => {
       });
     }
 
-    if (!email) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email is required" });
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email format" });
+    // if (!email) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Email is required" });
+    // }
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid email format" });
+      }
     }
 
     if (phone) {
@@ -100,7 +119,9 @@ export const saveEngineerRecord = async (req, res) => {
         });
       }
     }
-    const isExist = await EngineerReocord.findOne({ empId });
+    const isExist = await EngineerReocord.findOne({
+      empId: empId.toUpperCase(),
+    });
 
     if (isExist) {
       return res.status(400).json({
@@ -108,7 +129,13 @@ export const saveEngineerRecord = async (req, res) => {
         message: "this employee code already exist",
       });
     }
-    await EngineerReocord.create({ name, email, phone, assignments, empId });
+    await EngineerReocord.create({
+      name,
+      email,
+      phone,
+      assignments,
+      empId: empId.toUpperCase(),
+    });
 
     return res.status(201).json({
       success: true,
@@ -140,16 +167,18 @@ export const editEngineerRecord = async (req, res) => {
       });
     }
 
-    if (!email) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email is required" });
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid email format" });
+    // if (!email) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Email is required" });
+    // }
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid email format" });
+      }
     }
 
     if (phone) {
@@ -169,7 +198,7 @@ export const editEngineerRecord = async (req, res) => {
         name,
         phone,
         ...(manualOverride && { isAssigned: !manualOverride }),
-        empId,
+        empId: empId.toUpperCase(),
         manualOverride,
       },
       { new: true, runValidators: true }

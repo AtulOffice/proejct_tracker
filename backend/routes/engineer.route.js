@@ -5,12 +5,46 @@ import {
   getAllEngineers,
   saveEngineerRecord,
   editEngineerRecord,
+  getAssignedEngineers,
 } from "../controller/engineer.controller.js";
+import { authenticate } from "../middlware/authaticate.js";
+import { authorizeRole } from "../middlware/authRole.js";
 
 export const EngineerRouter = express.Router();
 
-EngineerRouter.post("/addEngineer", saveEngineerRecord);
-EngineerRouter.put("/editEngineer/:id", editEngineerRecord);
-EngineerRouter.get("/getAvailableEngineers", getAvailableEngineers);
-EngineerRouter.get("/getAllEngineers", getAllEngineers);
-EngineerRouter.delete("/deleteEngineer/:id", deleteEngineerRecord);
+EngineerRouter.post(
+  "/addEngineer",
+  authenticate,
+  authorizeRole("admin", "reception"),
+  saveEngineerRecord
+);
+EngineerRouter.put(
+  "/editEngineer/:id",
+  authenticate,
+  authorizeRole("admin", "reception"),
+  editEngineerRecord
+);
+EngineerRouter.get(
+  "/getAvailableEngineers",
+  authenticate,
+  authorizeRole("admin", "reception"),
+  getAvailableEngineers
+);
+EngineerRouter.get(
+  "/getAssignedEngineers",
+  authenticate,
+  authorizeRole("admin", "reception"),
+  getAssignedEngineers
+);
+EngineerRouter.get(
+  "/getAllEngineers",
+  authenticate,
+  authorizeRole("admin"),
+  getAllEngineers
+);
+EngineerRouter.delete(
+  "/deleteEngineer/:id",
+  authenticate,
+  authorizeRole("admin"),
+  deleteEngineerRecord
+);
