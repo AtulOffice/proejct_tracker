@@ -15,22 +15,43 @@ const WeeklyAssignmentForm = () => {
   const [engineers, setEngineers] = useState([
     {
       engineerId: "E1",
-      engineerName: "Atul",
-      projectName: "Project Alpha",
+      engineerName: "REEMA",
+      projectName: "",
       scadaOrlogic: false,
       jobNumber: "",
     },
     {
       engineerId: "E2",
-      engineerName: "Ravi",
-      projectName: "Project Beta",
+      engineerName: "AKASH",
+      projectName: "",
       scadaOrlogic: false,
       jobNumber: "",
     },
     {
       engineerId: "E3",
-      engineerName: "Sita",
-      projectName: "Project Gamma",
+      engineerName: "VISHAL",
+      projectName: "",
+      scadaOrlogic: false,
+      jobNumber: "",
+    },
+    {
+      engineerId: "E4",
+      engineerName: "MAHIMA",
+      projectName: "",
+      scadaOrlogic: false,
+      jobNumber: "",
+    },
+    {
+      engineerId: "E5",
+      engineerName: "SAPANA",
+      projectName: "",
+      scadaOrlogic: false,
+      jobNumber: "",
+    },
+    {
+      engineerId: "E6",
+      engineerName: "BABITA",
+      projectName: "",
       scadaOrlogic: false,
       jobNumber: "",
     },
@@ -90,7 +111,7 @@ const WeeklyAssignmentForm = () => {
 
   const addEngineer = () => {
     if (!newEngineerName.trim()) {
-      toast.error("please enter the  value then click add button");
+      toast.error("please enter the  name then click add button");
       return;
     }
 
@@ -102,7 +123,6 @@ const WeeklyAssignmentForm = () => {
 
     setEngineers([...engineers, newEngineer]);
 
-    // Add task fields for this new engineer for all dates
     if (weekStart && Object.keys(tasksByDate).length > 0) {
       const temp = { ...tasksByDate };
       Object.keys(temp).forEach((date) => {
@@ -110,14 +130,13 @@ const WeeklyAssignmentForm = () => {
       });
       setTasksByDate(temp);
     }
-
     // Reset form
     setNewEngineerName("");
   };
 
   const removeEngineer = (engineerId) => {
     if (engineers.length === 1) {
-      alert("Cannot remove the last engineer");
+      toast.error("Cannot remove the last engineer");
       return;
     }
 
@@ -137,7 +156,7 @@ const WeeklyAssignmentForm = () => {
       engineers,
       tasksByDate,
     };
-    alert("Weekly assignments saved successfully!");
+    console.log("Weekly assignments saved successfully", data );
   };
 
   return (
@@ -240,10 +259,12 @@ const WeeklyAssignmentForm = () => {
                             </div>
                             <button
                               onClick={() => removeEngineer(eng.engineerId)}
-                              className="bg-red-500 hover:bg-red-600 text-white w-7 h-7 rounded-lg transition flex items-center justify-center text-sm font-bold"
+                              className="group relative bg-gradient-to-br from-red-100 to-red-500 hover:from-red-600 hover:to-red-700 text-white w-8 h-8 rounded-lg transition-all duration-200 flex items-center justify-center text-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
                               title="Remove engineer"
                             >
-                              ×
+                              <span className="group-hover:rotate-90 transition-transform duration-200">
+                                ×
+                              </span>
                             </button>
                           </div>
                         </td>
@@ -257,10 +278,9 @@ const WeeklyAssignmentForm = () => {
                                 (task, idx) => (
                                   <div
                                     key={idx}
-                                    className="flex gap-2 items-start"
+                                    className="flex gap-2 items-start w-full"
                                   >
-                                    <input
-                                      type="text"
+                                    <textarea
                                       value={task}
                                       onChange={(e) =>
                                         handleTaskChange(
@@ -270,8 +290,9 @@ const WeeklyAssignmentForm = () => {
                                           idx
                                         )
                                       }
-                                      className="flex-1 border border-gray-300 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                                      className="flex-1 border border-gray-300 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition resize-none"
                                       placeholder="Enter task..."
+                                      rows={4}
                                     />
                                   </div>
                                 )
