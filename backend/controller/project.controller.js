@@ -577,7 +577,7 @@ export const UrgentProjectPegination = async (req, res) => {
         },
         visitDateObj: {
           $dateFromString: {
-            dateString: "$startDate",
+            dateString: "$visitDate",
             format: "%Y-%m-%d",
             onError: null,
             onNull: null,
@@ -603,6 +603,16 @@ export const UrgentProjectPegination = async (req, res) => {
     startDate.setDate(today.getDate() - 180);
     const endDate = new Date(today);
     endDate.setDate(today.getDate() + 30);
+
+    pipeline.push({
+      $match: {
+        status: { $ne: "completed" },
+        $or: [
+          { EngineerDetails: { $exists: false } },
+          { EngineerDetails: { $size: 0 } },
+        ],
+      },
+    });
 
     pipeline.push({
       $match: {
@@ -671,7 +681,7 @@ export const UrgentProjectAction = async (req, res) => {
         },
         visitDateObj: {
           $dateFromString: {
-            dateString: "$startDate",
+            dateString: "$visitDate",
             format: "%Y-%m-%d",
             onError: null,
             onNull: null,
@@ -683,11 +693,7 @@ export const UrgentProjectAction = async (req, res) => {
     pipeline.push({
       $addFields: {
         compareDate: {
-          $cond: [
-            { $ne: ["$deliveryDateObj", null] },
-            "$deliveryDateObj",
-            "$visitDateObj",
-          ],
+          $ifNull: ["$visitDateObj", "$deliveryDateObj"],
         },
       },
     });
@@ -696,6 +702,16 @@ export const UrgentProjectAction = async (req, res) => {
     startDate.setDate(today.getDate() - 180);
     const endDate = new Date(today);
     endDate.setDate(today.getDate() + 30);
+
+    pipeline.push({
+      $match: {
+        status: { $ne: "completed" },
+        $or: [
+          { EngineerDetails: { $exists: false } },
+          { EngineerDetails: { $size: 0 } },
+        ],
+      },
+    });
 
     pipeline.push({
       $match: {
@@ -779,7 +795,7 @@ export const getProjectOverview = async (req, res) => {
         },
         visitDateObj: {
           $dateFromString: {
-            dateString: "$startDate",
+            dateString: "$visitDate",
             format: "%Y-%m-%d",
             onError: null,
             onNull: null,
@@ -807,6 +823,16 @@ export const getProjectOverview = async (req, res) => {
 
     pipeline.push({
       $match: {
+        status: { $ne: "completed" },
+        $or: [
+          { EngineerDetails: { $exists: false } },
+          { EngineerDetails: { $size: 0 } },
+        ],
+      },
+    });
+
+    pipeline.push({
+      $match: {
         $or: [
           { compareDate: { $gte: startDate, $lte: endDate } },
           { visitDateObj: { $gte: startDate, $lte: endDate } },
@@ -818,7 +844,6 @@ export const getProjectOverview = async (req, res) => {
     });
 
     const data = await ProjectModel.aggregate(pipeline);
-    //  temp end
 
     const projects = await ProjectModel.find({}).sort({
       updatedAt: -1,
@@ -860,7 +885,7 @@ export const getProjectOverview = async (req, res) => {
     });
 
     const countEngineer = await EngineerReocord.countDocuments({
-      isAssigned: false,
+      isAssigned: true,
     });
 
     projects.forEach((project) => {
