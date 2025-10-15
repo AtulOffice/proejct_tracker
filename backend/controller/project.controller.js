@@ -403,7 +403,6 @@ export const PaginationDevStatus = async (req, res) => {
       const result = await ProjectModel.findOne({
         jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
       });
-      console.log(result);
       if (result?.Development) {
         data = [result];
         total = 1;

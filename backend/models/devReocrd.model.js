@@ -12,6 +12,7 @@ const dailyTaskSchema = new mongoose.Schema({
 const weeklyAssignmentSchema = new mongoose.Schema({
   weekStart: { type: Date, required: true },
   weekEnd: { type: Date, required: true },
+  engineerName: [String],
   assignments: {
     type: Map,
     of: [dailyTaskSchema],

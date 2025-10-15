@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../appContex";
-import CardAll from "./Card.All";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
@@ -8,7 +7,7 @@ import FilterCompo from "../utils/FilterCompo";
 import { fetchProjectsUrgentAction } from "../utils/apiCall";
 import ProjectTable from "./Project.table";
 
-const ProjectsDevlopment = () => {
+const ProejctACtions = () => {
   const { setToggle, toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -113,4 +112,4 @@ const ProjectsDevlopment = () => {
   );
 };
 
-export default ProjectsDevlopment;
+export default ProejctACtions;

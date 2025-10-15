@@ -36,7 +36,6 @@ const NotificationForm = ({ setOpen, formRef }) => {
       try {
         const val = await getAssignedEngineers();
         const data = val?.data || [];
-        console.log(data);
         data.sort((a, b) => {
           const aDate = a.assignments?.length
             ? new Date(a.assignments[a.assignments.length - 1].assignedAt)

@@ -50,7 +50,6 @@ app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/projectDev", ProjectDevRouter);
 app.use("/api/v1/engineer", EngineerRouter);
 app.use("/api/v1/devrecord", DevRecordRouter);
-// hello how are yor
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   console.log(`server is linsten on port ${port}`);

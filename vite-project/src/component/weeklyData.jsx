@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { saveWeeklyAssment } from "../utils/apiCall";
+import { engineerWeek } from "../utils/engineerWeek";
 
 const days = [
   "Monday",
@@ -12,50 +14,7 @@ const days = [
 
 const WeeklyAssignmentForm = () => {
   const [weekStart, setWeekStart] = useState("");
-  const [engineers, setEngineers] = useState([
-    {
-      engineerId: "E1",
-      engineerName: "REEMA",
-      projectName: "",
-      scadaOrlogic: false,
-      jobNumber: "",
-    },
-    {
-      engineerId: "E2",
-      engineerName: "AKASH",
-      projectName: "",
-      scadaOrlogic: false,
-      jobNumber: "",
-    },
-    {
-      engineerId: "E3",
-      engineerName: "VISHAL",
-      projectName: "",
-      scadaOrlogic: false,
-      jobNumber: "",
-    },
-    {
-      engineerId: "E4",
-      engineerName: "MAHIMA",
-      projectName: "",
-      scadaOrlogic: false,
-      jobNumber: "",
-    },
-    {
-      engineerId: "E5",
-      engineerName: "SAPANA",
-      projectName: "",
-      scadaOrlogic: false,
-      jobNumber: "",
-    },
-    {
-      engineerId: "E6",
-      engineerName: "BABITA",
-      projectName: "",
-      scadaOrlogic: false,
-      jobNumber: "",
-    },
-  ]);
+  const [engineers, setEngineers] = useState(engineerWeek);
   const [tasksByDate, setTasksByDate] = useState({});
   const [newEngineerName, setNewEngineerName] = useState("");
 
@@ -95,20 +54,6 @@ const WeeklyAssignmentForm = () => {
     setTasksByDate(temp);
   };
 
-  const addTaskRow = (date, engineerId) => {
-    const temp = { ...tasksByDate };
-    temp[date][engineerId].push("");
-    setTasksByDate(temp);
-  };
-
-  const removeTaskRow = (date, engineerId, idx) => {
-    const temp = { ...tasksByDate };
-    if (temp[date][engineerId].length > 1) {
-      temp[date][engineerId].splice(idx, 1);
-      setTasksByDate(temp);
-    }
-  };
-
   const addEngineer = () => {
     if (!newEngineerName.trim()) {
       toast.error("please enter the  name then click add button");
@@ -130,7 +75,6 @@ const WeeklyAssignmentForm = () => {
       });
       setTasksByDate(temp);
     }
-    // Reset form
     setNewEngineerName("");
   };
 
@@ -142,7 +86,6 @@ const WeeklyAssignmentForm = () => {
 
     setEngineers(engineers.filter((eng) => eng.engineerId !== engineerId));
 
-    // Remove tasks for this engineer
     const temp = { ...tasksByDate };
     Object.keys(temp).forEach((date) => {
       delete temp[date][engineerId];
@@ -156,7 +99,28 @@ const WeeklyAssignmentForm = () => {
       engineers,
       tasksByDate,
     };
-    console.log("Weekly assignments saved successfully", data );
+    try {
+      const response = await saveWeeklyAssment({
+        weekStart,
+        engineers,
+        tasksByDate,
+      });
+      toast.success(response?.message || "operation success");
+      setWeekStart("");
+      setNewEngineerName("");
+      const clearedTasks = { ...tasksByDate };
+      Object.keys(clearedTasks).forEach((date) => {
+        Object.keys(clearedTasks[date]).forEach((engId) => {
+          clearedTasks[date][engId] = [""];
+        });
+      });
+      setTasksByDate(clearedTasks);
+    } catch (e) {
+      if (e.response) {
+        toast.error(e.response?.data?.message);
+      }
+      console.log(e);
+    }
   };
 
   return (
@@ -204,30 +168,30 @@ const WeeklyAssignmentForm = () => {
             </div>
 
             {weekStart && (
-              <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-                <table className="w-full border-collapse">
+              <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-lg font-sans font-medium">
+                <table className="w-full border-collapse text-[15px]">
                   <thead>
-                    <tr className="bg-gradient-to-r from-blue-200 to-indigo-600 text-white">
-                      <th className="border g-gradient-to-r from-blue-200 to-indigo-600 px-4 py-4 text-white font-semibold text-left sticky left-0 bg-gradient-to-r from-blue-600 to-indigo-600 z-10">
+                    <tr className="bg-gradient-to-r from-blue-500/80 to-indigo-500/90 text-white">
+                      <th className="border-none px-4 py-4 text-left sticky left-0 bg-gradient-to-r from-blue-400/70 to-indigo-400/60 z-10 text-xl font-bold rounded-tl-2xl">
                         Engineer
                       </th>
                       {Object.keys(tasksByDate).map((date) => (
                         <th
                           key={date}
-                          className="border border-blue-500 px-4 py-4 text-white font-semibold min-w-[200px]"
+                          className="border-none px-4 py-4 min-w-[200px] text-center"
                         >
-                          <div className="text-center">
-                            <div className="text-sm font-normal text-blue-100">
+                          <div>
+                            <span className="block text-xs text-indigo-100 font-normal mb-1">
                               {new Date(date).toLocaleDateString("en-GB", {
                                 weekday: "short",
                               })}
-                            </div>
-                            <div className="text-lg">
+                            </span>
+                            <span className="block text-lg tracking-wider">
                               {new Date(date).toLocaleDateString("en-GB", {
                                 day: "2-digit",
                                 month: "short",
                               })}
-                            </div>
+                            </span>
                           </div>
                         </th>
                       ))}
@@ -237,32 +201,31 @@ const WeeklyAssignmentForm = () => {
                     {engineers.map((eng, engIdx) => (
                       <tr
                         key={eng.engineerId}
-                        className={engIdx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                        className={`transition ${
+                          engIdx % 2 ? "bg-gray-50/60" : "bg-white/90"
+                        } hover:bg-indigo-50`}
                       >
                         <td
-                          className="border border-gray-300 px-4 py-4 font-semibold text-gray-800 sticky left-0 z-10"
+                          className="sticky left-0 z-10 px-4 py-5 bg-white/80 border-none"
                           style={{
-                            backgroundColor:
-                              engIdx % 2 === 0 ? "white" : "#f9fafb",
+                            borderRadius: engIdx === 0 ? "0 0 0 12px" : "0",
                           }}
                         >
-                          <div className="flex items-center gap-2 justify-between">
-                            <div className="flex items-center gap-2">
-                              <div>
-                                <div className="font-semibold">
-                                  {eng.engineerName}
-                                </div>
-                                <div className="text-xs text-gray-500">
-                                  {eng.projectName}
-                                </div>
+                          <div className="flex items-center justify-between gap-2">
+                            <div>
+                              <div className="font-semibold text-indigo-900 text-base">
+                                {eng.engineerName}
+                              </div>
+                              <div className="text-xs text-indigo-400 italic">
+                                {eng.projectName}
                               </div>
                             </div>
                             <button
                               onClick={() => removeEngineer(eng.engineerId)}
-                              className="group relative bg-gradient-to-br from-red-100 to-red-500 hover:from-red-600 hover:to-red-700 text-white w-8 h-8 rounded-lg transition-all duration-200 flex items-center justify-center text-lg font-semibold shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+                              className="group bg-gradient-to-br from-pink-300 to-red-500 hover:from-red-600 hover:to-red-700 text-white w-8 h-8 rounded-lg flex items-center justify-center text-lg transition active:scale-95 shadow hover:shadow-xl"
                               title="Remove engineer"
                             >
-                              <span className="group-hover:rotate-90 transition-transform duration-200">
+                              <span className="group-hover:rotate-90 duration-200 transition-transform">
                                 ×
                               </span>
                             </button>
@@ -271,10 +234,11 @@ const WeeklyAssignmentForm = () => {
                         {Object.keys(tasksByDate).map((date) => (
                           <td
                             key={date}
-                            className="border border-gray-300 px-3 py-3 align-top"
+                            className="px-3 py-3 align-top border-none"
+                            style={{ background: "rgba(248,250,252,0.7)" }}
                           >
                             <div className="space-y-2">
-                              {tasksByDate[date][eng.engineerId]?.map(
+                              {(tasksByDate[date][eng.engineerId] || []).map(
                                 (task, idx) => (
                                   <div
                                     key={idx}
@@ -290,9 +254,9 @@ const WeeklyAssignmentForm = () => {
                                           idx
                                         )
                                       }
-                                      className="flex-1 border border-gray-300 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition resize-none"
+                                      className="flex-1 border border-indigo-200 px-3 py-2 rounded-xl text-sm bg-white/80 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-indigo-400 resize-none shadow-sm hover:shadow-lg transition"
                                       placeholder="Enter task..."
-                                      rows={4}
+                                      rows={3}
                                     />
                                   </div>
                                 )
@@ -310,9 +274,9 @@ const WeeklyAssignmentForm = () => {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={handleSubmit}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition transform hover:scale-105"
+                  className="font-sans bg-gradient-to-r from-blue-100 to-indigo-600 hover:from-indigo-600 hover:to-blue-100 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition transform hover:scale-105"
                 >
-                  💾 Save Weekly Assignments
+                  💾 SAVE
                 </button>
               </div>
             )}

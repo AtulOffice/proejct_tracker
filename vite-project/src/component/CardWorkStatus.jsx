@@ -26,7 +26,8 @@ const CardWorkStatus = ({ project, indx, setToggle }) => {
     setIsdisabled(true);
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/worksts/delete/${id}`, { withCredentials: true }
+        `${import.meta.env.VITE_API_URL}/worksts/delete/${id}`,
+        { withCredentials: true }
       );
       toast.success(`Work Status deleted successfully`);
       setDeleteflag(false);
@@ -122,47 +123,53 @@ focus:outline-none focus:ring-4 focus:ring-red-400
 
           <ul className="text-sm text-gray-700 space-y-1 mb-4">
             <li>
-              <strong>Project Name:</strong> {project.projectName}
+              <strong>Project Name:</strong> {project.projectName || "-"}
             </li>
+
             {project.EngineerName && (
               <li>
-                <strong>Engineer Name:</strong>
-                {project.EngineerName}
+                <strong>Engineer Name:</strong> {project.EngineerName}
               </li>
             )}
-            {
+
+            {project.entityType && (
               <li>
                 <strong>Entity Type:</strong> {project.entityType}
               </li>
-            }
+            )}
 
             <li>
-              <strong>Backup status:</strong> {project.BackupSubmission}
+              <strong>Backup Status:</strong> {project.BackupSubmission || "-"}
             </li>
 
             <li>
-              <strong>Expense status:</strong> {project.ExpensSubmission}
+              <strong>Expense Status:</strong> {project.ExpensSubmission || "-"}
             </li>
 
             <li>
-              <strong>Start Checklist:</strong> {project.StartChecklist}
-            </li>
-            <li>
-              <strong>End Checklist:</strong> {project.EndChecklist}
+              <strong>Start Checklist:</strong> {project.StartChecklist || "-"}
             </li>
 
-            <>
+            <li>
+              <strong>End Checklist:</strong> {project.EndChecklist || "-"}
+            </li>
+
+            {project.fromDate && (
               <li>
-                <strong>from</strong>{" "}
+                <strong>From:</strong>{" "}
                 {new Date(project.fromDate).toLocaleDateString()}
               </li>
+            )}
+
+            {project.toDate && (
               <li>
-                <strong>to: </strong>
-                {new Date(project?.toDate).toLocaleDateString()}
+                <strong>To:</strong>{" "}
+                {new Date(project.toDate).toLocaleDateString()}
               </li>
-            </>
+            )}
+
             <li>
-              <strong>Location:</strong> {project?.location || "not mentioned"}
+              <strong>Location:</strong> {project?.location || "Not mentioned"}
             </li>
           </ul>
 

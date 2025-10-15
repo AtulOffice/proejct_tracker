@@ -377,3 +377,47 @@ export const updateProject = async (project, navigate) => {
     throw error;
   }
 };
+
+export const saveWeeklyAssment = async ({
+  weekStart,
+  engineers,
+  tasksByDate,
+}) => {
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/devrecord/save`,
+      { weekStart, engineers, tasksByDate },
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("error while saving", err);
+    throw err;
+  }
+};
+
+export const fetchWeeklyAssment = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/devrecord/fetchall`,
+      { withCredentials: true }
+    );
+    return res?.data;
+  } catch (err) {
+    console.error("error while saving", err);
+    throw err;
+  }
+};
+
+export const fetchWeeklyAssmentbyId = async (id) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/devrecord/fetchbyid/${id}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("error while saving", err);
+    throw err;
+  }
+};

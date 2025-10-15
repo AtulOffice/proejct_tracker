@@ -37,6 +37,7 @@ import ProjectDev from "./project.Devlopment";
 import ProjectsDevlopment from "./development.projects";
 import ProejctACtions from "./ProejctACtions.projects";
 import EngineerAction from "./EngineerActions.projects";
+import AssessMentAction from "./AssessMentAction.projects.jsx";
 import NotificationForm from "./notification";
 import { useRef } from "react";
 import WeeklyAssignmentForm from "./weeklyData";
@@ -127,6 +128,8 @@ const AdminDashboard = () => {
         return <WeeklyAssignmentForm />;
       case "ninteen":
         return <ProjectList />;
+      case "twenty":
+        return <AssessMentAction />;
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -308,6 +311,30 @@ const AdminDashboard = () => {
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       UPCOMING
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => handleActiveBar("eighteen")}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "eighteen"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      WEEKLY ASSESSMENT
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => handleActiveBar("twenty")}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twenty" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ASSESSMENTS
                     </div>
                   </li>
                   <li>
