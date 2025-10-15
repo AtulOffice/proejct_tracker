@@ -70,7 +70,7 @@ const UpdateForm = () => {
     if (
       actualStartDate &&
       actualEndDate &&
-      new Date(actualStartDate) >= new Date(actualEndDate)
+      new Date(actualStartDate) > new Date(actualEndDate)
     ) {
       toast.error("Actual Start date must be less than Actual end date");
       setIsLoading(false);
@@ -80,7 +80,7 @@ const UpdateForm = () => {
     if (
       visitDate &&
       visitendDate &&
-      new Date(visitDate) >= new Date(visitendDate)
+      new Date(visitDate) > new Date(visitendDate)
     ) {
       toast.error("Visit Start date must be less than Visit end date");
       setIsLoading(false);

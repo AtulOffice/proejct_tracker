@@ -96,7 +96,7 @@ const InputForm = () => {
       orderDate,
     } = formData;
 
-    if (startDate && endDate && new Date(startDate) >= new Date(endDate)) {
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
       toast.error("Start date must be less than end date");
       false;
       return;
@@ -105,7 +105,7 @@ const InputForm = () => {
     if (
       actualStartDate &&
       actualEndDate &&
-      new Date(actualStartDate) >= new Date(actualEndDate)
+      new Date(actualStartDate) > new Date(actualEndDate)
     ) {
       toast.error("Actual Start date must be less than Acual end date");
       setIsLoading(false);
@@ -115,7 +115,7 @@ const InputForm = () => {
     if (
       visitDate &&
       visitendDate &&
-      new Date(visitDate) >= new Date(visitendDate)
+      new Date(visitDate) > new Date(visitendDate)
     ) {
       toast.error("Visit Start date must be less than Visit end date");
       setIsLoading(false);
