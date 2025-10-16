@@ -320,7 +320,6 @@ export const getAssementbyId = async (req, res) => {
         message: "No assignments found for this week",
       });
     }
-
     return res.status(200).json({
       success: true,
       data: assignment,

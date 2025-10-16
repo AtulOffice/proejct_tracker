@@ -28,7 +28,6 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
       }))
     : [];
 
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300">
       <div className="bg-white/95 p-10 rounded-3xl shadow-2xl w-[90vw] max-w-[1200px] max-h-[90vh] overflow-y-auto border border-gray-200 scrollbar-glass relative">

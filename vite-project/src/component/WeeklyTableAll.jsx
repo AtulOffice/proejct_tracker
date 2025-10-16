@@ -7,6 +7,7 @@ import { fetchWeeklyAssmentbyId } from "../utils/apiCall";
 const WeeklyTableAll = ({ data }) => {
   const [open, setOpen] = useState(false);
   const [weekData, setWeekData] = useState([]);
+
   const navigate = useNavigate();
   const handleUpdate = (id) => {
     try {

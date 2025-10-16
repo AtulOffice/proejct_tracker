@@ -1,28 +1,28 @@
 export const engineerWeek = [
   {
     engineerId: "E1",
-    engineerName: "REEMA",
-    projectName: "",
-    scadaOrlogic: false,
-    jobNumber: "",
-  },
-  {
-    engineerId: "E2",
-    engineerName: "AKASH",
-    projectName: "",
-    scadaOrlogic: false,
-    jobNumber: "",
-  },
-  {
-    engineerId: "E3",
     engineerName: "VISHAL",
     projectName: "",
     scadaOrlogic: false,
     jobNumber: "",
   },
   {
+    engineerId: "E2",
+    engineerName: "MAHIMA CHOUDHARY",
+    projectName: "",
+    scadaOrlogic: false,
+    jobNumber: "",
+  },
+  {
+    engineerId: "E3",
+    engineerName: "BABITA",
+    projectName: "",
+    scadaOrlogic: false,
+    jobNumber: "",
+  },
+  {
     engineerId: "E4",
-    engineerName: "MAHIMA",
+    engineerName: "REEMA",
     projectName: "",
     scadaOrlogic: false,
     jobNumber: "",
@@ -36,7 +36,7 @@ export const engineerWeek = [
   },
   {
     engineerId: "E6",
-    engineerName: "BABITA",
+    engineerName: "AKASH YADAV",
     projectName: "",
     scadaOrlogic: false,
     jobNumber: "",

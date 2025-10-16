@@ -1,6 +1,7 @@
 import React from "react";
 import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
+// === Styles ===
 const styles = StyleSheet.create({
   page: {
     backgroundColor: "#ffffff",
@@ -23,7 +24,6 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: "row",
     backgroundColor: "#e0e7ff",
-    borderBottom: "1 solid #cbd5e1",
   },
   tableRow: {
     flexDirection: "row",
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 4,
     fontWeight: "bold",
+    borderRight: "1 solid #cbd5e1",
   },
   engineerCell: {
     flex: 1,
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     fontWeight: "bold",
     backgroundColor: "#eef2ff",
+    borderRight: "1 solid #cbd5e1",
   },
   dayCell: {
     flex: 1,
@@ -49,6 +51,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     textAlign: "center",
     wordWrap: "break-word",
+    borderRight: "1 solid #e5e7eb",
   },
   footer: {
     marginTop: 10,
@@ -58,6 +61,7 @@ const styles = StyleSheet.create({
   },
 });
 
+// === Helper: Generate Week Days ===
 const getWeekDaysFromMonday = (weekStart) => {
   const start = new Date(weekStart);
   const day = start.getDay();
@@ -70,19 +74,18 @@ const getWeekDaysFromMonday = (weekStart) => {
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday", 
+    "Saturday",
   ];
 
   return weekdays.map((weekday, i) => {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
-
     const dateLabel = d.toLocaleDateString("en-GB").split("/").join("-");
-
-    return `${weekday}\n${dateLabel}`;
+    return `${weekday}\n${dateLabel}`; // Two-line header
   });
 };
 
+// === Helper: Extract Unique Engineers & Days ===
 const prepareTableData = (assignmentsArray) => {
   const days = assignmentsArray.map((d) => d.date);
   const engineerMap = {};
@@ -101,6 +104,7 @@ const prepareTableData = (assignmentsArray) => {
   return { days, engineers, engineerMap };
 };
 
+// === Main PDF Document ===
 const AssignmentsPDF = ({ assignmentsArray, weekData }) => {
   const { days, engineers, engineerMap } = prepareTableData(assignmentsArray);
   const weekDays = getWeekDaysFromMonday(weekData?.weekStart);
@@ -108,32 +112,64 @@ const AssignmentsPDF = ({ assignmentsArray, weekData }) => {
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
+        {/* Title */}
         <Text style={styles.title}>
           Weekly Assignments —{" "}
           {weekData?.weekStart
             ? new Date(weekData.weekStart).toLocaleDateString("en-GB")
             : ""}
         </Text>
+
+        {/* Table */}
         <View style={styles.tableContainer}>
+          {/* Header Row */}
+          {/* Header Row */}
           <View style={styles.tableHeader}>
             <Text style={[styles.headerCell, { flex: 1.2 }]}>Engineer</Text>
-            {weekDays.map((day, idx) => (
-              <Text key={idx} style={styles.headerCell}>
-                {day}
-              </Text>
-            ))}
+            {weekDays.map((dayStr, idx) => {
+              const [weekday, date] = dayStr.split("\n"); // split weekday and date
+              return (
+                <View
+                  key={idx}
+                  style={[
+                    {
+                      flex: 1,
+                      borderRight:
+                        idx === weekDays.length - 1
+                          ? "none"
+                          : "1 solid #cbd5e1",
+                      alignItems: "center",
+                    },
+                  ]}
+                >
+                  <Text style={{ fontWeight: "bold" }}>{weekday}</Text>
+                  <Text>{date}</Text>
+                </View>
+              );
+            })}
           </View>
+
+          {/* Engineer Rows */}
           {engineers.map((eng, eIdx) => (
             <View key={eIdx} style={styles.tableRow}>
               <Text style={[styles.engineerCell, { flex: 1.2 }]}>{eng}</Text>
               {days.map((day, dIdx) => (
-                <Text key={dIdx} style={styles.dayCell}>
+                <Text
+                  key={dIdx}
+                  style={[
+                    styles.dayCell,
+                    { flex: 1 }, // same as header
+                    dIdx === days.length - 1 ? { borderRight: "none" } : {},
+                  ]}
+                >
                   {engineerMap[eng][day] || "-"}
                 </Text>
               ))}
             </View>
           ))}
         </View>
+
+        {/* Footer */}
         <Text style={styles.footer}>
           Generated on {new Date().toLocaleDateString("en-GB")}
         </Text>
