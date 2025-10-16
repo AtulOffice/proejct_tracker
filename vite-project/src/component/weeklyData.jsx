@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { saveWeeklyAssment } from "../utils/apiCall";
 import { engineerWeek } from "../utils/engineerWeek";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const days = [
   "Monday",
@@ -18,7 +20,22 @@ const WeeklyAssignmentForm = () => {
   const [tasksByDate, setTasksByDate] = useState({});
   const [newEngineerName, setNewEngineerName] = useState("");
 
-  const handleDateChange = (e) => {
+  const handleDateChange = (date) => {
+    if (!date) return;
+    const utcDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    const day = utcDate.getUTCDay();
+    console.log(utcDate);
+    if (day !== 1) {
+      toast.error("Please select a Monday only!");
+      setWeekStart(null);
+      return;
+    }
+    setWeekStart(utcDate);
+  };
+
+  const handleDateChange1 = (e) => {
     const selectedDate = new Date(e.target.value);
     const day = selectedDate.getDay();
 
@@ -54,6 +71,8 @@ const WeeklyAssignmentForm = () => {
     setTasksByDate(temp);
   };
 
+
+  
   const addEngineer = () => {
     if (!newEngineerName.trim()) {
       toast.error("please enter the  name then click add button");
@@ -138,12 +157,25 @@ const WeeklyAssignmentForm = () => {
               <label className="text-lg font-semibold text-gray-700 block mb-3">
                 📅 Select Week Start (Monday)
               </label>
-              <input
+              <DatePicker
+                selected={weekStart}
+                onChange={handleDateChange}
+                placeholderText="Select Monday"
+                customInput={
+                  <button className="px-4 py-2 border rounded-lg bg-blue-500 text-white">
+                    Select Date
+                  </button>
+                }
+                dateFormat="MM-dd-yyyy"
+                minDate={new Date()}
+                filterDate={(date) => date.getDay() === 1}
+              />
+              {/* <input
                 type="date"
                 value={weekStart}
-                onChange={handleDateChange}
+                onChange={handleDateChange1}
                 className="w-full md:w-auto border-2 border-blue-300 px-4 py-3 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
+              /> */}
             </div>
 
             <div className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">

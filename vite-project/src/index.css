@@ -42,3 +42,12 @@ input[type="number"] {
   border-radius: 9999px;
   border: 2px solid transparent;
 }
+
+
+/* input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+input[type="date"] {
+  color: transparent;
+} */
