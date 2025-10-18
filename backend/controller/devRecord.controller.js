@@ -2,9 +2,9 @@ import WeeklyAssignment from "../models/devReocrd.model.js";
 
 export const saveWeeklyAssignment = async (req, res) => {
   try {
-    const { weekStart, assignments, tasksByDate, engineers } = req.body;
+    const { weekStart, tasksByDate, engineers } = req.body;
 
-    if (!weekStart || (!assignments && !tasksByDate)) {
+    if (!weekStart || !tasksByDate) {
       return res.status(400).json({
         success: false,
         message: "weekStart and assignment data are required",
@@ -73,13 +73,6 @@ export const saveWeeklyAssignment = async (req, res) => {
         formattedAssignments[dayName] = assignmentsForDate;
       }
       engineerName = [...new Set(engineerName.filter((name) => name))];
-    } else if (assignments) {
-      for (const dateStr in assignments) {
-        const date = new Date(dateStr);
-        if (isNaN(date)) continue;
-        const dayName = getDayName(date);
-        formattedAssignments[dayName] = assignments[dateStr];
-      }
     }
 
     const existingWeek = await WeeklyAssignment.findOne({
@@ -103,7 +96,7 @@ export const saveWeeklyAssignment = async (req, res) => {
         weekStart: start,
         weekEnd: end,
         assignments: formattedAssignments,
-        engineerName,
+        engineerName: engineerName,
       });
 
       return res.status(201).json({
@@ -122,127 +115,9 @@ export const saveWeeklyAssignment = async (req, res) => {
   }
 };
 
-export const updateWeeklyAssignments = async (req, res) => {
-  try {
-    const { weekStart, assignments, tasksByDate, engineers } = req.body;
-
-    if (!weekStart || (!assignments && !tasksByDate)) {
-      return res.status(400).json({
-        success: false,
-        message: "weekStart and assignment data are required",
-      });
-    }
-
-    const start = new Date(weekStart);
-    if (isNaN(start)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid weekStart date",
-      });
-    }
-
-    if (start.getDay() !== 1) {
-      return res.status(400).json({
-        success: false,
-        message: "weekStart must be a Monday",
-      });
-    }
-
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-
-    const getDayName = (date) => {
-      const days = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ];
-      return days[date.getDay()];
-    };
-
-    let formattedAssignments = {};
-    let engineerName = [];
-
-    if (tasksByDate && engineers) {
-      for (const dateStr in tasksByDate) {
-        const date = new Date(dateStr);
-        if (isNaN(date)) continue;
-        const dayName = getDayName(date);
-
-        const engineerTaskData = tasksByDate[dateStr];
-        const assignmentsForDate = [];
-
-        for (const engineerId in engineerTaskData) {
-          const engineer = engineers.find((e) => e.engineerId === engineerId);
-          const tasks = engineerTaskData[engineerId];
-
-          tasks.forEach((task) => {
-            assignmentsForDate.push({
-              engineerId: engineer?.engineerId || engineerId,
-              engineerName: engineer?.engineerName || "",
-              projectName: engineer?.projectName || "",
-              jobNumber: engineer?.jobNumber || "",
-              tasks: task,
-            });
-            engineerName.push(engineer?.engineerName || "");
-          });
-        }
-
-        formattedAssignments[dayName] = assignmentsForDate;
-      }
-      engineerName = [...new Set(engineerName.filter((name) => name))];
-    } else if (assignments) {
-      for (const dateStr in assignments) {
-        const date = new Date(dateStr);
-        if (isNaN(date)) continue;
-        const dayName = getDayName(date);
-        formattedAssignments[dayName] = assignments[dateStr];
-      }
-    }
-
-    const existingWeek = await WeeklyAssignment.findOne({
-      weekStart: start,
-      weekEnd: end,
-    });
-
-    if (!existingWeek) {
-      return res.status(404).json({
-        success: false,
-        message: "Weekly assignment not found for the given weekStart",
-      });
-    }
-
-    existingWeek.assignments = formattedAssignments;
-    existingWeek.updatedAt = new Date();
-    if (engineerName.length > 0) {
-      existingWeek.engineerName = engineerName;
-    }
-
-    await existingWeek.save();
-
-    return res.status(200).json({
-      success: true,
-      message: "Weekly assignments updated successfully",
-      data: existingWeek,
-    });
-  } catch (error) {
-    console.error("Error updating weekly assignments:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Error updating weekly assignments",
-      error: error.message,
-    });
-  }
-};
-
 export const getWeeklyAssignmentByDate = async (req, res) => {
   try {
     const { weekStart } = req.query;
-
     if (!weekStart) {
       return res.status(400).json({
         success: false,
@@ -251,14 +126,17 @@ export const getWeeklyAssignmentByDate = async (req, res) => {
     }
 
     const startDate = new Date(weekStart);
+
     if (isNaN(startDate)) {
       return res.status(400).json({
         success: false,
         message: "Invalid weekStart date",
       });
     }
-
-    const assignment = await WeeklyAssignment.findOne({ weekStart: startDate });
+    startDate.setUTCHours(0, 0, 0, 0);
+    const assignment = await WeeklyAssignment.findOne({
+      weekStart: startDate,
+    });
 
     if (!assignment) {
       return res.status(404).json({

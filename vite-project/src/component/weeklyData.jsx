@@ -4,6 +4,7 @@ import { saveWeeklyAssment } from "../utils/apiCall";
 import { engineerWeek } from "../utils/engineerWeek";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
 
 const days = [
   "Monday",
@@ -26,7 +27,6 @@ const WeeklyAssignmentForm = () => {
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     );
     const day = utcDate.getUTCDay();
-    console.log(utcDate);
     if (day !== 1) {
       toast.error("Please select a Monday only!");
       setWeekStart(null);
@@ -35,35 +35,56 @@ const WeeklyAssignmentForm = () => {
     setWeekStart(utcDate);
   };
 
-  const handleDateChange1 = (e) => {
-    const selectedDate = new Date(e.target.value);
-    const day = selectedDate.getDay();
-
-    if (day !== 1) {
-      toast.error("Please select a Monday only!");
-      setWeekStart("");
-      return;
+  const FetchData = async (weekStart) => {
+    try {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/devrecord/fetch?weekStart=${weekStart}`,
+        { withCredentials: true }
+      );
+      toast.success("Existing tasks loaded");
+      return res?.data?.data?.assignments || {};
+    } catch (e) {
+      if (e.response) {
+        toast.error(e.response?.data?.message);
+      }
+      console.error("Error fetching existing tasks:", e);
+      return {};
     }
-
-    setWeekStart(e.target.value);
   };
 
   useEffect(() => {
     if (!weekStart) return;
-    const startDate = new Date(weekStart);
-    const tempTasks = {};
-    days.forEach((day, index) => {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + index);
-      tempTasks[date.toISOString().split("T")[0]] = {};
-      engineers.forEach((eng) => {
-        if (!tempTasks[date.toISOString().split("T")[0]][eng.engineerId]) {
-          tempTasks[date.toISOString().split("T")[0]][eng.engineerId] = [""];
-        }
+    const fetchTasks = async () => {
+      const fetchval = await FetchData(weekStart);
+      const startDate = new Date(weekStart);
+      const tempTasks = {};
+
+      days.forEach((day, index) => {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + index);
+        const dateKey = date.toISOString().split("T")[0];
+
+        tempTasks[dateKey] = {};
+
+        engineers.forEach((eng) => {
+          const dayAssignments = fetchval?.[day] || [];
+          const existingTaskObj = dayAssignments.find(
+            (a) => a.engineerId === eng.engineerId
+          );
+
+          tempTasks[dateKey][eng.engineerId] = [
+            existingTaskObj ? existingTaskObj.tasks : "",
+          ];
+        });
       });
-    });
-    setTasksByDate(tempTasks);
+      setTasksByDate(tempTasks);
+    };
+    fetchTasks();
   }, [weekStart, engineers]);
+
+  console.log(tasksByDate);
 
   const handleTaskChange = (date, engineerId, value, idx) => {
     const temp = { ...tasksByDate };
@@ -71,8 +92,6 @@ const WeeklyAssignmentForm = () => {
     setTasksByDate(temp);
   };
 
-
-  
   const addEngineer = () => {
     if (!newEngineerName.trim()) {
       toast.error("please enter the  name then click add button");
@@ -113,11 +132,6 @@ const WeeklyAssignmentForm = () => {
   };
 
   const handleSubmit = async () => {
-    const data = {
-      weekStart,
-      engineers,
-      tasksByDate,
-    };
     try {
       const response = await saveWeeklyAssment({
         weekStart,
@@ -170,12 +184,6 @@ const WeeklyAssignmentForm = () => {
                 minDate={new Date()}
                 filterDate={(date) => date.getDay() === 1}
               />
-              {/* <input
-                type="date"
-                value={weekStart}
-                onChange={handleDateChange1}
-                className="w-full md:w-auto border-2 border-blue-300 px-4 py-3 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              /> */}
             </div>
 
             <div className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">

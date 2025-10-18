@@ -22,6 +22,7 @@ const corsOptions = {
   origin: [
     `${process.env.FRONT_PORT}`,
     "https://warlike-unlubricative-angelo.ngrok-free.dev",
+    "https://7b9nkwkz-5173.inc1.devtunnels.ms",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
