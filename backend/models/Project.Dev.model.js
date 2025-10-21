@@ -51,6 +51,10 @@ const ProjectDevSchema = new mongoose.Schema(
       default: false,
     },
     JobNumber: { type: String, required: true },
+    projectName: {
+      type: String,
+      trim: true,
+    },
     startDate: { type: String, required: true },
     endDate: { type: String, default: null },
     DaysConsumed: { type: String, default: "0" },
@@ -190,7 +194,10 @@ ProjectDevSchema.pre("save", function (next) {
 ProjectDevSchema.post("findOneAndUpdate", async function (doc) {
   if (doc) {
     const { summary, statusprogress } = calculateSummaryAndStatus(doc);
-    await this.model.updateOne({ _id: doc._id }, { $set: { summary, statusprogress } });
+    await this.model.updateOne(
+      { _id: doc._id },
+      { $set: { summary, statusprogress } }
+    );
   }
 });
 

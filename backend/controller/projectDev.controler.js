@@ -4,7 +4,6 @@ import ProjectModel from "../models/Project.model.js";
 export const ProjectStatusSave = async (req, res) => {
   try {
     const data = req.body;
-
     const { JobNumber } = data;
     if (!JobNumber) {
       return res
@@ -23,7 +22,10 @@ export const ProjectStatusSave = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Project status already exists" });
     }
-    const savestatus = await ProjectDevModel.create(data);
+    const savestatus = await ProjectDevModel.create({
+      ...data,
+      projectName: isprojectExist.projectName,
+    });
     res
       .status(200)
       .json({ success: true, message: "Project status saved successfully" });

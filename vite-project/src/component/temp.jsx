@@ -19,7 +19,6 @@ const WeeklyAssignmentForm = () => {
   const [newEngineerName, setNewEngineerName] = useState("");
 
   const handleDateChange = (e) => {
-    console.log(e.target.value);
     const selectedDate = new Date(e.target.value);
     const day = selectedDate.getDay();
 

@@ -2,6 +2,7 @@ import ProjectModel from "../models/Project.model.js";
 import dayjs from "dayjs";
 import workStatusModel from "../models/WorkStatus.model.js";
 import EngineerReocord from "../models/engineer.record.model.js";
+import ProjectDevModel from "../models/Project.Dev.model.js";
 
 export const Recordsformave = async (req, res) => {
   try {
@@ -848,6 +849,11 @@ export const getProjectOverview = async (req, res) => {
       updatedAt: -1,
       createdAt: -1,
     });
+
+    const projectStatus = await ProjectDevModel.find()
+      .sort({ updatedAt: -1 })
+      .limit(3);
+
     const latestProjects = projects.slice(0, 3);
     const highPriority = projects
       .filter((p) => {
@@ -968,7 +974,7 @@ export const getProjectOverview = async (req, res) => {
 
     res.json({
       latestProjects,
-      highPriority,
+      highPriority: projectStatus,
       statusGroups: {
         ...statusGroups,
         urgent: { name: "Urgent", cnt: data.length },

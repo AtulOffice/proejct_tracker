@@ -55,7 +55,7 @@ export const statusSave = async (data) => {
 export const getStatus = async (id) => {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/projectDev/fetch/${id}`,
+      `${import.meta.env.VITE_API_URL}/projectDev/fetchbyid/${id}`,
       { withCredentials: true }
     );
     return res.data;
@@ -70,6 +70,7 @@ export const getStatus = async (id) => {
 
 export const statusupdate = async (data, id) => {
   try {
+    console.log
     const res = await axios.put(
       `${import.meta.env.VITE_API_URL}/projectDev/updatebyid/${id}`,
       data,

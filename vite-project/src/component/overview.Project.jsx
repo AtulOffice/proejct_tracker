@@ -7,7 +7,7 @@ import LollipopChart from "./overviewChart";
 import { useAppContext } from "../appContex";
 
 const ProjectOverview = ({ overvew, setActiveCard }) => {
-  const { user } = useAppContext()
+  const { user } = useAppContext();
   const statusGroups = {
     upcoming: { name: "UpComing", cnt: 0 },
     running: { name: "Active", cnt: 0 },
@@ -33,7 +33,6 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
     pending: { name: "Pending", cnt: 0, color: "#a78bfa" },
     urgent: { name: "Urgent", cnt: 0, color: "#f87171" },
   };
-
   return (
     <div className={`transition-all duration-300 lg:ml-64 pt-16 min-h-screen`}>
       <div className="p-6">
@@ -42,8 +41,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
             Dashboard Overview
           </h2>
           <p className="text-gray-600 mt-1">
-            Welcome back,{" "}
-            {user ? user?.username.toUpperCase() : "Admin!"}
+            Welcome back, {user ? user?.username.toUpperCase() : "Admin!"}
           </p>
         </div>
 
@@ -109,28 +107,36 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              TOP 3 OLD WITH HIGH PRIORITY CUSOTMER
+              ACTIVE DEVELOPMENT PROJECTS
             </h3>
             <div className="space-y-4">
               {(overvew?.highPriority ? overvew.highPriority : []).map(
                 (project, indx) => (
-                  <div className="flex items-start" key={indx}>
+                  <div className="flex items-start italic" key={indx}>
                     <div className="bg-blue-100 p-2 rounded-full mr-4">
                       <FaUser className="text-blue-500" size={18} />
                     </div>
                     <div>
                       <p className="text-gray-800 font-medium">
-                        {project.client}
+                        {project.JobNumber}
                       </p>
                       <p className="text-gray-500 text-sm">
                         {project.projectName}
                       </p>
-                      <p className="text-gray-400 text-xs mt-1">
-                        {" "}
-                        {project?.endDate
-                          ? format(new Date(project.endDate), "dd MMM yyyy")
-                          : "PROJECT COMPLETION DATE NOT PROVIDED"}
-                      </p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        <span className="bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full">
+                          D-{project?.summary?.document} %
+                        </span>
+                        <span className="bg-yellow-100 text-yellow-600 text-xs font-semibold px-3 py-1 rounded-full">
+                          S-{project?.summary?.scada} %
+                        </span>
+                        <span className="bg-green-100 text-green-600 text-xs font-semibold px-3 py-1 rounded-full">
+                          L-{project?.summary?.logic} %
+                        </span>
+                        <span className="bg-purple-100 text-purple-600 text-xs font-semibold px-3 py-1 rounded-full">
+                          T-{project?.summary?.test} %
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )
@@ -170,7 +176,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            RECENT PROJECTS
+            LATEST PROJECT MODIFICATIONS
           </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">

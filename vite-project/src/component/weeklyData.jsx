@@ -85,9 +85,6 @@ const WeeklyAssignmentForm = () => {
     };
     fetchTasks();
   }, [weekStart, engineers]);
-
-  console.log(tasksByDate);
-
   const handleTaskChange = (date, engineerId, value, idx) => {
     const temp = { ...tasksByDate };
     temp[date][engineerId][idx] = value;

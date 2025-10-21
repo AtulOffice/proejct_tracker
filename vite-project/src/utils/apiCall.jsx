@@ -384,7 +384,6 @@ export const saveWeeklyAssment = async ({
   tasksByDate,
 }) => {
   try {
-    console.log(weekStart);
     const res = await axios.post(
       `${import.meta.env.VITE_API_URL}/devrecord/save`,
       { weekStart, engineers, tasksByDate },
