@@ -47,7 +47,9 @@ const WeeklyAssignmentForm = () => {
       return res?.data?.data?.assignments || {};
     } catch (e) {
       if (e.response) {
-        toast.error(e.response?.data?.message);
+        toast.success(
+          e.response?.data?.message + " " + "please enter new tasks details"
+        );
       }
       console.error("Error fetching existing tasks:", e);
       return {};
