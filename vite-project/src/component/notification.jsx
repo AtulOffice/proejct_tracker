@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../appContex";
 import { getAssignedEngineers } from "../utils/apiCall";
 import { FaCalendar } from "react-icons/fa6";
+import { handlePrint } from "../utils/print";
 
 const NotificationForm = ({ setOpen, formRef }) => {
   const { toggle, setToggle } = useAppContext();
@@ -66,6 +67,20 @@ const NotificationForm = ({ setOpen, formRef }) => {
     });
   };
 
+  const printRef = useRef();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "p") {
+        e.preventDefault();
+        handlePrint(printRef);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-sky-900/80 via-indigo-700/70 to-blue-950/80 backdrop-blur-sm transition">
       <div
@@ -79,21 +94,28 @@ const NotificationForm = ({ setOpen, formRef }) => {
           <div className="flex justify-end space-x-4 pb-6">
             <button
               type="button"
-              onClick={() => setOpen(false)}
-              className="px-6 py-2 rounded-lg bg-gradient-to-r from-gray-200 to-gray-300 text-gray-800 shadow-sm hover:shadow-md hover:bg-gray-400/50 transition"
-            >
-              Close
-            </button>
-            <button
-              type="button"
               onClick={() => setToggle((prev) => !prev)}
               className={`px-8 py-2 rounded-lg text-white font-semibold shadow transition bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-700 hover:bg-blue-700/90 hover:shadow-lg`}
             >
               Refresh
             </button>
+            <button
+              type="button"
+              onClick={() => handlePrint(printRef)}
+              className="px-8 py-2 rounded-lg text-white font-semibold shadow transition bg-green-600 hover:bg-green-700"
+            >
+              Print
+            </button>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="px-6 py-2 rounded-lg bg-gradient-to-r from-gray-200 to-gray-300 text-gray-800 shadow-sm hover:shadow-md hover:bg-gray-400/50 transition"
+            >
+              Close
+            </button>
           </div>
           <div className="relative w-full overflow-hidden rounded-2xl shadow-xl border border-indigo-400 bg-gradient-to-b from-white/80 via-blue-50 to-blue-100">
-            <div className="overflow-x-auto">
+            <div ref={printRef} className="overflow-x-auto">
               <table className="w-full table-fixed">
                 <thead>
                   <tr className="bg-gradient-to-r from-blue-800 via-indigo-700 to-blue-600 text-white shadow-lg">

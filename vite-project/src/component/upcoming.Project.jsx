@@ -20,7 +20,6 @@ const ProjectsUpcoming = () => {
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
 
   useEffect(() => {
-    
     const handler = setTimeout(() => {
       setdebounceSerchTerm(searchTerm);
     }, 2000);
@@ -28,7 +27,6 @@ const ProjectsUpcoming = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    
     const getProjects = async () => {
       if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
         try {
@@ -68,7 +66,6 @@ const ProjectsUpcoming = () => {
   }, [currentPage, toggle, debounceSearchTerm]);
 
   useEffect(() => {
-    
     if (!data) return;
     const filterfun = setTimeout(() => {
       const filtered = filterProjectsUtils({
@@ -83,7 +80,6 @@ const ProjectsUpcoming = () => {
 
   const filterRef = useRef(null);
   useEffect(() => {
-    
     function handleClickOutside(event) {
       if (filterRef.current && !filterRef.current.contains(event.target)) {
         setIsFilterOpen(false);
@@ -118,9 +114,7 @@ const ProjectsUpcoming = () => {
 
   return (
     <div className="max-w-8xl min-h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
-      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">
-        UPCOMING
-      </h2>
+      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">UPCOMING</h2>
 
       <FilterCompo
         setToggle={setToggle}

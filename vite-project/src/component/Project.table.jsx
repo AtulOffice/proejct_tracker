@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import EngineerForm from "./ProjectFormAction";
 import { Navigate, useNavigate } from "react-router-dom";
+import { handlePrint } from "../utils/print";
 
 const ProjectTable = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -30,9 +31,23 @@ const ProjectTable = ({ data }) => {
     }
   };
 
+  const printRef = useRef();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "p") {
+        e.preventDefault();
+        handlePrint(printRef);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="relative col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
-      <div className="overflow-x-auto">
+      <div ref={printRef} className="overflow-x-auto">
         <table className="w-full table-fixed">
           <thead>
             <tr className="bg-gradient-to-r from-purple-600 via-pink-500 to-pink-600 text-white shadow-lg">
