@@ -31,7 +31,7 @@ export const handlePrint = (printRef) => {
         <style>
           @page {
             size: A4;
-            margin: 10mm; /* smaller margins */
+            margin: 10mm; 
           }
           body {
             width: 100%;
