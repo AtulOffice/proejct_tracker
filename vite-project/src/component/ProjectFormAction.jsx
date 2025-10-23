@@ -55,7 +55,7 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
       <div
         ref={formRef}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl min-h-[80vh] max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 scrollbar-glass"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl min-h-[70vh] max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 scrollbar-glass"
       >
         <div className="p-6">
           <h2 className="text-lg font-bold mb-4 text-center text-gray-800">
