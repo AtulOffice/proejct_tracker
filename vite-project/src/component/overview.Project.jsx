@@ -109,7 +109,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               ACTIVE DEVELOPMENT PROJECTS
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-4 h-70 overflow-y-auto pr-2 cursor-grab">
               {(overvew?.highPriority ? overvew.highPriority : []).map(
                 (project, indx) => (
                   <div className="flex items-start italic" key={indx}>
@@ -120,21 +120,21 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
                       <p className="text-gray-800 font-medium">
                         {project.JobNumber}
                       </p>
-                      <p className="text-gray-500 text-sm">
+                      <p className="text-gray-500 text-sm truncate">
                         {project.projectName}
                       </p>
                       <div className="flex flex-wrap gap-2 mt-1">
                         <span className="bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full">
-                          D-{project?.summary?.document} %
+                          D-{project?.summary?.document}
                         </span>
                         <span className="bg-yellow-100 text-yellow-600 text-xs font-semibold px-3 py-1 rounded-full">
-                          S-{project?.summary?.scada} %
+                          S-{project?.summary?.scada}
                         </span>
                         <span className="bg-green-100 text-green-600 text-xs font-semibold px-3 py-1 rounded-full">
-                          L-{project?.summary?.logic} %
+                          L-{project?.summary?.logic}
                         </span>
                         <span className="bg-purple-100 text-purple-600 text-xs font-semibold px-3 py-1 rounded-full">
-                          T-{project?.summary?.test} %
+                          T-{project?.summary?.test}
                         </span>
                       </div>
                     </div>

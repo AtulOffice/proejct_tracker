@@ -45,7 +45,7 @@ import ProjectList from "./projectList";
 
 const AdminDashboard = () => {
   const formRef = useRef(null);
-  const { toggle, user, userLoading } = useAppContext();
+  const { toggle, user, userLoading, toggleDev } = useAppContext();
   const [overvew, setOverview] = useState();
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
       data && setOverview(data);
     };
     fetchData();
-  }, [toggle]);
+  }, [toggle, toggleDev]);
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

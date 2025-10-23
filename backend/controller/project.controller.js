@@ -850,10 +850,7 @@ export const getProjectOverview = async (req, res) => {
       createdAt: -1,
     });
 
-    const projectStatus = await ProjectDevModel.find()
-      .sort({ updatedAt: -1 })
-      .limit(3);
-
+    const projectStatus = await ProjectDevModel.find().sort({ updatedAt: -1 });
     const latestProjects = projects.slice(0, 3);
     const highPriority = projects
       .filter((p) => {

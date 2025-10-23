@@ -138,7 +138,6 @@ const CardStatus = ({
       );
       toast.success(`JobId ${jobNumber} deleted successfully`);
       setDeleteflag(false);
-      setToggle((prev) => !prev);
       setToggleDev((prev) => !prev);
     } catch (e) {
       if (e.response) {

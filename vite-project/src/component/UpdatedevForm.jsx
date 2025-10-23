@@ -88,7 +88,6 @@ const ProjectdevlopForm = () => {
         });
       }
       setToggleDev((prev) => !prev);
-
       response?.success && nevigate(`/page`);
       toast.success(" Data updated successfully!");
     } catch (error) {
