@@ -75,6 +75,7 @@ ProjectRouter.get(
 );
 ProjectRouter.get(
   "/latestProjectpagination",
+  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   LatestProjectPagination
@@ -102,6 +103,7 @@ ProjectRouter.get(
 );
 ProjectRouter.get(
   "/urgentProject/pagination",
+  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   UrgentProjectPegination
@@ -109,6 +111,7 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/urgentProjectAction",
+  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   UrgentProjectAction
@@ -116,6 +119,7 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/allProjectsfetch",
+  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   allProjectsFetch
