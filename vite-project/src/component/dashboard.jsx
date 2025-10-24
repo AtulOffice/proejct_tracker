@@ -157,16 +157,25 @@ const AdminDashboard = () => {
             </button>
             <div className="ml-4 lg:ml-0">
               {" "}
-              <h1 className="text-xl font-bold bg-gradient-to-r from-pink-500 via-indigo-600 to-teal-400 text-transparent bg-clip-text animate-pulse shadow-lg p-2 rounded-lg border-2 border-indigo-300 hover:border-indigo-500 transition-all duration-300 transform hover:scale-110 tracking-wider flex items-center">
-                {" "}
-                <span className="mr-2">✨</span>{" "}
-                {user.role === "admin"
-                  ? "ADMIN DASHBOARD"
-                  : user?.role === "reception"
-                  ? "RECEPTION DASHBOARD"
-                  : "DESIGN DASHBOARD"}
-                <span className="ml-2">✨</span>{" "}
-              </h1>{" "}
+              <h1 className="text-xl sm:text-xl font-bold bg-gradient-to-r from-pink-500 via-indigo-600 to-teal-400 text-transparent bg-clip-text animate-pulse shadow-lg p-2 rounded-lg border-2 border-indigo-300 hover:border-indigo-500 transition-all duration-300 transform hover:scale-110 tracking-wider flex items-center">
+                <span className="mr-2">✨</span>
+                <span className="hidden sm:inline">
+                  {user.role === "admin"
+                    ? "ADMIN DASHBOARD"
+                    : user?.role === "reception"
+                    ? "RECEPTION DASHBOARD"
+                    : "DESIGN DASHBOARD"}
+                </span>
+                <span className="inline sm:hidden">
+                  {user.role === "admin"
+                    ? "ADMIN"
+                    : user?.role === "reception"
+                    ? "RECEPTION"
+                    : "DESIGN"}
+                </span>
+
+                <span className="ml-2">✨</span>
+              </h1>
             </div>
           </div>
 
@@ -198,7 +207,6 @@ const AdminDashboard = () => {
                 size={20}
                 className="transition-transform duration-300 group-hover:translate-x-0.5"
               />
-              {/* <span className="text-sm font-medium">LOG OUT</span> */}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full"></span>
             </button>
           </div>
@@ -206,9 +214,9 @@ const AdminDashboard = () => {
       </header>
 
       <aside
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transition-transform duration-300 transform z-30 w-64
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+    lg:translate-x-0 lg:static lg:inset-auto lg:w-64`}
       >
         <div className="flex flex-col h-full">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
