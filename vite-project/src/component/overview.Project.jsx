@@ -105,35 +105,38 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
               ACTIVE DEVELOPMENT PROJECTS
             </h3>
-            <div className="space-y-4 h-70 overflow-y-auto pr-2 cursor-grab">
+            <div className="space-y-3 sm:space-y-4 h-[280px] sm:h-70 overflow-y-auto pr-2 cursor-grab">
               {(overvew?.highPriority ? overvew.highPriority : []).map(
                 (project, indx) => (
-                  <div className="flex items-start italic" key={indx}>
-                    <div className="bg-blue-100 p-2 rounded-full mr-4">
-                      <FaUser className="text-blue-500" size={18} />
+                  <div
+                    className="flex items-start italic space-x-3 sm:space-x-4"
+                    key={indx}
+                  >
+                    <div className="bg-blue-100 p-1.5 sm:p-2 rounded-full mr-3 sm:mr-4">
+                      <FaUser className="text-blue-500" size={16} />
                     </div>
                     <div>
-                      <p className="text-gray-800 font-medium">
+                      <p className="text-gray-800 font-medium text-sm sm:text-base">
                         {project.JobNumber}
                       </p>
-                      <p className="text-gray-500 text-sm truncate">
+                      <p className="text-gray-500 text-xs sm:text-sm truncate max-w-[220px] sm:max-w-none">
                         {project.projectName}
                       </p>
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        <span className="bg-blue-100 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full">
+                      <div className="flex flex-wrap gap-1 sm:gap-2 mt-1">
+                        <span className="bg-blue-100 text-blue-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
                           D-{project?.summary?.document}
                         </span>
-                        <span className="bg-yellow-100 text-yellow-600 text-xs font-semibold px-3 py-1 rounded-full">
+                        <span className="bg-yellow-100 text-yellow-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
                           S-{project?.summary?.scada}
                         </span>
-                        <span className="bg-green-100 text-green-600 text-xs font-semibold px-3 py-1 rounded-full">
+                        <span className="bg-green-100 text-green-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
                           L-{project?.summary?.logic}
                         </span>
-                        <span className="bg-purple-100 text-purple-600 text-xs font-semibold px-3 py-1 rounded-full">
+                        <span className="bg-purple-100 text-purple-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
                           T-{project?.summary?.test}
                         </span>
                       </div>
