@@ -113,7 +113,7 @@ const ProjectsDevlopment = () => {
     };
 
     return (
-        <div className="max-w-8xl h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+        <div className="max-w-8xl h-[140vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
             <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">PROJECTS INCLUDED DEVELOPMENT</h2>
 
             <FilterCompo
