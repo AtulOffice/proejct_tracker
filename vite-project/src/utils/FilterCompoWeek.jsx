@@ -3,8 +3,8 @@ import React from "react";
 const FilterCompo = ({ searchTerm, setSearchTerm, setToggle }) => {
   return (
     <>
-      <div className="flex flex-col lg:flex-row items-center justify-between mb-10 gap-6">
-        <div className="relative w-full lg:w-1/2 group">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
+        <div className="relative w-full sm:w-1/2 group">
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
             <svg
               className="w-5 h-5 text-indigo-500 group-focus-within:text-indigo-600 transition-colors"
@@ -27,7 +27,8 @@ const FilterCompo = ({ searchTerm, setSearchTerm, setToggle }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="mx-4 my-2">
+
+        <div className="hidden sm:flex sm:justify-end w-auto">
           <button
             onClick={async (e) => {
               e.stopPropagation();
@@ -57,7 +58,7 @@ const FilterCompo = ({ searchTerm, setSearchTerm, setToggle }) => {
                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
               />
             </svg>
-          </button>
+          </button>{" "}
         </div>
       </div>
     </>

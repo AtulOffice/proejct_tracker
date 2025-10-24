@@ -8,6 +8,7 @@ import {
   saveAllEngineers,
 } from "../utils/apiCall.jsx";
 import toast from "react-hot-toast";
+import PopupConfirmation from "./PopuP.Page.jsx";
 
 const EngineerTable = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -16,6 +17,8 @@ const EngineerTable = ({ data }) => {
   const [showData, setShowData] = useState();
   const formRef = useRef(null);
   const { setToggle } = useAppContext();
+  const [deleteFlag, setDeleteflag] = useState(false);
+  const [id, setId] = useState(null);
 
   const [engineersdata, setEngineersdata] = useState({
     id: "",
@@ -76,10 +79,10 @@ const EngineerTable = ({ data }) => {
     setSaveOpen(true);
   };
 
-  const handleDelete = async (e, project) => {
-    e.stopPropagation();
+  const handleDelete = async () => {
     try {
-      await deleteEngineer(project._id);
+      await deleteEngineer(id);
+      setDeleteflag(false);
       toast.success("data deleted successfully");
       setToggle((prev) => !prev);
     } catch (error) {
@@ -128,33 +131,41 @@ const EngineerTable = ({ data }) => {
   };
 
   return (
-    <div className="relative col-span-full w-full overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+    <div className="relative col-span-full w-full overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200 p-4">
+      {deleteFlag && (
+        <PopupConfirmation
+          setCancelflag={setDeleteflag}
+          handleConfirm={handleDelete}
+          title="Are you sure?"
+          message={`Do you really want to delete ? This action cannot be undone.`}
+          btnval="Delete"
+        />
+      )}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300 p-4">
           <div
             ref={formRef}
-            className="bg-white bg-opacity-90 p-8 rounded-3xl shadow-2xl w-[380px] max-h-[70vh] overflow-y-auto border border-gray-200 scrollbar-glass"
+            className="bg-white bg-opacity-90 p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-sm md:max-w-md max-h-[70vh] overflow-y-auto border border-gray-200 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100"
           >
             <h2 className="text-xl font-bold mb-6 text-gray-800 text-center drop-shadow-sm">
               Recent Project Assignments
             </h2>
-            {showData?.assignments &&
-              showData.assignments
-                ?.slice()
-                .reverse()
-                .map((project) => (
-                  <div
-                    key={project._id}
-                    className="group bg-gradient-to-r from-green-100 via-blue-50 to-white rounded-xl mb-4 py-3 px-4 shadow hover:shadow-xl transition-shadow border-b border-gray-100 hover:bg-blue-50"
-                  >
-                    <h3 className="font-semibold text-lg text-gray-800 group-hover:text-blue-600">
-                      {project.projectName}
-                    </h3>
-                    <p className="text-xs text-gray-500 mt-1 group-hover:text-gray-700">
-                      {project.jobNumber}
-                    </p>
-                  </div>
-                ))}
+            {showData?.assignments
+              ?.slice()
+              .reverse()
+              .map((project) => (
+                <div
+                  key={project._id}
+                  className="group bg-gradient-to-r from-green-100 via-blue-50 to-white rounded-xl mb-4 py-3 px-4 shadow hover:shadow-xl transition-shadow border-b border-gray-100 hover:bg-blue-50"
+                >
+                  <h3 className="font-semibold text-lg text-gray-800 group-hover:text-blue-600">
+                    {project.projectName}
+                  </h3>
+                  <p className="text-xs text-gray-500 mt-1 group-hover:text-gray-700">
+                    {project.jobNumber}
+                  </p>
+                </div>
+              ))}
           </div>
         </div>
       )}
@@ -169,7 +180,8 @@ const EngineerTable = ({ data }) => {
           isEditExtra={saveOpen ? false : true}
         />
       )}
-      <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-pink-600 px-6 py-4 flex justify-between items-center">
+
+      <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-pink-600 px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 rounded-xl">
         <h2 className="text-xl font-bold text-white tracking-wide">
           ENGINEER MANAGEMENT
         </h2>
@@ -181,11 +193,12 @@ const EngineerTable = ({ data }) => {
           <span>Add New Engineer</span>
         </button>
       </div>
+
       {data.length > 0 ? (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto hidden md:block mt-4">
           <table className="w-full table-fixed">
             <thead>
-              <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md">
+              <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md ">
                 <th className="w-1/5 px-6 py-4 text-left text-sm font-bold tracking-wide uppercase">
                   Engineer Name
                 </th>
@@ -216,7 +229,8 @@ const EngineerTable = ({ data }) => {
                   <td className="px-6 py-4">
                     <div
                       onClick={() => {
-                        setOpen(true), setShowData(project);
+                        setOpen(true);
+                        setShowData(project);
                       }}
                       className="text-base font-semibold text-blue-900 truncate cursor-pointer"
                       title={project.name}
@@ -252,7 +266,10 @@ const EngineerTable = ({ data }) => {
                         <span>Edit</span>
                       </button>
                       <button
-                        onClick={(e) => handleDelete(e, project)}
+                        onClick={() => {
+                          setDeleteflag(true);
+                          setId(project._id);
+                        }}
                         className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
                         title="Delete Engineer"
                       >
@@ -267,53 +284,66 @@ const EngineerTable = ({ data }) => {
           </table>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-16 px-4">
-          <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-12 shadow-lg border border-blue-200 max-w-md text-center overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-300 rounded-full opacity-30 animate-pulse"></div>
-            <div
-              className="absolute bottom-0 left-0 w-24 h-24 bg-purple-300 rounded-full opacity-30 animate-pulse"
-              style={{ animationDelay: "1s" }}
-            ></div>
-            <div className="relative mb-6 animate-bounce">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                <svg
-                  className="w-10 h-10 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
+        <NoDataFound />
+      )}
+      <div className="md:hidden mt-4 space-y-4">
+        {data.map((project) => (
+          <div
+            key={project._id}
+            className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-xl rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
+          >
+            <div className="flex items-start justify-between mb-2 gap-2">
+              <div
+                className="text-lg font-bold text-indigo-700 truncate max-w-[70%]"
+                title={project.name}
+              >
+                {project.name}
               </div>
+              <span
+                className={`inline-flex items-center px-2 py-1 border rounded-full font-semibold text-xs ${
+                  !project.isAssigned
+                    ? "bg-green-100 text-green-700 border-green-300"
+                    : "bg-red-100 text-red-700 border-red-300"
+                }`}
+              >
+                {project.isAssigned ? "No" : "Yes"}
+              </span>
             </div>
 
-            <h3 className="text-2xl font-bold text-blue-900 mb-3 animate-fade-in">
-              No Engineers Found
-            </h3>
+            <div className="pt-2 text-blue-800 text-sm">
+              <div className="mb-2">
+                <span className="font-medium text-indigo-600">Email:</span>
+                <span className="ml-2 truncate">{project?.email}</span>
+              </div>
+              <div className="mb-2">
+                <span className="font-medium text-indigo-600">Phone:</span>
+                <span className="ml-2 truncate">
+                  {project?.phone ? project.phone : "not available"}
+                </span>
+              </div>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={(e) => handleEdit(e, project)}
+                  className="flex-1 flex items-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                >
+                  <Edit3 size={16} />
+                  <span>Edit</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setDeleteflag(true);
+                    setId(project._id);
+                  }}
+                  className="flex-1 flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                >
+                  <Trash2 size={16} />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
           </div>
-          <style jsx>{`
-            @keyframes fade-in {
-              from {
-                opacity: 0;
-                transform: translateY(10px);
-              }
-              to {
-                opacity: 1;
-                transform: translateY(0);
-              }
-            }
-            .animate-fade-in {
-              animation: fade-in 0.6s ease-out forwards;
-              opacity: 0;
-            }
-          `}</style>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };

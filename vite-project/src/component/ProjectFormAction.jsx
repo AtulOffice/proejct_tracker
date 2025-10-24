@@ -52,13 +52,13 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 sm:p-0">
       <div
         ref={formRef}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl min-h-[70vh] max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 scrollbar-glass"
+        className="bg-white rounded-2xl shadow-2xl w-full sm:max-w-2xl min-h-[60vh] max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 scrollbar-glass"
       >
-        <div className="p-6">
-          <h2 className="text-lg font-bold mb-4 text-center text-gray-800">
+        <div className="p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-bold mb-4 text-center text-gray-800">
             {selectedProject?.jobNumber || "Assign Engineers"}
           </h2>
 
@@ -67,10 +67,10 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
             setEngineerData={setEngineerData}
           />
 
-          <div className="flex justify-end space-x-2 mt-6 sticky bottom-0 bg-white pt-2">
+          <div className="flex flex-col sm:flex-row justify-end sm:space-x-2 space-y-2 sm:space-y-0 mt-6 sticky bottom-0 bg-white pt-2 sm:pt-0">
             <button
               type="button"
-              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg transition"
+              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg transition w-full sm:w-auto"
               onClick={() => setOpen(false)}
             >
               Cancel
@@ -80,7 +80,7 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
               type="submit"
               onClick={handleSubmit}
               disabled={isDisabled}
-              className={`px-4 py-2 rounded-lg text-white transition ${
+              className={`px-4 py-2 rounded-lg text-white transition w-full sm:w-auto ${
                 isDisabled
                   ? "bg-blue-300 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"

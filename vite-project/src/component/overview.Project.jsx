@@ -242,6 +242,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
             </table>
           </div>
         </div>
+        
       </div>
     </div>
   );

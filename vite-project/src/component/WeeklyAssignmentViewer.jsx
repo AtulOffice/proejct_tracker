@@ -29,15 +29,17 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
     : [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300">
-      <div className="bg-white/95 p-10 rounded-3xl shadow-2xl w-[90vw] max-w-[1200px] max-h-[90vh] overflow-y-auto border border-gray-200 scrollbar-glass relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-[1200px] max-h-[90vh] overflow-y-auto p-6 relative scrollbar-glass">
         <button
           onClick={onClose}
           className="absolute top-4 right-5 text-gray-500 hover:text-red-500 text-3xl font-bold"
         >
           ×
         </button>
-        <div className="flex justify-left mb-6">
+
+        {/* PDF Download */}
+        <div className="mb-6 flex justify-center md:justify-start">
           <PDFDownloadLink
             document={
               <AssignmentsPDF
@@ -85,7 +87,8 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
                   📅 {day.date}
                 </h3>
 
-                <div className="overflow-x-auto">
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
                   <table className="min-w-full border-collapse border border-gray-300 text-base">
                     <thead className="bg-indigo-100">
                       <tr>
@@ -125,6 +128,30 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
                       ))}
                     </tbody>
                   </table>
+                </div>
+
+                {/* Mobile Cards */}
+                <div className="md:hidden space-y-3">
+                  {day.engineers.map((eng, eIndex) => (
+                    <div
+                      key={eIndex}
+                      className="p-3 bg-white rounded-lg shadow flex flex-col space-y-1"
+                    >
+                      <div>
+                        <strong>Engineer:</strong>{" "}
+                        {eng.engineerName || eng.engineerId}
+                      </div>
+                      <div>
+                        <strong>Task:</strong> {eng.tasks || "-"}
+                      </div>
+                      <div>
+                        <strong>Project:</strong> {eng.projectName || "-"}
+                      </div>
+                      <div>
+                        <strong>Job Number:</strong> {eng.jobNumber || "-"}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}

@@ -16,7 +16,7 @@ const ProjectTableAll = ({ data }) => {
 
   return (
     <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto hidden md:block">
         <div className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead>
@@ -64,7 +64,7 @@ const ProjectTableAll = ({ data }) => {
                     onClick={() => handleUpdate(project?._id)}
                   >
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full  text-xs font-bold border shadow-sm transition whitespace-nowrap`}
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border shadow-sm transition whitespace-nowrap`}
                     >
                       <span className="ml-2">{project.status}</span>
                     </span>
@@ -94,9 +94,58 @@ const ProjectTableAll = ({ data }) => {
             </tbody>
           </table>
         </div>
+      </div>d
+      <div className="md:hidden space-y-4 p-2">
+        {data.map((project, indx) => (
+          <div
+            key={indx}
+            className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-lg rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div
+                className="text-base font-bold text-indigo-700 truncate max-w-[70%]"
+                title={project.projectName}
+              >
+                {project.projectName}
+              </div>
+              <span
+                onClick={() => handleUpdate(project?._id)}
+                className="inline-flex items-center px-2 py-1 border border-indigo-300 rounded-full font-semibold text-[11px] bg-indigo-100 text-indigo-700 shadow-sm"
+                title={project.status}
+              >
+                {project.status}
+              </span>
+            </div>
+
+            <div className="space-y-2 text-sm text-blue-800">
+              <div>
+                <span className="font-medium text-indigo-600">Job ID:</span>
+                <span className="ml-2 font-semibold ">{project.jobNumber}</span>
+              </div>
+              <div>
+                <span className="font-medium text-indigo-600">Delivery:</span>
+                <span className="ml-2">{project.deleveryDate}</span>
+              </div>
+              <div>
+                <span className="font-medium text-indigo-600">Visit:</span>
+                <span className="ml-2">{project.visitDate}</span>
+              </div>
+              <div>
+                <span className="font-medium text-indigo-600">Engineer:</span>
+                <span
+                  className="ml-2 truncate block max-w-xs"
+                  title={project.engineerName || "Not assigned"}
+                >
+                  {project.engineerName.join(" , ") || "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100">
+      {/* 📊 Footer Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
           <p className="text-base text-blue-700">
             Showing{" "}

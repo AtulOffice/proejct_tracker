@@ -113,7 +113,7 @@ const ProjectsPending = () => {
   };
 
   return (
-    <div className="max-w-8xl h-[140vh] ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="max-w-8xl h-[140vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">PENDING</h2>
 
       <FilterCompo
@@ -149,15 +149,19 @@ const ProjectsPending = () => {
         )}
       </div>
       {hasMore && filteredProjects.length !== 0 && (
-        <div className="flex justify-between w-full mt-12 px-4">
+        <div className="w-full mt-12 px-4 flex flex-row justify-between items-center gap-3 overflow-x-auto">
           <button
             onClick={handlePrevPage}
             disabled={currentPage === 1}
-            className="mb-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 border-2 border-transparent hover:border-white"
+            className="flex items-center gap-2 py-3 px-4 sm:px-6 rounded-full font-semibold text-white shadow-lg
+                 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500
+                 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600
+                 transform transition-all duration-300
+                 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 transition-transform group-hover:-translate-x-1"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -169,17 +173,19 @@ const ProjectsPending = () => {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            <span>Prev</span>
+            <span className="hidden sm:inline">Prev</span>
           </button>
-
           <button
             onClick={handleNextPage}
-            className="mb-10 bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-500 hover:from-indigo-700 hover:via-purple-600 hover:to-indigo-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out flex items-center gap-3 border-2 border-transparent hover:border-white"
+            className="flex items-center gap-2 py-3 px-4 sm:px-6 rounded-full font-semibold text-white shadow-lg
+                 bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600
+                 hover:from-green-500 hover:via-blue-600 hover:to-indigo-700
+                 transform transition-all duration-300 flex-shrink-0"
           >
-            <span>Next</span>
+            <span className="hidden sm:inline">Next</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 transition-transform group-hover:translate-x-1"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

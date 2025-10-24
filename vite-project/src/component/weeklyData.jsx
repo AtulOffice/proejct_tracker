@@ -156,7 +156,7 @@ const WeeklyAssignmentForm = () => {
   };
 
   return (
-    <div className="min-h-screen ml-60 pt-20 bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4 pl-8">
+    <div className="min-h-screen lg:ml-60 pt-20 bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4 pl-8">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-gradient-to-r from-pink-500 via-yellow-400 via-green-400 via-blue-400 via-purple-500 to-red-500 px-8 py-6 rounded-lg">

@@ -54,15 +54,16 @@ const WeekRecordList = () => {
   }
 
   return (
-    <div className="max-w-8xl h-full ml-60 px-6 py-20 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="max-w-8xl h-full lg:ml-60 px-6 py-20 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <FilterCompoWeek
         setToggle={setToggle}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
+      
       <div
         layout="true"
-        className="w-full min-h-[56vh] h-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200"
+        className="w-full min-h-[80vh] h-full overflow-auto sm:overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200 p-2 sm:p-0"
       >
         {data && data?.length > 0 ? (
           <WeeklyTableAll data={data} />

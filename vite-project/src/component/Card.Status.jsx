@@ -125,7 +125,6 @@ const CardStatus = ({
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
-  const [updateId, setUpdateid] = useState();
   const navigate = useNavigate();
   const { setToggle } = useAppContext();
 
@@ -193,8 +192,6 @@ const CardStatus = ({
         <PopupConfirmation
           setCancelflag={setDeleteflag}
           handleConfirm={() => handleDelete(project._id, project.JobNumber)}
-          updateId={updateId}
-          setUpdateid={setUpdateid}
           isDisabled={isDisabled}
           title="Are you sure?"
           message={`Do you really want to delete Job Id ${project.JobNumber} ? This action cannot be undone.`}

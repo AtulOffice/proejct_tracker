@@ -19,7 +19,6 @@ const CardAll = ({
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
-  const [updateId, setUpdateid] = useState();
   const navigate = useNavigate();
 
   const handleDelete = async (id, jobNumber) => {
@@ -61,8 +60,6 @@ const CardAll = ({
         <PopupConfirmation
           setCancelflag={setDeleteflag}
           handleConfirm={() => handleDelete(project._id, project.jobNumber)}
-          updateId={updateId}
-          setUpdateid={setUpdateid}
           isDisabled={isDisabled}
           title="Are you sure?"
           message={`Do you really want to delete JobId ${project.jobNumber} ? This action cannot be undone.`}

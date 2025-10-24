@@ -46,8 +46,8 @@ const ProjectTable = ({ data }) => {
   }, []);
 
   return (
-    <div className="relative col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
-      <div ref={printRef} className="overflow-x-auto">
+    <div className="relative col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200 p-4">
+      <div ref={printRef} className="overflow-x-auto hidden md:block">
         <table className="w-full table-fixed">
           <thead>
             <tr className="bg-gradient-to-r from-purple-600 via-pink-500 to-pink-600 text-white shadow-lg">
@@ -91,9 +91,7 @@ const ProjectTable = ({ data }) => {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full  text-xs font-bold border shadow-sm transition whitespace-nowrap`}
-                  >
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border shadow-sm transition whitespace-nowrap">
                     <span className="ml-2">{project.status}</span>
                   </span>
                 </td>
@@ -126,7 +124,75 @@ const ProjectTable = ({ data }) => {
         </table>
       </div>
 
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100">
+      <div className="md:hidden space-y-4">
+        {data.map((project, indx) => (
+          <div
+            key={indx}
+            className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-xl rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
+          >
+            <div className="flex items-start justify-between mb-2 gap-2">
+              <div
+                className="text-lg font-bold text-indigo-700 truncate max-w-[70%]"
+                title={project.projectName}
+              >
+                {project.projectName}
+              </div>
+              <span
+                onClick={() => handleUpdate(project?._id)}
+                className="inline-flex items-center px-2 py-1 border border-indigo-200 rounded-full font-semibold text-xs bg-gradient-to-r from-indigo-100 to-blue-100 text-indigo-600 shadow"
+                title={project.status}
+              >
+                {project.status}
+              </span>
+            </div>
+
+            <div className="pt-2 text-blue-800 text-base">
+              <div className="mb-3">
+                <span className="font-medium text-indigo-600">Job ID:</span>
+                <span
+                  className="ml-2 underline decoration-indigo-400 decoration-2 font-semibold cursor-pointer bg-indigo-100 text-indigo-900 px-2 py-1 rounded-md shadow-sm transition-colors hover:bg-indigo-200"
+                  onClick={() => {
+                    setOpen(true);
+                    setSelectedProject(project);
+                  }}
+                  title="Click to view details"
+                >
+                  {project.jobNumber}
+                </span>
+              </div>
+
+              <div className="mb-2">
+                <span className="font-medium text-indigo-600">Delivery:</span>
+                <span className="ml-2">{project.deleveryDate}</span>
+              </div>
+              <div className="mb-2">
+                <span className="font-medium text-indigo-600">Visit:</span>
+                <span className="ml-2">{project.visitDate}</span>
+              </div>
+            </div>
+
+            {/* <div className="pt-2">
+              <div className="font-medium text-indigo-600 mb-1">Engineers:</div>
+              <div className="flex flex-wrap gap-1">
+                {(project.engineerName.length > 0
+                  ? project.engineerName
+                  : ["—"]
+                ).map((name, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-block px-2 py-0.5 rounded-lg bg-indigo-100 text-indigo-700 text-xs font-semibold shadow"
+                    title={name}
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
+            </div> */}
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
           <p className="text-base text-blue-700">
             Showing{" "}

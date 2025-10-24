@@ -139,6 +139,21 @@ const AdminDashboard = () => {
     setActiveCard(val);
   };
 
+  const sidebarRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sidebarRef, setSidebarOpen]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-100">
       {open && <NotificationForm formRef={formRef} setOpen={setOpen} />}
@@ -214,6 +229,7 @@ const AdminDashboard = () => {
       </header>
 
       <aside
+        ref={sidebarRef}
         className={`fixed inset-y-0 left-0 bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
@@ -228,7 +244,10 @@ const AdminDashboard = () => {
                 <>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("zero")}
+                      onClick={() => {
+                        handleActiveBar("zero");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -242,7 +261,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("one")}
+                      onClick={() => {
+                        handleActiveBar("one");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "one" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -253,7 +275,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("two")}
+                      onClick={() => {
+                        handleActiveBar("two");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -266,7 +291,10 @@ const AdminDashboard = () => {
                     <>
                       <li>
                         <div
-                          onClick={() => handleActiveBar("sixteen")}
+                          onClick={() => {
+                            handleActiveBar("sixteen");
+                            setSidebarOpen(false);
+                          }}
                           className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                             activeCard === "sixteen"
                               ? "bg-indigo-50 rounded-md"
@@ -284,7 +312,10 @@ const AdminDashboard = () => {
                     <>
                       <li>
                         <div
-                          onClick={() => handleActiveBar("seventeen")}
+                          onClick={() => {
+                            handleActiveBar("seventeen");
+                            setSidebarOpen(false);
+                          }}
                           className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                             activeCard === "seventeen"
                               ? "bg-indigo-50 rounded-md"
@@ -299,7 +330,10 @@ const AdminDashboard = () => {
                   )}
                   <li>
                     <div
-                      onClick={() => handleActiveBar("ninteen")}
+                      onClick={() => {
+                        handleActiveBar("ninteen");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "ninteen"
                           ? "bg-indigo-50 rounded-md"
@@ -312,7 +346,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("three")}
+                      onClick={() => {
+                        handleActiveBar("three");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -323,7 +360,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("eighteen")}
+                      onClick={() => {
+                        handleActiveBar("eighteen");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "eighteen"
                           ? "bg-indigo-50 rounded-md"
@@ -336,7 +376,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("twenty")}
+                      onClick={() => {
+                        handleActiveBar("twenty");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "twenty" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -347,7 +390,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("ten")}
+                      onClick={() => {
+                        handleActiveBar("ten");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -358,7 +404,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("twelve")}
+                      onClick={() => {
+                        handleActiveBar("twelve");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "twelve" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -369,7 +418,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("eleven")}
+                      onClick={() => {
+                        handleActiveBar("eleven");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "eleven" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -380,7 +432,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("four")}
+                      onClick={() => {
+                        handleActiveBar("four");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "four" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -391,7 +446,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("five")}
+                      onClick={() => {
+                        handleActiveBar("five");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "five" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -402,7 +460,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("thirteen")}
+                      onClick={() => {
+                        handleActiveBar("thirteen");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "thirteen"
                           ? "bg-indigo-50 rounded-md"
@@ -415,7 +476,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <a
-                      onClick={() => handleActiveBar("seven")}
+                      onClick={() => {
+                        handleActiveBar("seven");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -426,7 +490,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <a
-                      onClick={() => handleActiveBar("six")}
+                      onClick={() => {
+                        handleActiveBar("six");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -437,7 +504,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <div
-                      onClick={() => handleActiveBar("fifteen")}
+                      onClick={() => {
+                        handleActiveBar("fifteen");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "fifteen"
                           ? "bg-indigo-50 rounded-md"
@@ -452,7 +522,10 @@ const AdminDashboard = () => {
               )}
               <li>
                 <div
-                  onClick={() => handleActiveBar("fourteen")}
+                  onClick={() => {
+                    handleActiveBar("fourteen");
+                    setSidebarOpen(false);
+                  }}
                   className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                     activeCard === "fourteen" ? "bg-indigo-50 rounded-md" : ""
                   }`}
@@ -465,7 +538,10 @@ const AdminDashboard = () => {
                 <>
                   <li>
                     <a
-                      onClick={() => handleActiveBar("eight")}
+                      onClick={() => {
+                        handleActiveBar("eight");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
                       }`}
@@ -476,7 +552,10 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <a
-                      onClick={() => handleActiveBar("nine")}
+                      onClick={() => {
+                        handleActiveBar("nine");
+                        setSidebarOpen(false);
+                      }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
                         activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
                       }`}

@@ -21,6 +21,7 @@ const app = express();
 const corsOptions = {
   origin: [
     `${process.env.FRONT_PORT}`,
+    "http://localhost:5173",
     "https://warlike-unlubricative-angelo.ngrok-free.dev",
     "https://7b9nkwkz-5173.inc1.devtunnels.ms",
   ],
