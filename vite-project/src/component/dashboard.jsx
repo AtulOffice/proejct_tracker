@@ -218,6 +218,7 @@ const AdminDashboard = () => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
+        {/* d */}
         <div className="flex flex-col h-full">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
             <h2 className="text-xl font-bold text-indigo-600">{""}</h2>
