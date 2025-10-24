@@ -94,7 +94,7 @@ const ProjectTableAll = ({ data }) => {
             </tbody>
           </table>
         </div>
-      </div>d
+      </div>
       <div className="md:hidden space-y-4 p-2">
         {data.map((project, indx) => (
           <div
