@@ -18,21 +18,12 @@ import {
 import OneCard from "./add.Project";
 import ZeroCard from "./overview.Project";
 import TwoCard from "./all.Project";
-import ThreeCard from "./upcoming.Project";
-import FourCard from "./pending.Project";
-import SixCard from "./services.Project";
-import FiveCard from "./complte.Project";
 import SevenCard from "./urgent.Project";
-import EightCard from "./cancelled.Project";
 import NineCard from "./workStatus.Project";
-import TenCard from "./running.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { fetchProjectOveriew, logout } from "../utils/apiCall";
-import ElevenCard from "./latest.project";
-import ProjectsNoRequest from "./norequest";
-import ProjectsClosed from "./closed.Project";
 import ProjectDev from "./project.Devlopment";
 import ProjectsDevlopment from "./development.projects";
 import ProejctACtions from "./ProejctACtions.projects";
@@ -42,6 +33,7 @@ import NotificationForm from "./notification";
 import { useRef } from "react";
 import WeeklyAssignmentForm from "./weeklyData";
 import ProjectList from "./projectList";
+import { ProjectCatogary } from "./ProjectCatogary.jsx";
 
 const AdminDashboard = () => {
   const formRef = useRef(null);
@@ -61,7 +53,6 @@ const AdminDashboard = () => {
   const [activeCard, setActiveCard] = useState(() => {
     return sessionStorage.getItem("activeCard") || "zero";
   });
-  // const [activeCard, setActiveCard] = useState("eighteen");
 
   useEffect(() => {
     if (!userLoading && user?.role === "design" && activeCard !== "fourteen") {
@@ -95,27 +86,59 @@ const AdminDashboard = () => {
       case "two":
         return <TwoCard />;
       case "three":
-        return <ThreeCard />;
+        return (
+          <ProjectCatogary
+            key={"upcomming"}
+            status="upcoming"
+            title="UPCOMING"
+          />
+        );
       case "four":
-        return <FourCard />;
+        return (
+          <ProjectCatogary key={"pending"} status="pending" title="PENDING" />
+        );
       case "five":
-        return <FiveCard />;
+        return (
+          <ProjectCatogary
+            key={"completed"}
+            status="completed"
+            title="COMPLETED"
+          />
+        );
       case "six":
-        return <SixCard />;
+        return (
+          <ProjectCatogary key={"SERVICE"} soType="SERVICE" title="SERVICE" />
+        );
       case "seven":
         return <SevenCard />;
       case "eight":
-        return <EightCard />;
+        return (
+          <ProjectCatogary
+            key={"cancelled"}
+            status="cancelled"
+            title="CANCELLED"
+          />
+        );
       case "nine":
         return <NineCard />;
       case "ten":
-        return <TenCard />;
+        return (
+          <ProjectCatogary key={"running"} status="running" title="RUNNING" />
+        );
       case "eleven":
-        return <ElevenCard />;
+        return <ProjectCatogary key={"latest"} title="LATEST" />;
       case "twelve":
-        return <ProjectsNoRequest />;
+        return (
+          <ProjectCatogary
+            key={"no request"}
+            status="no request"
+            title="NO REQUEST"
+          />
+        );
       case "thirteen":
-        return <ProjectsClosed />;
+        return (
+          <ProjectCatogary key={"closed"} status="closed" title="CLOSED" />
+        );
       case "fourteen":
         return <ProjectDev />;
       case "fifteen":

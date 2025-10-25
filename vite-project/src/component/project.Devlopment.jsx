@@ -3,7 +3,7 @@ import { useAppContext } from "../appContex";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import FilterCompo from "../utils/filtercompo.dev";
-import CardStatus from "./Card.Status";
+import CardStatus from "./Card.Development";
 import { fetchProjectsDevprogress } from "../utils/apiCall.Dev";
 
 const ProjectDev = () => {

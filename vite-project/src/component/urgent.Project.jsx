@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../appContex";
-import CardAll from "./Card.All";
+import CardAll from "./Card.Projects";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";

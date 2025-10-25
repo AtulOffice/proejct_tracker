@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "../appContex";
-import CardAll from "./Card.All";
+import CardAll from "./Card.Projects";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
-import { fetchProjectsCatogary } from "../utils/apiCall";
+import {
+  fetchProjectsCatogary,
+  fetchProjectslatest,
+  fetchProjectsSotype,
+} from "../utils/apiCall";
 
-const ProjectsComplete = () => {
+export const ProjectCatogary = ({ status, title, soType }) => {
   const { setToggle, toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -28,42 +32,35 @@ const ProjectsComplete = () => {
 
   useEffect(() => {
     const getProjects = async () => {
-      if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
-        try {
-          const val = await fetchProjectsCatogary({
+      try {
+        let val;
+        if (soType) {
+          val = await fetchProjectsSotype({
             page: currentPage,
-            search: debounceSearchTerm,
-            status: "completed",
+            search: debounceSearchTerm || "",
+            soType,
           });
-          if (val?.data) {
-            setData(val.data);
-          }
-          if (val?.hashMore !== undefined) {
-            setHasMore(val.hashMore);
-          }
-        } catch (error) {
-          console.error("Failed to fetch by jobNumber", error);
+        } else if (status) {
+          val = await fetchProjectsCatogary({
+            page: currentPage,
+            search: debounceSearchTerm || "",
+            status,
+          });
+        } else {
+          val = await fetchProjectslatest({
+            page: currentPage,
+            search: debounceSearchTerm || "",
+          });
         }
-      } else {
-        const val = await fetchProjectsCatogary({
-          page: currentPage,
-          search: "",
-          status: "completed",
-        });
-        if (val?.data) {
-          setData(val.data);
-        }
-        if (val?.hashMore !== undefined) {
-          setHasMore(val.hashMore);
-        }
-        try {
-        } catch (error) {
-          console.error("Failed to fetch paginated data", error);
-        }
+        if (val?.data) setData(val.data);
+        if (val?.hashMore !== undefined) setHasMore(val.hashMore);
+      } catch (error) {
+        console.error("Failed to fetch projects", error);
       }
     };
+
     getProjects();
-  }, [currentPage, toggle, debounceSearchTerm]);
+  }, [currentPage, toggle, debounceSearchTerm, soType, status]);
 
   useEffect(() => {
     if (!data) return;
@@ -114,7 +111,7 @@ const ProjectsComplete = () => {
 
   return (
     <div className="max-w-8xl min-h-[140vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
-      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">COMPLETED</h2>
+      <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">{title}</h2>
 
       <FilterCompo
         setToggle={setToggle}
@@ -203,5 +200,3 @@ const ProjectsComplete = () => {
     </div>
   );
 };
-
-export default ProjectsComplete;
