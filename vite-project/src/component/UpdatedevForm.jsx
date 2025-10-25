@@ -131,7 +131,7 @@ const ProjectdevlopForm = () => {
                 <h2 className="text-xl font-bold text-white">DOCUMENTS</h2>
               </div>
               <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="hidden md:grid grid-cols-6 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
                   <div className="flex items-center">✅ Required Status</div>
                   <div className="flex items-center">📅 Start Date</div>
@@ -291,7 +291,7 @@ const ProjectdevlopForm = () => {
               </div>
             </div>
             <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+              <div className="hidden md:grid grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                 <div className="flex items-center">📋 Task Title</div>
                 <div className="flex items-center">📅 Start Date</div>
                 <div className="flex items-center">🏁 End Date</div>
@@ -408,7 +408,7 @@ const ProjectdevlopForm = () => {
                 <h2 className="text-xl font-bold text-white">LOGIC</h2>
               </div>
               <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="hidden md:grid grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
                   <div className="flex items-center">📅 Start Date</div>
                   <div className="flex items-center">🏁 End Date</div>
@@ -532,7 +532,7 @@ const ProjectdevlopForm = () => {
                 </div>
               </div>
               <div className="p-6">
-                <div className="flex justify-between items-center mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="hidden md:flex justify-between items-center mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
                   <div className="flex items-center">🎯 Status</div>
                 </div>

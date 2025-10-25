@@ -33,6 +33,15 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
     pending: { name: "Pending", cnt: 0, color: "#a78bfa" },
     urgent: { name: "Urgent", cnt: 0, color: "#f87171" },
   };
+  const gradients = [
+    "from-orange-100 via-pink-100 to-rose-100 hover:from-orange-200 hover:via-pink-200 hover:to-rose-200",
+    "from-cyan-100 via-blue-100 to-indigo-100 hover:from-cyan-200 hover:via-blue-200 hover:to-indigo-200",
+    "from-emerald-100 via-teal-100 to-cyan-100 hover:from-emerald-200 hover:via-teal-200 hover:to-cyan-200",
+    "from-violet-100 via-purple-100 to-fuchsia-100 hover:from-violet-200 hover:via-purple-200 hover:to-fuchsia-200",
+    "from-amber-100 via-yellow-100 to-orange-100 hover:from-amber-200  hover:via-yellow-200 hover:to-orange-200",
+    "from-pink-100 via-purple-100 to-blue-100 hover:from-pink-200 hover:via-purple-200 hover:to-blue-200",
+  ];
+
   return (
     <div className={`transition-all duration-300 lg:ml-64 pt-16 min-h-screen`}>
       <div className="p-6">
@@ -44,8 +53,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
             Welcome back, {user ? user?.username.toUpperCase() : "Admin!"}
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           {(overvew?.statusGroups
             ? Object.entries(overvew.statusGroups)
             : Object.entries(statusGroups)
@@ -82,20 +90,6 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
                 </div>
 
                 <div className="mt-3 flex items-center">
-                  <div className="flex items-center text-green-500 font-medium">
-                    <svg
-                      className="w-4 h-4 mr-1"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
                   <span className="ml-auto bg-indigo-50 text-indigo-700 text-xs font-medium px-2.5 py-0.5 rounded-full">
                     {item.name}
                   </span>
@@ -104,6 +98,36 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
             ))}
         </div>
 
+        <div className="md:hidden grid grid-cols-2 gap-4 mb-8">
+          {Object.entries(overvew?.statusGroups || statusGroups)
+            .filter(
+              ([key]) => !["closed", "cancelled", "complete"].includes(key)
+            )
+            .map(([key, item], index) => (
+              <div
+                key={key}
+                onClick={() => setActiveCard(router[item.name])}
+                className={`relative overflow-hidden p-4 rounded-2xl border border-indigo-100 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col justify-between bg-gradient-to-br ${
+                  gradients[index % gradients.length]
+                }`}
+              >
+                <div className="absolute inset-0 rounded-2xl bg-white/20 backdrop-blur-sm" />
+
+                <div className="relative z-10">
+                  <p className="text-[11px] text-gray-600">TOTAL</p>
+                  <h3 className="text-xl font-bold text-gray-800">
+                    {item.cnt}
+                  </h3>
+                </div>
+
+                <div className="relative z-10 mt-2 flex justify-between items-center">
+                  <span className="text-xs font-medium text-indigo-700 bg-white/60 px-2.5 py-1 rounded-full">
+                    {item.name}
+                  </span>
+                </div>
+              </div>
+            ))}
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
             <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
@@ -176,7 +200,6 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
             </div>
           </div>
         </div>
-
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             LATEST PROJECT MODIFICATIONS
@@ -242,7 +265,6 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
             </table>
           </div>
         </div>
-        
       </div>
     </div>
   );
