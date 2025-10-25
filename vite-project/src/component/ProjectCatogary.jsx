@@ -6,12 +6,14 @@ import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import FilterCompodev from "../utils/filtercompo.dev";
+import CardWorkStatus from "./CardWorkStatus";
 import {
   fetchProjects,
   fetchProjectsCatogary,
   fetchProjectslatest,
   fetchProjectsSotype,
   fetchProjectsUrgent,
+  fetchWorkStatus,
 } from "../utils/apiCall";
 import dayjs from "dayjs";
 import { fetchProjectsDevprogress } from "../utils/apiCall.Dev";
@@ -24,6 +26,7 @@ export const ProjectCatogary = ({
   urgentMode,
   all,
   devStatus,
+  workStatus,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -76,6 +79,11 @@ export const ProjectCatogary = ({
             page: currentPage,
             search: debounceSearchTerm || "",
             statusFilter: statusFilter,
+          });
+        } else if (workStatus) {
+          val = await fetchWorkStatus({
+            page: currentPage,
+            search: debounceSearchTerm || "",
           });
         } else {
           val = await fetchProjectslatest({
@@ -183,6 +191,13 @@ export const ProjectCatogary = ({
                 indx={indx}
                 setToggleDev={setToggleDev}
                 userRole={user?.role === "admin"}
+              />
+            ) : workStatus ? (
+              <CardWorkStatus
+                key={indx}
+                project={project}
+                indx={indx}
+                setToggle={setToggle}
               />
             ) : (
               <CardAll

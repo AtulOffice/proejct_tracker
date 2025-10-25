@@ -17,7 +17,6 @@ import {
 } from "react-icons/ri";
 import OneCard from "./add.Project";
 import ZeroCard from "./overview.Project";
-import NineCard from "./workStatus.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -119,7 +118,13 @@ const AdminDashboard = () => {
           />
         );
       case "nine":
-        return <NineCard />;
+        return (
+          <ProjectCatogary
+            key={"work status"}
+            workStatus={true}
+            title="WORK STATUS"
+          />
+        );
       case "ten":
         return (
           <ProjectCatogary key={"running"} status="running" title="RUNNING" />
