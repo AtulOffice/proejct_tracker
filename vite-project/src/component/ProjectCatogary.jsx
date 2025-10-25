@@ -6,6 +6,7 @@ import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import {
+  fetchProjects,
   fetchProjectsCatogary,
   fetchProjectslatest,
   fetchProjectsSotype,
@@ -13,7 +14,7 @@ import {
 } from "../utils/apiCall";
 import dayjs from "dayjs";
 
-export const ProjectCatogary = ({ status, title, soType, urgentMode }) => {
+export const ProjectCatogary = ({ status, title, soType, urgentMode, all }) => {
   const { setToggle, toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -54,6 +55,11 @@ export const ProjectCatogary = ({ status, title, soType, urgentMode }) => {
             search: debounceSearchTerm || "",
             status: "running",
             startDate: dayjs(Date.now()).format("YYYY-MM-DD"),
+          });
+        } else if (all) {
+          val = await fetchProjects({
+            page: currentPage,
+            search: debounceSearchTerm || "",
           });
         } else {
           val = await fetchProjectslatest({
@@ -98,10 +104,6 @@ export const ProjectCatogary = ({ status, title, soType, urgentMode }) => {
     };
   }, []);
 
-  if (!data) {
-    return <LoadingSkeltionAll />;
-  }
-
   const handleNextPage = () => {
     if (hasMore) {
       setCurrentPage((prev) => prev + 1);
@@ -117,6 +119,10 @@ export const ProjectCatogary = ({ status, title, soType, urgentMode }) => {
       setTimeFilter("all");
     }
   };
+
+  if (!data) {
+    return <LoadingSkeltionAll />;
+  }
 
   return (
     <div className="max-w-8xl min-h-[140vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
@@ -142,12 +148,12 @@ export const ProjectCatogary = ({ status, title, soType, urgentMode }) => {
           filteredProjects.map((project, indx) => (
             <CardAll
               key={indx}
-              deleteButton={false}
               project={project}
               indx={indx}
-              id={project._id}
               setToggle={setToggle}
-              shortFlag={false}
+              {...(all
+                ? { cardAllflag: false }
+                : { shortFlag: false, deleteButton: false })}
             />
           ))
         ) : (

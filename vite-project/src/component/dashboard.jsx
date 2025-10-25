@@ -17,7 +17,6 @@ import {
 } from "react-icons/ri";
 import OneCard from "./add.Project";
 import ZeroCard from "./overview.Project";
-import TwoCard from "./all.Project";
 import NineCard from "./workStatus.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
@@ -83,7 +82,7 @@ const AdminDashboard = () => {
       case "one":
         return <OneCard />;
       case "two":
-        return <TwoCard />;
+        return <ProjectCatogary key={"all"} all={true} title="ALL" />;
       case "three":
         return (
           <ProjectCatogary
