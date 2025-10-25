@@ -9,9 +9,11 @@ import {
   fetchProjectsCatogary,
   fetchProjectslatest,
   fetchProjectsSotype,
+  fetchProjectsUrgent,
 } from "../utils/apiCall";
+import dayjs from "dayjs";
 
-export const ProjectCatogary = ({ status, title, soType }) => {
+export const ProjectCatogary = ({ status, title, soType, urgentMode }) => {
   const { setToggle, toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -46,6 +48,13 @@ export const ProjectCatogary = ({ status, title, soType }) => {
             search: debounceSearchTerm || "",
             status,
           });
+        } else if (urgentMode) {
+          val = await fetchProjectsUrgent({
+            page: currentPage,
+            search: debounceSearchTerm || "",
+            status: "running",
+            startDate: dayjs(Date.now()).format("YYYY-MM-DD"),
+          });
         } else {
           val = await fetchProjectslatest({
             page: currentPage,
@@ -60,7 +69,7 @@ export const ProjectCatogary = ({ status, title, soType }) => {
     };
 
     getProjects();
-  }, [currentPage, toggle, debounceSearchTerm, soType, status]);
+  }, [currentPage, toggle, debounceSearchTerm, soType, status, urgentMode]);
 
   useEffect(() => {
     if (!data) return;

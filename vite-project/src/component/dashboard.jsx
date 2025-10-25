@@ -18,7 +18,6 @@ import {
 import OneCard from "./add.Project";
 import ZeroCard from "./overview.Project";
 import TwoCard from "./all.Project";
-import SevenCard from "./urgent.Project";
 import NineCard from "./workStatus.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
@@ -110,7 +109,9 @@ const AdminDashboard = () => {
           <ProjectCatogary key={"SERVICE"} soType="SERVICE" title="SERVICE" />
         );
       case "seven":
-        return <SevenCard />;
+        return (
+          <ProjectCatogary key={"urgent"} urgentMode={true} title="URGENT" />
+        );
       case "eight":
         return (
           <ProjectCatogary
