@@ -23,6 +23,7 @@ export const forgotUser = async (req, res) => {
       used: false,
     };
     await user.save();
+    console.log("this api called forget user");
     await sendMail({
       to: email,
       subject: "Password Reset OTP",
