@@ -31,16 +31,16 @@ export const refreshTokenMiddleware = (req, res, next) => {
 
       res.cookie("refreshToken", newRefreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+        secure: process.env.NODE_ENV !== "development",
+        sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
     }
     const newAccessToken = createAccessToken(decodedRefresh.user);
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
       maxAge: 10 * 60 * 1000,
     });
     req.cookies.accessToken = newAccessToken;
