@@ -180,7 +180,6 @@ const WeeklyAssignmentForm = () => {
                   </button>
                 }
                 dateFormat="MM-dd-yyyy"
-                minDate={new Date()}
                 filterDate={(date) => date.getDay() === 1}
               />
             </div>
