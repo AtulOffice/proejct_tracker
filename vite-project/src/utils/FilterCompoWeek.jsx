@@ -1,6 +1,6 @@
 import React from "react";
 
-const FilterCompo = ({ searchTerm, setSearchTerm, setToggle }) => {
+const FilterCompoWeek = ({ searchTerm, setSearchTerm, setToggle }) => {
   return (
     <>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
@@ -65,4 +65,4 @@ const FilterCompo = ({ searchTerm, setSearchTerm, setToggle }) => {
   );
 };
 
-export default FilterCompo;
+export default FilterCompoWeek;

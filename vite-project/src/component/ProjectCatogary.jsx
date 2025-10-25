@@ -5,6 +5,7 @@ import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
+import FilterCompodev from "../utils/filtercompo.dev";
 import {
   fetchProjects,
   fetchProjectsCatogary,
@@ -13,18 +14,27 @@ import {
   fetchProjectsUrgent,
 } from "../utils/apiCall";
 import dayjs from "dayjs";
+import { fetchProjectsDevprogress } from "../utils/apiCall.Dev";
+import CardStatus from "./Card.Development";
 
-export const ProjectCatogary = ({ status, title, soType, urgentMode, all }) => {
-  const { setToggle, toggle } = useAppContext();
+export const ProjectCatogary = ({
+  status,
+  title,
+  soType,
+  urgentMode,
+  all,
+  devStatus,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [hasMore, setHasMore] = useState(true);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
   const [data, setData] = useState();
-
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
+  const { setToggle, toggle, setToggleDev, user } = useAppContext();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -60,6 +70,12 @@ export const ProjectCatogary = ({ status, title, soType, urgentMode, all }) => {
           val = await fetchProjects({
             page: currentPage,
             search: debounceSearchTerm || "",
+          });
+        } else if (devStatus) {
+          val = await fetchProjectsDevprogress({
+            page: currentPage,
+            search: debounceSearchTerm || "",
+            statusFilter: statusFilter,
           });
         } else {
           val = await fetchProjectslatest({
@@ -128,34 +144,58 @@ export const ProjectCatogary = ({ status, title, soType, urgentMode, all }) => {
     <div className="max-w-8xl min-h-[140vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">{title}</h2>
 
-      <FilterCompo
-        setToggle={setToggle}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        timeFilter={timeFilter}
-        setTimeFilter={setTimeFilter}
-        filteredProjects={filteredProjects}
-        isFilterOpen={isFilterOpen}
-        setIsFilterOpen={setIsFilterOpen}
-        filterRef={filterRef}
-      />
+      {devStatus ? (
+        <FilterCompodev
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          filteredProjects={filteredProjects}
+          setToggle={setToggleDev}
+          isFilterOpen={isFilterOpen}
+          setIsFilterOpen={setIsFilterOpen}
+          filterRef={filterRef}
+        />
+      ) : (
+        <FilterCompo
+          setToggle={setToggle}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          timeFilter={timeFilter}
+          setTimeFilter={setTimeFilter}
+          filteredProjects={filteredProjects}
+          isFilterOpen={isFilterOpen}
+          setIsFilterOpen={setIsFilterOpen}
+          filterRef={filterRef}
+        />
+      )}
 
       <div
         layout="true"
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       >
         {filteredProjects.length > 0 ? (
-          filteredProjects.map((project, indx) => (
-            <CardAll
-              key={indx}
-              project={project}
-              indx={indx}
-              setToggle={setToggle}
-              {...(all
-                ? { cardAllflag: false }
-                : { shortFlag: false, deleteButton: false })}
-            />
-          ))
+          filteredProjects.map((project, indx) =>
+            devStatus ? (
+              <CardStatus
+                key={indx}
+                project={project}
+                indx={indx}
+                setToggleDev={setToggleDev}
+                userRole={user?.role === "admin"}
+              />
+            ) : (
+              <CardAll
+                key={indx}
+                project={project}
+                indx={indx}
+                setToggle={setToggle}
+                {...(all
+                  ? { cardAllflag: false }
+                  : { shortFlag: false, deleteButton: false })}
+              />
+            )
+          )
         ) : (
           <Notfound />
         )}

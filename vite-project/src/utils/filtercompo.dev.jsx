@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const FilterCompo = ({
+const FilterCompodev = ({
   searchTerm,
   setSearchTerm,
   statusFilter,
@@ -168,4 +168,4 @@ const FilterCompo = ({
   );
 };
 
-export default FilterCompo;
+export default FilterCompodev;

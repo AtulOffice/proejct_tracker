@@ -22,7 +22,6 @@ import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { fetchProjectOveriew, logout } from "../utils/apiCall";
-import ProjectDev from "./project.Devlopment";
 import ProjectsDevlopment from "./development.projects";
 import ProejctACtions from "./ProejctACtions.projects";
 import EngineerAction from "./EngineerActions.projects";
@@ -140,7 +139,13 @@ const AdminDashboard = () => {
           <ProjectCatogary key={"closed"} status="closed" title="CLOSED" />
         );
       case "fourteen":
-        return <ProjectDev />;
+        return (
+          <ProjectCatogary
+            key={"devstatus"}
+            devStatus={true}
+            title="PROJECT DEVLOPMENT STATUS"
+          />
+        );
       case "fifteen":
         return <ProjectsDevlopment />;
       case "sixteen":

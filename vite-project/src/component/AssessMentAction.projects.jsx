@@ -60,7 +60,7 @@ const WeekRecordList = () => {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
-      
+
       <div
         layout="true"
         className="w-full min-h-[80vh] h-full overflow-auto sm:overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200 p-2 sm:p-0"
