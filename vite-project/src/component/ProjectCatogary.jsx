@@ -10,6 +10,7 @@ import CardWorkStatus from "./CardWorkStatus";
 import {
   fetchProjects,
   fetchProjectsCatogary,
+  fetchProjectsDevelopment,
   fetchProjectslatest,
   fetchProjectsSotype,
   fetchProjectsUrgent,
@@ -27,6 +28,7 @@ export const ProjectCatogary = ({
   all,
   devStatus,
   workStatus,
+  devFilter,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -85,6 +87,12 @@ export const ProjectCatogary = ({
             page: currentPage,
             search: debounceSearchTerm || "",
           });
+        } else if (devFilter) {
+          val = await fetchProjectsDevelopment({
+            page: currentPage,
+            search: debounceSearchTerm || "",
+            devstatus: true,
+          });
         } else {
           val = await fetchProjectslatest({
             page: currentPage,
@@ -99,7 +107,16 @@ export const ProjectCatogary = ({
     };
 
     getProjects();
-  }, [currentPage, toggle, debounceSearchTerm, soType, status, urgentMode]);
+  }, [
+    currentPage,
+    toggle,
+    debounceSearchTerm,
+    soType,
+    status,
+    urgentMode,
+    workStatus,
+    devStatus,
+  ]);
 
   useEffect(() => {
     if (!data) return;
@@ -205,6 +222,7 @@ export const ProjectCatogary = ({
                 project={project}
                 indx={indx}
                 setToggle={setToggle}
+                {...(devFilter && { cardAllflag: true, editoptionflag: false })}
                 {...(all
                   ? { cardAllflag: false }
                   : { shortFlag: false, deleteButton: false })}

@@ -21,7 +21,6 @@ import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { fetchProjectOveriew, logout } from "../utils/apiCall";
-import ProjectsDevlopment from "./development.projects";
 import ProejctACtions from "./ProejctACtions.projects";
 import EngineerAction from "./EngineerActions.projects";
 import AssessMentAction from "./AssessMentAction.projects.jsx";
@@ -152,7 +151,13 @@ const AdminDashboard = () => {
           />
         );
       case "fifteen":
-        return <ProjectsDevlopment />;
+        return (
+          <ProjectCatogary
+            key={"devFilter"}
+            devFilter={true}
+            title="PROJECT INCLUDED DEVLOPMENT"
+          />
+        );
       case "sixteen":
         return <ProejctACtions />;
       case "seventeen":
