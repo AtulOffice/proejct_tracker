@@ -268,7 +268,7 @@ const AdminDashboard = () => {
 
       <aside
         ref={sidebarRef}
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${
+        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -276,7 +276,7 @@ const AdminDashboard = () => {
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
             <h2 className="text-xl font-bold text-indigo-600">{""}</h2>
           </div>
-          <nav className="flex-1 px-4 py-6 overflow-y-auto">
+          <nav className="flex-1 px-4 py-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
             <ul className="space-y-2">
               {(user?.role === "reception" || user?.role == "admin") && (
                 <>
