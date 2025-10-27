@@ -1,8 +1,13 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { fetchbyProjectbyId } from "../utils/apiCall";
+import toast from "react-hot-toast";
+import ProjectDetailsPopup from "../utils/cardPopup";
 
 const ProjectTableAll = ({ data }) => {
+  const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const navigate = useNavigate();
   const handleUpdate = (id) => {
     try {
@@ -14,8 +19,29 @@ const ProjectTableAll = ({ data }) => {
     }
   };
 
+  const hadleOpenPopup = async (id) => {
+    try {
+      const val = await fetchbyProjectbyId(id);
+      if (val) {
+        setSelectedProjectForPopup(val);
+      }
+      toast.success("Project details fetched successfully");
+    } catch (error) {
+      if (error?.response) {
+        toast.error(error.response.data.message || "An error occurred");
+      }
+      console.log("Error fetching project details:", error);
+    }
+  };
+
   return (
     <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+      {selectedProjectForPopup && (
+        <ProjectDetailsPopup
+          project={selectedProjectForPopup}
+          onClose={() => setSelectedProjectForPopup(null)}
+        />
+      )}
       <div className="overflow-x-auto hidden md:block">
         <div className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
@@ -55,6 +81,7 @@ const ProjectTableAll = ({ data }) => {
                     <div
                       className="text-base font-medium text-blue-900 truncate"
                       title={project.projectName}
+                      onClick={() => hadleOpenPopup(project?._id)}
                     >
                       {project.projectName}
                     </div>
@@ -95,9 +122,11 @@ const ProjectTableAll = ({ data }) => {
           </table>
         </div>
       </div>
+
       <div className="md:hidden space-y-4 p-2">
         {data.map((project, indx) => (
           <div
+            onClick={() => hadleOpenPopup(project?._id)}
             key={indx}
             className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-lg rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
           >

@@ -287,6 +287,19 @@ export const fetchSearchData = async ({ jobNumber }) => {
   }
 };
 
+export const fetchbyProjectbyId = async (id) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/fetch/${id}`,
+      { withCredentials: true }
+    );
+    return response.data.data;
+  } catch (e) {
+    console.log(e.message);
+    throw e;
+  }
+};
+
 export const UserCall = async () => {
   try {
     const response = await axios.get(
