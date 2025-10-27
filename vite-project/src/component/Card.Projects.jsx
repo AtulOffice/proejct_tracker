@@ -191,9 +191,11 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           </div>
 
           <ul className="text-sm text-gray-700 space-y-1 mb-4 truncate">
-            <li>
-              <strong>Client:</strong> {project?.client}
-            </li>
+            <div className="hidden sm:block">
+              <li>
+                <strong>Client:</strong> {project?.client}
+              </li>
+            </div>
 
             {project?.endUser && shortFlag && (
               <li>
