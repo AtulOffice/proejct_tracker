@@ -154,9 +154,9 @@ const CardStatus = ({
     setIsdisabled(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projectDev/existancedevelop/${
+        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${
           project.JobNumber
-        }`,
+        }?check=${true}`,
         { withCredentials: true }
       );
       const exists = res?.data?.exists;

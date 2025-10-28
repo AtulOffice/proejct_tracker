@@ -1,7 +1,6 @@
 import express from "express";
 import {
   allProjectStatusfetch,
-  isProjectExistFun,
   isProjectstatusExistFun,
   PaginationStatus,
   projectDevStatusDelete,
@@ -27,12 +26,6 @@ ProjectDevRouter.get(
   refreshTokenMiddleware,
   authenticate,
   isProjectstatusExistFun
-);
-ProjectDevRouter.get(
-  "/existancedevelop/:JobNumber",
-  refreshTokenMiddleware,
-  authenticate,
-  isProjectExistFun
 );
 ProjectDevRouter.get(
   "/fetch",

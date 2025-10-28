@@ -62,6 +62,7 @@ export const ProjectStatusSave = async (req, res) => {
 export const isProjectstatusExistFun = async (req, res) => {
   try {
     const { JobNumber } = req.params;
+    const check = req.query.check === "true";
 
     if (!JobNumber) {
       return res
@@ -70,19 +71,28 @@ export const isProjectstatusExistFun = async (req, res) => {
     }
 
     const projectStatus = await ProjectDevModel.findOne({ JobNumber });
-    const projectStatusParent = await ProjectModel.findOne({
+    const projectParent = await ProjectModel.findOne({
       jobNumber: JobNumber,
       Development: { $in: ["OFFICE", "SITE"] },
     });
 
-    if (!projectStatus || !projectStatusParent) {
-      return res.status(200).json({
-        success: false,
-        exists: false,
-        message: "Project not under development",
-      });
+    if (check) {
+      if (!projectStatus) {
+        return res.status(200).json({
+          success: false,
+          exists: false,
+          message: "Project not under development",
+        });
+      }
+    } else {
+      if (!projectStatus || !projectParent) {
+        return res.status(200).json({
+          success: false,
+          exists: false,
+          message: "Project not under development or not valid",
+        });
+      }
     }
-
     return res.status(200).json({
       success: true,
       exists: true,
@@ -90,42 +100,11 @@ export const isProjectstatusExistFun = async (req, res) => {
     });
   } catch (error) {
     console.error("Error checking project existence:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-};
-
-export const isProjectExistFun = async (req, res) => {
-  try {
-    const { JobNumber } = req.params;
-
-    if (!JobNumber) {
-      return res
-        .status(400)
-        .json({ success: false, message: "JobNumber is required" });
-    }
-
-    const projectStatus = await ProjectModel.findOne({
-      jobNumber: JobNumber,
-      Development: { $in: ["OFFICE", "SITE"] },
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
     });
-
-    if (!projectStatus) {
-      return res.status(200).json({
-        success: false,
-        exists: false,
-        message: "Project not under development",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      exists: true,
-      message: "Project under development",
-      developmentStatus: projectStatus.Development,
-    });
-  } catch (error) {
-    console.error("Error checking project existence:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
