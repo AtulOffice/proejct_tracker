@@ -5,12 +5,14 @@ import PopupConfirmation from "./PopuP.Page";
 import axios from "axios";
 import toast from "react-hot-toast";
 import WorkStatusModal from "./workPopup";
+import { useAppContext } from "../appContex";
 
-const CardWorkStatus = ({ project, indx, setToggle }) => {
+const CardWorkStatus = ({ project, indx }) => {
   const [deleteFlag, setDeleteflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
   const [updateId, setUpdateid] = useState();
   const [details, setDetails] = useState(false);
+  const { setToggle } = useAppContext();
 
   const formattedDate = (date) => {
     const validDate = new Date(date);

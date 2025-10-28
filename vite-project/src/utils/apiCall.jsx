@@ -58,12 +58,12 @@ export const fetchProjectsCatogary = async ({ status, page, search }) => {
   }
 };
 
-export const fetchProjectsDevelopment = async ({ devstatus, page, search }) => {
+export const fetchProjectsDevelopment = async ({ page, search }) => {
   try {
     const res = await axios.get(
       `${
         import.meta.env.VITE_API_URL
-      }/devlopment/pagination?page=${page}&limit=15&devstatus=${devstatus}&search=${search}`,
+      }/devlopment/pagination?page=${page}&limit=15&search=${search}`,
       { withCredentials: true }
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
@@ -376,8 +376,7 @@ export const updateProject = async (project, navigate) => {
       }`,
       { withCredentials: true }
     );
-    const exists = res?.data?.exists === true;
-    if (exists) {
+    if (res?.data?.exists) {
       toast.error("Project development status already exists");
     } else {
       navigate(`/develop/${project.jobNumber}`, {

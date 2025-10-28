@@ -8,7 +8,7 @@ import { fetchProjectsUrgentAction, fetfchProejctAll } from "../utils/apiCall";
 import ProjectTableAll from "./projectListTable";
 
 const ProjectList = () => {
-  const { setToggle, toggle } = useAppContext();
+  const { toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -74,7 +74,6 @@ const ProjectList = () => {
   return (
     <div className="max-w-8xl h-full lg:ml-60 px-6 py-20 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <FilterCompo
-        setToggle={setToggle}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         timeFilter={timeFilter}

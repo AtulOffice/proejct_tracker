@@ -1,7 +1,6 @@
-
 export const formval = {
   projectName: "",
-  Development: false,
+  Development: "N/A",
   engineerName: "",
   entityType: "SI DELHI",
   finalMomnumber: "",
@@ -485,6 +484,20 @@ export const InputConst = [
     placeholder: "Enter the value",
     required: true,
   },
+  {
+    htmlFor: "Development",
+    title: "Development Status",
+    type: "select",
+    id: "Development",
+    name: "Development",
+    required: true,
+    options: [
+      { value: "N/A", label: "N/A" },
+      { value: "SITE", label: "ON SITE" },
+      { value: "OFFICE", label: "IN OFFICE" },
+    ],
+    readOnly: false,
+  },
 ];
 
 export const UpdateConst = [
@@ -561,6 +574,7 @@ export const UpdateConst = [
     name: "jobNumber",
     placeholder: "Enter the job number",
     required: true,
+    readOnly: true,
   },
   {
     htmlFor: "orderNumber",
@@ -895,6 +909,20 @@ export const UpdateConst = [
     name: "daysspendsite",
     placeholder: "Enter the value",
     required: false,
+  },
+  {
+    htmlFor: "Development",
+    title: "Development Status",
+    type: "select",
+    id: "Development",
+    name: "Development",
+    required: true,
+    options: [
+      { value: "N/A", label: "N/A" },
+      { value: "SITE", label: "ON SITE" },
+      { value: "OFFICE", label: "IN OFFICE" },
+    ],
+    readOnly: false,
   },
 ];
 

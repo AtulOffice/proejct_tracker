@@ -7,7 +7,6 @@ const FilterCompodev = ({
   statusFilter,
   setStatusFilter,
   filteredProjects,
-  setToggle,
   isFilterOpen,
   setIsFilterOpen,
   filterRef,

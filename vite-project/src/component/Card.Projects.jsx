@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 import FootBarAll from "../utils/FootBarAll";
 import { deleteProject, updateProject } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
+import { useAppContext } from "../appContex";
 
 const CardAll = ({
   project,
   indx,
-  setToggle,
   deleteButton = true,
   shortFlag = true,
   cardAllflag = false,
@@ -22,6 +22,7 @@ const CardAll = ({
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [isDisabled, setIsdisabled] = useState(false);
   const navigate = useNavigate();
+  const { setToggle } = useAppContext();
 
   const handleDelete = async (id, jobNumber) => {
     setIsdisabled(true);
@@ -96,7 +97,18 @@ const CardAll = ({
         onClick={() =>
           window.innerWidth < 640 && setSelectedProjectForPopup(project)
         }
-        className="group relative rounded-xl bg-gradient-to-br from-pink-200 via-purple-50 to-indigo-50 border border-transparent hover:border-indigo-300 shadow-md hover:shadow-xl transition-all duration-300 "
+        className={`group relative rounded-xl border border-transparent shadow-md hover:shadow-xl transition-all duration-300
+    bg-gradient-to-br
+    ${
+      !editoptionflag
+        ? project.Development === "SITE"
+          ? "from-green-200 via-lime-100 to-emerald-100 hover:border-green-300"
+          : project.Development === "OFFICE"
+          ? "from-sky-200 via-blue-100 to-indigo-100 hover:border-blue-300"
+          : "from-gray-200 via-gray-50 to-zinc-100 hover:border-gray-300"
+        : "from-pink-200 via-purple-50 to-indigo-50 hover:border-indigo-300"
+    }
+  `}
       >
         <div className="p-6">
           <div className="flex items-center justify-between w-full">
@@ -206,18 +218,22 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             <li>
               <strong>Location:</strong> {project?.location || "Not mentioned"}
             </li>
-            <li>
-              <strong>Order Value (lacs):</strong> ₹
-              {project?.bill ?? "Not mentioned"}
-            </li>
-            <li>
-              <strong>Pending Bill (lacs):</strong> ₹
-              {project?.dueBill ?? "Not mentioned"}
-            </li>
-            <li>
-              <strong>Billing Status:</strong>{" "}
-              {project?.billStatus ?? "Not provided"}
-            </li>
+            {editoptionflag && (
+              <>
+                <li>
+                  <strong>Order Value (lacs):</strong> ₹
+                  {project?.bill ?? "Not mentioned"}
+                </li>
+                <li>
+                  <strong>Pending Bill (lacs):</strong> ₹
+                  {project?.dueBill ?? "Not mentioned"}
+                </li>
+                <li>
+                  <strong>Billing Status:</strong>{" "}
+                  {project?.billStatus ?? "Not provided"}
+                </li>
+              </>
+            )}
             <li>
               <strong>Order Date:</strong>{" "}
               {project?.orderDate
@@ -236,10 +252,12 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             </li>
 
             <div className="hidden sm:block">
-              <li>
-                <strong>Expense Scope:</strong>{" "}
-                {project?.expenseScope || "Not provided"}
-              </li>
+              {editoptionflag && (
+                <li>
+                  <strong>Expense Scope:</strong>{" "}
+                  {project?.expenseScope || "Not provided"}
+                </li>
+              )}
               <li>
                 <strong>Engineer Assigned:</strong>{" "}
                 {project?.engineerName?.length > 0
@@ -250,64 +268,72 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                 <strong>Work Scope:</strong>{" "}
                 {project?.workScope || "Not mentioned"}
               </li>
-              <li>
-                <strong>Request Date:</strong>{" "}
-                {project?.requestDate
-                  ? new Date(project.requestDate).toLocaleDateString()
-                  : "-"}
-              </li>
-              <li>
-                <strong>Visit Start Date:</strong>{" "}
-                {project?.visitDate
-                  ? new Date(project.visitDate).toLocaleDateString()
-                  : "-"}
-              </li>
-              <li>
-                <strong>Start Checklist:</strong>{" "}
-                {project?.StartChecklist || "Not mentioned"}
-              </li>
-              <li>
-                <strong>Visit End Date:</strong>{" "}
-                {project?.visitendDate
-                  ? new Date(project.visitendDate).toLocaleDateString()
-                  : "-"}
-              </li>
-              <li>
-                <strong>End Checklist:</strong>{" "}
-                {project?.EndChecklist || "Not mentioned"}
-              </li>
-              <li>
-                <strong>MOM SR No:</strong>{" "}
-                {project?.momsrNo?.length > 0 ? project.momsrNo : "-"}
-              </li>
-              <li className="flex items-center space-x-2">
-                <strong className="text-gray-700">Development:</strong>
-                <span
-                  className={`px-2 py-1 text-xs font-semibold rounded-md ${
-                    project?.Development
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {project?.Development ? "YES" : "NO"}
-                </span>
-              </li>
-              <li>
-                <strong>MOM Dates:</strong>{" "}
-                {project?.momDate?.length > 0
-                  ? project.momDate
-                      .map((dateStr) => new Date(dateStr).toLocaleDateString())
-                      .join(", ")
-                  : "-"}
-              </li>
-              <li>
-                <strong>Backup Submission:</strong>{" "}
-                {project?.BackupSubmission || "Not mentioned"}
-              </li>
-              <li>
-                <strong>Expense Submission:</strong>{" "}
-                {project?.ExpensSubmission || "Not mentioned"}
-              </li>
+
+              {editoptionflag && (
+                <>
+                  <li>
+                    <strong>Request Date:</strong>{" "}
+                    {project?.requestDate
+                      ? new Date(project.requestDate).toLocaleDateString()
+                      : "-"}
+                  </li>
+
+                  <li>
+                    <strong>Visit Start Date:</strong>{" "}
+                    {project?.visitDate
+                      ? new Date(project.visitDate).toLocaleDateString()
+                      : "-"}
+                  </li>
+                  <li>
+                    <strong>Start Checklist:</strong>{" "}
+                    {project?.StartChecklist || "Not mentioned"}
+                  </li>
+                  <li>
+                    <strong>Visit End Date:</strong>{" "}
+                    {project?.visitendDate
+                      ? new Date(project.visitendDate).toLocaleDateString()
+                      : "-"}
+                  </li>
+                  <li>
+                    <strong>End Checklist:</strong>{" "}
+                    {project?.EndChecklist || "Not mentioned"}
+                  </li>
+                  <li>
+                    <strong>MOM SR No:</strong>{" "}
+                    {project?.momsrNo?.length > 0 ? project.momsrNo : "-"}
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <strong className="text-gray-700">Development:</strong>
+                    <span
+                      className={`px-2 py-1 text-xs font-semibold rounded-md ${
+                        project?.Development == "OFFICE"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {project?.Development}
+                    </span>
+                  </li>
+                  <li>
+                    <strong>MOM Dates:</strong>{" "}
+                    {project?.momDate?.length > 0
+                      ? project.momDate
+                          .map((dateStr) =>
+                            new Date(dateStr).toLocaleDateString()
+                          )
+                          .join(", ")
+                      : "-"}
+                  </li>
+                  <li>
+                    <strong>Backup Submission:</strong>{" "}
+                    {project?.BackupSubmission || "Not mentioned"}
+                  </li>
+                  <li>
+                    <strong>Expense Submission:</strong>{" "}
+                    {project?.ExpensSubmission || "Not mentioned"}
+                  </li>
+                </>
+              )}
               {shortFlag && (
                 <>
                   <li>
@@ -340,22 +366,26 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                   ? new Date(project.endDate).toLocaleDateString()
                   : "-"}
               </li>
-              <li>
-                <strong>Final MOM Number:</strong>{" "}
-                {project?.finalMomnumber || "Not received"}
-              </li>
-              <li>
-                <strong>Actual Start Date:</strong>{" "}
-                {project?.actualStartDate
-                  ? new Date(project.actualStartDate).toLocaleDateString()
-                  : "-"}
-              </li>
-              <li>
-                <strong>Actual End Date:</strong>{" "}
-                {project?.actualEndDate
-                  ? new Date(project.actualEndDate).toLocaleDateString()
-                  : "-"}
-              </li>
+              {editoptionflag && (
+                <>
+                  <li>
+                    <strong>Final MOM Number:</strong>{" "}
+                    {project?.finalMomnumber || "Not received"}
+                  </li>
+                  <li>
+                    <strong>Actual Start Date:</strong>{" "}
+                    {project?.actualStartDate
+                      ? new Date(project.actualStartDate).toLocaleDateString()
+                      : "-"}
+                  </li>
+                  <li>
+                    <strong>Actual End Date:</strong>{" "}
+                    {project?.actualEndDate
+                      ? new Date(project.actualEndDate).toLocaleDateString()
+                      : "-"}
+                  </li>
+                </>
+              )}
             </div>
           </ul>
 

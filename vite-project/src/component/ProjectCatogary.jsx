@@ -39,7 +39,7 @@ export const ProjectCatogary = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState();
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
-  const { setToggle, toggle, setToggleDev, user } = useAppContext();
+  const { toggle, user } = useAppContext();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -91,7 +91,6 @@ export const ProjectCatogary = ({
           val = await fetchProjectsDevelopment({
             page: currentPage,
             search: debounceSearchTerm || "",
-            devstatus: true,
           });
         } else {
           val = await fetchProjectslatest({
@@ -176,14 +175,12 @@ export const ProjectCatogary = ({
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
           filteredProjects={filteredProjects}
-          setToggle={setToggleDev}
           isFilterOpen={isFilterOpen}
           setIsFilterOpen={setIsFilterOpen}
           filterRef={filterRef}
         />
       ) : (
         <FilterCompo
-          setToggle={setToggle}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           timeFilter={timeFilter}
@@ -206,22 +203,15 @@ export const ProjectCatogary = ({
                 key={indx}
                 project={project}
                 indx={indx}
-                setToggleDev={setToggleDev}
                 userRole={user?.role === "admin"}
               />
             ) : workStatus ? (
-              <CardWorkStatus
-                key={indx}
-                project={project}
-                indx={indx}
-                setToggle={setToggle}
-              />
+              <CardWorkStatus key={indx} project={project} indx={indx} />
             ) : (
               <CardAll
                 key={indx}
                 project={project}
                 indx={indx}
-                setToggle={setToggle}
                 {...(devFilter && { cardAllflag: true, editoptionflag: false })}
                 {...(all
                   ? { cardAllflag: false }

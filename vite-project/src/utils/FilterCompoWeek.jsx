@@ -1,6 +1,8 @@
 import React from "react";
+import { useAppContext } from "../appContex";
 
-const FilterCompoWeek = ({ searchTerm, setSearchTerm, setToggle }) => {
+const FilterCompoWeek = ({ searchTerm, setSearchTerm }) => {
+  const { setToggle } = useAppContext();
   return (
     <>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">

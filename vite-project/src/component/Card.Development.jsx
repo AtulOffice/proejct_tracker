@@ -117,7 +117,6 @@ const ProgressBar = ({
 const CardStatus = ({
   project,
   indx,
-  setToggleDev,
   deleteButton = true,
   shortFlag = true,
   userRole = false,
@@ -126,7 +125,7 @@ const CardStatus = ({
   const [updateFlag, setUpdateflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
   const navigate = useNavigate();
-  const { setToggle } = useAppContext();
+  const { setToggle, setToggleDev } = useAppContext();
 
   const handleDelete = async (id, jobNumber) => {
     setIsdisabled(true);
@@ -138,6 +137,7 @@ const CardStatus = ({
       toast.success(`JobId ${jobNumber} deleted successfully`);
       setDeleteflag(false);
       setToggleDev((prev) => !prev);
+      setToggle((prev) => !prev);
     } catch (e) {
       if (e.response) {
         toast.error(e.response?.data?.message);

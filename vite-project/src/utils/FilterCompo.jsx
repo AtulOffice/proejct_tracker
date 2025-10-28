@@ -7,7 +7,6 @@ const FilterCompo = ({
   timeFilter,
   setTimeFilter,
   filteredProjects,
-  setToggle,
   isFilterOpen,
   setIsFilterOpen,
   filterRef,

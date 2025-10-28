@@ -54,7 +54,6 @@ const ProjectdevlopForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const isValid = validateFormData(formData);
     if (!isValid) {
       toast.error("⚠️ Please check the form: some fields are missing");
@@ -64,7 +63,7 @@ const ProjectdevlopForm = () => {
     try {
       const data = mapFrontendToBackend(formData, true, jobnumber);
 
-      const response = await statusSave(data);
+      const response = await statusSave({data});
       if (response?.success) {
         setFormData({
           document: { rows: documentRows() },

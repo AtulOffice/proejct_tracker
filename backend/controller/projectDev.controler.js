@@ -16,6 +16,7 @@ export const ProjectStatusSave = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Project not found" });
     }
+
     const existingProject = await ProjectDevModel.findOne({ JobNumber });
     if (existingProject) {
       return res
@@ -25,6 +26,11 @@ export const ProjectStatusSave = async (req, res) => {
     const savestatus = await ProjectDevModel.create({
       ...data,
       projectName: isprojectExist.projectName,
+      ProjectDetails: isprojectExist._id,
+      devScope: isprojectExist.Development,
+    });
+    await ProjectModel.findByIdAndUpdate(isprojectExist._id, {
+      DevelopmentDetials: savestatus._id,
     });
     res
       .status(200)
@@ -71,12 +77,16 @@ export const isProjectstatusExistFun = async (req, res) => {
     }
 
     const projectStatus = await ProjectDevModel.findOne({ JobNumber });
+    const projectStatusParent = await ProjectModel.findOne({
+      jobNumber: JobNumber,
+      Development: { $in: ["OFFICE", "SITE"] },
+    });
 
-    if (!projectStatus) {
+    if (!projectStatus || !projectStatusParent) {
       return res.status(200).json({
         success: false,
         exists: false,
-        message: "Project status does not exist",
+        message: "Project not under development",
       });
     }
 
@@ -103,8 +113,9 @@ export const isProjectExistFun = async (req, res) => {
 
     const projectStatus = await ProjectModel.findOne({
       jobNumber: JobNumber,
-      Development: true,
+      Development: { $in: ["OFFICE", "SITE"] },
     });
+
     if (!projectStatus) {
       return res.status(200).json({
         success: false,
@@ -116,7 +127,8 @@ export const isProjectExistFun = async (req, res) => {
     return res.status(200).json({
       success: true,
       exists: true,
-      message: "project under development",
+      message: "Project under development",
+      developmentStatus: projectStatus.Development,
     });
   } catch (error) {
     console.error("Error checking project existence:", error);

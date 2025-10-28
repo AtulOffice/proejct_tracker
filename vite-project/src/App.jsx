@@ -12,14 +12,9 @@ import { UserCall } from "./utils/apiCall.jsx";
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useAppContext();
   if (!userLoading) {
-    return user?.username ? (
-      children
-    ) : (
-      <Navigate to="/login" />
-    );
+    return user?.username ? children : <Navigate to="/login" />;
   }
 };
-
 
 const AppRoutes = () => {
   const { setUser, setUserLoading } = useAppContext();
@@ -40,7 +35,6 @@ const AppRoutes = () => {
     fetchUser();
   }, []);
 
-
   return (
     <Routes>
       <Route
@@ -59,7 +53,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/engineer" element={<InputForm />} />  
+      <Route path="/engineer" element={<InputForm />} />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/update/:id"

@@ -383,28 +383,39 @@ export const Pagination = async (req, res) => {
 export const PaginationDevStatus = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const Development = req.query.devstatus || "";
-  const search = req.query.search || "";
+  const search = req.query.search?.trim() || "";
+  const devStatusRaw = req.query.devStatus || "";
 
   const skip = (page - 1) * limit;
 
   try {
     let data = [];
     let total = 0;
+    const devStatus = devStatusRaw.toUpperCase();
+    const filter = {};
 
+    if (devStatus && ["OFFICE", "SITE", "N/A"].includes(devStatus)) {
+      filter.Development = devStatus;
+    } else if (!devStatus) {
+      filter.Development = { $in: ["OFFICE", "SITE"] };
+    }
     if (!search) {
-      const filter = Development ? { Development } : {};
-
       data = await ProjectModel.find(filter)
         .sort({ updatedAt: -1, createdAt: -1 })
         .skip(skip)
         .limit(limit);
+
       total = await ProjectModel.countDocuments(filter);
     } else {
       const result = await ProjectModel.findOne({
         jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
       });
-      if (result?.Development) {
+
+      if (
+        result &&
+        ((devStatus && result.Development === devStatus) ||
+          (!devStatus && ["OFFICE", "SITE"].includes(result.Development)))
+      ) {
         data = [result];
         total = 1;
       } else {
@@ -412,15 +423,17 @@ export const PaginationDevStatus = async (req, res) => {
         total = 0;
       }
     }
+
     return res.json({
       success: true,
-      message: "data fetched successfully",
+      message: "Data fetched successfully",
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
       data,
     });
   } catch (err) {
+    console.error("PaginationDevStatus error:", err);
     res.status(500).json({ error: "Server error" });
   }
 };

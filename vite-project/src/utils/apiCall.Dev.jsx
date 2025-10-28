@@ -35,7 +35,7 @@ export const fetchProjectsDevprogress = async ({
   }
 };
 
-export const statusSave = async (data) => {
+export const statusSave = async ({data}) => {
   try {
     const res = await axios.post(
       `${import.meta.env.VITE_API_URL}/projectDev/save`,

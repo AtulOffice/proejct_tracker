@@ -46,6 +46,18 @@ const DocsTaskSchema = new mongoose.Schema(
 
 const ProjectDevSchema = new mongoose.Schema(
   {
+    devScope: {
+      type: String,
+      default: "N/A",
+    },
+    ProjectDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
+    },
+    PlanDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProjectDevPlans",
+    },
     status: {
       type: Boolean,
       default: false,

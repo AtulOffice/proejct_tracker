@@ -183,18 +183,12 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
           handleChange={handleChange}
         />
       )}
-      <div className="flex items-center justify-between p-2 bg-gradient-to-r from-white to-gray-100 rounded-2xl w-64 h-20 shadow-sm">
-        <label className="text-sm font-semibold text-gray-100">
-          Project Development
-        </label>
-        <input
-          type="checkbox"
-          name="Development"
-          checked={formData.Development}
-          onChange={handleChange}
-          className="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 cursor-pointer"
-        />
-      </div>
+
+      <SelectField
+        {...InputConst[40]}
+        value={formData.Development}
+        handleChange={handleChange}
+      />
 
       <SelectField
         {...InputConst[26]}

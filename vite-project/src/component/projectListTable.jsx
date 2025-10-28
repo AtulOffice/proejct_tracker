@@ -79,7 +79,7 @@ const ProjectTableAll = ({ data }) => {
                 >
                   <td className="px-6 py-4">
                     <div
-                      className="text-base font-medium text-blue-900 truncate"
+                      className="text-base font-medium hover:cursor-pointer text-blue-900 truncate"
                       title={project.projectName}
                       onClick={() => hadleOpenPopup(project?._id)}
                     >

@@ -88,6 +88,7 @@ const ProjectdevlopForm = () => {
         });
       }
       setToggleDev((prev) => !prev);
+      
       response?.success && nevigate(`/page`);
       toast.success(" Data updated successfully!");
     } catch (error) {
@@ -119,7 +120,6 @@ const ProjectdevlopForm = () => {
         </div>
 
         <form onSubmit={handleUpdate} className="space-y-8">
-          {/* DOCUMENT SECTION */}
           {user?.role === "admin" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
