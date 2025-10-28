@@ -59,31 +59,6 @@ export const ProjectStatusSave = async (req, res) => {
   }
 };
 
-export const ProjectStatusfetchbyJobnumber = async (req, res) => {
-  try {
-    const { JobNumber } = req.params;
-    if (!JobNumber) {
-      return res
-        .status(400)
-        .json({ success: false, message: "JobNumber is required" });
-    }
-    const projectStatus = await ProjectDevModel.findOne({ JobNumber });
-    if (!projectStatus) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Project status not found" });
-    }
-    res.status(200).json({
-      success: true,
-      message: "Project status fetched successfully",
-      data: projectStatus,
-    });
-  } catch (error) {
-    console.error("Error fetching project status:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-};
-
 export const isProjectstatusExistFun = async (req, res) => {
   try {
     const { JobNumber } = req.params;
@@ -154,7 +129,7 @@ export const isProjectExistFun = async (req, res) => {
   }
 };
 
-export const ProjectStatusfetchbyId = async (req, res) => {
+export const ProjectStatusfetchbyJobId = async (req, res) => {
   try {
     const { JobNumber } = req.params;
     if (!JobNumber) {
@@ -302,39 +277,6 @@ export const projectDevStatusUpdate = async (req, res) => {
       status: true,
       message: "Project status updated successfully",
       updatedProject,
-    });
-  } catch (error) {
-    console.error("Error updating project status:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-};
-
-export const projectDevStatusUpdatebyId = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updateData = req.body;
-    if (!updateData) {
-      return res.status(400).json({
-        success: false,
-        message: "JobNumber and update data are required",
-      });
-    }
-    const updatedProject = await ProjectDevModel.findOneAndUpdate(
-      { _id: id },
-      updateData,
-      { new: true }
-    );
-
-    if (!updatedProject) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Project status not found" });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Project status updated successfully",
-      data: updatedProject,
     });
   } catch (error) {
     console.error("Error updating project status:", error);

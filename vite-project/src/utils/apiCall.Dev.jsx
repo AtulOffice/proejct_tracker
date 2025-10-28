@@ -55,7 +55,9 @@ export const statusSave = async ({ data }) => {
 export const getStatus = async (Jobnumber) => {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/projectDev/fetchbyid/${Jobnumber}`,
+      `${
+        import.meta.env.VITE_API_URL
+      }/projectDev/fetchbyjobnumber/${Jobnumber}`,
       { withCredentials: true }
     );
     return res.data;
@@ -65,23 +67,5 @@ export const getStatus = async (Jobnumber) => {
       throw err.response;
     }
     throw new Error("Failed to fetch project status");
-  }
-};
-
-export const statusupdate = async (data, id) => {
-  try {
-    console.log;
-    const res = await axios.put(
-      `${import.meta.env.VITE_API_URL}/projectDev/updatebyid/${id}`,
-      data,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    if (err.response) {
-      throw err.response;
-    }
-    console.error("Failed to save project status:", err);
-    throw new Error("Failed to save project status");
   }
 };

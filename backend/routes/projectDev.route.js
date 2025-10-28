@@ -6,11 +6,9 @@ import {
   PaginationStatus,
   projectDevStatusDelete,
   projectDevStatusUpdate,
-  projectDevStatusUpdatebyId,
-  ProjectStatusfetchbyId,
-  ProjectStatusfetchbyJobnumber,
   ProjectStatusSave,
   PaginationStatusprog,
+  ProjectStatusfetchbyJobId,
 } from "../controller/projectDev.controler.js";
 import { authenticate } from "../middlware/authaticate.js";
 import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
@@ -22,7 +20,7 @@ ProjectDevRouter.get(
   "/fetchbyjobnumber/:JobNumber",
   refreshTokenMiddleware,
   authenticate,
-  ProjectStatusfetchbyJobnumber
+  ProjectStatusfetchbyJobId
 );
 ProjectDevRouter.get(
   "/existancecheck/:JobNumber",
@@ -60,18 +58,7 @@ ProjectDevRouter.put(
   authenticate,
   projectDevStatusUpdate
 );
-ProjectDevRouter.put(
-  "/updatebyid/:id",
-  refreshTokenMiddleware,
-  authenticate,
-  projectDevStatusUpdatebyId
-);
-ProjectDevRouter.get(
-  "/fetchbyid/:JobNumber",
-  refreshTokenMiddleware,
-  authenticate,
-  ProjectStatusfetchbyId
-);
+
 ProjectDevRouter.delete(
   "/delete/:id",
   refreshTokenMiddleware,
