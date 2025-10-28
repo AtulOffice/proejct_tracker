@@ -67,7 +67,7 @@ ProjectDevRouter.put(
   projectDevStatusUpdatebyId
 );
 ProjectDevRouter.get(
-  "/fetchbyid/:id",
+  "/fetchbyid/:JobNumber",
   refreshTokenMiddleware,
   authenticate,
   ProjectStatusfetchbyId

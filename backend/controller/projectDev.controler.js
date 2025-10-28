@@ -10,34 +10,52 @@ export const ProjectStatusSave = async (req, res) => {
         .status(400)
         .json({ success: false, message: "JobNumber is required" });
     }
-    const isprojectExist = await ProjectModel.findOne({ jobNumber: JobNumber });
-    if (!isprojectExist) {
+    const existingProject = await ProjectModel.findOne({
+      jobNumber: JobNumber,
+    });
+    if (!existingProject) {
       return res
         .status(404)
         .json({ success: false, message: "Project not found" });
     }
 
-    const existingProject = await ProjectDevModel.findOne({ JobNumber });
-    if (existingProject) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Project status already exists" });
+    let projectDev = await ProjectDevModel.findOne({ JobNumber });
+
+    if (projectDev) {
+      projectDev = await ProjectDevModel.findByIdAndUpdate(
+        projectDev._id,
+        {
+          ...data,
+          projectName: existingProject.projectName,
+          ProjectDetails: existingProject._id,
+          devScope: existingProject.Development,
+        },
+        { new: true }
+      );
+    } else {
+      projectDev = await ProjectDevModel.create({
+        ...data,
+        projectName: existingProject.projectName,
+        ProjectDetails: existingProject._id,
+        devScope: existingProject.Development,
+      });
     }
-    const savestatus = await ProjectDevModel.create({
-      ...data,
-      projectName: isprojectExist.projectName,
-      ProjectDetails: isprojectExist._id,
-      devScope: isprojectExist.Development,
+
+    await ProjectModel.findByIdAndUpdate(existingProject._id, {
+      DevelopmentDetails: projectDev._id,
     });
-    await ProjectModel.findByIdAndUpdate(isprojectExist._id, {
-      DevelopmentDetials: savestatus._id,
+    res.status(200).json({
+      success: true,
+      message: "Project status saved successfully",
+      data: projectDev,
     });
-    res
-      .status(200)
-      .json({ success: true, message: "Project status saved successfully" });
   } catch (error) {
     console.error("Error saving project status:", error);
-    res.status(500).json({ success: false, message: "Some thing went wrong" });
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
 
@@ -138,13 +156,15 @@ export const isProjectExistFun = async (req, res) => {
 
 export const ProjectStatusfetchbyId = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
+    const { JobNumber } = req.params;
+    if (!JobNumber) {
       return res
         .status(400)
-        .json({ success: false, message: "id is required" });
+        .json({ success: false, message: "JobNumber is required" });
     }
-    const projectStatus = await ProjectDevModel.findOne({ _id: id });
+    const projectStatus = await ProjectDevModel.findOne({
+      JobNumber,
+    });
     if (!projectStatus) {
       return res
         .status(404)

@@ -172,11 +172,11 @@ const CardStatus = ({
     }
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = (project) => {
     setIsdisabled(true);
     try {
-      navigate(`/develop/update/${id}`, {
-        state: { fromButton: true, recordId: id },
+      navigate(`/develop/${project?.JobNumber}`, {
+        state: { fromButton: true, recordId: project._id },
       });
       setUpdateflag(false);
     } catch (error) {
@@ -203,7 +203,7 @@ const CardStatus = ({
           setCancelflag={setUpdateflag}
           isDisabled={isDisabled}
           deleteFlag={false}
-          handleConfirm={() => handleUpdate(project._id)}
+          handleConfirm={() => handleUpdate(project)}
           title="Are you sure?"
           message={`Do you really want to update details in Job Id ${project.JobNumber}`}
           btnval="Update"
@@ -331,7 +331,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
               icon="🎨"
             />
             <ProgressBar
-              label="Development Progress"
+              label="Scada Progress"
               value={project.summary?.scada || 0}
               colorFrom="from-emerald-500"
               colorVia="via-teal-400"

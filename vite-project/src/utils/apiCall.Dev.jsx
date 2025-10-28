@@ -35,7 +35,7 @@ export const fetchProjectsDevprogress = async ({
   }
 };
 
-export const statusSave = async ({data}) => {
+export const statusSave = async ({ data }) => {
   try {
     const res = await axios.post(
       `${import.meta.env.VITE_API_URL}/projectDev/save`,
@@ -52,10 +52,10 @@ export const statusSave = async ({data}) => {
   }
 };
 
-export const getStatus = async (id) => {
+export const getStatus = async (Jobnumber) => {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/projectDev/fetchbyid/${id}`,
+      `${import.meta.env.VITE_API_URL}/projectDev/fetchbyid/${Jobnumber}`,
       { withCredentials: true }
     );
     return res.data;
@@ -70,7 +70,7 @@ export const getStatus = async (id) => {
 
 export const statusupdate = async (data, id) => {
   try {
-    console.log
+    console.log;
     const res = await axios.put(
       `${import.meta.env.VITE_API_URL}/projectDev/updatebyid/${id}`,
       data,
