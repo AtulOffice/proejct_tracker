@@ -1,13 +1,30 @@
 import mongoose from "mongoose";
 
+const resetOtpSchema = new mongoose.Schema(
+  {
+    hash: { type: String },
+    expires: { type: Date },
+    used: { type: Boolean, default: false },
+  },
+  { _id: false }
+);
+
 const engineerSchema = new mongoose.Schema(
   {
     name: { type: String, trim: true, required: true },
-    email: { type: String, trim: true, default: "" },
+    email: { type: String, required: true, unique: true, trim: true },
     phone: { type: String, trim: true, default: "" },
-    manualOverride: { type: Boolean, default: false },
+    empId: { type: String, trim: true, unique: true },
+    password: { type: String, required: true, select: false },
+    role: { type: String, enum: ["ENGINEER"], default: "ENGINEER" },
+    active: { type: Boolean, default: true },
+    lastLogin: { type: Date },
     isAssigned: { type: Boolean, default: false },
-    empId: { type: String, trim: true },
+    manualOverride: { type: Boolean, default: false },
+    resetOtp: {
+      type: resetOtpSchema,
+      select: false,
+    },
     assignments: [
       {
         projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
@@ -16,7 +33,7 @@ const engineerSchema = new mongoose.Schema(
           type: String,
           trim: true,
         },
-        assignedAt: { type: Date, default: Date.now() },
+        assignedAt: { type: Date, default: Date.now },
         endTime: { type: Date },
         durationDays: { type: Number, default: 0 },
       },

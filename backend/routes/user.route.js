@@ -12,7 +12,9 @@ import { authenticate } from "../middlware/authaticate.js";
 import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
 import { authorizeRole } from "../middlware/authRole.js";
 
+
 export const userRouter = express.Router();
+
 
 userRouter.post("/createuser", CreateUser);
 userRouter.post("/loginuser", loginUser);

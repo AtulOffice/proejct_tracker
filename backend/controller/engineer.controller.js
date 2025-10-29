@@ -96,11 +96,12 @@ export const saveEngineerRecord = async (req, res) => {
       });
     }
 
-    // if (!email) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "Email is required" });
-    // }
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
+    }
+
     if (email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
@@ -167,11 +168,11 @@ export const editEngineerRecord = async (req, res) => {
       });
     }
 
-    // if (!email) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "Email is required" });
-    // }
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
+    }
     if (email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {

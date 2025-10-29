@@ -11,6 +11,7 @@ import { ProjectDevRouter } from "./routes/projectDev.route.js";
 import cookieParser from "cookie-parser";
 import { EngineerRouter } from "./routes/engineer.route.js";
 import { DevRecordRouter } from "./routes/devlopment.Record.router.js";
+import { PlannigRouter } from "./routes/dev.Planning.route.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -47,6 +48,8 @@ app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/projectDev", ProjectDevRouter);
 app.use("/api/v1/engineer", EngineerRouter);
 app.use("/api/v1/devrecord", DevRecordRouter);
+app.use("/api/v1/planningDev", PlannigRouter);
+
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   console.log(`server is linsten on port ${port}`);

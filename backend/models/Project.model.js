@@ -209,6 +209,14 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "ProjectDev",
     },
+    StartChecklisttId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "StartChecklists",
+    },
+    EndChecklisttId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "EndChecklists",
+    },
     PlanDetails: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ProjectDevPlans",

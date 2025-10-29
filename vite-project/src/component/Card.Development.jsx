@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { MdDeleteOutline, MdEdit } from "react-icons/md";
+import { MdDeleteOutline, MdEdit, MdLocationOn } from "react-icons/md";
 import PopupConfirmation from "./PopuP.Page";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../appContex";
+import { LuNotepadText } from "react-icons/lu";
+import ProjectTimelineForm from "../utils/project.Planning";
+import { FaHome } from "react-icons/fa";
 
-const Description = ({ one, two, three }) => {
+const Description = ({ one, two, three, HomeStatus }) => {
   return (
     <div className="flex flex-wrap gap-2">
       <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
@@ -18,6 +21,17 @@ const Description = ({ one, two, three }) => {
       </span>
       <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
         {three} days
+      </span>
+      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200 flex items-center gap-1">
+        {HomeStatus === "OFFICE" ? (
+          <>
+            <FaHome className="text-indigo-700 text-sm" />
+          </>
+        ) : (
+          <>
+            <MdLocationOn className="text-pink-700 text-sm" />
+          </>
+        )}
       </span>
     </div>
   );
@@ -118,12 +132,12 @@ const CardStatus = ({
   project,
   indx,
   deleteButton = true,
-  shortFlag = true,
   userRole = false,
 }) => {
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { setToggle, setToggleDev } = useAppContext();
 
@@ -188,6 +202,13 @@ const CardStatus = ({
 
   return (
     <div>
+      {open && (
+        <ProjectTimelineForm
+          project={project}
+          open={open}
+          onClose={() => setOpen(false)}
+        />
+      )}
       {deleteFlag && (
         <PopupConfirmation
           setCancelflag={setDeleteflag}
@@ -254,6 +275,25 @@ focus:outline-none focus:ring-4 focus:ring-emerald-400
                 type="button"
               >
                 <MdEdit className="w-5 h-5 drop-shadow" />
+              </button>
+            </div>
+
+            <div onClick={() => setOpen(true)} className="relative group ">
+              <button
+                className="
+flex items-center justify-center
+bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
+hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
+text-white p-2 rounded-full shadow-lg
+transition-all duration-200
+hover:scale-110 hover:-rotate-6
+ring-2 ring-transparent hover:ring-emerald-300
+focus:outline-none focus:ring-4 focus:ring-emerald-400
+"
+                aria-label="Update"
+                type="button"
+              >
+                <LuNotepadText className="w-5 h-5 drop-shadow" />
               </button>
             </div>
 
@@ -357,6 +397,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           </div>
 
           <Description
+            HomeStatus={project.devScope}
             one={project?.startDate || "N/A"}
             two={project?.endDate || "N/A"}
             three={project?.DaysConsumed || 0}

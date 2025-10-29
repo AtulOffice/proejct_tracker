@@ -35,21 +35,7 @@ const ProjectdevlopForm = () => {
   const { jobnumber } = useParams();
   const { setToggleDev, user } = useAppContext();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const backendData = await getStatus(jobnumber);
-        const frontendData = mapBackendToFrontend(backendData?.data);
-        backendData?.data && setFormData(frontendData);
-        toast.success("Data fetched successfully!");
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  const [plans, setPlans] = useState(null);
   const [formData, setFormData] = useState({
     document: {
       rows: documentRows(),
@@ -68,6 +54,22 @@ const ProjectdevlopForm = () => {
     },
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const backendData = await getStatus(jobnumber);
+        const frontendData = mapBackendToFrontend(backendData?.data);
+        backendData?.data && setFormData(frontendData);
+        backendData?.data?.PlanDetails &&
+          setPlans(backendData?.data?.PlanDetails);
+        toast.success("Data fetched successfully!");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const isValid = validateFormData(formData);
@@ -106,7 +108,6 @@ const ProjectdevlopForm = () => {
   if (!location.state?.fromButton) {
     return <Navigate to="/" replace />;
   }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
@@ -125,10 +126,27 @@ const ProjectdevlopForm = () => {
               animate={{ opacity: 1, y: 0 }}
               className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
             >
-              <div className="bg-gradient-to-r from-blue-200 to-indigo-400 p-6 flex items-center space-x-3">
-                <span className="text-2xl">📄</span>
-                <h2 className="text-xl font-bold text-white">DOCUMENTS</h2>
+              <div className="bg-gradient-to-r from-blue-200 to-indigo-400 p-6 flex justify-between items-center rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">📄</span>
+                  <h2 className="text-xl font-bold text-white">DOCUMENTS</h2>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
+                  <div>
+                    <span className="font-semibold">Start:</span>{" "}
+                    {plans?.documents?.startDate
+                      ? new Date(plans.documents.startDate).toLocaleDateString()
+                      : "—"}
+                  </div>
+                  <div>
+                    <span className="font-semibold">End:</span>{" "}
+                    {plans?.documents?.endDate
+                      ? new Date(plans.documents.endDate).toLocaleDateString()
+                      : "—"}
+                  </div>
+                </div>
               </div>
+
               <div className="p-6">
                 <div className="hidden md:grid grid-cols-6 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
@@ -277,16 +295,29 @@ const ProjectdevlopForm = () => {
             </motion.div>
           )}
 
-          {/* SCREEN SECTION */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
           >
-            <div className="bg-gradient-to-r from-emerald-400 to-teal-400 p-6">
+            <div className="bg-gradient-to-r from-emerald-400 to-teal-400 p-6 flex justify-between items-center rounded-xl">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🖥️</span>
                 <h2 className="text-xl font-bold text-white">Screen</h2>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
+                <div>
+                  <span className="font-semibold">Start:</span>{" "}
+                  {plans?.scada?.startDate
+                    ? new Date(plans?.scada?.startDate).toLocaleDateString()
+                    : "—"}
+                </div>
+                <div>
+                  <span className="font-semibold">End:</span>{" "}
+                  {plans?.scada?.endDate
+                    ? new Date(plans.scada.endDate).toLocaleDateString()
+                    : "—"}
+                </div>
               </div>
             </div>
             <div className="p-6">
@@ -402,10 +433,27 @@ const ProjectdevlopForm = () => {
               animate={{ opacity: 1, y: 0 }}
               className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
             >
-              <div className="bg-gradient-to-r from-blue-200 to-indigo-400 p-6 flex items-center space-x-3">
-                <span className="text-2xl">📄</span>
-                <h2 className="text-xl font-bold text-white">LOGIC</h2>
+              <div className="bg-gradient-to-r from-blue-200 to-indigo-400 p-6 flex justify-between items-center rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">📄</span>
+                  <h2 className="text-xl font-bold text-white">Logic</h2>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
+                  <div>
+                    <span className="font-semibold">Start:</span>{" "}
+                    {plans?.logic?.startDate
+                      ? new Date(plans.logic.startDate).toLocaleDateString()
+                      : "—"}
+                  </div>
+                  <div>
+                    <span className="font-semibold">End:</span>{" "}
+                    {plans?.logic?.endDate
+                      ? new Date(plans.logic.endDate).toLocaleDateString()
+                      : "—"}
+                  </div>
+                </div>
               </div>
+
               <div className="p-6">
                 <div className="hidden md:grid grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
@@ -524,12 +572,27 @@ const ProjectdevlopForm = () => {
               animate={{ opacity: 1, y: 0 }}
               className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
             >
-              <div className="bg-gradient-to-r from-orange-400 to-yellow-400 p-6">
+              <div className="bg-gradient-to-r from-orange-400 to-yellow-400 p-6 flex justify-between items-center rounded-xl">
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">🧪</span>
                   <h2 className="text-xl font-bold text-white">Testing</h2>
                 </div>
+                <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
+                  <div>
+                    <span className="font-semibold">Start:</span>{" "}
+                    {plans?.testing?.startDate
+                      ? new Date(plans.testing.startDate).toLocaleDateString()
+                      : "—"}
+                  </div>
+                  <div>
+                    <span className="font-semibold">End:</span>{" "}
+                    {plans?.testing?.endDate
+                      ? new Date(plans.testing.endDate).toLocaleDateString()
+                      : "—"}
+                  </div>
+                </div>
               </div>
+
               <div className="p-6">
                 <div className="hidden md:flex justify-between items-center mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>

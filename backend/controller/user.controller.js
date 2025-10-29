@@ -281,7 +281,9 @@ export const findUserDetails = async (req, res) => {
         message: "Please Login first",
       });
     }
-    const UserData = await UserModels.findById(_id);
+    const UserData = await UserModels.findById(_id).select(
+      "-createdAt -updatedAt -email"
+    );
     if (!UserData) {
       return res.status(404).json({
         success: false,

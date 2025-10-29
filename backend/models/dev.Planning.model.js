@@ -6,18 +6,31 @@ const sectionSchema = new mongoose.Schema({
   planDetails: { type: String },
 });
 
-const projectDevelopmentSchema = new mongoose.Schema(
+const DevPlanningSchema = new mongoose.Schema(
   {
     ProjectDetails: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
+    },
+    projectName: {
+      type: String,
+      trim: true,
+    },
+    DevelopmentDetials: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProjectDev",
+    },
+    JobNumber: {
+      type: String,
+      required: true,
+      trim: true,
     },
     scada: sectionSchema,
     logic: sectionSchema,
     testing: sectionSchema,
     documents: sectionSchema,
     upatedBy: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
     },
   },
@@ -26,4 +39,5 @@ const projectDevelopmentSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("ProjectDevPlans", projectDevelopmentSchema);
+const PlanningModel = new mongoose.model("ProjectDevPlans", DevPlanningSchema);
+export default PlanningModel;

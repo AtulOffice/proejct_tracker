@@ -212,10 +212,13 @@ export const ProjectCatogary = ({
                 key={indx}
                 project={project}
                 indx={indx}
-                {...(devFilter && { cardAllflag: true, editoptionflag: false })}
+                {...(devFilter && {
+                  cardAllflag: true,
+                  editoptionflag: false,
+                })}
                 {...(all
                   ? { cardAllflag: false }
-                  : { shortFlag: false, deleteButton: false })}
+                  : { largeFlag: false, deleteButton: false })}
               />
             )
           )

@@ -13,7 +13,7 @@ const CardAll = ({
   project,
   indx,
   deleteButton = true,
-  shortFlag = true,
+  largeFlag = true,
   cardAllflag = false,
   editoptionflag = true,
 }) => {
@@ -209,7 +209,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
               </li>
             </div>
 
-            {project?.endUser && shortFlag && (
+            {project?.endUser && largeFlag && (
               <li>
                 <strong>End User:</strong> {project.endUser}
               </li>
@@ -306,9 +306,10 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                     <strong className="text-gray-700">Development:</strong>
                     <span
                       className={`px-2 py-1 text-xs font-semibold rounded-md ${
-                        project?.Development == "OFFICE"
+                        project?.Development == "OFFICE" ||
+                        project?.Development == "SITE"
                           ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
+                          : ""
                       }`}
                     >
                       {project?.Development}
@@ -334,7 +335,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                   </li>
                 </>
               )}
-              {shortFlag && (
+              {largeFlag && (
                 <>
                   <li>
                     <strong>Entity Type:</strong> {project.entityType}
@@ -389,7 +390,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             </div>
           </ul>
 
-          {shortFlag ? (
+          {largeFlag ? (
             <FootBarAll
               one={project?.status}
               two={project?.service}
@@ -397,6 +398,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             />
           ) : (
             <FootBarAll
+              {...(cardAllflag && { four: project?.Development })}
               one={project?.entityType}
               two={project?.priority}
               three={project?.soType}

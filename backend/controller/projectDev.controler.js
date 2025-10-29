@@ -118,6 +118,9 @@ export const ProjectStatusfetchbyJobId = async (req, res) => {
     }
     const projectStatus = await ProjectDevModel.findOne({
       JobNumber,
+    }).populate({
+      path: "PlanDetails",
+      select: "scada logic testing documents",
     });
     if (!projectStatus) {
       return res
