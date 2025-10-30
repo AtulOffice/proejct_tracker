@@ -148,6 +148,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
             <input
               type="date"
               value={date}
+              max={new Date().toISOString().split("T")[0]}
               onChange={(e) => setDate(e.target.value)}
               className="bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             />
