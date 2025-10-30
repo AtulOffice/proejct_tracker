@@ -1,4 +1,4 @@
-import EngineerReocord from "../models/engineer.record.model.js";
+import EngineerReocord from "../models/engineers..model.js";
 
 export const updateEngineerAssignmentStatusCrons = async () => {
   try {

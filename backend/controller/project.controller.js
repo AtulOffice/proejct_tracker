@@ -1,7 +1,7 @@
 import ProjectModel from "../models/Project.model.js";
 import dayjs from "dayjs";
 import workStatusModel from "../models/WorkStatus.model.js";
-import EngineerReocord from "../models/engineer.record.model.js";
+import EngineerReocord from "../models/engineers..model.js";
 import ProjectDevModel from "../models/Project.Dev.model.js";
 
 export const Recordsformave = async (req, res) => {
