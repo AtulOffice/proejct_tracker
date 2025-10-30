@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import workStatusModel from "../models/WorkStatus.model.js";
 import EngineerReocord from "../models/engineers..model.js";
 import ProjectDevModel from "../models/Project.Dev.model.js";
+import mongoose from "mongoose";
 
 export const Recordsformave = async (req, res) => {
   try {
@@ -788,7 +789,7 @@ export const allProjectsFetch = async (req, res) => {
 
 export const getProjectOverview = async (req, res) => {
   try {
-    // this is temp
+    // this is temm
     const filter = {};
     const pipeline = [];
 
@@ -996,6 +997,102 @@ export const getProjectOverview = async (req, res) => {
   } catch (error) {
     console.error("Error in dashboard API:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getEngineerProjectsPaginated = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const engineer = await EngineerReocord.findById(id).select(
+      "name email active"
+    );
+    if (!engineer) {
+      return res.status(404).json({
+        success: false,
+        message: "Engineer not found",
+      });
+    }
+    const pipeline = [
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $unwind: "$assignments" },
+      // { $sort: { "assignments.assignedAt": -1 } },
+      { $sort: { "projectData.updatedAt": -1 } },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "assignments.projectId",
+          foreignField: "_id",
+          as: "projectData",
+        },
+      },
+      { $unwind: { path: "$projectData", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 0,
+          projectId: "$projectData._id",
+          projectName: {
+            $ifNull: ["$projectData.projectName", "$assignments.projectName"],
+          },
+          jobNumber: {
+            $ifNull: ["$projectData.jobNumber", "$assignments.jobNumber"],
+          },
+          engineerName: "$projectData.engineerName",
+          entityType: "$projectData.entityType",
+          soType: "$projectData.soType",
+          startChecklist: "$projectData.StartChecklist",
+          endChecklist: "$projectData.EndChecklist",
+          endUser: "$projectData.endUser",
+          client: "$projectData.client",
+          Development: "$projectData.Development",
+          location: "$projectData.location",
+          expenseScope: "$projectData.expenseScope",
+          workScope: "$projectData.workScope",
+          assignedAt: "$assignments.assignedAt",
+          endTime: "$assignments.endTime",
+          durationDays: "$assignments.durationDays",
+        },
+      },
+      { $skip: skip },
+      { $limit: limit },
+    ];
+
+    const assignments = await EngineerReocord.aggregate(pipeline);
+
+    const totalCount = await EngineerReocord.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $project: { total: { $size: "$assignments" } } },
+    ]);
+
+    const totalAssignments = totalCount[0]?.total || 0;
+
+    return res.status(200).json({
+      success: true,
+      message: "Engineer assignments fetched successfully",
+      engineer: {
+        _id: engineer._id,
+        name: engineer.name,
+        email: engineer.email,
+        active: engineer.active,
+        totalAssignments,
+      },
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalAssignments / limit),
+        totalItems: totalAssignments,
+      },
+      assignments,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching engineer projects:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
   }
 };
 

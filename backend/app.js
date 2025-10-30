@@ -12,6 +12,7 @@ import cookieParser from "cookie-parser";
 import { EngineerRouter } from "./routes/engineer.route.js";
 import { DevRecordRouter } from "./routes/devlopment.Record.router.js";
 import { PlannigRouter } from "./routes/dev.Planning.route.js";
+import { engineerAuthRouter } from "./routes/engineer.auth.route.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -20,7 +21,7 @@ const app = express();
 // engineerStatus();
 
 const corsOptions = {
-  origin: [`${process.env.FRONT_PORT}`],
+  origin: [`${process.env.FRONT_PORT}`, `http://localhost:5174`],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
@@ -49,6 +50,7 @@ app.use("/api/v1/projectDev", ProjectDevRouter);
 app.use("/api/v1/engineer", EngineerRouter);
 app.use("/api/v1/devrecord", DevRecordRouter);
 app.use("/api/v1/planningDev", PlannigRouter);
+app.use("/api/v1/engineer", engineerAuthRouter);
 
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });

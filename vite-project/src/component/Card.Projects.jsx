@@ -8,6 +8,8 @@ import FootBarAll from "../utils/FootBarAll";
 import { deleteProject, updateProject } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import { useAppContext } from "../appContex";
+import { LuNotepadText } from "react-icons/lu";
+import ProjectTimelineForm from "../utils/project.Planning";
 
 const CardAll = ({
   project,
@@ -21,6 +23,7 @@ const CardAll = ({
   const [updateFlag, setUpdateflag] = useState(false);
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [isDisabled, setIsdisabled] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { setToggle } = useAppContext();
 
@@ -63,6 +66,14 @@ const CardAll = ({
         <ProjectDetailsPopup
           project={selectedProjectForPopup}
           onClose={() => setSelectedProjectForPopup(null)}
+        />
+      )}
+
+      {open && (
+        <ProjectTimelineForm
+          project={{ ...project, JobNumber: project.jobNumber }}
+          open={open}
+          onClose={() => setOpen(false)}
         />
       )}
 
@@ -126,14 +137,37 @@ const CardAll = ({
               </svg>
               {project.jobNumber}
             </span>
-
-            {cardAllflag && project?.Development && (
-              <div
-                onClick={() => handleDevelop(project)}
-                className="relative group "
-              >
-                <button
-                  className="
+            {cardAllflag &&
+              (project?.Development == "OFFICE" ||
+                project?.Development == "SITE") && (
+                <div onClick={() => setOpen(true)} className="relative group ">
+                  <button
+                    className="
+flex items-center justify-center
+bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
+hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
+text-white p-2 rounded-full shadow-lg
+transition-all duration-200
+hover:scale-110 hover:-rotate-6
+ring-2 ring-transparent hover:ring-emerald-300
+focus:outline-none focus:ring-4 focus:ring-emerald-400
+"
+                    aria-label="Update"
+                    type="button"
+                  >
+                    <LuNotepadText className="w-5 h-5 drop-shadow" />
+                  </button>
+                </div>
+              )}
+            {cardAllflag &&
+              (project?.Development == "OFFICE" ||
+                project?.Development == "SITE") && (
+                <div
+                  onClick={() => handleDevelop(project)}
+                  className="relative group "
+                >
+                  <button
+                    className="
 flex items-center justify-center
 bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
 hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
@@ -143,13 +177,13 @@ hover:scale-110 hover:-rotate-6
 ring-2 ring-transparent hover:ring-blue-300
 focus:outline-none focus:ring-4 focus:ring-blue-400
 "
-                  aria-label="Update"
-                  type="button"
-                >
-                  <FaDev className="w-5 h-5 drop-shadow" />
-                </button>
-              </div>
-            )}
+                    aria-label="Update"
+                    type="button"
+                  >
+                    <FaDev className="w-5 h-5 drop-shadow" />
+                  </button>
+                </div>
+              )}
 
             {editoptionflag && (
               <div
@@ -221,13 +255,19 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             {editoptionflag && (
               <>
                 <li>
-                  <strong>Order Value (lacs):</strong> ₹
-                  {project?.bill ?? "Not mentioned"}
+                  <strong>Order Value (Lacs):</strong> ₹
+                  {project?.bill
+                    ? (project.bill / 100000).toFixed(2)
+                    : "Not mentioned"}
                 </li>
+
                 <li>
-                  <strong>Pending Bill (lacs):</strong> ₹
-                  {project?.dueBill ?? "Not mentioned"}
+                  <strong>Pending Bill (Lacs):</strong> ₹
+                  {project?.dueBill
+                    ? (project.dueBill / 100000).toFixed(2)
+                    : "Not mentioned"}
                 </li>
+
                 <li>
                   <strong>Billing Status:</strong>{" "}
                   {project?.billStatus ?? "Not provided"}
@@ -258,7 +298,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                   {project?.expenseScope || "Not provided"}
                 </li>
               )}
-              <li>
+              <li className="truncate">
                 <strong>Engineer Assigned:</strong>{" "}
                 {project?.engineerName?.length > 0
                   ? project.engineerName.join(", ")

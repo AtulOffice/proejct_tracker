@@ -216,9 +216,7 @@ export const ProjectCatogary = ({
                   cardAllflag: true,
                   editoptionflag: false,
                 })}
-                {...(all
-                  ? { cardAllflag: false }
-                  : { largeFlag: false, deleteButton: false })}
+                {...(!all && { largeFlag: false, deleteButton: false })}
               />
             )
           )

@@ -15,6 +15,7 @@ import {
   getProjectOverview,
   updateRecords,
   allProjectsFetch,
+  getEngineerProjectsPaginated,
 } from "../controller/project.controller.js";
 import { authenticate } from "../middlware/authaticate.js";
 import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
@@ -32,8 +33,8 @@ ProjectRouter.post(
 ProjectRouter.get(
   "/getProjectOverview",
   refreshTokenMiddleware,
-  authenticate,
-  authorizeRole("admin", "reception"),
+  // authenticate,
+  // authorizeRole("admin", "reception"),
   getProjectOverview
 );
 
@@ -72,6 +73,12 @@ ProjectRouter.get(
   refreshTokenMiddleware,
   authenticate,
   Pagination
+);
+ProjectRouter.get(
+  "/Engineerpagination/:id",
+  refreshTokenMiddleware,
+  authenticate,
+  getEngineerProjectsPaginated
 );
 ProjectRouter.get(
   "/latestProjectpagination",

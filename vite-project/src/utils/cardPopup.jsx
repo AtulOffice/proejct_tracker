@@ -33,13 +33,19 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
             <strong>Location:</strong> {project?.location || "Not mentioned"}
           </li>
           <li>
-            <strong>Order Value (lacs):</strong> ₹
-            {project?.bill ?? "Not mentioned"}
+            <strong>Order Value (Lacs):</strong> ₹
+            {project?.bill
+              ? (project.bill / 100000).toFixed(2)
+              : "Not mentioned"}
           </li>
+
           <li>
-            <strong>Pending Bill (lacs):</strong> ₹
-            {project?.dueBill ?? "Not mentioned"}
+            <strong>Pending Bill (Lacs):</strong> ₹
+            {project?.dueBill
+              ? (project.dueBill / 100000).toFixed(2)
+              : "Not mentioned"}
           </li>
+
           <li>
             <strong>Billing Status:</strong>{" "}
             {project?.billStatus ?? "Not provided"}
@@ -66,7 +72,7 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
             <strong>Expense Scope:</strong>{" "}
             {project?.expenseScope || "Not provided"}
           </li>
-          <li>
+          <li className="truncate">
             <strong>Engineer Assigned:</strong>{" "}
             {project?.engineerName?.join(", ") || "-"}
           </li>

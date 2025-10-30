@@ -1,14 +1,11 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import InputForm from "./component/user.Formsubmit.jsx";
 import LoginPage from "./component/LoginPage.jsx";
 import TaskDisplay from "./component/dashboard.jsx";
 import { AppProvider, useAppContext } from "./appContex";
 import UpdateForm from "./component/UpdateForm.jsx";
 import ProjectdevlopForm from "./component/add.devstatus.jsx";
 import { UserCall } from "./utils/apiCall.jsx";
-import StartChecklistForm from "./component/startcheckList.jsx";
-import EndChecklistForm from "./component/endCheklist.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useAppContext();
@@ -54,9 +51,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/engineer" element={<InputForm />} />
-      <Route path="/start" element={<StartChecklistForm />} />
-      <Route path="/end" element={<EndChecklistForm />} />
+
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/update/:id"
