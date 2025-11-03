@@ -229,7 +229,9 @@ export const login = async ({ username, password, navigate, setUser }) => {
     if (user) {
       setUser(user);
       toast.success("Login successful");
-      navigate("/page");
+      navigate("/page", {
+        replace: true,
+      });
     } else {
       toast.error("Login failed: Token not received");
     }
@@ -431,5 +433,46 @@ export const fetchWeeklyAssmentbyId = async (id) => {
   } catch (err) {
     console.error("error while saving", err);
     throw err;
+  }
+};
+
+// this is order section
+
+export const fetfchOrdersAll = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/order/getAll?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
+export const fetfchOrdersAllnew = async () => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/order/getAllnew`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
+export const fetchbyOrderbyId = async (id) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/order/fetchbyid/${id}`,
+      { withCredentials: true }
+    );
+    return response.data.data;
+  } catch (e) {
+    console.log(e.message);
+    throw e;
   }
 };

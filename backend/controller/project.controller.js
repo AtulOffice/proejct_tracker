@@ -4,6 +4,8 @@ import workStatusModel from "../models/WorkStatus.model.js";
 import EngineerReocord from "../models/engineers..model.js";
 import ProjectDevModel from "../models/Project.Dev.model.js";
 import mongoose from "mongoose";
+import StartChecklistsModel from "../models/startCheck.model.js";
+import EndChecklistsModel from "../models/endCheckList.js";
 
 export const Recordsformave = async (req, res) => {
   try {
@@ -997,6 +999,106 @@ export const getProjectOverview = async (req, res) => {
   } catch (error) {
     console.error("Error in dashboard API:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getEngineerOverview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid ID format" });
+    }
+
+    const engineer = await EngineerReocord.findById(id).select(
+      "name email active assignments"
+    );
+    if (!engineer) {
+      return res.status(404).json({
+        success: false,
+        message: "Engineer not found",
+      });
+    }
+
+    const latestProjects = await EngineerReocord.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $unwind: "$assignments" },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "assignments.projectId",
+          foreignField: "_id",
+          as: "projectData",
+        },
+      },
+      { $unwind: { path: "$projectData", preserveNullAndEmptyArrays: true } },
+      { $sort: { "assignments.assignedAt": -1 } },
+      { $limit: 3 },
+      {
+        $project: {
+          _id: 0,
+          projectId: "$projectData._id",
+          projectName: {
+            $ifNull: ["$projectData.projectName", "$assignments.projectName"],
+          },
+          jobNumber: {
+            $ifNull: ["$projectData.jobNumber", "$assignments.jobNumber"],
+          },
+          client: "$projectData.client",
+          endUser: "$projectData.endUser",
+          Development: "$projectData.Development",
+          location: "$projectData.location",
+          assignedAt: "$assignments.assignedAt",
+        },
+      },
+    ]);
+
+    const totalWorkStatus = await workStatusModel.countDocuments({
+      submittedBy: new mongoose.Types.ObjectId(id),
+    });
+
+    const totalStartChecklist = await StartChecklistsModel.countDocuments({
+      submittedBy: new mongoose.Types.ObjectId(id),
+    });
+
+    const totalEndChecklist = await EndChecklistsModel.countDocuments({
+      submittedBy: new mongoose.Types.ObjectId(id),
+    });
+
+    const chartData = [
+      { title: "Work Status", value: totalWorkStatus, color: "#3b82f6" },
+      {
+        title: "Start Checklist",
+        value: totalStartChecklist,
+        color: "#10b981",
+      },
+      { title: "End Checklist", value: totalEndChecklist, color: "#f59e0b" },
+    ];
+
+    res.status(200).json({
+      success: true,
+      engineer: {
+        id: engineer._id,
+        name: engineer.name,
+        email: engineer.email,
+        active: engineer.active,
+      },
+      overview: {
+        latestProjects,
+        totalWorkStatus,
+        totalStartChecklist,
+        totalEndChecklist,
+        chartData,
+      },
+    });
+  } catch (error) {
+    console.error("❌ Error in getEngineerOverview:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };
 

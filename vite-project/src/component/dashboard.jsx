@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { GoProjectRoadmap } from "react-icons/go";
-import { FaRegSquarePlus } from "react-icons/fa6";
-import { MdCancel, MdOutlinePendingActions } from "react-icons/md";
+import { FaClipboardList, FaRegSquarePlus } from "react-icons/fa6";
+import {
+  MdAssignmentAdd,
+  MdCancel,
+  MdOutlinePendingActions,
+} from "react-icons/md";
 import { TbUrgent } from "react-icons/tb";
 import logimg from "../assets/logo_image.png";
 import {
@@ -29,6 +33,9 @@ import { useRef } from "react";
 import WeeklyAssignmentForm from "./weeklyData";
 import ProjectList from "./projectList";
 import { ProjectCatogary } from "./ProjectCatogary.jsx";
+import OrderForm from "./OrderForm.jsx";
+import OrderList from "./orderList.jsx";
+import { FaShoppingCart } from "react-icons/fa";
 
 const AdminDashboard = () => {
   const formRef = useRef(null);
@@ -168,6 +175,10 @@ const AdminDashboard = () => {
         return <ProjectList />;
       case "twenty":
         return <AssessMentAction />;
+      case "twentyone":
+        return <OrderForm />;
+      case "twentytwo":
+        return <OrderList />;
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -295,6 +306,38 @@ const AdminDashboard = () => {
                         size={20}
                       />
                       DASHBOARD
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("twentyone");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twentyone"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <FaShoppingCart className="mr-3" size={20} />
+                      ADD ORDER
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("twentytwo");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twentytwo"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <FaClipboardList className="mr-3" size={20} />
+                      ORDER LIST
                     </div>
                   </li>
                   <li>

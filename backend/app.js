@@ -13,6 +13,7 @@ import { EngineerRouter } from "./routes/engineer.route.js";
 import { DevRecordRouter } from "./routes/devlopment.Record.router.js";
 import { PlannigRouter } from "./routes/dev.Planning.route.js";
 import { engineerAuthRouter } from "./routes/engineer.auth.route.js";
+import { OrderRouter } from "./routes/Order.route.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -51,7 +52,7 @@ app.use("/api/v1/engineer", EngineerRouter);
 app.use("/api/v1/devrecord", DevRecordRouter);
 app.use("/api/v1/planningDev", PlannigRouter);
 app.use("/api/v1/engineer", engineerAuthRouter);
-
+app.use("/api/v1/order", OrderRouter);
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   console.log(`server is linsten on port ${port}`);

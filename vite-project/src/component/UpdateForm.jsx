@@ -156,7 +156,9 @@ const UpdateForm = () => {
       toast.success("Data updated successfully");
       setToggle((prev) => !prev);
       setToggleDev((prev) => !prev);
-      navigate("/page");
+      navigate("/page", {
+        replace: true,
+      });
     } catch (e) {
       if (e.response) {
         toast.error(e.response?.data?.message);

@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const TaskSchema = new mongoose.Schema(
   {
     title: { type: String, default: "" },
-    startDate: { type: String, default: "" },
-    endDate: { type: String, default: "" },
+    startDate: { type: Date, default: null },
+    endDate: { type: Date, default: null },
     consumedDays: { type: String, default: "0" },
     status: {
       type: Boolean,
@@ -21,8 +21,8 @@ const StatusTaskSchema = new mongoose.Schema(
       default: false,
     },
     title: { type: String, default: "" },
-    startDate: { type: String, default: "" },
-    endDate: { type: String, default: "" },
+    startDate: { type: Date, default: null },
+    endDate: { type: Date, default: null },
     consumedDays: { type: String, default: "0" },
   },
   { _id: false }
@@ -37,8 +37,8 @@ const DocsTaskSchema = new mongoose.Schema(
     },
     title: { type: String, default: "" },
     status: { type: Boolean, default: false },
-    startDate: { type: String, default: "" },
-    endDate: { type: String, default: "" },
+    startDate: { type: Date, default: null },
+    endDate: { type: Date, default: null },
     consumedDays: { type: String, default: "0" },
   },
   { _id: false }
@@ -67,8 +67,8 @@ const ProjectDevSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    startDate: { type: String, required: true },
-    endDate: { type: String, default: null },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, default: null },
     DaysConsumed: { type: String, default: "0" },
 
     fileReading: DocsTaskSchema,
@@ -83,8 +83,8 @@ const ProjectDevSchema = new mongoose.Schema(
     scadaScreen: [
       {
         title: { type: String, default: "Screen" },
-        scadastartDate: { type: String, default: "" },
-        scadaendDate: { type: String, default: "" },
+        scadastartDate: { type: Date, default: null },
+        scadaendDate: { type: Date, default: null },
         scadaconsumedDays: { type: String, default: "0" },
         status: { type: Boolean, default: false },
       },

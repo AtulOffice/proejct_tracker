@@ -19,13 +19,14 @@ const WrkStatusSchema = new mongoose.Schema(
     },
     EngineerName: {
       type: String,
+      trim: true,
     },
     fromDate: {
-      type: String,
+      type: Date,
       required: true,
     },
     toDate: {
-      type: String,
+      type: Date,
       required: true,
     },
     WorkStatus: {
@@ -51,6 +52,10 @@ const WrkStatusSchema = new mongoose.Schema(
       type: String,
       enum: ["YES", "NO", "N/A"],
       default: "N/A",
+    },
+    submittedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
     },
   },
   {

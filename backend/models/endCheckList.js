@@ -18,17 +18,16 @@ const EndChecklistsSchema = new mongoose.Schema(
 
     visitStartDate: { type: Date },
     visitEndDate: { type: Date },
-    momNumber: { type: String, trim: true }, 
+    momNumber: { type: String, trim: true },
     projectStatus: { type: String, enum: ["OPEN", "CLOSED"] },
     momSignedByCustomer: { type: String, enum: ENUMVAL },
 
-
-    pendingPoints: { type: String, trim: true }, 
+    pendingPoints: { type: String, trim: true },
     customerRemarks: { type: String, trim: true },
 
     completedWithinEstimatedTime: { type: Boolean },
     facedChallenges: { type: Boolean },
-    challengeDetails: { type: String, trim: true }, 
+    challengeDetails: { type: String, trim: true },
     completionDocuments: {
       asBuiltDrawings: { type: String, enum: ENUMVAL },
       finalLogicBackup: { type: String, enum: ENUMVAL },

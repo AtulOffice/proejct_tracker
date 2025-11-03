@@ -6,6 +6,8 @@ import { AppProvider, useAppContext } from "./appContex";
 import UpdateForm from "./component/UpdateForm.jsx";
 import ProjectdevlopForm from "./component/add.devstatus.jsx";
 import { UserCall } from "./utils/apiCall.jsx";
+import OrderForm from "./component/OrderForm.jsx";
+import UpdateOrderForm from "./component/updateOrder.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useAppContext();
@@ -51,6 +53,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="/newPage" element={<OrderForm />} />
 
       <Route path="/login" element={<LoginPage />} />
       <Route
@@ -58,6 +61,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <UpdateForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/updateOrder/:id"
+        element={
+          <ProtectedRoute>
+            <UpdateOrderForm />
           </ProtectedRoute>
         }
       />

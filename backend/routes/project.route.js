@@ -16,9 +16,16 @@ import {
   updateRecords,
   allProjectsFetch,
   getEngineerProjectsPaginated,
+  getEngineerOverview,
 } from "../controller/project.controller.js";
-import { authenticate } from "../middlware/authaticate.js";
-import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
+import {
+  authenticate,
+  authenticateEngineer,
+} from "../middlware/authaticate.js";
+import {
+  refreshTokenEngineerMiddleware,
+  refreshTokenMiddleware,
+} from "../middlware/refreshToken.js";
 import { authorizeRole } from "../middlware/authRole.js";
 
 export const ProjectRouter = express.Router();
@@ -36,6 +43,14 @@ ProjectRouter.get(
   // authenticate,
   // authorizeRole("admin", "reception"),
   getProjectOverview
+);
+
+ProjectRouter.get(
+  "/getEngineerOverview/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  // authorizeRole("admin", "reception"),
+  getEngineerOverview
 );
 
 ProjectRouter.get("/fetch", refreshTokenMiddleware, authenticate, findrecord);
