@@ -71,11 +71,10 @@ const ProjectTableAll = ({ data }) => {
               {data.map((project, indx) => (
                 <tr
                   key={indx}
-                  className={`hover:bg-blue-50/60 transition-colors duration-150 ${
-                    indx % 2 === 0
-                      ? "bg-gradient-to-r from-white via-blue-50 to-white"
-                      : "bg-gradient-to-r from-white via-blue-100 to-white"
-                  }`}
+                  className={`hover:bg-blue-50/60 transition-colors duration-150 ${indx % 2 === 0
+                    ? "bg-gradient-to-r from-white via-blue-50 to-white"
+                    : "bg-gradient-to-r from-white via-blue-100 to-white"
+                    }`}
                 >
                   <td className="px-6 py-4">
                     <div
@@ -103,10 +102,12 @@ const ProjectTableAll = ({ data }) => {
                     {project.jobNumber}
                   </td>
                   <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
-                    {project.deleveryDate}
+                    {project.deleveryDate && new Date(project.deleveryDate).toISOString().split("T")[0]}
+
                   </td>
                   <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
-                    {project.visitDate}
+                    {project.visitDate && new Date(project.visitDate).toISOString().split("T")[0]}
+
                   </td>
                   <td className="px-6 py-4">
                     <div
@@ -153,11 +154,13 @@ const ProjectTableAll = ({ data }) => {
               </div>
               <div>
                 <span className="font-medium text-indigo-600">Delivery:</span>
-                <span className="ml-2">{project.deleveryDate}</span>
+                <span className="ml-2">{project.deleveryDate && new Date(project.deleveryDate).toISOString().split("T")[0]}
+                </span>
               </div>
               <div>
                 <span className="font-medium text-indigo-600">Visit:</span>
-                <span className="ml-2">{project.visitDate}</span>
+                <span className="ml-2">{project.visitDate && new Date(project.visitDate).toISOString().split("T")[0]}
+                </span>
               </div>
               <div>
                 <span className="font-medium text-indigo-600">Engineer:</span>

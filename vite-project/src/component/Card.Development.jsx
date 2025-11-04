@@ -105,11 +105,10 @@ const ProgressBar = ({
         {[...Array(5)].map((_, index) => (
           <div
             key={index}
-            className={`w-2 h-1 rounded-full transition-all duration-300 ${
-              index < Math.ceil((value || 0) / 20)
-                ? `bg-gradient-to-r ${colorFrom} ${colorTo} shadow-sm`
-                : "bg-gray-300"
-            }`}
+            className={`w-2 h-1 rounded-full transition-all duration-300 ${index < Math.ceil((value || 0) / 20)
+              ? `bg-gradient-to-r ${colorFrom} ${colorTo} shadow-sm`
+              : "bg-gray-300"
+              }`}
           />
         ))}
       </div>
@@ -117,12 +116,12 @@ const ProgressBar = ({
         {value >= 100
           ? "Complete"
           : value >= 75
-          ? "Almost Done"
-          : value >= 50
-          ? "In Progress"
-          : value >= 25
-          ? "Getting Started"
-          : "Not Started"}
+            ? "Almost Done"
+            : value >= 50
+              ? "In Progress"
+              : value >= 25
+                ? "Getting Started"
+                : "Not Started"}
       </span>
     </div>
   </div>
@@ -168,8 +167,7 @@ const CardStatus = ({
     setIsdisabled(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${
-          project.JobNumber
+        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.JobNumber
         }?check=${true}`,
         { withCredentials: true }
       );
@@ -318,49 +316,6 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             )}
           </div>
 
-          <ul className="text-sm text-gray-800 space-y-1 mb-4">
-            {project.orderDate && (
-              <li>
-                <strong className="text-gray-900">Order Date:</strong>{" "}
-                {new Date(project.orderDate).toLocaleDateString() || ""}
-              </li>
-            )}
-            {project.deleveryDate && (
-              <li>
-                <strong className="text-gray-900">Delivery Date:</strong>{" "}
-                {new Date(project.deleveryDate).toLocaleDateString() || ""}
-              </li>
-            )}
-            {project?.expenseScope && (
-              <li>
-                <strong className="text-gray-900">Expense scope:</strong>{" "}
-                {project?.expenseScope}
-              </li>
-            )}
-
-            {project.status === "completed" &&
-              project.finalMomnumber &&
-              project?.actualStartDate &&
-              project?.actualEndDate && (
-                <>
-                  <li>
-                    <strong className="text-gray-900">Final MOM Number:</strong>{" "}
-                    {project.finalMomnumber || "not recieved"}
-                  </li>
-                  <li>
-                    <strong className="text-gray-900">
-                      Actual Start Date:
-                    </strong>{" "}
-                    {new Date(project.actualStartDate).toLocaleDateString()}
-                  </li>
-                  <li>
-                    <strong className="text-gray-900">Actual End Date: </strong>
-                    {new Date(project?.actualEndDate).toLocaleDateString()}
-                  </li>
-                </>
-              )}
-          </ul>
-
           <div className="mb-6 bg-white/70 backdrop-blur-md rounded-xl p-4 border border-white/40 shadow-lg">
             <ProgressBar
               label="Documents Progress"
@@ -398,8 +353,8 @@ focus:outline-none focus:ring-4 focus:ring-red-400
 
           <Description
             HomeStatus={project.devScope}
-            one={project?.startDate || "N/A"}
-            two={project?.endDate || "N/A"}
+            one={project?.startDate ? project.startDate && new Date(project.startDate).toISOString().split("T")[0] : "--"}
+            two={project?.endDate ? project.endDate && new Date(project.endDate).toISOString().split("T")[0] : "--"}
             three={project?.DaysConsumed || 0}
           />
         </div>

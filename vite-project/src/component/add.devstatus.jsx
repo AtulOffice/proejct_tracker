@@ -186,9 +186,8 @@ const ProjectdevlopForm = () => {
                         ]}
                       />
                       <div
-                        className={`${
-                          row.Reqiredval === "N/A" ? "invisible h-0" : ""
-                        }`}
+                        className={`${row.Reqiredval === "N/A" ? "invisible h-0" : ""
+                          }`}
                       >
                         <InputField
                           type="date"
@@ -203,11 +202,10 @@ const ProjectdevlopForm = () => {
                         />
                       </div>
                       <div
-                        className={`${
-                          !row.completed || row.Reqiredval === "N/A"
+                        className={`${!row.completed || row.Reqiredval === "N/A"
                             ? "invisible h-0"
                             : ""
-                        }`}
+                          }`}
                       >
                         <InputField
                           type="date"
@@ -223,11 +221,10 @@ const ProjectdevlopForm = () => {
                         />
                       </div>
                       <div
-                        className={`${
-                          !row.completed || row.Reqiredval === "N/A"
+                        className={`${!row.completed || row.Reqiredval === "N/A"
                             ? "invisible h-0"
                             : ""
-                        }`}
+                          }`}
                       >
                         <InputField
                           type="number"
@@ -248,9 +245,8 @@ const ProjectdevlopForm = () => {
                       </div>
                       <div className="flex flex-col gap-3">
                         <div
-                          className={`bg-white rounded-lg p-2 border border-gray-200 shadow-sm ${
-                            row.Reqiredval === "N/A" ? "invisible h-0" : ""
-                          }`}
+                          className={`bg-white rounded-lg p-2 border border-gray-200 shadow-sm ${row.Reqiredval === "N/A" ? "invisible h-0" : ""
+                            }`}
                         >
                           <CheckboxField
                             label="Complete"
@@ -271,19 +267,17 @@ const ProjectdevlopForm = () => {
                           />
                         </div>
                         <div
-                          className={`${
-                            !row.completed || row.Reqiredval === "N/A"
+                          className={`${!row.completed || row.Reqiredval === "N/A"
                               ? "invisible h-0"
                               : ""
-                          }`}
+                            }`}
                         >
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
-                              className={`h-2 rounded-full transition-all duration-300 ${
-                                row.completed
+                              className={`h-2 rounded-full transition-all duration-300 ${row.completed
                                   ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
                                   : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
-                              }`}
+                                }`}
                             />
                           </div>
                         </div>
@@ -411,11 +405,10 @@ const ProjectdevlopForm = () => {
                       >
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className={`h-2 rounded-full transition-all duration-300 ${
-                              row.completed
+                            className={`h-2 rounded-full transition-all duration-300 ${row.completed
                                 ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
                                 : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
-                            }`}
+                              }`}
                           />
                         </div>
                       </div>
@@ -549,11 +542,10 @@ const ProjectdevlopForm = () => {
                         >
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
-                              className={`h-2 rounded-full transition-all duration-300 ${
-                                row.completed
+                              className={`h-2 rounded-full transition-all duration-300 ${row.completed
                                   ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
                                   : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
-                              }`}
+                                }`}
                             />
                           </div>
                         </div>
@@ -632,17 +624,15 @@ const ProjectdevlopForm = () => {
                           />
                         </div>
                         <div
-                          className={`${
-                            !row.completed ? "invisible h-0" : "w-full"
-                          }`}
+                          className={`${!row.completed ? "invisible h-0" : "w-full"
+                            }`}
                         >
                           <div className="w-32 bg-gray-200 rounded-full h-2">
                             <div
-                              className={`h-2 rounded-full transition-all duration-300 ${
-                                row.completed
+                              className={`h-2 rounded-full transition-all duration-300 ${row.completed
                                   ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
                                   : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
-                              }`}
+                                }`}
                             />
                           </div>
                         </div>
@@ -757,11 +747,10 @@ const ProjectdevlopForm = () => {
                         >
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
-                              className={`h-2 rounded-full transition-all duration-300 ${
-                                row.completed
+                              className={`h-2 rounded-full transition-all duration-300 ${row.completed
                                   ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
                                   : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
-                              }`}
+                                }`}
                             />
                           </div>
                         </div>

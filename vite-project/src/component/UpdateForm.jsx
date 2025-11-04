@@ -29,13 +29,48 @@ const UpdateForm = () => {
           `${import.meta.env.VITE_API_URL}/fetch/${id}`,
           { withCredentials: true }
         );
-        res?.data?.data && setFormData(res.data.data);
+
+        if (res?.data?.data) {
+          const dateFields = [
+            "actualStartDate",
+            "actualEndDate",
+            "visitDate",
+            "visitendDate",
+            "momDate",
+            "orderDate",
+            "startDate",
+            "deleveryDate",
+            "requestDate",
+            "createdAt",
+            "updatedAt",
+          ];
+
+          const formattedData = { ...res.data.data };
+
+          dateFields.forEach(field => {
+            const value = formattedData[field];
+            if (value) {
+              const date = new Date(value);
+              if (!isNaN(date)) {
+                formattedData[field] = date.toISOString().split("T")[0]; // ✅ for <input type="date">
+              } else {
+                formattedData[field] = "";
+              }
+            } else {
+              formattedData[field] = "";
+            }
+          });
+
+          setFormData(formattedData);
+        }
       } catch (err) {
         console.error("Failed to fetch projects:", err);
       }
     };
-    fetchByid();
+
+    if (id) fetchByid();
   }, [id]);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -136,9 +171,9 @@ const UpdateForm = () => {
         momsrNo:
           typeof formData.momsrNo === "string"
             ? formData.momsrNo
-                .split(",")
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
+              .split(",")
+              .map((name) => name.trim())
+              .filter((name) => name.length > 0)
             : formData.momsrNo,
         // engineerData: engineerData.map((eng) => ({
         //   ...eng,
