@@ -55,7 +55,7 @@ const InputForm = () => {
         A: "AMC",
         R: "SERVICE",
       };
-      const service = { YES: "Service Included", NO: "Service not included" };
+
 
       const updated = {};
       if (entityMap[firstChar]) {
@@ -63,11 +63,6 @@ const InputForm = () => {
       }
       if (soTypeMap[secondChar]) {
         updated.soType = soTypeMap[secondChar];
-        if (secondChar === "R") {
-          updated.service = service.YES;
-        } else {
-          updated.service = service.NO;
-        }
       }
 
       if (Object.keys(updated).length > 0) {
