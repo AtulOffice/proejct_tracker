@@ -40,6 +40,9 @@ export const formval = {
   ContactPersonName: "",
   ExpensSubmission: "N/A",
   BackupSubmission: "N/A",
+  technicalEmail: "",
+  isMailSent: "NO",
+  isDevlopmentApproved: "NO"
 };
 
 export const dateFields = [
@@ -333,7 +336,6 @@ export const InputConst = [
       { value: "PROJECT", label: "PROJECT" },
       { value: "SERVICE", label: "SERVICE" },
       { value: "AMC", label: "AMC" },
-      { value: "SUPPLY", label: "SUPPLY" },
     ],
   },
   {
@@ -498,6 +500,42 @@ export const InputConst = [
     ],
     readOnly: false,
   },
+  {
+    htmlFor: "technicalEmail",
+    title: "Technical Person Email",
+    type: "text",
+    id: "technicalEmail",
+    name: "technicalEmail",
+    placeholder: "Enter the Email",
+    required: true,
+  },
+  {
+    htmlFor: "isMailSent",
+    title: "Email Sent Status",
+    type: "select",
+    id: "isMailSent",
+    name: "isMailSent",
+    required: true,
+    options: [
+      { value: "NO", label: "NO" },
+      { value: "YES", label: "YES" },
+    ],
+    readOnly: false,
+  },
+  {
+    htmlFor: "isDevlopmentApproved",
+    title: "DEVELOPMENT APPROVAL STATUS",
+    type: "select",
+    id: "isDevlopmentApproved",
+    name: "isDevlopmentApproved",
+    required: true,
+    options: [
+      { value: "NO", label: "NO" },
+      { value: "YES", label: "YES" },
+    ],
+    readOnly: false,
+  },
+
 ];
 
 export const UpdateConst = [
@@ -1113,7 +1151,6 @@ export const UserSideConst = [
       { value: "PROJECT", label: "PROJECT" },
       { value: "SERVICE", label: "SERVICE" },
       { value: "AMC", label: "AMC" },
-      { value: "SUPPLY", label: "SUPPLY" },
     ],
     readOnly: false,
   },

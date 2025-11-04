@@ -63,6 +63,11 @@ const InputForm = () => {
       }
       if (soTypeMap[secondChar]) {
         updated.soType = soTypeMap[secondChar];
+        if (secondChar === "R") {
+          updated.service = service.YES;
+        } else {
+          updated.service = service.NO;
+        }
       }
 
       if (Object.keys(updated).length > 0) {
@@ -71,10 +76,6 @@ const InputForm = () => {
     }
   }, [debounceJobnumber]);
 
-  useEffect(() => {
-    console.log(selectData)
-    console.log(formData)
-  }, [selectData]);
 
   useEffect(() => {
     setFormData((prevData) => {
@@ -182,7 +183,32 @@ const InputForm = () => {
     }
   };
 
-  const formRef = useRef(null);
+  useEffect(() => {
+    if (selectData) {
+      const formatDate = (date) => {
+        if (!date) return "";
+        return new Date(date).toISOString().split("T")[0];
+      };
+
+      setFormData((prev) => ({
+        ...prev,
+        entityType: selectData.entityType || prev.entityType,
+        soType: selectData.soType || prev.soType,
+        jobNumber: selectData.jobNumber || "",
+        client: selectData.client || "",
+        endUser: selectData.endUser || "",
+        site: selectData.site || "",
+        orderNumber: selectData.orderNumber || "",
+        orderDate: formatDate(selectData.orderDate),
+        deleveryDate: formatDate(selectData.deleveryDate),
+        technicalEmail: selectData.technicalEmail || "",
+        billStatus: selectData.billingStatus || "",
+        bill: selectData.netOrderValue || "",
+        dueBill: selectData.netOrderValue || ""
+
+      }));
+    }
+  }, [selectData]);
 
   return (
     <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
@@ -235,6 +261,7 @@ const InputForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <FormField
+            selectData={selectData}
             formData={formData}
             handleChange={handleChange}
             setEngineerData={setEngineerData}

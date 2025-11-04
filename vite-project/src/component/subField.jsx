@@ -11,6 +11,7 @@ export const InputFiled = ({
   placeholder,
   required,
   readOnly = false,
+  isEditable = false,
 }) => {
   const handleKeyDown = (e) => {
     if (type === "number" && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
@@ -23,6 +24,7 @@ export const InputFiled = ({
       e.target.blur();
     }
   };
+
   return (
     <div>
       <label
@@ -42,19 +44,20 @@ export const InputFiled = ({
         type={type}
         id={id}
         name={name}
-        readOnly={readOnly}
+        readOnly={readOnly || isEditable} // 👈 condition added here
         value={value ?? ""}
         onChange={handleChange}
-        // {...(type === "date" && { max: new Date().toISOString().split("T")[0] })}
         onKeyDown={handleKeyDown}
         onWheel={handleWheel}
-        className="bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-black/70"
+        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-black/70 ${isEditable ? "cursor-not-allowed opacity-60" : ""
+          }`} // 👈 visual hint when not editable
         placeholder={placeholder}
         required={required}
       />
     </div>
   );
 };
+
 
 export const SelectField = ({
   htmlFor,
@@ -65,6 +68,7 @@ export const SelectField = ({
   handleChange,
   options,
   required,
+  isEditable = false,
 }) => {
   return (
     <div>
@@ -80,25 +84,27 @@ export const SelectField = ({
           </span>
         )}
       </label>
+
       <select
         id={id}
         name={name}
         value={value ?? ""}
         onChange={handleChange}
         required={required}
-        className="bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        disabled={isEditable}
+        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${isEditable ? "cursor-not-allowed opacity-60" : ""
+          }`}
       >
-        {options.map((item) => {
-          return (
-            <option key={item.value} value={item.value}>
-              {item.label}
-            </option>
-          );
-        })}
+        {options.map((item) => (
+          <option key={item.value} value={item.value}>
+            {item.label}
+          </option>
+        ))}
       </select>
     </div>
   );
 };
+
 
 export const TextArea = ({
   value,

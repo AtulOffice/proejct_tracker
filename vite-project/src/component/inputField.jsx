@@ -3,51 +3,68 @@ import { InputConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField, TextArea } from "./subField";
 import { EngineerAssignment } from "./engineerInpt";
 
-const FormField = ({ formData, handleChange, setEngineerData }) => {
+const FormField = ({ formData, handleChange, setEngineerData, selectData }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <InputFiled
         {...InputConst[7]}
+        isEditable={!!selectData?.jobNumber}
         value={formData.jobNumber}
         handleChange={handleChange}
       />
+
       <InputFiled
         {...InputConst[8]}
+        isEditable={!!selectData?.orderNumber}
         value={formData.orderNumber}
         handleChange={handleChange}
       />
       <SelectField
         {...InputConst[28]}
         value={formData.entityType}
+        isEditable={!!selectData?.entityType}
         handleChange={handleChange}
       />
       <SelectField
         {...InputConst[27]}
+        isEditable={!!selectData?.soType}
         value={formData.soType}
         handleChange={handleChange}
       />
-      <SelectField
-        {...InputConst[29]}
-        value={formData.status}
-        handleChange={handleChange}
-      />
+
       <InputFiled
         {...InputConst[5]}
+        isEditable={!!selectData?.client}
         value={formData.client}
         handleChange={handleChange}
       />
       <InputFiled
         {...InputConst[6]}
+        isEditable={!!selectData?.endUser}
         value={formData.endUser}
         handleChange={handleChange}
       />
       <InputFiled
         {...InputConst[22]}
+        isEditable={!!selectData?.site}
         value={formData.location}
         handleChange={handleChange}
       />
       <InputFiled
+        {...InputConst[21]}
+        isEditable={!!selectData?.orderDate}
+        value={formData.orderDate}
+        handleChange={handleChange}
+      />
+      <InputFiled
+        {...InputConst[17]}
+        isEditable={!!selectData?.deleveryDate}
+        value={formData.deleveryDate}
+        handleChange={handleChange}
+      />
+      <InputFiled
         {...InputConst[9]}
+        isEditable={!!selectData?.netOrderValue}
         value={formData.bill}
         handleChange={handleChange}
       />
@@ -56,19 +73,19 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
         value={formData.dueBill}
         handleChange={handleChange}
       />
+      <InputFiled
+        {...InputConst[41]}
+        value={formData.technicalEmail}
+        handleChange={handleChange}
+      />
+      <SelectField
+        {...InputConst[29]}
+        value={formData.status}
+        handleChange={handleChange}
+      />
       <SelectField
         {...InputConst[25]}
         value={formData.billStatus}
-        handleChange={handleChange}
-      />
-      <InputFiled
-        {...InputConst[21]}
-        value={formData.orderDate}
-        handleChange={handleChange}
-      />
-      <InputFiled
-        {...InputConst[17]}
-        value={formData.deleveryDate}
         handleChange={handleChange}
       />
       <InputFiled
@@ -106,12 +123,12 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
             formData.status === "completed" ||
             formData.status === "cancelled" ||
             formData.status === "closed") && (
-            <SelectField
-              {...InputConst[30]}
-              handleChange={handleChange}
-              value={formData.StartChecklist}
-            />
-          )}
+              <SelectField
+                {...InputConst[30]}
+                handleChange={handleChange}
+                value={formData.StartChecklist}
+              />
+            )}
           <InputFiled
             {...InputConst[19]}
             value={formData.visitendDate}
@@ -120,12 +137,12 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
           {(formData.status === "completed" ||
             formData.status === "cancelled" ||
             formData.status === "closed") && (
-            <SelectField
-              {...InputConst[34]}
-              handleChange={handleChange}
-              value={formData.EndChecklist}
-            />
-          )}
+              <SelectField
+                {...InputConst[34]}
+                handleChange={handleChange}
+                value={formData.EndChecklist}
+              />
+            )}
         </>
       )}
       {(formData.status === "completed" || formData.status === "closed") && (
@@ -146,27 +163,27 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
         formData.status === "pending" ||
         formData.status === "completed" ||
         1) && (
-        <>
-          {(formData.status === "completed" ||
-            formData.status === "cancelled" ||
-            formData.status === "closed") && (
-            <SelectField
-              {...InputConst[37]}
-              handleChange={handleChange}
-              value={formData.BackupSubmission}
-            />
-          )}
-          {(formData.status === "completed" ||
-            formData.status === "cancelled" ||
-            formData.status === "closed") && (
-            <SelectField
-              {...InputConst[38]}
-              handleChange={handleChange}
-              value={formData.ExpensSubmission}
-            />
-          )}
-        </>
-      )}
+          <>
+            {(formData.status === "completed" ||
+              formData.status === "cancelled" ||
+              formData.status === "closed") && (
+                <SelectField
+                  {...InputConst[37]}
+                  handleChange={handleChange}
+                  value={formData.BackupSubmission}
+                />
+              )}
+            {(formData.status === "completed" ||
+              formData.status === "cancelled" ||
+              formData.status === "closed") && (
+                <SelectField
+                  {...InputConst[38]}
+                  handleChange={handleChange}
+                  value={formData.ExpensSubmission}
+                />
+              )}
+          </>
+        )}
       {(formData.status === "completed" || formData.status === "closed") && (
         <InputFiled
           {...InputConst[39]}
@@ -177,12 +194,12 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
       {(formData.status === "completed" ||
         formData.status === "cancelled" ||
         formData.status === "closed") && (
-        <InputFiled
-          {...InputConst[2]}
-          value={formData.actualVisitDuration}
-          handleChange={handleChange}
-        />
-      )}
+          <InputFiled
+            {...InputConst[2]}
+            value={formData.actualVisitDuration}
+            handleChange={handleChange}
+          />
+        )}
 
       <SelectField
         {...InputConst[40]}
@@ -212,12 +229,12 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
       {(formData.status === "closed" ||
         formData.status === "completed" ||
         formData.status === "running") && (
-        <InputFiled
-          {...InputConst[14]}
-          value={formData.actualStartDate}
-          handleChange={handleChange}
-        />
-      )}
+          <InputFiled
+            {...InputConst[14]}
+            value={formData.actualStartDate}
+            handleChange={handleChange}
+          />
+        )}
       {(formData.status === "completed" || formData.status === "closed") && (
         <InputFiled
           {...InputConst[15]}
@@ -265,7 +282,6 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
             value={formData.ContactPersonName}
             handleChange={handleChange}
           />
-
           <InputFiled
             {...InputConst[36]}
             value={formData.ContactPersonNumber}
@@ -273,6 +289,20 @@ const FormField = ({ formData, handleChange, setEngineerData }) => {
           />
         </>
       )}
+      <SelectField
+        {...InputConst[42]}
+        value={formData.isMailSent}
+        handleChange={handleChange}
+      />
+      {
+        (formData?.Development === "OFFICE" || formData?.Development === "SITE") && (
+          <SelectField
+            {...InputConst[43]}
+            value={formData.isDevlopmentApproved}
+            handleChange={handleChange}
+          />
+        )
+      }
     </div>
   );
 };
