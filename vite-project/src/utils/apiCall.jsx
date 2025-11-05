@@ -318,7 +318,7 @@ export const UserCall = async () => {
   }
 };
 
-export const addProject = async ({ formData, engineerData }) => {
+export const addProject = async ({ formData, engineerData, Docs }) => {
   try {
     await axios.post(
       `${import.meta.env.VITE_API_URL}/save`,
@@ -334,12 +334,8 @@ export const addProject = async ({ formData, engineerData }) => {
         projectName: formData.client,
         startDate: formData?.requestDate ?? null,
         endDate: formData?.deleveryDate ?? null,
-        // engineerData: engineerData.map((eng) => ({
-        //   ...eng,
-        //   assignedAt: formData.visitDate,
-        //   endTime: formData.visitendDate,
-        // })),
         engineerData,
+        ...Docs
       },
       { withCredentials: true }
     );

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { dateFields, formval } from "../utils/FieldConstant";
+import { dateFields, formval, docsVal } from "../utils/FieldConstant";
 import FormField from "./inputField";
 import { useAppContext } from "../appContex";
 import { addProject, fetfchOrdersAllnew } from "../utils/apiCall";
@@ -16,7 +16,35 @@ const InputForm = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectData, setSelectData] = useState(null);
+  const [Docs, setDocs] = useState(docsVal);
+console.log(Docs)
+  useEffect(() => {
+    if (selectData) {
+      const formatDate = (date) => {
+        if (!date) return "";
+        return new Date(date).toISOString().split("T")[0];
+      };
 
+      setFormData((prev) => ({
+        ...prev,
+        OrderMongoId: selectData._id,
+        entityType: selectData.entityType || prev.entityType,
+        soType: selectData.soType || prev.soType,
+        jobNumber: selectData.jobNumber || "",
+        client: selectData.client || "",
+        endUser: selectData.endUser || "",
+        location: selectData.site || "",
+        orderNumber: selectData.orderNumber || "",
+        orderDate: formatDate(selectData.orderDate),
+        deleveryDate: formatDate(selectData.deleveryDate),
+        technicalEmail: selectData.technicalEmail || "",
+        billStatus: selectData.billingStatus || "",
+        bill: selectData.netOrderValue || "",
+        dueBill: selectData.netOrderValue || "",
+      }));
+      setDocs(docsVal)
+    }
+  }, [selectData]);
   useEffect(() => {
     const getOrdersnew = async () => {
       try {
@@ -56,7 +84,6 @@ const InputForm = () => {
         R: "SERVICE",
       };
 
-
       const updated = {};
       if (entityMap[firstChar]) {
         updated.entityType = entityMap[firstChar];
@@ -75,7 +102,6 @@ const InputForm = () => {
       }
     }
   }, [debounceJobnumber]);
-
 
   useEffect(() => {
     setFormData((prevData) => {
@@ -100,10 +126,24 @@ const InputForm = () => {
     }));
   };
 
+  const validateDocs = (docsVal) => {
+    const VALID_VALUES = ["YES", "NO", "N/A"];
+    console.log(docsVal);
+    return ![
+      ...Object.values(docsVal.internalDocuments),
+      ...Object.values(docsVal.customerDocuments),
+      ...Object.values(docsVal.dispatchDocuments),
+    ].every((val) => VALID_VALUES.includes(val));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
+    if (validateDocs(Docs)) {
+      toast.error(`Please select YES, NO, or N/A for Documents}`);
+      return;
+    }
+    setIsLoading(true);
     const {
       actualEndDate,
       startDate,
@@ -172,9 +212,14 @@ const InputForm = () => {
     //   }
     // }
     try {
-      await addProject({ formData: formData, engineerData: engineerData });
+      await addProject({
+        formData: formData,
+        engineerData: engineerData,
+        Docs: Docs,
+      });
       setToggleDev((prev) => !prev);
       setFormData(formval);
+      setDocs(docsVal);
       setToggle((prev) => !prev);
     } catch (e) {
       console.log(e);
@@ -182,33 +227,6 @@ const InputForm = () => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (selectData) {
-      const formatDate = (date) => {
-        if (!date) return "";
-        return new Date(date).toISOString().split("T")[0];
-      };
-
-      setFormData((prev) => ({
-        ...prev,
-        entityType: selectData.entityType || prev.entityType,
-        soType: selectData.soType || prev.soType,
-        jobNumber: selectData.jobNumber || "",
-        client: selectData.client || "",
-        endUser: selectData.endUser || "",
-        site: selectData.site || "",
-        orderNumber: selectData.orderNumber || "",
-        orderDate: formatDate(selectData.orderDate),
-        deleveryDate: formatDate(selectData.deleveryDate),
-        technicalEmail: selectData.technicalEmail || "",
-        billStatus: selectData.billingStatus || "",
-        bill: selectData.netOrderValue || "",
-        dueBill: selectData.netOrderValue || ""
-
-      }));
-    }
-  }, [selectData]);
 
   return (
     <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
@@ -261,6 +279,8 @@ const InputForm = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <FormField
+            Docs={Docs}
+            setDocs={setDocs}
             selectData={selectData}
             formData={formData}
             handleChange={handleChange}

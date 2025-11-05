@@ -14,7 +14,7 @@ export const InputFiled = ({
   isEditable = false,
 }) => {
   const handleKeyDown = (e) => {
-    if (type === "number" && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+    if (type === "number" && (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key==="-")) {
       e.preventDefault();
     }
   };
@@ -49,15 +49,15 @@ export const InputFiled = ({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onWheel={handleWheel}
-        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-black/70 ${isEditable ? "cursor-not-allowed opacity-60" : ""
-          }`} // 👈 visual hint when not editable
+        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-black/70 ${
+          isEditable ? "cursor-not-allowed opacity-60" : ""
+        }`} // 👈 visual hint when not editable
         placeholder={placeholder}
         required={required}
       />
     </div>
   );
 };
-
 
 export const SelectField = ({
   htmlFor,
@@ -92,8 +92,9 @@ export const SelectField = ({
         onChange={handleChange}
         required={required}
         disabled={isEditable}
-        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${isEditable ? "cursor-not-allowed opacity-60" : ""
-          }`}
+        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
+          isEditable ? "cursor-not-allowed opacity-60" : ""
+        }`}
       >
         {options.map((item) => (
           <option key={item.value} value={item.value}>
@@ -104,7 +105,6 @@ export const SelectField = ({
     </div>
   );
 };
-
 
 export const TextArea = ({
   value,

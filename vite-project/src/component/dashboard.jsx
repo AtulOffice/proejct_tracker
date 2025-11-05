@@ -227,15 +227,15 @@ const AdminDashboard = () => {
                   {user.role === "admin"
                     ? "ADMIN DASHBOARD"
                     : user?.role === "reception"
-                      ? "RECEPTION DASHBOARD"
-                      : "DESIGN DASHBOARD"}
+                    ? "RECEPTION DASHBOARD"
+                    : "DESIGN DASHBOARD"}
                 </span>
                 <span className="inline sm:hidden">
                   {user.role === "admin"
                     ? "ADMIN"
                     : user?.role === "reception"
-                      ? "RECEPTION"
-                      : "DESIGN"}
+                    ? "RECEPTION"
+                    : "DESIGN"}
                 </span>
 
                 <span className="ml-2">✨</span>
@@ -279,8 +279,9 @@ const AdminDashboard = () => {
 
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="flex flex-col h-full">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
@@ -296,8 +297,9 @@ const AdminDashboard = () => {
                         handleActiveBar("zero");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <RiDashboardLine
                         className="mr-3 text-indigo-500"
@@ -312,10 +314,11 @@ const AdminDashboard = () => {
                         handleActiveBar("twentyone");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twentyone"
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twentyone"
                           ? "bg-indigo-50 rounded-md"
                           : ""
-                        }`}
+                      }`}
                     >
                       <FaShoppingCart className="mr-3" size={20} />
                       ADD ORDER
@@ -327,10 +330,11 @@ const AdminDashboard = () => {
                         handleActiveBar("twentytwo");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twentytwo"
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twentytwo"
                           ? "bg-indigo-50 rounded-md"
                           : ""
-                        }`}
+                      }`}
                     >
                       <FaClipboardList className="mr-3" size={20} />
                       ORDER LIST
@@ -342,8 +346,9 @@ const AdminDashboard = () => {
                         handleActiveBar("one");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "one" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "one" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <FaRegSquarePlus className="mr-3" size={20} />
                       ADD NEW
@@ -352,11 +357,28 @@ const AdminDashboard = () => {
                   <li>
                     <div
                       onClick={() => {
+                        handleActiveBar("ninteen");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "ninteen"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ALL PROJECTS
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
                         handleActiveBar("two");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       ALL
@@ -370,10 +392,11 @@ const AdminDashboard = () => {
                             handleActiveBar("sixteen");
                             setSidebarOpen(false);
                           }}
-                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "sixteen"
+                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                            activeCard === "sixteen"
                               ? "bg-indigo-50 rounded-md"
                               : ""
-                            }`}
+                          }`}
                         >
                           <GoProjectRoadmap className="mr-3" size={20} />
                           PROJECT ACTIONS
@@ -390,10 +413,11 @@ const AdminDashboard = () => {
                             handleActiveBar("seventeen");
                             setSidebarOpen(false);
                           }}
-                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "seventeen"
+                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                            activeCard === "seventeen"
                               ? "bg-indigo-50 rounded-md"
                               : ""
-                            }`}
+                          }`}
                         >
                           <GoProjectRoadmap className="mr-3" size={20} />
                           ENGINEERS
@@ -401,29 +425,16 @@ const AdminDashboard = () => {
                       </li>
                     </>
                   )}
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("ninteen");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ninteen"
-                          ? "bg-indigo-50 rounded-md"
-                          : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ALL PROJECT LIST
-                    </div>
-                  </li>
+
                   <li>
                     <div
                       onClick={() => {
                         handleActiveBar("three");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       UPCOMING
@@ -435,10 +446,11 @@ const AdminDashboard = () => {
                         handleActiveBar("eighteen");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eighteen"
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "eighteen"
                           ? "bg-indigo-50 rounded-md"
                           : ""
-                        }`}
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       WEEKLY ASSESSMENT
@@ -450,8 +462,9 @@ const AdminDashboard = () => {
                         handleActiveBar("twenty");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twenty" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twenty" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       ASSESSMENTS
@@ -463,8 +476,9 @@ const AdminDashboard = () => {
                         handleActiveBar("ten");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       RUNNING
@@ -476,8 +490,9 @@ const AdminDashboard = () => {
                         handleActiveBar("twelve");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twelve" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twelve" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       NO REQUEST
@@ -489,8 +504,9 @@ const AdminDashboard = () => {
                         handleActiveBar("eleven");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eleven" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "eleven" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       LATEST
@@ -502,8 +518,9 @@ const AdminDashboard = () => {
                         handleActiveBar("four");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "four" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "four" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <MdOutlinePendingActions className="mr-3" size={20} />
                       PENDING
@@ -515,8 +532,9 @@ const AdminDashboard = () => {
                         handleActiveBar("five");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "five" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "five" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       COMPLETED
@@ -528,10 +546,11 @@ const AdminDashboard = () => {
                         handleActiveBar("thirteen");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "thirteen"
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "thirteen"
                           ? "bg-indigo-50 rounded-md"
                           : ""
-                        }`}
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       CLOSED
@@ -543,8 +562,9 @@ const AdminDashboard = () => {
                         handleActiveBar("seven");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <TbUrgent className="mr-3" size={20} />
                       URGENT
@@ -556,8 +576,9 @@ const AdminDashboard = () => {
                         handleActiveBar("six");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <RiCustomerServiceFill className="mr-3" size={20} />
                       SERVICES
@@ -569,10 +590,11 @@ const AdminDashboard = () => {
                         handleActiveBar("fifteen");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fifteen"
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "fifteen"
                           ? "bg-indigo-50 rounded-md"
                           : ""
-                        }`}
+                      }`}
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       PROJECTS UNDER DEVLOPMENT
@@ -586,8 +608,9 @@ const AdminDashboard = () => {
                     handleActiveBar("fourteen");
                     setSidebarOpen(false);
                   }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fourteen" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                    activeCard === "fourteen" ? "bg-indigo-50 rounded-md" : ""
+                  }`}
                 >
                   <GoProjectRoadmap className="mr-3" size={20} />
                   PROJECT DEV STATUS
@@ -601,8 +624,9 @@ const AdminDashboard = () => {
                         handleActiveBar("eight");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <MdCancel className="mr-3" size={20} />
                       CANCELLED
@@ -614,8 +638,9 @@ const AdminDashboard = () => {
                         handleActiveBar("nine");
                         setSidebarOpen(false);
                       }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
                     >
                       <RiProgress2Line className="mr-3" size={20} />
                       WORK STATUS

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { UpdateConst } from "../utils/FieldConstant";
+import { docsVal, formval, UpdateConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField, TextArea } from "./subField";
 import { useAppContext } from "../appContex";
 import {
@@ -12,15 +12,17 @@ import {
 } from "react-router-dom";
 import LoadingSkeleton from "../utils/loaderForm";
 import { EngineerAssignment } from "./engineerInpt";
+import DocumentsSection from "../utils/addDevDocs";
 
 const UpdateForm = () => {
   const { id } = useParams();
   const location = useLocation();
   const { setToggle, setToggleDev } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState(formval);
   const navigate = useNavigate();
   const [engineerData, setEngineerData] = useState([]);
+  const [Docs, setDocs] = useState(docsVal);
 
   useEffect(() => {
     const fetchByid = async () => {
@@ -47,12 +49,12 @@ const UpdateForm = () => {
 
           const formattedData = { ...res.data.data };
 
-          dateFields.forEach(field => {
+          dateFields.forEach((field) => {
             const value = formattedData[field];
             if (value) {
               const date = new Date(value);
               if (!isNaN(date)) {
-                formattedData[field] = date.toISOString().split("T")[0]; // ✅ for <input type="date">
+                formattedData[field] = date.toISOString().split("T")[0];
               } else {
                 formattedData[field] = "";
               }
@@ -61,7 +63,14 @@ const UpdateForm = () => {
             }
           });
 
-          setFormData(formattedData);
+          setFormData((prev) => ({ ...prev, ...formattedData }));
+          setDocs((prev) => ({
+            ...prev,
+            dispatchDocuments: formattedData?.dispatchDocuments,
+            customerDocuments: formattedData?.customerDocuments,
+            internalDocuments: formattedData?.internalDocuments,
+            completionDocuments: formattedData?.completionDocuments,
+          }));
         }
       } catch (err) {
         console.error("Failed to fetch projects:", err);
@@ -70,7 +79,6 @@ const UpdateForm = () => {
 
     if (id) fetchByid();
   }, [id]);
-
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -152,14 +160,6 @@ const UpdateForm = () => {
     try {
       const finalData = {
         ...formData,
-        // engineerName:
-        //   typeof formData.engineerName === "string"
-        //     ? formData.engineerName
-        //         .split(",")
-        //         .map((name) => name.trim())
-        //         .filter((name) => name.length > 0)
-        //     : formData.engineerName,
-
         engineerName: Array.from(
           new Set([
             ...(formData.engineerName || []),
@@ -171,16 +171,12 @@ const UpdateForm = () => {
         momsrNo:
           typeof formData.momsrNo === "string"
             ? formData.momsrNo
-              .split(",")
-              .map((name) => name.trim())
-              .filter((name) => name.length > 0)
+                .split(",")
+                .map((name) => name.trim())
+                .filter((name) => name.length > 0)
             : formData.momsrNo,
-        // engineerData: engineerData.map((eng) => ({
-        //   ...eng,
-        //   assignedAt: formData?.visitDate,
-        //   endTime: formData?.visitendDate,
-        // })),
         engineerData,
+        ...Docs,
       };
 
       const response = await axios.put(
@@ -189,6 +185,8 @@ const UpdateForm = () => {
         { withCredentials: true }
       );
       toast.success("Data updated successfully");
+      setFormData(formval);
+      setDocs(docsVal);
       setToggle((prev) => !prev);
       setToggleDev((prev) => !prev);
       navigate("/page", {
@@ -224,37 +222,43 @@ const UpdateForm = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <InputFiled
               {...UpdateConst[7]}
+              isEditable={true}
               value={formData.jobNumber}
               handleChange={handleChange}
             />
             <InputFiled
               {...UpdateConst[8]}
+              isEditable={true}
               value={formData.orderNumber}
               handleChange={handleChange}
             />
             <SelectField
               {...UpdateConst[28]}
+              isEditable={true}
               value={formData.entityType}
               handleChange={handleChange}
             />
             <SelectField
               {...UpdateConst[27]}
+              isEditable={true}
               value={formData.soType}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[29]}
-              value={formData.status}
               handleChange={handleChange}
             />
             <InputFiled
               {...UpdateConst[5]}
+              isEditable={true}
               value={formData.client}
               handleChange={handleChange}
             />
             <InputFiled
               {...UpdateConst[6]}
+              isEditable={true}
               value={formData.endUser}
+              handleChange={handleChange}
+            />
+            <SelectField
+              {...UpdateConst[29]}
+              value={formData.status}
               handleChange={handleChange}
             />
             <InputFiled
@@ -287,6 +291,37 @@ const UpdateForm = () => {
               value={formData.deleveryDate}
               handleChange={handleChange}
             />
+            <SelectField
+              {...UpdateConst[40]}
+              value={formData.Development}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...UpdateConst[41]}
+              value={formData.technicalEmail}
+              handleChange={handleChange}
+            />{" "}
+            <SelectField
+              {...UpdateConst[42]}
+              value={formData.isMailSent}
+              handleChange={handleChange}
+            />
+            {(formData?.Development === "OFFICE" ||
+              formData?.Development === "SITE") && (
+              <SelectField
+                {...UpdateConst[43]}
+                value={formData.isDevlopmentApproved}
+                handleChange={handleChange}
+              />
+            )}
+            {(formData.Development === "OFFICE" ||
+              formData.Development === "SITE") && (
+              <SelectField
+                {...UpdateConst[44]}
+                value={formData.DevelopmentSetcion}
+                handleChange={handleChange}
+              />
+            )}
             <InputFiled
               {...UpdateConst[3]}
               value={formData.expenseScope}
@@ -307,7 +342,6 @@ const UpdateForm = () => {
               value={formData.engineerName}
               handleChange={handleChange}
             /> */}
-
             <div className="flex flex-col mb-3">
               <label className="text-sm font-semibold text-gray-700 mb-1">
                 All Assigned Engineers List
@@ -318,9 +352,7 @@ const UpdateForm = () => {
                   : "No engineer assigned"}
               </div>
             </div>
-
             <EngineerAssignment setEngineerData={setEngineerData} />
-
             <InputFiled
               {...UpdateConst[16]}
               value={formData.requestDate}
@@ -385,7 +417,6 @@ const UpdateForm = () => {
               value={formData.Development}
               handleChange={handleChange}
             />
-
             <SelectField
               {...UpdateConst[26]}
               value={formData.supplyStatus}
@@ -444,6 +475,7 @@ const UpdateForm = () => {
               handleChange={handleChange}
             />
           </div>
+          <DocumentsSection Docs={Docs} setDocs={setDocs} />
           <div className="flex justify-center mt-8">
             <button
               type="submit"

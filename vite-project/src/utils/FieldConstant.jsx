@@ -27,7 +27,7 @@ export const formval = {
   status: "upcoming",
   priority: "high",
   duration: "",
-  service: "Service not included",
+  service: "N/A",
   workScope: "",
   expenseScope: "",
   supplyStatus: "DISPATCHED",
@@ -42,7 +42,37 @@ export const formval = {
   BackupSubmission: "N/A",
   technicalEmail: "",
   isMailSent: "NO",
-  isDevlopmentApproved: "NO"
+  isDevlopmentApproved: "NO",
+  DevelopmentSetcion: "",
+  OrderMongoId: "",
+};
+export const docsVal = {
+  internalDocuments: {
+    panelGA: "",
+    wiringDiagram: "",
+    ioList: "",
+    systemConfiguration: "",
+    cableSchedule: "",
+    logicSchedule: "",
+    logicBackup: "",
+    scada: "",
+  },
+  customerDocuments: {
+    pAndIDs: "",
+    controlPhilosophy: "",
+    anyOther: "",
+  },
+  dispatchDocuments: {
+    packingList: "",
+    deliveryChallan: "",
+    anyOther: "",
+  },
+   completionDocuments: {
+      asBuiltDrawings: "",
+      finalLogicBackup:"",
+      finalScadaBackup: "",
+      expenseSettlement: "",
+    },
 };
 
 export const dateFields = [
@@ -403,8 +433,8 @@ export const InputConst = [
     name: "service",
     required: true,
     options: [
-      { value: "Service Included", label: "Include" },
-      { value: "Service not included", label: "Not Included" },
+      { value: "N/A", label: "Not Included" },
+      { value: "SERVICE", label: "Include" },
     ],
   },
   {
@@ -535,7 +565,21 @@ export const InputConst = [
     ],
     readOnly: false,
   },
-
+  {
+    htmlFor: "DevelopmentSetcion",
+    title: "Development Section",
+    type: "select",
+    id: "DevelopmentSetcion",
+    name: "DevelopmentSetcion",
+    required: true,
+    options: [
+      { value: "", label: "SELECT" },
+      { value: "LOGIC", label: "LOGIC" },
+      { value: "SCADA", label: "SCADA" },
+      { value: "BOTh", label: "BOTH" },
+    ],
+    readOnly: false,
+  },
 ];
 
 export const UpdateConst = [
@@ -865,8 +909,8 @@ export const UpdateConst = [
     name: "service",
     required: false,
     options: [
-      { value: "Service Included", label: "Include" },
-      { value: "Service not included", label: "Not Included" },
+      { value: "N/A", label: "Not Included" },
+      { value: "SERVICE", label: "Include" },
     ],
   },
   {
@@ -959,6 +1003,56 @@ export const UpdateConst = [
       { value: "N/A", label: "N/A" },
       { value: "SITE", label: "ON SITE" },
       { value: "OFFICE", label: "IN OFFICE" },
+    ],
+    readOnly: false,
+  },
+  {
+    htmlFor: "technicalEmail",
+    title: "Technical Person Email",
+    type: "text",
+    id: "technicalEmail",
+    name: "technicalEmail",
+    placeholder: "Enter the Email",
+    required: true,
+  },
+  {
+    htmlFor: "isMailSent",
+    title: "Email Sent Status",
+    type: "select",
+    id: "isMailSent",
+    name: "isMailSent",
+    required: true,
+    options: [
+      { value: "NO", label: "NO" },
+      { value: "YES", label: "YES" },
+    ],
+    readOnly: false,
+  },
+  {
+    htmlFor: "isDevlopmentApproved",
+    title: "DEVELOPMENT APPROVAL STATUS",
+    type: "select",
+    id: "isDevlopmentApproved",
+    name: "isDevlopmentApproved",
+    required: true,
+    options: [
+      { value: "NO", label: "NO" },
+      { value: "YES", label: "YES" },
+    ],
+    readOnly: false,
+  },
+  {
+    htmlFor: "DevelopmentSetcion",
+    title: "Development Section",
+    type: "select",
+    id: "DevelopmentSetcion",
+    name: "DevelopmentSetcion",
+    required: true,
+    options: [
+      { value: "", label: "SELECT" },
+      { value: "LOGIC", label: "LOGIC" },
+      { value: "SCADA", label: "SCADA" },
+      { value: "BOTh", label: "BOTH" },
     ],
     readOnly: false,
   },
@@ -1243,6 +1337,20 @@ export const UserSideConst = [
     name: "daysspendsite",
     placeholder: "Enter the value",
     required: true,
+  },
+  {
+    htmlFor: "Development",
+    title: "Development Status",
+    type: "select",
+    id: "Development",
+    name: "Development",
+    required: true,
+    options: [
+      { value: "N/A", label: "N/A" },
+      { value: "SITE", label: "ON SITE" },
+      { value: "OFFICE", label: "IN OFFICE" },
+    ],
+    readOnly: false,
   },
 ];
 
