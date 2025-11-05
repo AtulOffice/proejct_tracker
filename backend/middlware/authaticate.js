@@ -29,7 +29,7 @@ export const authenticate = async (req, res, next) => {
     const user = await UserModels.findById(decoded.user._id);
     if (!user) {
       return res.status(401).json({ message: "User not found" });
-    }
+    } 
 
     req.user = user;
     next();
