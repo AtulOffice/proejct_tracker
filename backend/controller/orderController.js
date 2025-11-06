@@ -110,7 +110,7 @@ export const getAllOrders = async (req, res) => {
 export const getAllOrdersnew = async (req, res) => {
   try {
     const orders = await Order.find(
-      { isSaveInProject: false },
+      { isSaveInProject: false, soType: { $ne: "SUPPLY" } },
       {
         _id: 1,
         site: 1,
@@ -124,6 +124,8 @@ export const getAllOrdersnew = async (req, res) => {
         orderDate: 1,
         deleveryDate: 1,
         technicalEmail: 1,
+        billingStatus: 1,
+        netOrderValue: 1,
       }
     ).sort({
       updatedAt: -1,

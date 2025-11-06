@@ -66,8 +66,6 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
             <strong>Service Days:</strong>{" "}
             {project?.duration !== "0" ? project?.duration : "Not provided"}
           </li>
-
-          {/* Additional fields */}
           <li>
             <strong>Expense Scope:</strong>{" "}
             {project?.expenseScope || "Not provided"}

@@ -6,10 +6,18 @@ import ProjectDevModel from "../models/Project.Dev.model.js";
 import mongoose from "mongoose";
 import StartChecklistsModel from "../models/startCheck.model.js";
 import EndChecklistsModel from "../models/endCheckList.js";
+import Order from "../models/orderSheet.model.js";
 
 export const Recordsformave = async (req, res) => {
   try {
-    const { jobNumber, engineerData, ...projectFields } = req.body;
+    const { jobNumber, engineerData, OrderMongoId, ...projectFields } =
+      req.body;
+    if (!jobNumber) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Job number is Required" });
+    }
+
     const existingProject = await ProjectModel.findOne({ jobNumber });
     if (existingProject) {
       return res
@@ -47,7 +55,16 @@ export const Recordsformave = async (req, res) => {
       ...projectFields,
       jobNumber,
       EngineerDetails,
+      OrderMongoId,
     });
+    await Order.findByIdAndUpdate(
+      OrderMongoId,
+      {
+        ProjectDetails: project._id,
+        isSaveInProject: true,
+      },
+      { new: true }
+    );
 
     let updatedCount = 0;
     let skippedEngineers = [];
@@ -206,7 +223,14 @@ export const findrecordbyId = async (req, res) => {
 export const updateRecords = async (req, res) => {
   try {
     const { id } = req.params;
-    const { engineerData, ...otherData } = req.body;
+    const {
+      engineerData,
+      completionDocuments,
+      dispatchDocuments,
+      customerDocuments,
+      internalDocuments,
+      ...otherData
+    } = req.body;
 
     if (!id)
       return res
@@ -222,6 +246,23 @@ export const updateRecords = async (req, res) => {
     Object.keys(otherData).forEach((key) => {
       if (project.schema.path(key)) project[key] = otherData[key];
     });
+
+    const mergeNested = (target, source) => {
+      if (!source) return;
+      Object.entries(source).forEach(([key, value]) => {
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          if (!target[key]) target[key] = {};
+          mergeNested(target[key], value);
+        } else {
+          target[key] = value;
+        }
+      });
+    };
+
+    mergeNested(project.completionDocuments, completionDocuments);
+    mergeNested(project.dispatchDocuments, dispatchDocuments);
+    mergeNested(project.customerDocuments, customerDocuments);
+    mergeNested(project.internalDocuments, internalDocuments);
 
     let transformedEngineers = [];
     if (Array.isArray(engineerData) && engineerData.length > 0) {
@@ -325,6 +366,11 @@ export const updateRecords = async (req, res) => {
 export const deleteRecord = async (req, res) => {
   try {
     const { id } = req.params;
+
+    return res.status(400).json({
+      success: false,
+      message: "delete operation is closed by developer temperory",
+    });
     const deletedRecord = await ProjectModel.findByIdAndDelete(id);
 
     if (!deletedRecord) {
@@ -821,6 +867,7 @@ export const allProjectsFetch = async (req, res) => {
       engineerName: 1,
       updatedAt: 1,
       createdAt: 1,
+      OrderMongoId:1
     }).sort({
       updatedAt: -1,
       createdAt: -1,

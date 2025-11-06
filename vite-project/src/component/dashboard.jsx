@@ -357,6 +357,22 @@ const AdminDashboard = () => {
                   <li>
                     <div
                       onClick={() => {
+                        handleActiveBar("ninteen");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "ninteen"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ALL PROJECTS
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
                         handleActiveBar("two");
                         setSidebarOpen(false);
                       }}
@@ -409,22 +425,7 @@ const AdminDashboard = () => {
                       </li>
                     </>
                   )}
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("ninteen");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                        activeCard === "ninteen"
-                          ? "bg-indigo-50 rounded-md"
-                          : ""
-                      }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ALL PROJECT LIST
-                    </div>
-                  </li>
+
                   <li>
                     <div
                       onClick={() => {

@@ -360,14 +360,16 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           <Description
             HomeStatus={project.devScope}
             one={
-              project.startDate
-                ? new Date(project.startDate).toISOString().split("T")[0]
-                : ""
+              project?.startDate
+                ? project.startDate &&
+                  new Date(project.startDate).toISOString().split("T")[0]
+                : "--"
             }
             two={
-              project.endDate
-                ? new Date(project.endDate).toISOString().split("T")[0]
-                : ""
+              project?.endDate
+                ? project.endDate &&
+                  new Date(project.endDate).toISOString().split("T")[0]
+                : "--"
             }
             three={project?.DaysConsumed || 0}
           />

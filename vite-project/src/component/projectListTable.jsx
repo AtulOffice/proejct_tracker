@@ -2,12 +2,14 @@ import axios from "axios";
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { fetchbyProjectbyId } from "../utils/apiCall";
+import { fetchbyOrderbyId, fetchbyProjectbyId } from "../utils/apiCall";
 import toast from "react-hot-toast";
 import ProjectDetailsPopup from "../utils/cardPopup";
+import OrderDetailsPopup from "../utils/OrderShower";
 
 const ProjectTableAll = ({ data }) => {
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
+  const [isOrderFetched, setIsOrderFetched] = useState(false);
   const navigate = useNavigate();
   const handleUpdate = (id) => {
     try {
@@ -19,29 +21,48 @@ const ProjectTableAll = ({ data }) => {
     }
   };
 
-  const hadleOpenPopup = async (id) => {
+  const hadleOpenPopup = async (project) => {
     try {
-      const val = await fetchbyProjectbyId(id);
+      const id = project?.mongoOrderId || project?._id || project?.id;
+
+      if (!id) {
+        toast.error("Invalid project data — ID missing");
+        return;
+      }
+
+      let val;
+      let orderFlag = false;
+      if (project?.OrderMongoId) {
+        val = await fetchbyOrderbyId(project.OrderMongoId);
+        orderFlag = true;
+      } else {
+        val = await fetchbyProjectbyId(id);
+      }
+
       if (val) {
         setSelectedProjectForPopup(val);
+        setIsOrderFetched(orderFlag);
       }
-      toast.success("Project details fetched successfully");
     } catch (error) {
-      if (error?.response) {
-        toast.error(error.response.data.message || "An error occurred");
-      }
-      console.log("Error fetching project details:", error);
+      console.error("Error fetching project/order details:", error);
     }
   };
 
   return (
     <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
-      {selectedProjectForPopup && (
-        <ProjectDetailsPopup
-          project={selectedProjectForPopup}
-          onClose={() => setSelectedProjectForPopup(null)}
-        />
-      )}
+      {selectedProjectForPopup &&
+        (isOrderFetched ? (
+          <OrderDetailsPopup
+            order={selectedProjectForPopup}
+            onClose={() => setSelectedProjectForPopup(null)}
+          />
+        ) : (
+          <ProjectDetailsPopup
+            project={selectedProjectForPopup}
+            onClose={() => setSelectedProjectForPopup(null)}
+          />
+        ))}
+
       <div className="overflow-x-auto hidden md:block">
         <div className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
@@ -81,7 +102,7 @@ const ProjectTableAll = ({ data }) => {
                     <div
                       className="text-base font-medium hover:cursor-pointer text-blue-900 truncate"
                       title={project.projectName}
-                      onClick={() => hadleOpenPopup(project?._id)}
+                      onClick={() => hadleOpenPopup(project)}
                     >
                       {project.projectName}
                     </div>
@@ -157,11 +178,17 @@ const ProjectTableAll = ({ data }) => {
               </div>
               <div>
                 <span className="font-medium text-indigo-600">Delivery:</span>
-                <span className="ml-2">{project.deleveryDate}</span>
+                <span className="ml-2">
+                  {project.deleveryDate &&
+                    new Date(project.deleveryDate).toISOString().split("T")[0]}
+                </span>
               </div>
               <div>
                 <span className="font-medium text-indigo-600">Visit:</span>
-                <span className="ml-2">{project.visitDate}</span>
+                <span className="ml-2">
+                  {project.visitDate &&
+                    new Date(project.visitDate).toISOString().split("T")[0]}
+                </span>
               </div>
               <div>
                 <span className="font-medium text-indigo-600">Engineer:</span>

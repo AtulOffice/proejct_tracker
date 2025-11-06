@@ -6,7 +6,6 @@ import { fields } from "../utils/FieldConstant";
 
 export default function OrderForm() {
   const [formData, setFormData] = useState(fields);
-
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [touched, setTouched] = useState({});
@@ -52,25 +51,30 @@ export default function OrderForm() {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    const newValue = type === "number" ? parseFloat(value) || 0 : value;
+    const newValue =
+      type === "number" && value !== "" ? parseFloat(value) : value;
 
     setFormData((prev) => {
       const updated = { ...prev, [name]: newValue };
 
+      const orderValueSupply = parseFloat(updated.orderValueSupply) || 0;
+      const orderValueService = parseFloat(updated.orderValueService) || 0;
+      const orderValueTotal = orderValueSupply + orderValueService;
+
       if (name === "orderValueSupply" || name === "orderValueService") {
-        updated.orderValueTotal =
-          (name === "orderValueSupply" ? newValue : updated.orderValueSupply) +
-          (name === "orderValueService" ? newValue : updated.orderValueService);
+        updated.orderValueTotal = orderValueTotal;
       }
+
+      const total = parseFloat(updated.orderValueTotal) || 0;
 
       if (name === "paymentPercent1" || name === "orderValueTotal") {
         updated.paymentAmount1 =
-          (updated.paymentPercent1 / 100) * updated.orderValueTotal;
+          ((parseFloat(updated.paymentPercent1) || 0) / 100) * total;
       }
 
       if (name === "paymentPercent2" || name === "orderValueTotal") {
         updated.paymentAmount2 =
-          (updated.paymentPercent2 / 100) * updated.orderValueTotal;
+          ((parseFloat(updated.paymentPercent2) || 0) / 100) * total;
       }
 
       return updated;
@@ -88,8 +92,6 @@ export default function OrderForm() {
 
   const validate = () => {
     const newErrors = {};
-
-    // ✅ All required select fields
     const requiredSelects = [
       "entityType",
       "soType",
@@ -236,8 +238,16 @@ export default function OrderForm() {
             value={formData[name]}
             onChange={handleChange}
             onBlur={handleBlur}
+            onWheel={(e) => {
+            if (type === "number") {
+              e.target.blur();
+            }
+            }}
             placeholder={placeholder}
-            min={options.min}
+            onKeyDown={(e) => {
+              if (type === "number" && e.key === "-") e.preventDefault();
+            }}
+            min={options.min ?? 0}
             max={options.max}
             step={options.step}
             readOnly={options.readOnly}

@@ -1,4 +1,3 @@
-
 const formatDate = (value) => {
   if (!value) return "";
   const date = new Date(value);
@@ -78,6 +77,7 @@ const fromBackendObj = (row) => ({
   daysConsumed: row?.consumedDays || "0",
   completed: row?.status || false,
 });
+
 
 const fromBackendBoolObj = (row) => ({
   title: row?.title || "",

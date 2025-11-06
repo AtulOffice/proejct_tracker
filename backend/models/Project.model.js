@@ -61,13 +61,11 @@ const projectSchema = new mongoose.Schema(
     entityType: {
       type: String,
       required: true,
-      trim: true,
       enum: ["SI DELHI", "SI PUNE", "SI NOIDA", "MS DELHI"],
     },
     soType: {
       type: String,
       required: true,
-      trim: true,
       enum: ["PROJECT", "AMC", "SERVICE", "WARRANTY", "SUPPLY"],
     },
     billStatus: {
@@ -94,8 +92,9 @@ const projectSchema = new mongoose.Schema(
       enum: ["low", "medium", "high", "critical"],
     },
     isDevlopmentApproved: {
-      type: Boolean,
-      defaul: false,
+      type: String,
+      enum: ["YES", "NO"],
+      default: "NO",
     },
     isDataSavedProject: {
       type: Boolean,
@@ -132,25 +131,17 @@ const projectSchema = new mongoose.Schema(
     },
     service: {
       type: String,
-      required: true,
-      enum: [
-        "Service Included",
-        "Service not included",
-        "E&C",
-        "COMMISSIONING",
-        "N/A",
-        "AMC",
-        "SERVICE",
-      ],
-      default: "Service Included",
+      enum: ["E&C", "COMMISSIONING", "N/A", "AMC", "SERVICE"],
+      default: "N/A",
     },
-    TechnicalPersonMail: {
+    technicalEmail: {
       type: String,
       trim: true,
     },
     isMailSent: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["YES", "NO"],
+      default: "NO",
     },
     supplyStatus: {
       type: String,
@@ -177,20 +168,14 @@ const projectSchema = new mongoose.Schema(
     },
     Development: {
       type: String,
-      enum: ["OFFICE", "SITE", "N/A"],
-      default: "N/A",
+      enum: ["OFFICE", "SITE", "N/A", ""],
+      default: "",
     },
     DevelopmentSetcion: {
-      Logic: {
-        type: Boolean,
-        default: false,
-      },
-      Scada: {
-        type: Boolean,
-        default: false,
-      },
+      type: String,
+      enum: ["LOGIC", "SCADA", "BOTH", ""],
+      default: "",
     },
-
     BackupSubmission: {
       type: String,
       enum: ["YES", "NO", "N/A"],
@@ -246,11 +231,10 @@ const projectSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      required: true,
     },
     duration: {
       type: String,
-      required: true,
+      default: "0",
     },
 
     workScope: {
@@ -275,6 +259,10 @@ const projectSchema = new mongoose.Schema(
     DevelopmentDetials: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ProjectDev",
+    },
+    OrderMongoId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
     },
     StartChecklisttId: {
       type: mongoose.Schema.Types.ObjectId,

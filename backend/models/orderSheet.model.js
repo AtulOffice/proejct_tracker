@@ -76,7 +76,7 @@ const OrderSchema = new mongoose.Schema(
     billPending: { type: Number, default: 0 },
     billingStatus: {
       type: String,
-      enum: ["TBB", "ALL BILLED"],
+      enum: ["TBB", "ALL BILLED", "PART BILLED", "N/A", "CLOSED", "CANCELED"],
     },
 
     jobDescription: { type: String, trim: true },

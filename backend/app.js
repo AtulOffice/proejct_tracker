@@ -22,7 +22,7 @@ const app = express();
 // engineerStatus();
 
 const corsOptions = {
-  origin: [`${process.env.FRONT_PORT}`, `http://localhost:5174`],
+  origin: [`${process.env.FRONT_PORT}`, `http://localhost:5174`,`http://192.168.0.29:5173`],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
