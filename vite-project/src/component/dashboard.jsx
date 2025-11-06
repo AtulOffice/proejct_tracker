@@ -249,7 +249,7 @@ const AdminDashboard = () => {
               className="text-gray-600 relative cursor-pointer"
             >
               <RiNotification3Line size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">
+              <span className="absolute -top-1 -right-1 bg-red-500 !text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
                 {overvew?.todayNotice ?? 0}
               </span>
             </button>

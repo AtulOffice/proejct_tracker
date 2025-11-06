@@ -136,6 +136,55 @@ export const findrecord = async (req, res) => {
   }
 };
 
+export const fixVal = async (req, res) => {
+  try {
+    const dateFields = [
+      "actualStartDate",
+      "actualEndDate",
+      "visitDate",
+      "visitendDate",
+      "momDate",
+      "orderDate",
+      "startDate",
+      "deleveryDate",
+      "requestDate",
+      "createdAt",
+      "updatedAt",
+    ];
+
+    const projects = await ProjectModel.find();
+
+    for (const project of projects) {
+      let updated = false;
+
+      for (const field of dateFields) {
+        const value = project[field];
+        if (value) {
+          project[field] = new Date(value);
+          updated = true;
+        }
+      }
+      project.Development = "N/A";
+      if (updated) {
+        await project.save();
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message:
+        "All ProjectModel documents updated: Dates converted to Date type, and development field standardized",
+    });
+  } catch (error) {
+    console.error("Error fixing ProjectModel data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating ProjectModel documents",
+      error: error.message,
+    });
+  }
+};
+
 export const findrecordbyId = async (req, res) => {
   try {
     const { id } = req.params;

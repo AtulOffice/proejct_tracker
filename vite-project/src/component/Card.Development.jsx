@@ -13,12 +13,16 @@ import { FaHome } from "react-icons/fa";
 const Description = ({ one, two, three, HomeStatus }) => {
   return (
     <div className="flex flex-wrap gap-2">
-      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
-        {one}
-      </span>
-      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
-        {two}
-      </span>
+      {one && (
+        <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
+          {one}
+        </span>
+      )}
+      {two && (
+        <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
+          {two}
+        </span>
+      )}
       <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
         {three} days
       </span>
@@ -318,49 +322,6 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             )}
           </div>
 
-          <ul className="text-sm text-gray-800 space-y-1 mb-4">
-            {project.orderDate && (
-              <li>
-                <strong className="text-gray-900">Order Date:</strong>{" "}
-                {new Date(project.orderDate).toLocaleDateString() || ""}
-              </li>
-            )}
-            {project.deleveryDate && (
-              <li>
-                <strong className="text-gray-900">Delivery Date:</strong>{" "}
-                {new Date(project.deleveryDate).toLocaleDateString() || ""}
-              </li>
-            )}
-            {project?.expenseScope && (
-              <li>
-                <strong className="text-gray-900">Expense scope:</strong>{" "}
-                {project?.expenseScope}
-              </li>
-            )}
-
-            {project.status === "completed" &&
-              project.finalMomnumber &&
-              project?.actualStartDate &&
-              project?.actualEndDate && (
-                <>
-                  <li>
-                    <strong className="text-gray-900">Final MOM Number:</strong>{" "}
-                    {project.finalMomnumber || "not recieved"}
-                  </li>
-                  <li>
-                    <strong className="text-gray-900">
-                      Actual Start Date:
-                    </strong>{" "}
-                    {new Date(project.actualStartDate).toLocaleDateString()}
-                  </li>
-                  <li>
-                    <strong className="text-gray-900">Actual End Date: </strong>
-                    {new Date(project?.actualEndDate).toLocaleDateString()}
-                  </li>
-                </>
-              )}
-          </ul>
-
           <div className="mb-6 bg-white/70 backdrop-blur-md rounded-xl p-4 border border-white/40 shadow-lg">
             <ProgressBar
               label="Documents Progress"
@@ -398,8 +359,16 @@ focus:outline-none focus:ring-4 focus:ring-red-400
 
           <Description
             HomeStatus={project.devScope}
-            one={project?.startDate || "N/A"}
-            two={project?.endDate || "N/A"}
+            one={
+              project.startDate
+                ? new Date(project.startDate).toISOString().split("T")[0]
+                : ""
+            }
+            two={
+              project.endDate
+                ? new Date(project.endDate).toISOString().split("T")[0]
+                : ""
+            }
             three={project?.DaysConsumed || 0}
           />
         </div>

@@ -103,10 +103,14 @@ const ProjectTableAll = ({ data }) => {
                     {project.jobNumber}
                   </td>
                   <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
-                    {project.deleveryDate}
+                    {project.deleveryDate &&
+                      new Date(project.deleveryDate)
+                        .toISOString()
+                        .split("T")[0]}
                   </td>
                   <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
-                    {project.visitDate}
+                    {project.visitDate &&
+                      new Date(project.visitDate).toISOString().split("T")[0]}
                   </td>
                   <td className="px-6 py-4">
                     <div

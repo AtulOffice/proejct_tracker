@@ -25,7 +25,7 @@ const OrderTableAll = ({ data }) => {
       if (val) {
         setSelectedProjectForPopup(val);
       }
-      toast.success("Order details fetched successfully");
+      // toast.success("Order details fetched successfully");
     } catch (error) {
       if (error?.response) {
         toast.error(error.response.data.message || "An error occurred");

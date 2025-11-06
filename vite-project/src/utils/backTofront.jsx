@@ -1,3 +1,10 @@
+
+const formatDate = (value) => {
+  if (!value) return "";
+  const date = new Date(value);
+  return isNaN(date) ? "" : date.toISOString().split("T")[0];
+};
+
 export const mapBackendToFrontend = (backend) => {
   return {
     project: {
@@ -5,8 +12,8 @@ export const mapBackendToFrontend = (backend) => {
         {
           JobNumber: backend.JobNumber || "",
           projectName: backend.projectName || "",
-          startDate: backend.startDate || "",
-          endDate: backend.endDate || "",
+          startDate: formatDate(backend.startDate),
+          endDate: formatDate(backend.endDate),
           daysConsumed: backend.DaysConsumed || "0",
           completed: backend.status || false,
         },
@@ -27,8 +34,8 @@ export const mapBackendToFrontend = (backend) => {
       rows: [
         {
           title: backend.scadaScreen?.[0]?.title || "SCREENS",
-          startDate: backend.scadaScreen?.[0]?.scadastartDate || "",
-          endDate: backend.scadaScreen?.[0]?.scadaendDate || "",
+          startDate: formatDate(backend.scadaScreen?.[0]?.scadastartDate),
+          endDate: formatDate(backend.scadaScreen?.[0]?.scadaendDate),
           daysConsumed: backend.scadaScreen?.[0]?.scadaconsumedDays || "0",
           completed: backend.scadaScreen?.[0]?.status || false,
         },
@@ -66,16 +73,16 @@ export const mapBackendToFrontend = (backend) => {
 const fromBackendObj = (row) => ({
   title: row?.title || "",
   Reqiredval: row?.requireMent || "",
-  startDate: row?.startDate || "",
-  endDate: row?.endDate || "",
+  startDate: formatDate(row?.startDate),
+  endDate: formatDate(row?.endDate),
   daysConsumed: row?.consumedDays || "0",
   completed: row?.status || false,
 });
 
 const fromBackendBoolObj = (row) => ({
   title: row?.title || "",
-  startDate: row?.startDate || "",
-  endDate: row?.endDate || "",
+  startDate: formatDate(row?.startDate),
+  endDate: formatDate(row?.endDate),
   daysConsumed: row?.consumedDays || "0",
   completed: row?.status || false,
 });
