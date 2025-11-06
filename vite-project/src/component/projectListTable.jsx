@@ -29,7 +29,6 @@ const ProjectTableAll = ({ data }) => {
         toast.error("Invalid project data — ID missing");
         return;
       }
-
       let val;
       let orderFlag = false;
       if (project?.OrderMongoId) {
@@ -151,7 +150,7 @@ const ProjectTableAll = ({ data }) => {
       <div className="md:hidden space-y-4 p-2">
         {data.map((project, indx) => (
           <div
-            onClick={() => hadleOpenPopup(project?._id)}
+            onClick={() => hadleOpenPopup(project)}
             key={indx}
             className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-lg rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
           >
