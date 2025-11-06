@@ -6,6 +6,7 @@ import { fetchbyOrderbyId, fetchbyProjectbyId } from "../utils/apiCall";
 import toast from "react-hot-toast";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
+import { MdEdit } from "react-icons/md";
 
 const ProjectTableAll = ({ data }) => {
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
@@ -61,7 +62,6 @@ const ProjectTableAll = ({ data }) => {
             onClose={() => setSelectedProjectForPopup(null)}
           />
         ))}
-
       <div className="overflow-x-auto hidden md:block">
         <div className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
@@ -85,6 +85,9 @@ const ProjectTableAll = ({ data }) => {
                 <th className="w-1/5 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
                   ALL Engineer List
                 </th>
+                <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-blue-100">
@@ -106,20 +109,14 @@ const ProjectTableAll = ({ data }) => {
                       {project.projectName}
                     </div>
                   </td>
-                  <td
-                    className="px-6 py-4 cursor-pointer"
-                    onClick={() => handleUpdate(project?._id)}
-                  >
+                  <td className="px-6 py-4">
                     <span
                       className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border shadow-sm transition whitespace-nowrap`}
                     >
                       <span className="ml-2">{project.status}</span>
                     </span>
                   </td>
-                  <td
-                    onClick={() => handleUpdate(project?._id)}
-                    className="px-6 py-4 text-base font-semibold text-blue-700 whitespace-nowrap cursor-pointer"
-                  >
+                  <td className="px-6 py-4 text-base font-semibold text-blue-700 whitespace-nowrap">
                     {project.jobNumber}
                   </td>
                   <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
@@ -140,13 +137,21 @@ const ProjectTableAll = ({ data }) => {
                       {project.engineerName.join(" , ") || "—"}
                     </div>
                   </td>
+                  <td className="px-6 py-4 text-center">
+                    <button
+                      onClick={() => handleUpdate(project?._id)}
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 text-white hover:from-pink-500 hover:to-pink-700 shadow-md hover:shadow-lg hover:scale-110 active:scale-95 transition-all duration-300"
+                      title="Edit project"
+                    >
+                      <MdEdit size={20} />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-
       <div className="md:hidden space-y-4 p-2">
         {data.map((project, indx) => (
           <div
@@ -202,7 +207,6 @@ const ProjectTableAll = ({ data }) => {
           </div>
         ))}
       </div>
-
       {/* 📊 Footer Section */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
