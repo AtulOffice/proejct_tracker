@@ -391,12 +391,12 @@ export const OrderDetailsCard = ({ order }) => {
             <EnhancedInfoRow label="Cancellation" value={order?.cancellation} />
             <EnhancedInfoRow
               label="Bill Pending"
-              value={order?.billPending === 1 ? "Yes" : "No"}
+              value={order?.billPending}
             />
-            <EnhancedInfoRow
+            {/* <EnhancedInfoRow
               label="Saved in Project"
               value={order?.isSaveInProject ? "Yes" : "No"}
-            />
+            /> */}
           </div>
         </div>
       </section>
