@@ -120,6 +120,8 @@ const OrderTableAll = ({ data }) => {
         </div>
       </div>
 
+      
+      
       {/* Mobile View - Optional Enhancement */}
       <div className="md:hidden space-y-3 p-4">
         {data.map((order, indx) => (
