@@ -4,6 +4,7 @@ const formatDate = (value) => {
   return isNaN(date) ? "" : date.toISOString().split("T")[0];
 };
 
+// nothing
 export const mapBackendToFrontend = (backend) => {
   return {
     project: {
