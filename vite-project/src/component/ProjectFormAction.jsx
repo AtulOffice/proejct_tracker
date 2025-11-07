@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAppContext } from "../appContex";
 import { EngineerAssignment } from "./engineerInpt";
 
-const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
+const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
   const { setToggle, setToggleDev } = useAppContext();
@@ -90,4 +90,4 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
   );
 };
 
-export default EngineerProjectForm;
+export default EngineerForm;

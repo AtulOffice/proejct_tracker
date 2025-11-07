@@ -6,6 +6,7 @@ import { handlePrint } from "../utils/print";
 const ProjectTable = ({ data }) => {
   const [open, setOpen] = useState(false);
   const formRef = useRef(null);
+  const printRef = useRef();
   const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
@@ -31,7 +32,10 @@ const ProjectTable = ({ data }) => {
     }
   };
 
-  const printRef = useRef();
+  const handleAssingned = (project) => {
+    setOpen(true);
+    setSelectedProject(project);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -67,7 +71,7 @@ const ProjectTable = ({ data }) => {
                 Visit
               </th>
               <th className="w-1/5 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                ALL Engineer List
+                Development
               </th>
             </tr>
           </thead>
@@ -96,10 +100,7 @@ const ProjectTable = ({ data }) => {
                   </span>
                 </td>
                 <td
-                  onClick={() => {
-                    setOpen(true);
-                    setSelectedProject(project);
-                  }}
+                  onClick={() => handleAssingned(project)}
                   className="px-6 py-4 text-base font-semibold text-blue-700 whitespace-nowrap cursor-pointer"
                 >
                   {project.jobNumber}
@@ -113,9 +114,9 @@ const ProjectTable = ({ data }) => {
                 <td className="px-6 py-4">
                   <div
                     className="text-[12px] text-blue-900 break-words max-w-xs"
-                    title={project.engineerName || "Not assigned"}
+                    title={project.Development || "Not assigned"}
                   >
-                    {project.engineerName.join(" , ") || "—"}
+                    {project.Development || "—"}
                   </div>
                 </td>
               </tr>

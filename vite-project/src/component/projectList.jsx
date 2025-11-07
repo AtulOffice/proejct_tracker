@@ -7,7 +7,7 @@ import FilterCompo from "../utils/FilterCompo";
 import { fetchProjectsUrgentAction, fetfchProejctAll } from "../utils/apiCall";
 import ProjectTableAll from "./projectListTable";
 
-const ProjectList = () => {
+const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
   const { toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -27,7 +27,7 @@ const ProjectList = () => {
     const getProjects = async () => {
       if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
         try {
-          const val = await fetfchProejctAll({
+          const val = await fetchFun({
             search: debounceSearchTerm,
           });
           if (val) {
@@ -37,7 +37,7 @@ const ProjectList = () => {
           console.error("Failed to fetch by jobNumber", error);
         }
       } else {
-        const val = await fetfchProejctAll({
+        const val = await fetchFun({
           search: "",
         });
         if (val) {
@@ -90,7 +90,13 @@ const ProjectList = () => {
         className="w-full min-h-[56vh] h-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200"
       >
         {filteredProjects.length > 0 ? (
-          <ProjectTableAll data={filteredProjects} />
+          <ProjectTableAll
+            data={filteredProjects}
+            tableVal={tableVal}
+            isEdit={isEdit}
+            onEditFun={onEditFun}
+            printTitle={printTitle}
+          />
         ) : (
           <Notfound />
         )}

@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GoProjectRoadmap } from "react-icons/go";
 import { FaClipboardList, FaRegSquarePlus } from "react-icons/fa6";
-import {
-  MdAssignmentAdd,
-  MdCancel,
-  MdOutlinePendingActions,
-} from "react-icons/md";
+import { MdCancel, MdOutlinePendingActions } from "react-icons/md";
 import { TbUrgent } from "react-icons/tb";
 import logimg from "../assets/logo_image.png";
 import {
@@ -24,7 +20,12 @@ import ZeroCard from "./overview.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchProjectOveriew, logout } from "../utils/apiCall";
+import {
+  fetchProjectOveriew,
+  fetchProjectsUrgentAction,
+  fetfchProejctAll,
+  logout,
+} from "../utils/apiCall";
 import ProejctACtions from "./ProejctACtions.projects";
 import EngineerAction from "./EngineerActions.projects";
 import AssessMentAction from "./AssessMentAction.projects.jsx";
@@ -71,14 +72,57 @@ const AdminDashboard = () => {
   };
   const handleLogOut = () => {
     try {
-      toast.success("logout successfully");
       logout();
+      toast.success("logout successfully");
       navigate("/login");
     } catch (e) {
       console.log(e);
       toast.error("error while logout");
     }
   };
+
+  const handleEngineer = () => {};
+
+  const ProjectTab = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "Status",
+      val: "status",
+    },
+    {
+      head: "Delivery",
+      val: "deleveryDate",
+    },
+    { head: "Visit", val: "visitDate" },
+  ];
+
+  const ProjectActionTab = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "Status",
+      val: "status",
+    },
+    {
+      head: "Delivery",
+      val: "deleveryDate",
+    },
+    { head: "Visit", val: "visitDate" },
+    { head: "Devlopment", val: "Development" },
+  ];
   const renderCard = () => {
     switch (activeCard) {
       case "zero":
@@ -166,13 +210,31 @@ const AdminDashboard = () => {
           />
         );
       case "sixteen":
-        return <ProejctACtions />;
+        return (
+          <ProjectList
+            key={"URGENT"}
+            tableVal={ProjectActionTab}
+            fetchFun={fetchProjectsUrgentAction}
+            isEdit={true}
+            onEditFun="URGENT"
+            printTitle="URGENT PROJECT LIST"
+          />
+        );
+      case "ninteen":
+        return (
+          <ProjectList
+            key={"ALLPROJECT"}
+            tableVal={ProjectTab}
+            fetchFun={fetfchProejctAll}
+            isEdit={true}
+            onEditFun="ALLPROJECT"
+            printTitle="PROJECT LIST"
+          />
+        );
       case "seventeen":
         return <EngineerAction />;
       case "eighteen":
         return <WeeklyAssignmentForm />;
-      case "ninteen":
-        return <ProjectList />;
       case "twenty":
         return <AssessMentAction />;
       case "twentyone":
@@ -370,20 +432,6 @@ const AdminDashboard = () => {
                       ALL PROJECTS
                     </div>
                   </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("two");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                        activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ALL
-                    </div>
-                  </li>
                   {(user?.role == "admin" || user?.role == "reception") && (
                     <>
                       <li>
@@ -404,6 +452,20 @@ const AdminDashboard = () => {
                       </li>
                     </>
                   )}
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("two");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ALL
+                    </div>
+                  </li>
 
                   {user?.role == "admin" && (
                     <>
