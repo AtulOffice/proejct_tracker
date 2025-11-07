@@ -8,7 +8,7 @@ const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
   const { setToggle, setToggleDev } = useAppContext();
-
+  console.log(selectedProject);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsDisabled(true);

@@ -80,9 +80,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
       case "ALLPROJECT":
         handleUpdateProject(data._id);
         break;
-      case "TASK":
-        openTaskEditor(data.id, data.status);
-        break;
       default:
         console.warn("Unknown edit type:", type);
     }
@@ -222,7 +219,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
             <div className="space-y-2 text-sm text-blue-800">
               {tableVal.slice(1).map((col, i) => {
                 const val = project[col.val];
-                console.log(val)
                 const display = Array.isArray(val)
                   ? val.join(", ")
                   : col.val.toLowerCase().includes("date") && val

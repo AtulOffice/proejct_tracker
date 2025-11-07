@@ -56,9 +56,16 @@
 //   }, 1000);
 // };
 
-export const handlePrint = (printRef, printTitle = "") => {
+export const handlePrint = (
+  printRef,
+  printTitle = "",
+  excludeLastColumn = true
+) => {
   if (!printRef.current) return;
+
   const content = printRef.current.outerHTML;
+
+  // Create hidden iframe
   const iframe = document.createElement("iframe");
   iframe.style.position = "absolute";
   iframe.style.width = "0px";
@@ -68,6 +75,16 @@ export const handlePrint = (printRef, printTitle = "") => {
 
   const doc = iframe.contentWindow.document;
   doc.open();
+  
+  const conditionalStyle = excludeLastColumn
+    ? `
+      th:last-child,
+      td:last-child {
+        display: none !important;
+      }
+    `
+    : "";
+
   doc.write(`
     <html>
       <head>
@@ -95,12 +112,7 @@ export const handlePrint = (printRef, printTitle = "") => {
             tr {
               page-break-inside: avoid;
             }
-
-            /* ✅ Hide last column (both header & cells) during print */
-            th:last-child,
-            td:last-child {
-              display: none !important;
-            }
+            ${conditionalStyle}
           }
         </style>
       </head>
