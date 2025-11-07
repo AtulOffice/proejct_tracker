@@ -23,6 +23,7 @@ import toast from "react-hot-toast";
 import {
   fetchProjectOveriew,
   fetchProjectsUrgentAction,
+  fetfchProejctADev,
   fetfchProejctAll,
   logout,
 } from "../utils/apiCall";
@@ -100,6 +101,26 @@ const AdminDashboard = () => {
       val: "deleveryDate",
     },
     { head: "Visit", val: "visitDate" },
+  ];
+  const ProjectTabDev = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "Status",
+      val: "status",
+    },
+    {
+      head: "Delivery",
+      val: "deleveryDate",
+    },
+    { head: "Visit", val: "visitDate" },
+    { head: "LOGIC/SCADA", val: "DevelopmentSetcion" },
   ];
 
   const ProjectActionTab = [
@@ -240,6 +261,17 @@ const AdminDashboard = () => {
         return <OrderForm />;
       case "twentytwo":
         return <OrderList />;
+      case "twentythree":
+        return (
+          <ProjectList
+            key={"DEVLOPMENT"}
+            tableVal={ProjectTabDev}
+            fetchFun={fetfchProejctADev}
+            isEdit={false}
+            onEditFun="DEVLOPMENT"
+            printTitle="DEVLOPMENT PROJECT LIST"
+          />
+        );
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -451,6 +483,22 @@ const AdminDashboard = () => {
                       </li>
                     </>
                   )}
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("twentythree");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twentythree"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      PROJ INC DEV
+                    </div>
+                  </li>
                   <li>
                     <div
                       onClick={() => {

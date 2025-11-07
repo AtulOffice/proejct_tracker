@@ -58,7 +58,7 @@ const FilterCompo = ({
                 refreshIcon.classList.remove("animate-spin");
               }, 1000);
             }}
-            className="p-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 text-white transition-all duration-200 flex items-center justify-center shadow-sm flex-shrink-0"
+            className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 transition-all duration-200 flex items-center justify-center shadow-md flex-shrink-0"
             title="Refresh tasks"
           >
             <svg
@@ -80,11 +80,11 @@ const FilterCompo = ({
           <div ref={filterRef} className="relative w-auto lg:w-auto">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="w-full lg:w-auto text-white bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 hover:from-green-500 hover:via-blue-600 hover:to-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-all flex-shrink-0"
+              className="w-full lg:w-auto text-gray-800 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-indigo-200 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-md transition-all flex-shrink-0 border border-gray-300"
               type="button"
             >
               <svg
-                className="w-5 h-5 mr-2"
+                className="w-5 h-5 mr-2 text-gray-600"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ const FilterCompo = ({
               </svg>
               {mapTime[timeFilter] || "Filter by time"}
               <svg
-                className="w-4 h-4 ml-2"
+                className="w-4 h-4 ml-2 text-gray-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -111,6 +111,7 @@ const FilterCompo = ({
                 ></path>
               </svg>
             </button>
+
             <AnimatePresence>
               {isFilterOpen && (
                 <motion.div
@@ -118,7 +119,7 @@ const FilterCompo = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100 dark:bg-gray-400"
+                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100 dark:bg-gray-400 z-20"
                 >
                   <ul className="p-4 space-y-2 text-sm text-gray-700 dark:text-gray-200">
                     {["all", "today", "thisWeek", "thisMonth", "thisYear"].map(

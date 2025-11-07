@@ -134,6 +134,19 @@ export const fetfchProejctAll = async ({ search }) => {
   }
 };
 
+export const fetfchProejctADev = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/allProjectsfetchdev?search=${search}`,
+      { withCredentials: true }
+    );
+    console.log(res)
+    return res.data.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
 export const saveAllEngineers = async (data) => {
   try {
     const res = await axios.post(
@@ -335,7 +348,7 @@ export const addProject = async ({ formData, engineerData, Docs }) => {
         startDate: formData?.requestDate ?? null,
         endDate: formData?.deleveryDate ?? null,
         engineerData,
-        ...Docs
+        ...Docs,
       },
       { withCredentials: true }
     );
