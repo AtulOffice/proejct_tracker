@@ -72,6 +72,7 @@ export const getAssignedEngineers = async (req, res) => {
   }
 };
 export const getAllEngineers = async (req, res) => {
+  console.log("this is called")
   try {
     const availableEngineers = await EngineerReocord.find({});
 
