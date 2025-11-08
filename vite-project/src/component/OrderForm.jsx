@@ -5,56 +5,7 @@ import toast from "react-hot-toast";
 import { fields } from "../utils/FieldConstant";
 
 export default function OrderForm() {
-  const [formData, setFormData] = useState({
-    entityType: "",
-    soType: "",
-    jobNumber: "",
-    orderNumber: "",
-    bookingDate: "",
-    client: "",
-    technicalEmail: "",
-    site: "",
-    endUser: "",
-    orderDate: "",
-    deleveryDate: "",
-    formalOrderStatus: "",
-    amndReqrd: "",
-    orderValueSupply: 0,
-    orderValueService: 0,
-    orderValueTotal: 0,
-    cancellation: "",
-    netOrderValue: 0,
-    paymentAgainst: "",
-    paymentAdvance: "",
-    paymentPercent1: 0,
-    paymentType1: "",
-    payemntCGBG1: "",
-    paymentrecieved1: "",
-    paymentAmount1: 0,
-    paymentPercent2: 0,
-    paymentType2: "",
-    payemntCGBG2: "",
-    paymentAmount2: 0,
-    paymentrecieved2: "",
-    retentionPercent: 0,
-    retentionAmount: 0,
-    retentionDocs: "",
-    retentionPeriod: "",
-    status: "OPEN",
-    creditDays: 0,
-    dispatchStatus: "",
-    salesBasic: 0,
-    salesTotal: 0,
-    billPending: 0,
-    billingStatus: "",
-    jobDescription: "",
-    remarks: "",
-    concerningSalesManager: "",
-    poReceived: "",
-    invoiceTerm: "",
-    invoicePercent: "",
-    mileStone: "",
-  });
+  const [formData, setFormData] = useState(fields);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [touched, setTouched] = useState({});
@@ -126,6 +77,17 @@ export default function OrderForm() {
           ((parseFloat(updated.paymentPercent2) || 0) / 100) * total;
       }
 
+
+      const totalPercent =
+        (parseFloat(updated.paymentPercent1) || 0) +
+        (parseFloat(updated.paymentPercent2) || 0) +
+        (parseFloat(updated.invoicePercent) || 0);
+
+      if (totalPercent <= 100) {
+        const temppercent = 100 - totalPercent;
+        updated.retentionPercent = temppercent;
+        updated.retentionAmount = ((parseFloat(temppercent) || 0) / 100) * total;
+      }
       return updated;
     });
 
@@ -172,11 +134,15 @@ export default function OrderForm() {
       }
     }
 
-    if (!formData.bookingDate) {
-      newErrors.bookingDate = "Booking Date is required";
-    }
-    if (!formData.poReceived) {
+
+    if (!formData.bookingDate || !formData.poReceived || !formData.creditDays || !formData.invoiceTerm || !formData.invoicePercent || !formData.mileStone) {
+      newErrors.poReceived = "this field is required";
+      newErrors.creditDays = "this field is required";
+      newErrors.invoiceTerm = "this field is required";
+      newErrors.invoicePercent = "this field is required";
+      newErrors.mileStone = "this field is required";
       newErrors.bookingDate = "this field is required";
+
     }
     if (!formData.concerningSalesManager) {
       newErrors.concerningSalesManager = "sales Manager is required";
@@ -225,7 +191,7 @@ export default function OrderForm() {
         if (error?.response) {
           toast.error(
             error?.response?.data?.message ||
-              "some thing wrong when saved order"
+            "some thing wrong when saved order"
           );
         }
         console.error("API Error:", error);
@@ -261,11 +227,10 @@ export default function OrderForm() {
             value={formData[name]}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${
-              hasError
-                ? "border-red-500 bg-red-50"
-                : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300"
-            }`}
+            className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${hasError
+              ? "border-red-500 bg-red-50"
+              : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300"
+              }`}
           >
             <option value="">
               {options.placeholder || "Select an option"}
@@ -284,11 +249,10 @@ export default function OrderForm() {
             onBlur={handleBlur}
             rows={options.rows || 3}
             placeholder={placeholder}
-            className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 resize-none font-medium ${
-              hasError
-                ? "border-red-500 bg-red-50"
-                : "border-purple-200 bg-gradient-to-br from-indigo-50 to-purple-50 hover:border-purple-300"
-            }`}
+            className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 resize-none font-medium ${hasError
+              ? "border-red-500 bg-red-50"
+              : "border-purple-200 bg-gradient-to-br from-indigo-50 to-purple-50 hover:border-purple-300"
+              }`}
           />
         ) : (
           <input
@@ -310,13 +274,12 @@ export default function OrderForm() {
             max={options.max}
             step={options.step}
             readOnly={options.readOnly}
-            className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${
-              hasError
-                ? "border-red-500 bg-red-50"
-                : options.readOnly
+            className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${hasError
+              ? "border-red-500 bg-red-50"
+              : options.readOnly
                 ? "border-purple-200 bg-gradient-to-br from-gray-100 to-purple-50 cursor-not-allowed text-gray-600"
                 : "border-purple-200 bg-gradient-to-br from-pink-50 to-purple-50 hover:border-purple-300"
-            }`}
+              }`}
           />
         )}
         {hasError && (
@@ -388,7 +351,7 @@ export default function OrderForm() {
               )}
               {renderInput(
                 "technicalEmail",
-                "Technical Email",
+                "Client Technical Email",
                 "email",
                 "Enter technical person email id",
                 true

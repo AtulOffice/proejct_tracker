@@ -88,14 +88,13 @@ export default function UpdateOrderForm() {
 
   const validate = () => {
     const newErrors = {};
-
     const requiredSelects = [
       "entityType",
       "soType",
-      "cancellation",
-      "formalOrderStatus",
-      "amndReqrd",
-      "dispatchStatus",
+      // "cancellation",
+      // "formalOrderStatus",
+      // "amndReqrd",
+      // "dispatchStatus",
       "billingStatus",
     ];
 
@@ -118,6 +117,20 @@ export default function UpdateOrderForm() {
       if (new Date(formData.orderDate) < new Date(formData.bookingDate)) {
         newErrors.orderDate = "Order Date cannot be before Booking Date";
       }
+    }
+
+
+    if (!formData.bookingDate || !formData.poReceived || !formData.creditDays || !formData.invoiceTerm || !formData.invoicePercent || !formData.mileStone) {
+      newErrors.poReceived = "this field is required";
+      newErrors.creditDays = "this field is required";
+      newErrors.invoiceTerm = "this field is required";
+      newErrors.invoicePercent = "this field is required";
+      newErrors.mileStone = "this field is required";
+      newErrors.bookingDate = "this field is required";
+
+    }
+    if (!formData.concerningSalesManager) {
+      newErrors.concerningSalesManager = "sales Manager is required";
     }
 
     if (formData.orderDate && formData.deleveryDate) {
@@ -166,7 +179,7 @@ export default function UpdateOrderForm() {
         if (error?.response) {
           toast.error(
             error?.response?.data?.message ||
-              "some thing wrong when saved order"
+            "some thing wrong when saved order"
           );
         }
         console.error("API Error:", error);
@@ -206,13 +219,12 @@ export default function UpdateOrderForm() {
             onBlur={handleBlur}
             disabled={isLocked}
             className={`w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200
-            ${
-              hasError
+            ${hasError
                 ? "border-red-500 bg-red-50"
                 : isLocked
-                ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
-                : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
-            }`}
+                  ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
+                  : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
+              }`}
           >
             <option value="">
               {options.placeholder || "Select an option"}
@@ -233,13 +245,12 @@ export default function UpdateOrderForm() {
             placeholder={placeholder}
             readOnly={isLocked}
             className={`w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200 resize-none
-            ${
-              hasError
+            ${hasError
                 ? "border-red-500 bg-red-50"
                 : isLocked
-                ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
-                : "border-purple-200 bg-gradient-to-br from-indigo-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
-            }`}
+                  ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
+                  : "border-purple-200 bg-gradient-to-br from-indigo-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
+              }`}
           />
         ) : (
           <input
@@ -254,13 +265,12 @@ export default function UpdateOrderForm() {
             step={options.step}
             readOnly={isLocked}
             className={`w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200
-            ${
-              hasError
+            ${hasError
                 ? "border-red-500 bg-red-50"
                 : isLocked
-                ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
-                : "border-purple-200 bg-gradient-to-br from-pink-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
-            }`}
+                  ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
+                  : "border-purple-200 bg-gradient-to-br from-pink-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
+              }`}
           />
         )}
 
@@ -289,27 +299,37 @@ export default function UpdateOrderForm() {
               </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {renderInput("entityType", "Entity Type", "select", "", true, {
-                choices: ["SI DELHI", "SI PUNE", "SI NOIDA", "MS DELHI"],
-                placeholder: "Select Entity Type",
-                locked: !!formData.entityType,
-              })}
-              {renderInput("soType", "SO Type", "select", "", true, {
-                choices: ["PROJECT", "AMC", "SERVICE", "WARRANTY", "SUPPLY"],
-                placeholder: "Select SO Type",
-                locked: !!formData.soType,
-              })}
               {renderInput(
                 "jobNumber",
                 "Job Number",
                 "text",
                 "Enter job number",
-                true,
-                {
-                  locked: !!formData.jobNumber,
-                }
+                true
               )}
-              {renderInput("bookingDate", "Booking Date", "date")}
+              {renderInput("entityType", "Entity Type", "select", "", true, {
+                choices: ["SI DELHI", "SI PUNE", "SI NOIDA", "MS DELHI"],
+                placeholder: "Select Entity Type",
+              })}
+              {renderInput("soType", "SO Type", "select", "", true, {
+                choices: ["PROJECT", "AMC", "SERVICE", "WARRANTY", "SUPPLY"],
+                placeholder: "Select SO Type",
+              })}
+              {renderInput(
+                "client",
+                "Client Name",
+                "text",
+                "Enter client name",
+                true
+              )}
+              {renderInput(
+                "endUser",
+                "End User",
+                "text",
+                "Enter end user",
+                false
+              )}
+              {renderInput("site", "Site Location", "text", "Enter site")}
+              {renderInput("bookingDate", "Booking Date", "date", "", true)}
               {renderInput("status", "Status", "select", "", false, {
                 choices: ["OPEN", "CLOSED"],
                 placeholder: "Select Status",
@@ -318,38 +338,31 @@ export default function UpdateOrderForm() {
                 "concerningSalesManager",
                 "Sales Manager",
                 "text",
-                "Enter sales manager name"
-              )}
-            </div>
-          </section>
-
-          {/* Client Information Section */}
-          <section className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-8 bg-green-600 rounded"></div>
-              <h2 className="text-2xl font-bold text-green-900">
-                Client Information
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {renderInput(
-                "client",
-                "Client Name",
-                "text",
-                "Enter client name",
+                "Enter sales manager name",
                 true
               )}
-              {renderInput("site", "Site Location", "text", "Enter site")}
-              {renderInput("endUser", "End User", "text", "Enter end user")}
               {renderInput(
                 "technicalEmail",
-                "Technical Email",
+                "Client Technical Email",
                 "email",
                 "Enter technical person email id",
                 true
               )}
             </div>
           </section>
+
+          {/* Client Information Section */}
+          {/* <section className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200 shadow-sm hover:shadow-md transition-shadow">
+                   <div className="flex items-center gap-3 mb-6">
+                     <div className="w-1 h-8 bg-green-600 rounded"></div>
+                     <h2 className="text-2xl font-bold text-green-900">
+                       Client Information
+                     </h2>
+                   </div>
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                   </div>
+                 </section> */}
 
           {/* Order Details Section */}
           <section className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
@@ -359,59 +372,20 @@ export default function UpdateOrderForm() {
                 Order Details
               </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {renderInput("orderNumber", "Order Number", "text", "", "", {
-                locked: !!formData.orderNumber,
-              })}
-              {renderInput("orderDate", "Order Date", "date")}
-              {renderInput("deleveryDate", "Delivery Date", "date")}
-              {renderInput(
-                "formalOrderStatus",
-                "Formal Order Status",
-                "select",
-                "",
-                false,
-                { choices: ["RECEIVED", "PENDING"] }
-              )}
-              {renderInput(
-                "amndReqrd",
-                "Amendment Required",
-                "select",
-                "",
-                false,
-                { choices: ["RECEIVED", "PENDING"] }
-              )}
-              {renderInput(
-                "cancellation",
-                "Cancellation",
-                "select",
-                "",
-                false,
-                { choices: ["NONE", "PARTIAL", "COMPLETE"] }
-              )}
-              {renderInput(
-                "dispatchStatus",
-                "Dispatch Status",
-                "select",
-                "",
-                false,
-                { choices: ["DISPATCHED", "LD APPLIED", "URGENT"] }
-              )}
-              {renderInput("creditDays", "Credit Days", "number", "", false, {
-                min: 0,
-              })}
-            </div>
-          </section>
 
-          {/* Financial Information Section */}
-          <section className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-8 bg-orange-600 rounded"></div>
-              <h2 className="text-2xl font-bold text-orange-900">
-                Financial Information
-              </h2>
-            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {renderInput("poReceived", "PO Received", "select", "", true, {
+                choices: ["YES", "NO"],
+              })}
+
+              {formData.poReceived === "YES" && (
+                <>
+                  {renderInput("orderNumber", "PO Number", "text")}
+                  {renderInput("orderDate", "PO Order Date", "date")}
+                  {renderInput("deleveryDate", "PO Delivery Date", "date")}
+                </>
+              )}
+
               {renderInput(
                 "orderValueSupply",
                 "Order Value - Supply (₹)",
@@ -436,6 +410,51 @@ export default function UpdateOrderForm() {
                 false,
                 { min: 0, step: "0.01", readOnly: true }
               )}
+
+              {renderInput(
+                "formalOrderStatus",
+                "Formal Order Status",
+                "select",
+                "",
+                false,
+                { choices: ["RECEIVED", "PENDING"] }
+              )}
+              {renderInput(
+                "amndReqrd",
+                "Amendment Required",
+                "select",
+                "",
+                false,
+                { choices: ["RECEIVED", "PENDING"] }
+              )}
+              {renderInput(
+                "cancellation",
+                "Cancellation",
+                "select",
+                "",
+                false,
+                { choices: ["NONE", "PARTIAL", "COMPLETE"] }
+              )}
+              {/* {renderInput(
+                       "dispatchStatus",
+                       "Dispatch Status",
+                       "select",
+                       "",
+                       false,
+                       { choices: ["DISPATCHED", "LD APPLIED", "URGENT"] }
+                     )} */}
+            </div>
+          </section>
+
+          {/* Financial Information Section */}
+          <section className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1 h-8 bg-orange-600 rounded"></div>
+              <h2 className="text-2xl font-bold text-orange-900">
+                Financial Information
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {renderInput(
                 "netOrderValue",
                 "Net Order Value (₹)",
@@ -493,72 +512,204 @@ export default function UpdateOrderForm() {
                 "paymentAgainst",
                 "Payment against PI/DISPATCH",
                 "text",
-                "Enter payment against details"
+                "Enter payment against details",
+                true
+              )}
+            </div>
+
+            <div className="mb-4">
+              {renderInput(
+                "paymentAdvance",
+                "Payment Advance",
+                "select",
+                "",
+                true,
+                {
+                  choices: ["YES", "NO"], locked: true
+                }
               )}
             </div>
 
             {/* Payment Stage 1 */}
-            <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
-              <h3 className="font-bold text-lg text-cyan-800 mb-4">
-                💳 Advance Terms
+            {formData.paymentAdvance === "YES" && (
+              <>
+                <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
+                  <h3 className="font-bold text-lg text-cyan-800 mb-4">
+                    💳 Advance Terms 1
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {renderInput(
+                      "paymentPercent1",
+                      "Payment Percent (%)",
+                      "number",
+                      "",
+                      true,
+                      { min: 0, max: 100, step: "0.01" }
+                    )}
+                    {renderInput(
+                      "paymentType1",
+                      "Payment Type ",
+                      "select",
+                      "",
+                      true,
+                      { choices: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG"] }
+                    )}
+                    {renderInput(
+                      "payemntCGBG1",
+                      "Payment CG/BG ",
+                      "select",
+                      "",
+                      true,
+                      { choices: ["YES", "NO"] }
+                    )}
+                    {renderInput(
+                      "paymentAmount1",
+                      "Payment Amount  (₹)",
+                      "number",
+                      "",
+                      true,
+                      { min: 0, step: "0.01", readOnly: true }
+                    )}
+                    {renderInput(
+                      "paymentrecieved1",
+                      "Payment status",
+                      "select",
+                      "",
+                      true,
+                      { choices: ["RECIEVED", "NOT RECIEVED"] }
+                    )}
+                  </div>
+                </div>
+                <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
+                  <h3 className="font-bold text-lg text-cyan-800 mb-4">
+                    💳 Advance Terms 2
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {renderInput(
+                      "paymentPercent2",
+                      "Payment Percent (%)",
+                      "number",
+                      "",
+                      true,
+                      { min: 0, max: 100, step: "0.01" }
+                    )}
+                    {renderInput(
+                      "paymentType2",
+                      "Payment Type ",
+                      "select",
+                      "",
+                      true,
+                      { choices: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG"] }
+                    )}
+                    {renderInput(
+                      "payemntCGBG2",
+                      "Payment CG/BG ",
+                      "select",
+                      "",
+                      formData?.paymentPercent1 > 0,
+                      { choices: ["YES", "NO"] }
+                    )}
+                    {renderInput(
+                      "paymentAmount2",
+                      "Payment Amount  (₹)",
+                      "number",
+                      "",
+                      false,
+                      { min: 0, step: "0.01", readOnly: true }
+                    )}
+                    {renderInput(
+                      "paymentrecieved2",
+                      "Payment status",
+                      "select",
+                      "",
+                      formData?.paymentPercent1 > 0,
+                      { choices: ["RECIEVED", "NOT RECIEVED"] }
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Payment Stage 2 */}
+            <div className="bg-white p-6 mb-6 rounded-lg border-2 border-amber-300 shadow-sm">
+              <h3 className="font-bold text-lg text-amber-800 mb-4">
+                💳 Retention Amount 2
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {renderInput(
-                  "paymentPercent1",
-                  "Payment Percent (%)",
+                  "retentionPercent",
+                  "Retention Percent  (%)",
                   "number",
                   "",
-                  false,
+                  true,
                   { min: 0, max: 100, step: "0.01" }
                 )}
                 {renderInput(
-                  "paymentType1",
-                  "Payment Type ",
-                  "select",
-                  "",
-                  false,
-                  { choices: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG"] }
-                )}
-                {renderInput(
-                  "paymentAmount1",
-                  "Payment Amount  (₹)",
+                  "retentionAmount",
+                  "Retention Amount  (₹)",
                   "number",
                   "",
-                  false,
+                  true,
                   { min: 0, step: "0.01", readOnly: true }
+                )}
+                {renderInput(
+                  "retentionDocs",
+                  "Retention Docs ",
+                  "select",
+                  "",
+                  true,
+                  { choices: ["YES", "NO", "N/A"] }
+                )}
+                {renderInput(
+                  "retentionPeriod",
+                  "Payment Periods(days)",
+                  "number",
+                  "",
+                  true,
+                  { min: 0, step: "0.01", readOnly: false }
                 )}
               </div>
             </div>
-
-            {/* Payment Stage 2 */}
             <div className="bg-white p-6 rounded-lg border-2 border-amber-300 shadow-sm">
-              <h3 className="font-bold text-lg text-amber-800 mb-4">
-                💳 Retention Amt
-              </h3>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-1 h-8 bg-orange-600 rounded"></div>
+                <h2 className="text-2xl font-bold text-orange-900">
+                  Other Details
+                </h2>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {renderInput(
-                  "paymentPercent2",
-                  "Payment Percent  (%)",
+                  "creditDays",
+                  "Credit Periods",
                   "number",
                   "",
-                  false,
+                  true,
+                  {
+                    min: 0,
+                  }
+                )}
+                {renderInput(
+                  "invoiceTerm",
+                  "Invoice Term ",
+                  "select",
+                  "",
+                  true,
+                  { choices: ["PI", "SI", "N/A"] }
+                )}
+                {renderInput(
+                  "invoicePercent",
+                  "Invoice Percent  (%)",
+                  "number",
+                  "",
+                  true,
                   { min: 0, max: 100, step: "0.01" }
                 )}
                 {renderInput(
-                  "paymentType2",
-                  "Payment Type ",
-                  "select",
-                  "",
-                  false,
-                  { choices: ["A/W CPG", "A/W PBG", "A/W COMMISSIONING"] }
-                )}
-                {renderInput(
-                  "paymentAmount2",
-                  "Payment Amount  (₹)",
-                  "number",
-                  "",
-                  false,
-                  { min: 0, step: "0.01", readOnly: true }
+                  "mileStone",
+                  "MileStone",
+                  "text",
+                  "Enter Mile Stone",
+                  true
                 )}
               </div>
             </div>
@@ -607,7 +758,7 @@ export default function UpdateOrderForm() {
               ) : (
                 <>
                   <Save size={18} />
-                  Update Order
+                  Save Order
                 </>
               )}
             </button>

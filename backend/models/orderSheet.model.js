@@ -56,7 +56,7 @@ const OrderSchema = new mongoose.Schema(
     paymentPercent2: { type: Number, default: 0 },
     paymentType2: {
       type: String,
-      enum: ["A/W CPG", "A/W PBG", "A/W COMMISSIONING", ""],
+      enum: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", ""],
     },
     paymentAmount2: { type: Number, default: 0 },
 
@@ -94,6 +94,26 @@ const OrderSchema = new mongoose.Schema(
       lowercase: true,
       match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
     },
+    
+    paymentAdvance: { type: String,enum: ["YES", "NO", ""], default: "" },
+    payemntCGBG1: { type: String, enum: ["YES", "NO", ""], default: ""},
+    paymentrecieved1: { type: String, enum: ["RECIEVED", "NOT RECIEVED", ""], default: ""},
+    payemntCGBG2: { type: String,num: ["YES", "NO", ""], default: ""},
+    paymentrecieved2: { type: String,enum: ["RECIEVED", "NOT RECIEVED", ""], default: ""},
+    retentionPercent: { type: Number, default: 0 },
+    retentionAmount: { type: Number, default: 0 },
+    retentionDocs: { type: String,enum: ["YES", "NO", "N/A",""], default: ""},
+    retentionType:{
+      type: String,
+      enum: ["A/W CPG", "A/W PBG", "A/W COMMISSIONING", ""],
+      default:""
+    },
+    retentionPeriod:  {type: Number, default: 0 },
+    poReceived: { type: String, enum: ["YES", "NO", ""], default: "" },
+    invoiceTerm: { type: String,enum: ["PI", "SI","N/A", ""], default: "" },
+    invoicePercent: { type: Number, default: 0 },
+    mileStone: { type: String, trim: true },
+
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
