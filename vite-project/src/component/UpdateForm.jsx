@@ -62,7 +62,6 @@ const UpdateForm = () => {
               formattedData[field] = "";
             }
           });
-
           setFormData((prev) => ({ ...prev, ...formattedData }));
           setDocs((prev) => ({
             ...prev,
@@ -107,7 +106,6 @@ const UpdateForm = () => {
       visitendDate,
       deleveryDate,
       requestDate,
-      orderDate,
     } = formData;
 
     if (

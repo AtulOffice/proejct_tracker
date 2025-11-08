@@ -73,7 +73,7 @@ const NotificationForm = ({ setOpen, formRef }) => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "p") {
         e.preventDefault();
-        handlePrint(printRef);
+        handlePrint(printRef,"ENGINEER LIST",false);
       }
     };
 

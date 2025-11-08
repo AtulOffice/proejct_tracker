@@ -79,7 +79,6 @@ const fromBackendObj = (row) => ({
   completed: row?.status || false,
 });
 
-
 const fromBackendBoolObj = (row) => ({
   title: row?.title || "",
   startDate: formatDate(row?.startDate),

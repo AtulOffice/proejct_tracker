@@ -153,6 +153,55 @@ export const findrecord = async (req, res) => {
   }
 };
 
+export const fixVal = async (req, res) => {
+  try {
+    const dateFields = [
+      "actualStartDate",
+      "actualEndDate",
+      "visitDate",
+      "visitendDate",
+      "momDate",
+      "orderDate",
+      "startDate",
+      "deleveryDate",
+      "requestDate",
+      "createdAt",
+      "updatedAt",
+    ];
+
+    const projects = await ProjectModel.find();
+
+    for (const project of projects) {
+      let updated = false;
+
+      for (const field of dateFields) {
+        const value = project[field];
+        if (value) {
+          project[field] = new Date(value);
+          updated = true;
+        }
+      }
+      project.Development = "N/A";
+      if (updated) {
+        await project.save();
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message:
+        "All ProjectModel documents updated: Dates converted to Date type, and development field standardized",
+    });
+  } catch (error) {
+    console.error("Error fixing ProjectModel data:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating ProjectModel documents",
+      error: error.message,
+    });
+  }
+};
+
 export const findrecordbyId = async (req, res) => {
   try {
     const { id } = req.params;
@@ -180,6 +229,7 @@ export const updateRecords = async (req, res) => {
       dispatchDocuments,
       customerDocuments,
       internalDocuments,
+      OrderMongoId,
       ...otherData
     } = req.body;
 
@@ -818,7 +868,47 @@ export const allProjectsFetch = async (req, res) => {
       engineerName: 1,
       updatedAt: 1,
       createdAt: 1,
-      OrderMongoId:1
+      OrderMongoId: 1,
+    }).sort({
+      updatedAt: -1,
+      createdAt: -1,
+    });
+
+    return res.json({
+      success: true,
+      message: "Data fetched successfully",
+      totalItems: data.length,
+      data,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
+export const allProjectsFetchDev = async (req, res) => {
+  const search = req.query.search || "";
+
+  try {
+    const filter = {
+      Development: { $in: ["OFFICE", "SITE"] },
+    };
+
+    if (search) {
+      filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+    }
+
+    const data = await ProjectModel.find(filter, {
+      projectName: 1,
+      status: 1,
+      jobNumber: 1,
+      deleveryDate: 1,
+      visitDate: 1,
+      engineerName: 1,
+      updatedAt: 1,
+      createdAt: 1,
+      OrderMongoId: 1,
+      DevelopmentSetcion: 1,
     }).sort({
       updatedAt: -1,
       createdAt: -1,

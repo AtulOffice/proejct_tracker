@@ -4,11 +4,11 @@ import axios from "axios";
 import { useAppContext } from "../appContex";
 import { EngineerAssignment } from "./engineerInpt";
 
-const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
+const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
   const { setToggle, setToggleDev } = useAppContext();
-
+  console.log(selectedProject);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsDisabled(true);
@@ -22,11 +22,6 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
               .filter(Boolean) || []),
           ])
         ),
-        // engineerData: engineerData.map((eng) => ({
-        //   ...eng,
-        //   assignedAt: selectedProject?.visitDate || null,
-        //   endTime: selectedProject?.visitendDate || null,
-        // })),
         engineerData,
       };
 
@@ -95,4 +90,4 @@ const EngineerProjectForm = ({ setOpen, formRef, selectedProject }) => {
   );
 };
 
-export default EngineerProjectForm;
+export default EngineerForm;

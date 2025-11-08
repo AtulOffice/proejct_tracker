@@ -217,7 +217,10 @@ export const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const order = await Order.findById(id);
+    const order = await Order.findById(id).populate({
+      path: "ProjectDetails",
+      select: "",
+    });
 
     if (!order) {
       return res.status(404).json({

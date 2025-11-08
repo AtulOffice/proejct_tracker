@@ -15,7 +15,7 @@ const engineerSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, trim: true },
     phone: { type: String, trim: true, default: "" },
     empId: { type: String, trim: true, unique: true },
-    password: { type: String, required: true, select: false },
+    password: { type: String, select: false },
     role: { type: String, enum: ["ENGINEER"], default: "ENGINEER" },
     active: { type: Boolean, default: true },
     lastLogin: { type: Date },

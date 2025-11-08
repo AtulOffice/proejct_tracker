@@ -1,25 +1,35 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
 import { fetchbyOrderbyId, fetchbyProjectbyId } from "../utils/apiCall";
 import toast from "react-hot-toast";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
+import { MdEdit } from "react-icons/md";
+import { handlePrint } from "../utils/print";
+import EngineerForm from "./ProjectFormAction";
+import { useNavigate } from "react-router-dom";
 
-const ProjectTableAll = ({ data }) => {
+const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
+  const printRef = useRef();
+  const formRef = useRef(null);
+  const navigate = useNavigate();
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [isOrderFetched, setIsOrderFetched] = useState(false);
-  const navigate = useNavigate();
-  const handleUpdate = (id) => {
-    try {
-      navigate(`/update/${id}`, {
-        state: { fromButton: true, recordId: id },
-      });
-    } catch (error) {
-      console.error("Navigation error:", error);
-    }
-  };
+  const [open, setOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const hadleOpenPopup = async (project) => {
     try {
@@ -29,7 +39,6 @@ const ProjectTableAll = ({ data }) => {
         toast.error("Invalid project data — ID missing");
         return;
       }
-
       let val;
       let orderFlag = false;
       if (project?.OrderMongoId) {
@@ -48,6 +57,46 @@ const ProjectTableAll = ({ data }) => {
     }
   };
 
+  const handleUpdateProject = (id) => {
+    try {
+      navigate(`/update/${id}`, {
+        state: { fromButton: true, recordId: id },
+      });
+    } catch (error) {
+      console.error("Navigation error:", error);
+    }
+  };
+
+  const handleEngineer = (project) => {
+    setSelectedProject(project);
+    setOpen(true);
+  };
+
+  const handleEditAction = (type, data) => {
+    switch (type) {
+      case "URGENT":
+        handleEngineer(data);
+        break;
+      case "ALLPROJECT":
+        handleUpdateProject(data._id);
+        break;
+      default:
+        console.warn("Unknown edit type:", type);
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "p") {
+        e.preventDefault();
+        handlePrint(printRef, printTitle);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
       {selectedProjectForPopup &&
@@ -62,85 +111,76 @@ const ProjectTableAll = ({ data }) => {
             onClose={() => setSelectedProjectForPopup(null)}
           />
         ))}
-
       <div className="overflow-x-auto hidden md:block">
-        <div className="max-h-[690px] overflow-y-auto">
+        <div ref={printRef} className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
-            <thead>
-              <tr className="bg-gradient-to-r from-purple-600 via-pink-500 to-pink-600 text-white shadow-lg">
-                <th className="w-1/5 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                  Project Name
-                </th>
-                <th className="w-32 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                  Status
-                </th>
-                <th className="w-32 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                  Job ID
-                </th>
-                <th className="w-32 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                  Delivery
-                </th>
-                <th className="w-32 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                  Visit
-                </th>
-                <th className="w-1/5 px-6 py-5 text-left text-base font-bold tracking-wide uppercase">
-                  ALL Engineer List
-                </th>
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
+                {tableVal.map((col, idx) => (
+                  <th
+                    key={idx}
+                    className="px-6 py-5 text-left text-base font-bold tracking-wide uppercase !text-gray-400"
+                  >
+                    {col.head}
+                  </th>
+                ))}
+                {isEdit && (
+                  <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase !text-gray-400">
+                    Action
+                  </th>
+                )}
               </tr>
             </thead>
-            <tbody className="divide-y divide-blue-100">
-              {data.map((project, indx) => (
+
+            <tbody className="divide-y divide-gray-100 bg-white">
+              {data.map((row, i) => (
                 <tr
-                  key={indx}
-                  className={`hover:bg-blue-50/60 transition-colors duration-150 ${
-                    indx % 2 === 0
-                      ? "bg-gradient-to-r from-white via-blue-50 to-white"
-                      : "bg-gradient-to-r from-white via-blue-100 to-white"
-                  }`}
+                  key={i}
+                  className="hover:bg-slate-50 transition-colors duration-150 group"
                 >
-                  <td className="px-6 py-4">
-                    <div
-                      className="text-base font-medium hover:cursor-pointer text-blue-900 truncate"
-                      title={project.projectName}
-                      onClick={() => hadleOpenPopup(project)}
-                    >
-                      {project.projectName}
-                    </div>
-                  </td>
-                  <td
-                    className="px-6 py-4 cursor-pointer"
-                    onClick={() => handleUpdate(project?._id)}
-                  >
-                    <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border shadow-sm transition whitespace-nowrap`}
-                    >
-                      <span className="ml-2">{project.status}</span>
-                    </span>
-                  </td>
-                  <td
-                    onClick={() => handleUpdate(project?._id)}
-                    className="px-6 py-4 text-base font-semibold text-blue-700 whitespace-nowrap cursor-pointer"
-                  >
-                    {project.jobNumber}
-                  </td>
-                  <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
-                    {project.deleveryDate &&
-                      new Date(project.deleveryDate)
-                        .toISOString()
-                        .split("T")[0]}
-                  </td>
-                  <td className="px-6 py-4 text-base text-blue-700 whitespace-nowrap">
-                    {project.visitDate &&
-                      new Date(project.visitDate).toISOString().split("T")[0]}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div
-                      className="text-[12px] text-blue-900 break-words max-w-xs"
-                      title={project.engineerName || "Not assigned"}
-                    >
-                      {project.engineerName.join(" , ") || "—"}
-                    </div>
-                  </td>
+                  {tableVal.map((col, j) => {
+                    const val = row[col.val];
+                    const display = Array.isArray(val)
+                      ? val.join(", ")
+                      : col.val.toLowerCase().includes("date") && val
+                      ? new Date(val).toISOString().split("T")[0]
+                      : val || "—";
+                    return (
+                      <td
+                        key={j}
+                        className="px-6 py-4 text-base text-gray-700 whitespace-nowrap"
+                      >
+                        <div
+                          className={`truncate ${
+                            col.val === "projectName"
+                              ? "cursor-pointer hover:text-indigo-600"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            col.val === "projectName" && hadleOpenPopup
+                              ? hadleOpenPopup(row)
+                              : null
+                          }
+                        >
+                          {display}
+                        </div>
+                      </td>
+                    );
+                  })}
+
+                  {isEdit && (
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => handleEditAction(onEditFun, row)}
+                        className="inline-flex items-center justify-center p-2.5 rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
+                      >
+                        <MdEdit
+                          size={18}
+                          className="group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300"
+                        />
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -148,22 +188,27 @@ const ProjectTableAll = ({ data }) => {
         </div>
       </div>
 
+      {/* sm view */}
       <div className="md:hidden space-y-4 p-2">
         {data.map((project, indx) => (
           <div
-            onClick={() => hadleOpenPopup(project?._id)}
             key={indx}
+            onClick={() => hadleOpenPopup(project)}
             className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-lg rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
           >
             <div className="flex items-center justify-between mb-3">
               <div
                 className="text-base font-bold text-indigo-700 truncate max-w-[70%]"
-                title={project.projectName}
+                title={project[tableVal[0]?.val]}
               >
-                {project.projectName}
+                {project[tableVal[0]?.val]}
               </div>
               <span
-                onClick={() => handleUpdate(project?._id)}
+                onClick={
+                  isEdit
+                    ? () => handleEditAction(onEditFun, project)
+                    : undefined
+                }
                 className="inline-flex items-center px-2 py-1 border border-indigo-300 rounded-full font-semibold text-[11px] bg-indigo-100 text-indigo-700 shadow-sm"
                 title={project.status}
               >
@@ -172,39 +217,27 @@ const ProjectTableAll = ({ data }) => {
             </div>
 
             <div className="space-y-2 text-sm text-blue-800">
-              <div>
-                <span className="font-medium text-indigo-600">Job ID:</span>
-                <span className="ml-2 font-semibold ">{project.jobNumber}</span>
-              </div>
-              <div>
-                <span className="font-medium text-indigo-600">Delivery:</span>
-                <span className="ml-2">
-                  {project.deleveryDate &&
-                    new Date(project.deleveryDate).toISOString().split("T")[0]}
-                </span>
-              </div>
-              <div>
-                <span className="font-medium text-indigo-600">Visit:</span>
-                <span className="ml-2">
-                  {project.visitDate &&
-                    new Date(project.visitDate).toISOString().split("T")[0]}
-                </span>
-              </div>
-              <div>
-                <span className="font-medium text-indigo-600">Engineer:</span>
-                <span
-                  className="ml-2 truncate block max-w-xs"
-                  title={project.engineerName || "Not assigned"}
-                >
-                  {project.engineerName.join(" , ") || "—"}
-                </span>
-              </div>
+              {tableVal.slice(1).map((col, i) => {
+                const val = project[col.val];
+                const display = Array.isArray(val)
+                  ? val.join(", ")
+                  : col.val.toLowerCase().includes("date") && val
+                  ? new Date(val).toISOString().split("T")[0]
+                  : val || "—";
+
+                return (
+                  <div key={i}>
+                    <span className="font-medium text-indigo-600">
+                      {col.head}:
+                    </span>
+                    <span className="ml-2">{display}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))}
       </div>
-
-      {/* 📊 Footer Section */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
           <p className="text-base text-blue-700">
@@ -214,6 +247,13 @@ const ProjectTableAll = ({ data }) => {
           </p>
         </div>
       </div>
+      {open && (
+        <EngineerForm
+          setOpen={setOpen}
+          formRef={formRef}
+          selectedProject={selectedProject}
+        />
+      )}
     </div>
   );
 };

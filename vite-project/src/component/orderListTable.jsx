@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchbyOrderbyId } from "../utils/apiCall";
 import toast from "react-hot-toast";
 import OrderDetailsPopup from "../utils/OrderShower";
+import { MdEdit } from "react-icons/md";
 
 const OrderTableAll = ({ data }) => {
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
@@ -42,12 +43,11 @@ const OrderTableAll = ({ data }) => {
           onClose={() => setSelectedProjectForPopup(null)}
         />
       )}
-
       <div className="overflow-x-auto hidden md:block">
         <div className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900  border-b-2 border-purple-400 shadow-md">
+              <tr className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
                 <th className="w-1/5 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
                   Client Name
                 </th>
@@ -65,6 +65,9 @@ const OrderTableAll = ({ data }) => {
                 </th>
                 <th className="w-1/5 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
                   Site
+                </th>
+                <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase !text-white">
+                  Action
                 </th>
               </tr>
             </thead>
@@ -85,10 +88,9 @@ const OrderTableAll = ({ data }) => {
                       {order?.client}
                     </div>
                   </td>
-                  <td className="px-6 py-4 cursor-pointer">
+                  <td className="px-6 py-4">
                     <span
-                      onClick={() => handleUpdate(order?._id)}
-                      className="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-all duration-200"
+                      className="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200"
                       title={order.jobNumber}
                     >
                       {order.jobNumber}
@@ -113,15 +115,24 @@ const OrderTableAll = ({ data }) => {
                       {order.site || "—"}
                     </div>
                   </td>
+                  <td className="px-6 py-4 text-center">
+                    <button
+                      onClick={() => handleUpdate(order?._id)}
+                      className="inline-flex items-center justify-center p-2.5 rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
+                      title="Edit this order"
+                    >
+                      <MdEdit
+                        size={18}
+                        className="group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300"
+                      />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </div>
-
-      
-      
       {/* Mobile View - Optional Enhancement */}
       <div className="md:hidden space-y-3 p-4">
         {data.map((order, indx) => (
@@ -164,7 +175,6 @@ const OrderTableAll = ({ data }) => {
           </div>
         ))}
       </div>
-
       {/* Footer Section */}
       <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div className="flex flex-wrap items-center justify-between gap-y-2">

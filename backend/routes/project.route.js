@@ -17,6 +17,7 @@ import {
   allProjectsFetch,
   getEngineerProjectsPaginated,
   getEngineerOverview,
+  allProjectsFetchDev,
 } from "../controller/project.controller.js";
 import {
   authenticate,
@@ -145,4 +146,12 @@ ProjectRouter.get(
   authenticate,
   authorizeRole("admin", "reception"),
   allProjectsFetch
+);
+
+ProjectRouter.get(
+  "/allProjectsfetchdev",
+  refreshTokenMiddleware,
+  authenticate,
+  authorizeRole("admin", "reception"),
+  allProjectsFetchDev
 );

@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GoProjectRoadmap } from "react-icons/go";
 import { FaClipboardList, FaRegSquarePlus } from "react-icons/fa6";
-import {
-  MdAssignmentAdd,
-  MdCancel,
-  MdOutlinePendingActions,
-} from "react-icons/md";
+import { MdCancel, MdOutlinePendingActions } from "react-icons/md";
 import { TbUrgent } from "react-icons/tb";
 import logimg from "../assets/logo_image.png";
 import {
@@ -24,8 +20,13 @@ import ZeroCard from "./overview.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchProjectOveriew, logout } from "../utils/apiCall";
-import ProejctACtions from "./ProejctACtions.projects";
+import {
+  fetchProjectOveriew,
+  fetchProjectsUrgentAction,
+  fetfchProejctADev,
+  fetfchProejctAll,
+  logout,
+} from "../utils/apiCall";
 import EngineerAction from "./EngineerActions.projects";
 import AssessMentAction from "./AssessMentAction.projects.jsx";
 import NotificationForm from "./notification";
@@ -71,14 +72,77 @@ const AdminDashboard = () => {
   };
   const handleLogOut = () => {
     try {
-      toast.success("logout successfully");
       logout();
+      toast.success("logout successfully");
       navigate("/login");
     } catch (e) {
       console.log(e);
       toast.error("error while logout");
     }
   };
+
+  const handleEngineer = () => {};
+
+  const ProjectTab = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "Status",
+      val: "status",
+    },
+    {
+      head: "Delivery",
+      val: "deleveryDate",
+    },
+    { head: "Visit", val: "visitDate" },
+  ];
+  const ProjectTabDev = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "Status",
+      val: "status",
+    },
+    {
+      head: "Delivery",
+      val: "deleveryDate",
+    },
+    { head: "Visit", val: "visitDate" },
+    { head: "LOGIC/SCADA", val: "DevelopmentSetcion" },
+  ];
+
+  const ProjectActionTab = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "Status",
+      val: "status",
+    },
+    {
+      head: "Delivery",
+      val: "deleveryDate",
+    },
+    { head: "Visit", val: "visitDate" },
+    { head: "Devlopment", val: "Development" },
+  ];
   const renderCard = () => {
     switch (activeCard) {
       case "zero":
@@ -166,19 +230,48 @@ const AdminDashboard = () => {
           />
         );
       case "sixteen":
-        return <ProejctACtions />;
+        return (
+          <ProjectList
+            key={"URGENT"}
+            tableVal={ProjectActionTab}
+            fetchFun={fetchProjectsUrgentAction}
+            isEdit={true}
+            onEditFun="URGENT"
+            printTitle="URGENT PROJECT LIST"
+          />
+        );
+      case "ninteen":
+        return (
+          <ProjectList
+            key={"ALLPROJECT"}
+            tableVal={ProjectTab}
+            fetchFun={fetfchProejctAll}
+            isEdit={true}
+            onEditFun="ALLPROJECT"
+            printTitle="PROJECT LIST"
+          />
+        );
       case "seventeen":
         return <EngineerAction />;
       case "eighteen":
         return <WeeklyAssignmentForm />;
-      case "ninteen":
-        return <ProjectList />;
       case "twenty":
         return <AssessMentAction />;
       case "twentyone":
         return <OrderForm />;
       case "twentytwo":
         return <OrderList />;
+      case "twentythree":
+        return (
+          <ProjectList
+            key={"DEVLOPMENT"}
+            tableVal={ProjectTabDev}
+            fetchFun={fetfchProejctADev}
+            isEdit={false}
+            onEditFun="DEVLOPMENT"
+            printTitle="DEVLOPMENT PROJECT LIST"
+          />
+        );
       default:
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
     }
@@ -249,7 +342,7 @@ const AdminDashboard = () => {
               className="text-gray-600 relative cursor-pointer"
             >
               <RiNotification3Line size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-white text-xs">
+              <span className="absolute -top-1 -right-1 bg-red-500 !text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
                 {overvew?.todayNotice ?? 0}
               </span>
             </button>
@@ -370,20 +463,6 @@ const AdminDashboard = () => {
                       ALL PROJECTS
                     </div>
                   </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("two");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
-                        activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ALL
-                    </div>
-                  </li>
                   {(user?.role == "admin" || user?.role == "reception") && (
                     <>
                       <li>
@@ -404,6 +483,36 @@ const AdminDashboard = () => {
                       </li>
                     </>
                   )}
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("twentythree");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "twentythree"
+                          ? "bg-indigo-50 rounded-md"
+                          : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      PROJ INC DEV
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("two");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${
+                        activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ALL
+                    </div>
+                  </li>
 
                   {user?.role == "admin" && (
                     <>
