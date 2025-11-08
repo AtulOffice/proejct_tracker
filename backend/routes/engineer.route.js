@@ -41,13 +41,7 @@ EngineerRouter.get(
   authorizeRole("admin", "reception"),
   getAssignedEngineers
 );
-EngineerRouter.get(
-  "/getAllEngineers",
-  refreshTokenMiddleware,
-  authenticate,
-  authorizeRole("admin"),
-  getAllEngineers
-);
+EngineerRouter.get("/getAllEngineers", getAllEngineers);
 EngineerRouter.delete(
   "/deleteEngineer/:id",
   refreshTokenMiddleware,

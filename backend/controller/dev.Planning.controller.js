@@ -5,23 +5,25 @@ import ProjectModel from "../models/Project.model.js";
 export const PlanningSave = async (req, res) => {
   try {
     const data = req.body;
-    const { JobNumber, useId } = data;
+    const { JobNumber, useId, projectId } = data;
+    console.log(req.body);
     if (!JobNumber) {
       return res
         .status(400)
         .json({ success: false, message: "JobNumber is required" });
     }
-    const existingProject = await ProjectModel.findOne({
-      jobNumber: JobNumber,
-    });
-    let isExistprojectDev = await ProjectDevModel.findOne({ JobNumber });
+    const existingProject = await ProjectModel.findById(projectId);
 
-    if (!existingProject || !isExistprojectDev) {
+    let isExistprojectDev = await ProjectDevModel.findOne({ JobNumber });
+    console.log(isExistprojectDev);
+
+    if (!existingProject) {
+      console.log("this loop is executed");
       return res
         .status(404)
         .json({ success: false, message: "Project not found" });
     }
-    let Planning = await PlanningModel.findOne({ JobNumber });
+    let Planning = await PlanningModel.findOne({ ProjectDetails: projectId });
     if (Planning) {
       Planning = await PlanningModel.findByIdAndUpdate(
         Planning._id,

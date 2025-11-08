@@ -27,11 +27,11 @@ const OrderSchema = new mongoose.Schema(
 
     formalOrderStatus: {
       type: String,
-      enum: ["RECEIVED", "PENDING"],
+      enum: ["RECEIVED", "PENDING", ""],
     },
     amndReqrd: {
       type: String,
-      enum: ["RECEIVED", "PENDING"],
+      enum: ["RECEIVED", "PENDING", ""],
     },
     orderValueSupply: { type: Number, default: 0, min: 0 },
     orderValueService: { type: Number, default: 0, min: 0 },
@@ -39,7 +39,7 @@ const OrderSchema = new mongoose.Schema(
 
     cancellation: {
       type: String,
-      enum: ["NONE", "PARTIAL", "COMPLETE"],
+      enum: ["NONE", "PARTIAL", "COMPLETE", ""],
     },
     netOrderValue: { type: Number, default: 0 },
 
@@ -68,7 +68,7 @@ const OrderSchema = new mongoose.Schema(
     creditDays: { type: Number, default: 0 },
     dispatchStatus: {
       type: String,
-      enum: ["DISPATCHED", "LD APPLIED", "URGENT"],
+      enum: ["DISPATCHED", "LD APPLIED", "URGENT", ""],
     },
 
     salesBasic: { type: Number, default: 0 },
