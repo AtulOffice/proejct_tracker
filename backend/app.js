@@ -14,10 +14,12 @@ import { DevRecordRouter } from "./routes/devlopment.Record.router.js";
 import { PlannigRouter } from "./routes/dev.Planning.route.js";
 import { engineerAuthRouter } from "./routes/engineer.auth.route.js";
 import { OrderRouter } from "./routes/Order.route.js";
+import { ImageUploadRouter } from "./routes/image.router.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
 const app = express();
+app.use(express.json({ limit: "110mb" }));
 
 // engineerStatus();
 
@@ -31,7 +33,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 const limiter = rateLimit({
   windowMs: 2 * 60 * 1000,
-  max: 240,
+  max: 240, 
   message: {
     success: false,
     message: "You hit too many requests. Please wait 2 minutes.",
@@ -53,6 +55,7 @@ app.use("/api/v1/devrecord", DevRecordRouter);
 app.use("/api/v1/planningDev", PlannigRouter);
 app.use("/api/v1/engineer", engineerAuthRouter);
 app.use("/api/v1/order", OrderRouter);
+app.use("/api/v1/imageUploader",ImageUploadRouter)
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   console.log(`server is linsten on port ${port}`);
