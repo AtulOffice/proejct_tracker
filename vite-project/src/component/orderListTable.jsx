@@ -36,7 +36,7 @@ const OrderTableAll = ({ data }) => {
   };
 
   return (
-    <div className="relative h-full col-span-full w-full overflow-hidden rounded-lg shadow-sm bg-white border border-gray-200">
+    <div className="relative italic h-full col-span-full w-full overflow-hidden rounded-lg shadow-sm bg-white border border-gray-200">
       {selectedProjectForPopup && (
         <OrderDetailsPopup
           order={selectedProjectForPopup}
@@ -88,13 +88,13 @@ const OrderTableAll = ({ data }) => {
                       {order?.client}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span
+                  <td className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap font-mono">
+                    {/* <span
                       className="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200"
                       title={order.jobNumber}
                     >
-                      {order.jobNumber}
-                    </span>
+                    </span> */}
+                    {order.jobNumber}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-700 whitespace-nowrap font-mono">
                     {order?.bookingDate
