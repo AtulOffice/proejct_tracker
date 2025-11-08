@@ -17,7 +17,7 @@ const InputForm = () => {
   const [open, setOpen] = useState(false);
   const [selectData, setSelectData] = useState(null);
   const [Docs, setDocs] = useState(docsVal);
-console.log(Docs)
+  console.log(Docs)
   useEffect(() => {
     if (selectData) {
       const formatDate = (date) => {

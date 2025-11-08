@@ -222,7 +222,7 @@ const projectSchema = new mongoose.Schema(
       default: null,
     },
     endDate: {
-      type: String,
+      type: Date,
       default: null,
     },
     description: {

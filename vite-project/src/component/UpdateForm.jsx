@@ -169,9 +169,9 @@ const UpdateForm = () => {
         momsrNo:
           typeof formData.momsrNo === "string"
             ? formData.momsrNo
-                .split(",")
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
+              .split(",")
+              .map((name) => name.trim())
+              .filter((name) => name.length > 0)
             : formData.momsrNo,
         engineerData,
         ...Docs,
@@ -211,281 +211,343 @@ const UpdateForm = () => {
   }
 
   return (
-    <div className="transition-all duration-300  pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-      <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
-        <h2 className="text-3xl font-extrabold mb-8 text-center text-white drop-shadow-md">
-          {formData?.projectName.toUpperCase()}
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InputFiled
-              {...UpdateConst[7]}
-              isEditable={true}
-              value={formData.jobNumber}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[8]}
-              isEditable={true}
-              value={formData.orderNumber}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[28]}
-              isEditable={true}
-              value={formData.entityType}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[27]}
-              isEditable={true}
-              value={formData.soType}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[5]}
-              isEditable={true}
-              value={formData.client}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[6]}
-              isEditable={true}
-              value={formData.endUser}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[29]}
-              value={formData.status}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[22]}
-              value={formData.location}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[9]}
-              value={formData.bill}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[10]}
-              value={formData.dueBill}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[25]}
-              value={formData.billStatus}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[21]}
-              value={formData.orderDate}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[17]}
-              value={formData.deleveryDate}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[40]}
-              value={formData.Development}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[41]}
-              value={formData.technicalEmail}
-              handleChange={handleChange}
-            />{" "}
-            <SelectField
-              {...UpdateConst[42]}
-              value={formData.isMailSent}
-              handleChange={handleChange}
-            />
-            {(formData?.Development === "OFFICE" ||
-              formData?.Development === "SITE") && (
-              <SelectField
-                {...UpdateConst[43]}
-                value={formData.isDevlopmentApproved}
-                handleChange={handleChange}
-              />
-            )}
-            {(formData.Development === "OFFICE" ||
-              formData.Development === "SITE") && (
-              <SelectField
-                {...UpdateConst[44]}
-                value={formData.DevelopmentSetcion}
-                handleChange={handleChange}
-              />
-            )}
-            <InputFiled
-              {...UpdateConst[3]}
-              value={formData.expenseScope}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[1]}
-              value={formData.duration}
-              handleChange={handleChange}
-            />
-            <TextArea
-              {...UpdateConst[4]}
-              value={formData.workScope}
-              handleChange={handleChange}
-            />
-            {/* <InputFiled
-              {...UpdateConst[23]}
-              value={formData.engineerName}
-              handleChange={handleChange}
-            /> */}
-            <div className="flex flex-col mb-3">
-              <label className="text-sm font-semibold text-gray-700 mb-1">
-                All Assigned Engineers List
-              </label>
-              <div className="h-[20vh] border border-gray-300 rounded-md px-2 py-1 bg-gradient-to-r from-blue-50 to-white text-gray-800 text-sm font-medium shadow-sm overflow-y-auto">
-                {formData?.engineerName?.length
-                  ? formData.engineerName.join(", ")
-                  : "No engineer assigned"}
-              </div>
-            </div>
-            <EngineerAssignment setEngineerData={setEngineerData} />
-            <InputFiled
-              {...UpdateConst[16]}
-              value={formData.requestDate}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[18]}
-              value={formData.visitDate}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[30]}
-              handleChange={handleChange}
-              value={formData.StartChecklist}
-            />
-            <InputFiled
-              {...UpdateConst[19]}
-              value={formData.visitendDate}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[34]}
-              handleChange={handleChange}
-              value={formData.EndChecklist}
-            />
-            <InputFiled
-              {...UpdateConst[11]}
-              value={formData.momsrNo}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[20]}
-              value={
-                formData.momDate.length >= 0
-                  ? formData.momDate[formData.momDate.length - 1]
-                  : ""
-              }
-              handleChange={(e) => handleMomDateChange(e.target.value)}
-            />
-            <SelectField
-              {...UpdateConst[37]}
-              handleChange={handleChange}
-              value={formData.BackupSubmission}
-            />
-            <SelectField
-              {...UpdateConst[38]}
-              handleChange={handleChange}
-              value={formData.ExpensSubmission}
-            />
-            <InputFiled
-              {...UpdateConst[39]}
-              value={formData.daysspendsite}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[2]}
-              value={formData.actualVisitDuration}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[40]}
-              value={formData.Development}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[26]}
-              value={formData.supplyStatus}
-              handleChange={handleChange}
-            />
-            {/* <InputFiled
-              {...UpdateConst[12]}
-              value={formData.startDate}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[13]}
-              value={formData.endDate}
-              handleChange={handleChange}
-            /> */}
-            <InputFiled
-              {...UpdateConst[14]}
-              value={formData.actualStartDate}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[15]}
-              value={formData.actualEndDate}
-              handleChange={handleChange}
-            />
-            <div className="md:col-span-2">
-              <TextArea
-                {...UpdateConst[33]}
-                handleChange={handleChange}
-                value={formData.description}
-              />
-            </div>
-            <InputFiled
-              {...UpdateConst[24]}
-              value={formData.finalMomnumber}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...UpdateConst[31]}
-              handleChange={handleChange}
-              value={formData.priority}
-            />
-            <SelectField
-              {...UpdateConst[32]}
-              handleChange={handleChange}
-              value={formData.service}
-            />
-            <InputFiled
-              {...UpdateConst[35]}
-              value={formData.ContactPersonName}
-              handleChange={handleChange}
-            />
-            <InputFiled
-              {...UpdateConst[36]}
-              value={formData.ContactPersonNumber}
-              handleChange={handleChange}
-            />
-          </div>
-          <DocumentsSection Docs={Docs} setDocs={setDocs} />
-          <div className="flex justify-center mt-8">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-            >
-              Update
-            </button>
-          </div>
-        </form>
+   <div className="transition-all duration-300 pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+  <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
+    <h2 className="text-3xl font-extrabold mb-8 text-center text-indigo-900 drop-shadow-md">
+      {formData?.projectName.toUpperCase()}
+    </h2>
+    <form onSubmit={handleSubmit} className="space-y-6">
+
+      {/* 📋 Basic Project Information */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-indigo-300 shadow-sm">
+        <h3 className="font-bold text-lg text-indigo-800 mb-4">
+          📋 Basic Project Information
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputFiled
+            {...UpdateConst[7]}
+            isEditable={true}
+            value={formData.jobNumber}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[8]}
+            isEditable={true}
+            value={formData.orderNumber}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...UpdateConst[28]}
+            isEditable={true}
+            value={formData.entityType}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...UpdateConst[27]}
+            isEditable={true}
+            value={formData.soType}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...UpdateConst[31]}
+            handleChange={handleChange}
+            value={formData.priority}
+          />
+          <SelectField
+            {...UpdateConst[32]}
+            handleChange={handleChange}
+            value={formData.service}
+          />
+        </div>
       </div>
-    </div>
+
+      {/* 👥 Client & Contact Details */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-purple-300 shadow-sm">
+        <h3 className="font-bold text-lg text-purple-800 mb-4">
+          👥 Client & Contact Details
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputFiled
+            {...UpdateConst[5]}
+            isEditable={true}
+            value={formData.client}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[6]}
+            isEditable={true}
+            value={formData.endUser}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[22]}
+            value={formData.location}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[35]}
+            value={formData.ContactPersonName}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[36]}
+            value={formData.ContactPersonNumber}
+            handleChange={handleChange}
+          />
+        </div>
+      </div>
+
+      {/* 💰 Billing Information */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-green-300 shadow-sm">
+        <h3 className="font-bold text-lg text-green-800 mb-4">
+          💰 Billing Information
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputFiled
+            {...UpdateConst[9]}
+            value={formData.bill}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[10]}
+            value={formData.dueBill}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...UpdateConst[25]}
+            value={formData.billStatus}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[3]}
+            value={formData.expenseScope}
+            handleChange={handleChange}
+          />
+        </div>
+      </div>
+
+      {/* 📅 Timeline & Scheduling */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-blue-300 shadow-sm">
+        <h3 className="font-bold text-lg text-blue-800 mb-4">
+          📅 Timeline & Scheduling
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputFiled
+            {...UpdateConst[21]}
+            value={formData.orderDate}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[17]}
+            value={formData.deleveryDate}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[16]}
+            value={formData.requestDate}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[18]}
+            value={formData.visitDate}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[19]}
+            value={formData.visitendDate}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[14]}
+            value={formData.actualStartDate}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[15]}
+            value={formData.actualEndDate}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[1]}
+            value={formData.duration}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[2]}
+            value={formData.actualVisitDuration}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[39]}
+            value={formData.daysspendsite}
+            handleChange={handleChange}
+          />
+        </div>
+      </div>
+
+      {/* 👷 Engineer Assignment & Status */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-orange-300 shadow-sm">
+        <h3 className="font-bold text-lg text-orange-800 mb-4">
+          👷 Engineer Assignment & Status
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col mb-3">
+            <label className="text-sm font-semibold text-gray-700 mb-1">
+              All Assigned Engineers List
+            </label>
+            <div className="h-[20vh] border border-indigo-300 rounded-md px-2 py-1 bg-indigo-100 text-gray-800 text-sm font-medium shadow-sm overflow-y-auto">
+              {formData?.engineerName?.length
+                ? formData.engineerName.join(", ")
+                : "No engineer assigned"}
+            </div>
+          </div>
+          <EngineerAssignment setEngineerData={setEngineerData} />
+          <SelectField
+            {...UpdateConst[29]}
+            value={formData.status}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...UpdateConst[26]}
+            value={formData.supplyStatus}
+            handleChange={handleChange}
+          />
+        </div>
+      </div>
+
+      {/* 🔧 Development & Technical */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
+        <h3 className="font-bold text-lg text-cyan-800 mb-4">
+          🔧 Development & Technical
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <SelectField
+            {...UpdateConst[40]}
+            value={formData.Development}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[41]}
+            value={formData.technicalEmail}
+            handleChange={handleChange}
+          />
+          <SelectField
+            {...UpdateConst[42]}
+            value={formData.isMailSent}
+            handleChange={handleChange}
+          />
+          {(formData?.Development === "OFFICE" ||
+            formData?.Development === "SITE") && (
+            <SelectField
+              {...UpdateConst[43]}
+              value={formData.isDevlopmentApproved}
+              handleChange={handleChange}
+            />
+          )}
+          {(formData.Development === "OFFICE" ||
+            formData.Development === "SITE") && (
+            <SelectField
+              {...UpdateConst[44]}
+              value={formData.DevelopmentSetcion}
+              handleChange={handleChange}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* ✅ Checklists & Submissions */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-pink-300 shadow-sm">
+        <h3 className="font-bold text-lg text-pink-800 mb-4">
+          ✅ Checklists & Submissions
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <SelectField
+            {...UpdateConst[30]}
+            handleChange={handleChange}
+            value={formData.StartChecklist}
+          />
+          <SelectField
+            {...UpdateConst[34]}
+            handleChange={handleChange}
+            value={formData.EndChecklist}
+          />
+          <SelectField
+            {...UpdateConst[37]}
+            handleChange={handleChange}
+            value={formData.BackupSubmission}
+          />
+          <SelectField
+            {...UpdateConst[38]}
+            handleChange={handleChange}
+            value={formData.ExpensSubmission}
+          />
+        </div>
+      </div>
+
+      {/* 📝 MOM & Documentation */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-yellow-300 shadow-sm">
+        <h3 className="font-bold text-lg text-yellow-800 mb-4">
+          📝 MOM & Documentation
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <InputFiled
+            {...UpdateConst[11]}
+            value={formData.momsrNo}
+            handleChange={handleChange}
+          />
+          <InputFiled
+            {...UpdateConst[20]}
+            value={
+              formData.momDate.length >= 0
+                ? formData.momDate[formData.momDate.length - 1]
+                : ""
+            }
+            handleChange={(e) => handleMomDateChange(e.target.value)}
+          />
+          <InputFiled
+            {...UpdateConst[24]}
+            value={formData.finalMomnumber}
+            handleChange={handleChange}
+          />
+        </div>
+      </div>
+
+      {/* 📄 Work Scope & Description */}
+      <div className="bg-indigo-50 p-6 rounded-lg mb-6 border-2 border-red-300 shadow-sm">
+        <h3 className="font-bold text-lg text-red-800 mb-4">
+          📄 Work Scope & Description
+        </h3>
+        <div className="grid grid-cols-1 gap-4">
+          <TextArea
+            {...UpdateConst[4]}
+            value={formData.workScope}
+            handleChange={handleChange}
+          />
+          <TextArea
+            {...UpdateConst[33]}
+            handleChange={handleChange}
+            value={formData.description}
+          />
+        </div>
+      </div>
+
+      {/* 📎 Documents */}
+      <DocumentsSection Docs={Docs} setDocs={setDocs} />
+
+      <div className="flex justify-center mt-8">
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
   );
 };
 

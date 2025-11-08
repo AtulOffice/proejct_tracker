@@ -510,7 +510,7 @@ export const InputConst = [
   {
     htmlFor: "daysspendsite",
     title: "Days spend on site",
-    type: "text",
+    type: "number",
     id: "daysspendsite",
     name: "daysspendsite",
     placeholder: "Enter the value",
@@ -986,7 +986,7 @@ export const UpdateConst = [
   {
     htmlFor: "daysspendsite",
     title: "Days spend on site",
-    type: "text",
+    type: "number",
     id: "daysspendsite",
     name: "daysspendsite",
     placeholder: "Enter the value",
@@ -1332,7 +1332,7 @@ export const UserSideConst = [
   {
     htmlFor: "daysspendsite",
     title: "Days spend on site",
-    type: "text",
+    type: "number",
     id: "daysspendsite",
     name: "daysspendsite",
     placeholder: "Enter the value",

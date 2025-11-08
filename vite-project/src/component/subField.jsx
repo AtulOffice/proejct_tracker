@@ -14,7 +14,7 @@ export const InputFiled = ({
   isEditable = false,
 }) => {
   const handleKeyDown = (e) => {
-    if (type === "number" && (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key==="-")) {
+    if (type === "number" && (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "-")) {
       e.preventDefault();
     }
   };
@@ -29,14 +29,11 @@ export const InputFiled = ({
     <div>
       <label
         htmlFor={htmlFor}
-        className="block mb-2 text-sm font-medium text-white"
+        className="block text-sm font-semibold text-gray-700 mb-2"
       >
         {title}
         {required && (
-          <span className="text-red-500 text-xl" style={{ color: "#ef4444" }}>
-            {" "}
-            *
-          </span>
+          <span className="text-red-500 text-xl ml-1">*</span>
         )}
       </label>
 
@@ -44,19 +41,22 @@ export const InputFiled = ({
         type={type}
         id={id}
         name={name}
-        readOnly={readOnly || isEditable} // 👈 condition added here
+        readOnly={readOnly || isEditable}
         value={value ?? ""}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onWheel={handleWheel}
-        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-black/70 ${
-          isEditable ? "cursor-not-allowed opacity-60" : ""
-        }`} // 👈 visual hint when not editable
+        className={`w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200 ${isEditable
+            ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
+            : "border-purple-200 bg-gradient-to-br from-pink-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500 placeholder-gray-400"
+          }`}
         placeholder={placeholder}
         required={required}
       />
     </div>
+
   );
+
 };
 
 export const SelectField = ({
@@ -74,14 +74,11 @@ export const SelectField = ({
     <div>
       <label
         htmlFor={htmlFor}
-        className="block mb-2 text-sm font-medium text-white"
+        className="block text-sm font-semibold text-gray-700 mb-2"
       >
         {title}
         {required && (
-          <span className="text-red-500 text-xl" style={{ color: "#ef4444" }}>
-            {" "}
-            *
-          </span>
+          <span className="text-red-500 text-xl ml-1">*</span>
         )}
       </label>
 
@@ -92,9 +89,10 @@ export const SelectField = ({
         onChange={handleChange}
         required={required}
         disabled={isEditable}
-        className={`bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
-          isEditable ? "cursor-not-allowed opacity-60" : ""
-        }`}
+        className={`w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200 ${isEditable
+            ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
+            : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
+          }`}
       >
         {options.map((item) => (
           <option key={item.value} value={item.value}>
@@ -104,6 +102,7 @@ export const SelectField = ({
       </select>
     </div>
   );
+
 };
 
 export const TextArea = ({
@@ -122,14 +121,11 @@ export const TextArea = ({
     <div>
       <label
         htmlFor={htmlFor}
-        className="block mb-2 text-sm font-medium text-white"
+        className="block text-sm font-semibold text-gray-700 mb-2"
       >
         {title}
         {required && (
-          <span className="text-red-500 text-xl" style={{ color: "#ef4444" }}>
-            {" "}
-            *
-          </span>
+          <span className="text-red-500 text-xl ml-1">*</span>
         )}
       </label>
       <textarea
@@ -141,9 +137,11 @@ export const TextArea = ({
         rows={rows}
         required={required}
         maxLength={maxLength}
-        className="bg-white/30 border border-white/40 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-black/70 resize-none"
+        className="w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200 resize-none border-purple-200 bg-gradient-to-br from-indigo-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500 placeholder-gray-400 text-gray-900"
         placeholder={placeholder}
       />
     </div>
+
+
   );
 };
