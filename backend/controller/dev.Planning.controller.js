@@ -42,20 +42,20 @@ export const PlanningSave = async (req, res) => {
       updatedBy: useId,
     };
 
-    let planning = project.PlanDetails
-      ? await PlanningModel.findByIdAndUpdate(project.PlanDetails, planData, {
-          new: true,
-        })
-      : await PlanningModel.create({
-          ...planData,
-          projectName: project.projectName,
-          ProjectDetails: project._id,
-          DevelopmentDetials: projectDev._id,
-          jobNumber: project.jobNumber,
-          devScope: project.Development,
-          createdBy: useId,
-        });
-
+    let planning =
+      project.PlanDetails && (await PlanningModel.findById(project.PlanDetails))
+        ? await PlanningModel.findByIdAndUpdate(project.PlanDetails, planData, {
+            new: true,
+          })
+        : await PlanningModel.create({
+            ...planData,
+            projectName: project.projectName,
+            ProjectDetails: project._id,
+            DevelopmentDetials: projectDev._id,
+            jobNumber: project.jobNumber,
+            devScope: project.Development,
+            createdBy: useId,
+          });
     await ProjectModel.findByIdAndUpdate(project._id, {
       PlanDetails: planning._id,
       DevelopmentDetials: projectDev._id,
