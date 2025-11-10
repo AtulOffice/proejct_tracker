@@ -4,14 +4,14 @@ import ProjectModel from "../models/Project.model.js";
 export const ProjectStatusSave = async (req, res) => {
   try {
     const data = req.body;
-    const { JobNumber } = data;
-    if (!JobNumber) {
+    const { jobNumber } = data;
+    if (!jobNumber) {
       return res
         .status(400)
-        .json({ success: false, message: "JobNumber is required" });
+        .json({ success: false, message: "jobNumber is required" });
     }
     const existingProject = await ProjectModel.findOne({
-      jobNumber: JobNumber,
+      jobNumber: jobNumber,
     });
     if (!existingProject) {
       return res
@@ -19,7 +19,7 @@ export const ProjectStatusSave = async (req, res) => {
         .json({ success: false, message: "Project not found" });
     }
 
-    let projectDev = await ProjectDevModel.findOne({ JobNumber });
+    let projectDev = await ProjectDevModel.findOne({ jobNumber });
 
     if (projectDev) {
       projectDev = await ProjectDevModel.findByIdAndUpdate(
@@ -61,18 +61,18 @@ export const ProjectStatusSave = async (req, res) => {
 
 export const isProjectstatusExistFun = async (req, res) => {
   try {
-    const { JobNumber } = req.params;
+    const { jobNumber } = req.params;
     const check = req.query.check === "true";
 
-    if (!JobNumber) {
+    if (!jobNumber) {
       return res
         .status(400)
-        .json({ success: false, message: "JobNumber is required" });
+        .json({ success: false, message: "jobNumber is required" });
     }
 
-    const projectStatus = await ProjectDevModel.findOne({ JobNumber });
+    const projectStatus = await ProjectDevModel.findOne({ jobNumber });
     const projectParent = await ProjectModel.findOne({
-      jobNumber: JobNumber,
+      jobNumber: jobNumber,
       Development: { $in: ["OFFICE", "SITE"] },
     });
 
@@ -110,14 +110,14 @@ export const isProjectstatusExistFun = async (req, res) => {
 
 export const ProjectStatusfetchbyJobId = async (req, res) => {
   try {
-    const { JobNumber } = req.params;
-    if (!JobNumber) {
+    const { jobNumber } = req.params;
+    if (!jobNumber) {
       return res
         .status(400)
-        .json({ success: false, message: "JobNumber is required" });
+        .json({ success: false, message: "jobNumber is required" });
     }
     const projectStatus = await ProjectDevModel.findOne({
-      JobNumber,
+      jobNumber,
     }).populate({
       path: "PlanDetails",
       select: "scada logic testing documents",
@@ -155,7 +155,7 @@ export const PaginationStatus = async (req, res) => {
       total = await ProjectDevModel.countDocuments();
     } else {
       const result = await ProjectDevModel.findOne({
-        JobNumber: { $regex: new RegExp(`^${search}$`, "i") },
+        jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
       });
 
       if (result) {
@@ -192,7 +192,7 @@ export const PaginationStatusprog = async (req, res) => {
     }
 
     if (search) {
-      query.JobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+      query.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
     }
 
     const data = await ProjectDevModel.find(query)
@@ -235,16 +235,16 @@ export const allProjectStatusfetch = async (req, res) => {
 
 export const projectDevStatusUpdate = async (req, res) => {
   try {
-    const { JobNumber } = req.params;
+    const { jobNumber } = req.params;
     const updateData = req.body;
-    if (!JobNumber || !updateData) {
+    if (!jobNumber || !updateData) {
       return res.status(400).json({
         success: false,
-        message: "JobNumber and update data are required",
+        message: "jobNumber and update data are required",
       });
     }
     const updatedProject = await ProjectDevModel.findOneAndUpdate(
-      { JobNumber },
+      { jobNumber },
       updateData,
       { new: true }
     );

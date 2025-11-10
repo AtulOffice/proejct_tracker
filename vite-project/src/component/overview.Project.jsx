@@ -145,7 +145,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
                     </div>
                     <div>
                       <p className="text-gray-800 font-medium text-sm sm:text-base">
-                        {project.JobNumber}
+                        {project.jobNumber}
                       </p>
                       <p className="text-gray-500 text-xs sm:text-sm truncate max-w-[220px] sm:max-w-none">
                         {project.projectName}

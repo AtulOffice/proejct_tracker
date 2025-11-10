@@ -1,69 +1,74 @@
+import mongoose from "mongoose";
 import PlanningModel from "../models/dev.Planning.model.js";
 import ProjectDevModel from "../models/Project.Dev.model.js";
 import ProjectModel from "../models/Project.model.js";
 
 export const PlanningSave = async (req, res) => {
   try {
-    const data = req.body;
-    const { JobNumber, useId, projectId } = data;
-    console.log(req.body);
-    if (!JobNumber) {
+    const { useId, projectId, formDevbackData, ...restData } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
       return res
         .status(400)
-        .json({ success: false, message: "JobNumber is required" });
+        .json({ success: false, message: "Invalid Project ID" });
     }
-    const existingProject = await ProjectModel.findById(projectId);
 
-    let isExistprojectDev = await ProjectDevModel.findOne({ JobNumber });
-    console.log(isExistprojectDev);
-
-    if (!existingProject) {
-      console.log("this loop is executed");
+    const project = await ProjectModel.findById(projectId);
+    if (!project) {
       return res
         .status(404)
         .json({ success: false, message: "Project not found" });
     }
-    let Planning = await PlanningModel.findOne({ ProjectDetails: projectId });
-    if (Planning) {
-      Planning = await PlanningModel.findByIdAndUpdate(
-        Planning._id,
-        {
-          ...data,
-          projectName: existingProject.projectName,
-          ProjectDetails: existingProject._id,
-          DevelopmentDetials: isExistprojectDev._id,
-          upatedBy: useId,
-          devScope: existingProject.Development,
-        },
-        { new: true }
-      );
-    } else {
-      Planning = await PlanningModel.create({
-        ...data,
-        projectName: existingProject.projectName,
-        ProjectDetails: existingProject._id,
-        DevelopmentDetials: isExistprojectDev._id,
-        upatedBy: useId,
-        devScope: existingProject.Development,
-      });
-    }
+    let projectDev =
+      (project.DevelopmentDetials &&
+        (await ProjectDevModel.findById(project.DevelopmentDetials))) ||
+      (await ProjectDevModel.create({
+        ...formDevbackData,
+        jobNumber: project.jobNumber,
+      }));
 
-    await ProjectModel.findByIdAndUpdate(existingProject._id, {
-      PlanDetails: Planning._id,
+    const planData = {
+      ...restData,
+      DevelopmentDetials: projectDev._id,
+      updatedBy: useId,
+    };
+
+    let planning = project.PlanDetails
+      ? await PlanningModel.findByIdAndUpdate(project.PlanDetails, planData, {
+          new: true,
+        })
+      : await PlanningModel.create({
+          ...planData,
+          projectName: project.projectName,
+          ProjectDetails: project._id,
+          DevelopmentDetials: projectDev._id,
+          jobNumber: project.jobNumber,
+          devScope: project.Development,
+          createdBy: useId,
+        });
+
+    await ProjectModel.findByIdAndUpdate(project._id, {
+      PlanDetails: planning._id,
+      DevelopmentDetials: projectDev._id,
+      isPlanRecord: true,
     });
-    await ProjectDevModel.findByIdAndUpdate(isExistprojectDev._id, {
-      PlanDetails: Planning._id,
+
+    await ProjectDevModel.findByIdAndUpdate(projectDev._id, {
+      PlanDetails: planning._id,
     });
-    res.status(200).json({
+
+    return res.status(200).json({
       success: true,
-      message: "Project status saved successfully",
-      data: Planning,
+      message: project.PlanDetails
+        ? "Project planning saved successfully"
+        : "Project planning created successfully",
+      data: planning,
     });
   } catch (error) {
-    console.error("Error saving project status:", error);
-    res.status(500).json({
+    console.error("❌ Error saving project planning:", error);
+    return res.status(500).json({
       success: false,
-      message: "Something went wrong",
+      message: "Something went wrong while saving planning",
       error: error.message,
     });
   }
@@ -74,7 +79,7 @@ export const getPlanningbyId = async (req, res) => {
     const { id } = req.params;
 
     const planning = await PlanningModel.findById(id).populate({
-      path: "upatedBy",
+      path: "updatedBy",
       select: "username",
     });
     if (!planning) {

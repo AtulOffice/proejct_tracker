@@ -294,6 +294,10 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
     },
+    isPlanRecord: {
+      type: Boolean,
+      default: false,
+    },
     requestDate: {
       type: Date,
       default: null,

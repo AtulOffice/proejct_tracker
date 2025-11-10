@@ -10,7 +10,7 @@ export const mapBackendToFrontend = (backend) => {
     project: {
       rows: [
         {
-          JobNumber: backend.JobNumber || "",
+          jobNumber: backend.jobNumber || "",
           projectName: backend.projectName || "",
           startDate: formatDate(backend.startDate),
           endDate: formatDate(backend.endDate),

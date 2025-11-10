@@ -62,12 +62,12 @@ const ProjectDevSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    JobNumber: { type: String, required: true },
+    jobNumber: { type: String, required: true },
     projectName: {
       type: String,
       trim: true,
     },
-    startDate: { type: Date, required: true },
+    startDate: { type: Date },
     endDate: { type: Date, default: null },
     DaysConsumed: { type: String, default: "0" },
 

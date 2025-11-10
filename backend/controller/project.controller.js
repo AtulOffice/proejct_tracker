@@ -869,6 +869,9 @@ export const allProjectsFetch = async (req, res) => {
       updatedAt: 1,
       createdAt: 1,
       OrderMongoId: 1,
+      PlanDetails: 1,
+      DevelopmentDetials: 1,
+      isPlanRecord: 1,
     }).sort({
       updatedAt: -1,
       createdAt: -1,
@@ -909,6 +912,9 @@ export const allProjectsFetchDev = async (req, res) => {
       createdAt: 1,
       OrderMongoId: 1,
       DevelopmentSetcion: 1,
+      PlanDetails: 1,
+      DevelopmentDetials: 1,
+      isPlanRecord: 1,
     }).sort({
       updatedAt: -1,
       createdAt: -1,

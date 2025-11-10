@@ -187,16 +187,14 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       {editType === "DEVLOPMENT" ? (
                         <button
                           onClick={() => handlAssignedDev(onEditFun, row)}
-                          className="
-      flex items-center justify-center
-      bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
-      hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
-      text-white p-2 rounded-full shadow-lg
-      transition-all duration-200
-      hover:scale-110 hover:-rotate-6
-      ring-2 ring-transparent hover:ring-emerald-300
-      focus:outline-none focus:ring-4 focus:ring-emerald-400
-    "
+                          className={`flex items-center justify-center text-white p-2 rounded-full shadow-lg
+    transition-all duration-200
+    hover:scale-110 hover:-rotate-6
+    ring-2 ring-transparent focus:outline-none focus:ring-4
+    ${row?.isPlanRecord
+                              ? "bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:ring-emerald-300 focus:ring-emerald-400"
+                              : "bg-gradient-to-tr from-rose-500 via-pink-400 to-red-400 hover:from-rose-600 hover:via-pink-500 hover:to-red-500 hover:ring-rose-300 focus:ring-rose-400"
+                            }`}
                           aria-label="Update"
                           type="button"
                         >

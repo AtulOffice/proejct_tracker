@@ -16,21 +16,21 @@ export const ProjectDevRouter = express.Router();
 
 ProjectDevRouter.post("/save", ProjectStatusSave);
 ProjectDevRouter.get(
-  "/fetchbyjobnumber/:JobNumber",
+  "/fetchbyjobnumber/:jobNumber",
   refreshTokenMiddleware,
   authenticate,
   ProjectStatusfetchbyJobId
 );
 ProjectDevRouter.get(
-  "/existancecheck/:JobNumber",
+  "/existancecheck/:jobNumber",
   refreshTokenMiddleware,
   authenticate,
   isProjectstatusExistFun
 );
 ProjectDevRouter.get(
   "/fetch",
-  refreshTokenMiddleware,
-  authenticate,
+  // refreshTokenMiddleware,
+  // authenticate,
   allProjectStatusfetch
 );
 ProjectDevRouter.get(
@@ -46,7 +46,7 @@ ProjectDevRouter.get(
   PaginationStatusprog
 );
 ProjectDevRouter.put(
-  "/update/:JobNumber",
+  "/update/:jobNumber",
   refreshTokenMiddleware,
   authenticate,
   projectDevStatusUpdate

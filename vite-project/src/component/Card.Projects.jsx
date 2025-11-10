@@ -71,7 +71,7 @@ const CardAll = ({
 
       {open && (
         <ProjectTimelineForm
-          project={{ ...project, JobNumber: project.jobNumber }}
+          project={{ ...project }}
           open={open}
           onClose={() => setOpen(false)}
         />
@@ -110,15 +110,14 @@ const CardAll = ({
         }
         className={`group relative rounded-xl border border-transparent shadow-md hover:shadow-xl transition-all duration-300
     bg-gradient-to-br
-    ${
-      !editoptionflag
-        ? project.Development === "SITE"
-          ? "from-green-200 via-lime-100 to-emerald-100 hover:border-green-300"
-          : project.Development === "OFFICE"
-          ? "from-sky-200 via-blue-100 to-indigo-100 hover:border-blue-300"
-          : "from-gray-200 via-gray-50 to-zinc-100 hover:border-gray-300"
-        : "from-pink-200 via-purple-50 to-indigo-50 hover:border-indigo-300"
-    }
+    ${!editoptionflag
+            ? project.Development === "SITE"
+              ? "from-green-200 via-lime-100 to-emerald-100 hover:border-green-300"
+              : project.Development === "OFFICE"
+                ? "from-sky-200 via-blue-100 to-indigo-100 hover:border-blue-300"
+                : "from-gray-200 via-gray-50 to-zinc-100 hover:border-gray-300"
+            : "from-pink-200 via-purple-50 to-indigo-50 hover:border-indigo-300"
+          }
   `}
       >
         <div className="p-6">
@@ -345,12 +344,11 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                   <li className="flex items-center space-x-2">
                     <strong className="text-gray-700">Development:</strong>
                     <span
-                      className={`px-2 py-1 text-xs font-semibold rounded-md ${
-                        project?.Development == "OFFICE" ||
+                      className={`px-2 py-1 text-xs font-semibold rounded-md ${project?.Development == "OFFICE" ||
                         project?.Development == "SITE"
-                          ? "bg-green-100 text-green-700"
-                          : ""
-                      }`}
+                        ? "bg-green-100 text-green-700"
+                        : ""
+                        }`}
                     >
                       {project?.Development}
                     </span>
@@ -359,10 +357,10 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                     <strong>MOM Dates:</strong>{" "}
                     {project?.momDate?.length > 0
                       ? project.momDate
-                          .map((dateStr) =>
-                            new Date(dateStr).toLocaleDateString()
-                          )
-                          .join(", ")
+                        .map((dateStr) =>
+                          new Date(dateStr).toLocaleDateString()
+                        )
+                        .join(", ")
                       : "-"}
                   </li>
                   <li>

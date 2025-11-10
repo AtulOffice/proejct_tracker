@@ -171,7 +171,7 @@ const CardStatus = ({
     setIsdisabled(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.JobNumber
+        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.jobNumber
         }?check=${true}`,
         { withCredentials: true }
       );
@@ -191,7 +191,7 @@ const CardStatus = ({
   const handleUpdate = (project) => {
     setIsdisabled(true);
     try {
-      navigate(`/develop/${project?.JobNumber}`, {
+      navigate(`/develop/${project?.jobNumber}`, {
         state: { fromButton: true, recordId: project._id },
       });
       setUpdateflag(false);
@@ -214,10 +214,10 @@ const CardStatus = ({
       {deleteFlag && (
         <PopupConfirmation
           setCancelflag={setDeleteflag}
-          handleConfirm={() => handleDelete(project._id, project.JobNumber)}
+          handleConfirm={() => handleDelete(project._id, project.jobNumber)}
           isDisabled={isDisabled}
           title="Are you sure?"
-          message={`Do you really want to delete Job Id ${project.JobNumber} ? This action cannot be undone.`}
+          message={`Do you really want to delete Job Id ${project.jobNumber} ? This action cannot be undone.`}
           btnval="Delete"
         />
       )}
@@ -228,7 +228,7 @@ const CardStatus = ({
           deleteFlag={false}
           handleConfirm={() => handleUpdate(project)}
           title="Are you sure?"
-          message={`Do you really want to update details in Job Id ${project.JobNumber}`}
+          message={`Do you really want to update details in Job Id ${project.jobNumber}`}
           btnval="Update"
         />
       )}
@@ -255,7 +255,7 @@ const CardStatus = ({
                   clipRule="evenodd"
                 />
               </svg>
-              {project.JobNumber}
+              {project.jobNumber}
             </span>
 
             <div

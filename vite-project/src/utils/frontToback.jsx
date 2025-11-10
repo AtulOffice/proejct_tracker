@@ -1,7 +1,7 @@
-export const mapFrontendToBackend = (formData, JobNumber) => {
+export const mapFrontendToBackend = (formData, jobNumber) => {
   const backend = {
     status: formData.project.rows[0]?.completed || false,
-    JobNumber: JobNumber,
+    jobNumber: jobNumber,
     startDate: formData.project.rows[0]?.startDate || "",
     endDate: formData.project.rows[0]?.endDate || "",
     DaysConsumed: formData.project.rows[0]?.daysConsumed || "0",

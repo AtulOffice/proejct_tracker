@@ -2,10 +2,36 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
 import axios from "axios";
+import {
+  documentRows,
+  logicRows,
+  projectRows,
+  screenRows,
+  testingRows,
+} from "../utils/dev.context";
+import { mapFrontendToBackend } from "./frontToback";
 
 const ProjectTimelineForm = ({ open, onClose, project }) => {
-  console.log(project)
   const { user } = useAppContext();
+  const [formdevData, setdevFormData] = useState({
+    document: {
+      rows: documentRows(),
+    },
+    screen: {
+      rows: screenRows(),
+    },
+    logic: {
+      rows: logicRows(),
+    },
+    testing: {
+      rows: testingRows(),
+    },
+    project: {
+      rows: projectRows(),
+    },
+  });
+
+  const { toggle, setToggle } = useAppContext()
 
   const [formData, setFormData] = useState({
     documents: { startDate: "", endDate: "", planDetails: "", engineers: [] },
@@ -24,8 +50,8 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
           `${import.meta.env.VITE_API_URL}/planningDev/fetchbyid/${id}`
         );
         const defaultData = res.data?.data || {};
-        defaultData?.upatedBy?.username &&
-          setName(defaultData.upatedBy.username);
+        defaultData?.updatedBy?.username &&
+          setName(defaultData.updatedBy.username);
 
         setFormData(() => {
           const updated = {};
@@ -52,7 +78,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
     };
 
     if (project?.PlanDetails) fetchPlanningData(project?.PlanDetails);
-  }, [project?.PlanDetails]);
+  }, [project?.PlanDetails, toggle]);
 
   useEffect(() => {
     const fetchEngineerData = async () => {
@@ -68,7 +94,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
     };
 
     fetchEngineerData();
-  }, []);
+  }, [toggle]);
 
   const handleChange = (phase, field, value) => {
     setFormData((prev) => ({
@@ -118,25 +144,19 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      ...formData,
-      projectId: project._id,
-      JobNumber: project.JobNumber,
-      useId: user?._id,
-    });
-    return;
     try {
+      const formDevbackData = mapFrontendToBackend(formdevData, project?.jobNumber)
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/planningDev/save`,
         {
           ...formData,
-          projectId: project._id,
-          JobNumber: project.JobNumber,
+          formDevbackData,
+          projectId: project?._id,
           useId: user?._id,
         },
         { withCredentials: true }
       );
-      toast.success("Plan saved successfully");
+      toast.success(res.data?.message || "Plan saved successfully");
       onClose();
       setFormData({
         documents: {
@@ -149,6 +169,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
         scada: { startDate: "", endDate: "", planDetails: "", engineers: [] },
         testing: { startDate: "", endDate: "", planDetails: "", engineers: [] },
       });
+      setToggle((prev) => !prev)
     } catch (e) {
       if (e?.response?.data?.message) {
         toast.error(e.response.data.message || "Something went wrong");
@@ -215,10 +236,11 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Start Date
+                      Start Date *
                     </label>
                     <input
                       type="date"
+                      required={true}
                       value={formData[key].startDate}
                       onChange={(e) =>
                         handleChange(key, "startDate", e.target.value)
@@ -233,6 +255,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                     </label>
                     <input
                       type="date"
+                      // required={true}
                       value={formData[key].endDate}
                       onChange={(e) =>
                         handleChange(key, "endDate", e.target.value)

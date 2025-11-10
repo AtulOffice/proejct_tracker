@@ -207,7 +207,7 @@ export const screenRows = () => [
 
 export const projectRows = () => [
     {
-        JobNumber: '',
+        jobNumber: '',
         startDate: '',
         endDate: '',
         daysConsumed: '',

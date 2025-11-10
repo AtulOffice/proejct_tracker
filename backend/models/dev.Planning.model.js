@@ -4,6 +4,7 @@ const sectionSchema = new mongoose.Schema({
   startDate: { type: Date },
   endDate: { type: Date },
   planDetails: { type: String },
+  engineers: [],
 });
 
 const DevPlanningSchema = new mongoose.Schema(
@@ -29,9 +30,14 @@ const DevPlanningSchema = new mongoose.Schema(
     logic: sectionSchema,
     testing: sectionSchema,
     documents: sectionSchema,
-    upatedBy: {
+    updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
+    },
+    devScope: {
+      type: String,
+      enum: ["OFFICE", "SITE", "N/A", ""],
+      default: "",
     },
   },
   {
