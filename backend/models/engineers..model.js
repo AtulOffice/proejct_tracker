@@ -38,6 +38,36 @@ const engineerSchema = new mongoose.Schema(
         durationDays: { type: Number, default: 0 },
       },
     ],
+    developmentProjectList: {
+      documents: [
+        {
+          project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+          startDate: Date,
+          endDate: Date,
+        },
+      ],
+      logic: [
+        {
+          project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+          startDate: Date,
+          endDate: Date,
+        },
+      ],
+      scada: [
+        {
+          project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+          startDate: Date,
+          endDate: Date,
+        },
+      ],
+      testing: [
+        {
+          project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+          startDate: Date,
+          endDate: Date,
+        },
+      ],
+    },
   },
   { timestamps: true }
 );
