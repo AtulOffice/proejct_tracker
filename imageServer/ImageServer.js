@@ -93,9 +93,6 @@ const isValidVideo = (file) => {
   );
 };
 
-
-
-
 app.post("/api/v1/upload-stream", apiCors, async (req, res) => {
 
   const form = formidable({
@@ -115,8 +112,7 @@ app.post("/api/v1/upload-stream", apiCors, async (req, res) => {
     });
   });
 
-  const file = Array.isArray(files.file) ? files.file[0] : files.file;
-
+  const file = files.file?.[0];
   if (!file) {
     throw new Error(
       "No valid video file uploaded. Supported formats: MP4, MOV, AVI, MKV"
@@ -131,15 +127,6 @@ app.post("/api/v1/upload-stream", apiCors, async (req, res) => {
   const outputFilename = `${uniqueName}${fileExt}`;
   const outputPath = path.join(videoDir, outputFilename);
   const tempOutputPath = path.join(tempDir, outputFilename);
-
-const exists = async (filePath) => {
-  try {
-    await fs.promises.access(filePath, fs.constants.F_OK);
-    return true;
-  } catch {
-    return false;
-  }
-};
 
   if (!(await exists(inputPath))) {
     throw new Error("Uploaded file not found");
@@ -357,8 +344,8 @@ app.delete("/deleteImage", apiCors, (req, res) => {
       return res.status(400).json({ message: "Invalid image URL structure." });
     }
 
-     const subfolder = pathParts.slice(1, -1).join("/");
- 
+    // Reconstruct the full subfolder path from index 1 to n-2
+    subfolder = pathParts.slice(1, -1).join("/"); // 'news/2025-06-05'
     const imageName = pathParts[pathParts.length - 1]; // 'filename.webp'
 
     const imagePath = path.join(__dirname, "uploads", subfolder, imageName);
