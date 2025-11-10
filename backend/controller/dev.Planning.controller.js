@@ -21,10 +21,19 @@ export const PlanningSave = async (req, res) => {
     }
     let projectDev =
       (project.DevelopmentDetials &&
-        (await ProjectDevModel.findById(project.DevelopmentDetials))) ||
+        (await ProjectDevModel.findByIdAndUpdate(
+          project.DevelopmentDetials,
+          {
+            ...formDevbackData,
+            jobNumber: project.jobNumber,
+            startDate: restData?.documents?.startDate,
+          },
+          { new: true }
+        ))) ||
       (await ProjectDevModel.create({
         ...formDevbackData,
         jobNumber: project.jobNumber,
+        startDate: restData?.documents?.startDate,
       }));
 
     const planData = {
