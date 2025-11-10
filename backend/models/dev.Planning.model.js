@@ -20,7 +20,7 @@ const DevPlanningSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "ProjectDev",
     },
-    JobNumber: {
+    jobNumber: {
       type: String,
       required: true,
       trim: true,

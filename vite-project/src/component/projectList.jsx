@@ -7,7 +7,7 @@ import FilterCompo from "../utils/FilterCompo";
 import { fetchProjectsUrgentAction, fetfchProejctAll } from "../utils/apiCall";
 import ProjectTableAll from "./projectListTable";
 
-const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
+const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editType }) => {
   const { toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -96,6 +96,7 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
             isEdit={isEdit}
             onEditFun={onEditFun}
             printTitle={printTitle}
+            editType={editType}
           />
         ) : (
           <Notfound />

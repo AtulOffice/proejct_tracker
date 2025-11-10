@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 const ProjectTimelineForm = ({ open, onClose, project }) => {
+  console.log(project)
   const { user } = useAppContext();
 
   const [formData, setFormData] = useState({
@@ -344,11 +345,10 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                               <label
                                 key={engineer._id}
                                 title={fullName}
-                                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 ${
-                                  isChecked
-                                    ? "bg-teal-50 border-teal-300 shadow-sm"
-                                    : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
-                                }`}
+                                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 ${isChecked
+                                  ? "bg-teal-50 border-teal-300 shadow-sm"
+                                  : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
+                                  }`}
                               >
                                 <div className="relative flex-shrink-0">
                                   <input
@@ -360,11 +360,10 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                                     className="peer sr-only"
                                   />
                                   <div
-                                    className={`w-5 h-5 border-2 rounded-md flex items-center justify-center transition-all duration-200 ${
-                                      isChecked
-                                        ? "bg-teal-400 border-teal-400"
-                                        : "bg-white border-gray-300"
-                                    }`}
+                                    className={`w-5 h-5 border-2 rounded-md flex items-center justify-center transition-all duration-200 ${isChecked
+                                      ? "bg-teal-400 border-teal-400"
+                                      : "bg-white border-gray-300"
+                                      }`}
                                   >
                                     {isChecked && (
                                       <svg
@@ -385,16 +384,14 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                                 </div>
                                 <div className="flex items-center gap-2 flex-1 min-w-0">
                                   <div
-                                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                      isChecked ? "bg-teal-100" : "bg-gray-100"
-                                    }`}
+                                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isChecked ? "bg-teal-100" : "bg-gray-100"
+                                      }`}
                                   >
                                     <svg
-                                      className={`w-5 h-5 ${
-                                        isChecked
-                                          ? "text-teal-600"
-                                          : "text-gray-500"
-                                      }`}
+                                      className={`w-5 h-5 ${isChecked
+                                        ? "text-teal-600"
+                                        : "text-gray-500"
+                                        }`}
                                       fill="currentColor"
                                       viewBox="0 0 20 20"
                                     >
@@ -406,11 +403,10 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                                     </svg>
                                   </div>
                                   <span
-                                    className={`text-sm font-medium ${
-                                      isChecked
-                                        ? "text-teal-700"
-                                        : "text-gray-700"
-                                    }`}
+                                    className={`text-sm font-medium ${isChecked
+                                      ? "text-teal-700"
+                                      : "text-gray-700"
+                                      }`}
                                   >
                                     {shortName}
                                   </span>

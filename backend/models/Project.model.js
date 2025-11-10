@@ -217,20 +217,20 @@ const projectSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    // 
-    SrvsdaysInPo:{
+    //
+    SrvsdaysInPo: {
       type: Number,
       default: 0,
     },
-    manDaysRate:{
+    manDaysRate: {
       type: Number,
       default: 0,
     },
-    serviceVal:{
+    serviceVal: {
       type: Number,
       default: 0,
     },
-    // 
+    //
     startDate: {
       type: Date,
       default: null,

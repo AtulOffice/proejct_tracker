@@ -109,11 +109,10 @@ const ProgressBar = ({
         {[...Array(5)].map((_, index) => (
           <div
             key={index}
-            className={`w-2 h-1 rounded-full transition-all duration-300 ${
-              index < Math.ceil((value || 0) / 20)
-                ? `bg-gradient-to-r ${colorFrom} ${colorTo} shadow-sm`
-                : "bg-gray-300"
-            }`}
+            className={`w-2 h-1 rounded-full transition-all duration-300 ${index < Math.ceil((value || 0) / 20)
+              ? `bg-gradient-to-r ${colorFrom} ${colorTo} shadow-sm`
+              : "bg-gray-300"
+              }`}
           />
         ))}
       </div>
@@ -121,12 +120,12 @@ const ProgressBar = ({
         {value >= 100
           ? "Complete"
           : value >= 75
-          ? "Almost Done"
-          : value >= 50
-          ? "In Progress"
-          : value >= 25
-          ? "Getting Started"
-          : "Not Started"}
+            ? "Almost Done"
+            : value >= 50
+              ? "In Progress"
+              : value >= 25
+                ? "Getting Started"
+                : "Not Started"}
       </span>
     </div>
   </div>
@@ -172,8 +171,7 @@ const CardStatus = ({
     setIsdisabled(true);
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${
-          project.JobNumber
+        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.JobNumber
         }?check=${true}`,
         { withCredentials: true }
       );
@@ -362,13 +360,13 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             one={
               project?.startDate
                 ? project.startDate &&
-                  new Date(project.startDate).toISOString().split("T")[0]
+                new Date(project.startDate).toISOString().split("T")[0]
                 : "--"
             }
             two={
               project?.endDate
                 ? project.endDate &&
-                  new Date(project.endDate).toISOString().split("T")[0]
+                new Date(project.endDate).toISOString().split("T")[0]
                 : "--"
             }
             three={project?.DaysConsumed || 0}

@@ -9,14 +9,18 @@ import { MdEdit } from "react-icons/md";
 import { handlePrint } from "../utils/print";
 import EngineerForm from "./ProjectFormAction";
 import { useNavigate } from "react-router-dom";
+import { LuNotepadText } from "react-icons/lu";
+import ProjectTimelineForm from "../utils/project.Planning";
 
-const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
+const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editType }) => {
+
   const printRef = useRef();
   const formRef = useRef(null);
   const navigate = useNavigate();
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [isOrderFetched, setIsOrderFetched] = useState(false);
   const [open, setOpen] = useState(false);
+  const [planopen, setPlanOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
@@ -30,6 +34,16 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handlAssignedDev = (onEditFun, project) => {
+    try {
+      setSelectedProject(project)
+      setPlanOpen(true)
+      console.log("this called as the hendle Assigned")
+    } catch (e) {
+      console.log("some error occured", e)
+    }
+  }
 
   const hadleOpenPopup = async (project) => {
     try {
@@ -143,19 +157,18 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
                     const display = Array.isArray(val)
                       ? val.join(", ")
                       : col.val.toLowerCase().includes("date") && val
-                      ? new Date(val).toISOString().split("T")[0]
-                      : val || "—";
+                        ? new Date(val).toISOString().split("T")[0]
+                        : val || "—";
                     return (
                       <td
                         key={j}
                         className="px-6 py-4 text-base text-gray-700 whitespace-nowrap"
                       >
                         <div
-                          className={`truncate ${
-                            col.val === "projectName"
-                              ? "cursor-pointer hover:text-indigo-600"
-                              : ""
-                          }`}
+                          className={`truncate ${col.val === "projectName"
+                            ? "cursor-pointer hover:text-indigo-600"
+                            : ""
+                            }`}
                           onClick={() =>
                             col.val === "projectName" && hadleOpenPopup
                               ? hadleOpenPopup(row)
@@ -170,15 +183,36 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
 
                   {isEdit && (
                     <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => handleEditAction(onEditFun, row)}
-                        className="inline-flex items-center justify-center p-2.5 rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
-                      >
-                        <MdEdit
-                          size={18}
-                          className="group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300"
-                        />
-                      </button>
+
+                      {editType === "DEVLOPMENT" ? (
+                        <button
+                          onClick={() => handlAssignedDev(onEditFun, row)}
+                          className="
+      flex items-center justify-center
+      bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
+      hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
+      text-white p-2 rounded-full shadow-lg
+      transition-all duration-200
+      hover:scale-110 hover:-rotate-6
+      ring-2 ring-transparent hover:ring-emerald-300
+      focus:outline-none focus:ring-4 focus:ring-emerald-400
+    "
+                          aria-label="Update"
+                          type="button"
+                        >
+                          <LuNotepadText className="w-5 h-5 drop-shadow" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleEditAction(onEditFun, row)}
+                          className="inline-flex items-center justify-center p-2.5 rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
+                        >
+                          <MdEdit
+                            size={18}
+                            className="group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300"
+                          />
+                        </button>
+                      )}
                     </td>
                   )}
                 </tr>
@@ -206,7 +240,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
               <span
                 onClick={
                   isEdit
-                    ? () => handleEditAction(onEditFun, project)
+                    ? editType ? () => handlAssignedDev(onEditFun, project) : () => handleEditAction(onEditFun, project)
                     : undefined
                 }
                 className="inline-flex items-center px-2 py-1 border border-indigo-300 rounded-full font-semibold text-[11px] bg-indigo-100 text-indigo-700 shadow-sm"
@@ -222,8 +256,8 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
                 const display = Array.isArray(val)
                   ? val.join(", ")
                   : col.val.toLowerCase().includes("date") && val
-                  ? new Date(val).toISOString().split("T")[0]
-                  : val || "—";
+                    ? new Date(val).toISOString().split("T")[0]
+                    : val || "—";
 
                 return (
                   <div key={i}>
@@ -252,6 +286,13 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
           setOpen={setOpen}
           formRef={formRef}
           selectedProject={selectedProject}
+        />
+      )}
+      {planopen && (
+        <ProjectTimelineForm
+          project={selectedProject}
+          open={planopen}
+          onClose={() => setOpen(setPlanOpen)}
         />
       )}
     </div>
