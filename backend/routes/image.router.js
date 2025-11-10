@@ -1,8 +1,8 @@
 import express from "express"
-import {uploadImageToGlobalServer,deleteImageToGlobalServer} from "../controller/imageUploader.js"
+import {uploadImagecontroller} from "../controller/imageUploader.controller.js"
 
 
 export const ImageUploadRouter = express.Router();
 
-ImageUploadRouter.post("/upload",uploadImageToGlobalServer)
-ImageUploadRouter.delete("/delete",deleteImageToGlobalServer)
+ImageUploadRouter.post("/upload",uploadImagecontroller)
+// ImageUploadRouter.delete("/delete",deleteImageToGlobalServer)
