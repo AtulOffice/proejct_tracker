@@ -219,12 +219,12 @@ export const resetEngineer = async (req, res) => {
 // 🔹 Logout
 export const logoutEngineer = (req, res) => {
   try {
-    res.clearCookie("accessToken", {
+    res.clearCookie("accessTokenEngineer", {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
     });
-    res.clearCookie("refreshToken", {
+    res.clearCookie("refreshTokenEngineer", {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",

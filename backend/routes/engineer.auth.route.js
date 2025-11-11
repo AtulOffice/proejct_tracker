@@ -1,18 +1,10 @@
 import express from "express";
-import {
-  loginUser,
-  CreateUser,
-  finduser,
-  findUserDetails,
-  forgotUser,
-  resetUser,
-  logoutUser,
-} from "../controller/user.controller.js";
 import { authenticateEngineer } from "../middlware/authaticate.js";
 import { refreshTokenEngineerMiddleware } from "../middlware/refreshToken.js";
 import {
   loginEngineer,
   findEngineerDetails,
+  logoutEngineer,
 } from "../controller/engineerAuth.controller.js";
 
 export const engineerAuthRouter = express.Router();
@@ -40,4 +32,9 @@ engineerAuthRouter.get(
 // );
 // userRouter.post("/forgetuser", forgotUser);
 // userRouter.post("/resetuser", resetUser);
-// userRouter.get("/logout", refreshTokenMiddleware, authenticate, logoutUser);
+engineerAuthRouter.get(
+  "/logout",
+  refreshTokenMiddleware,
+  authenticate,
+  logoutEngineer
+);
