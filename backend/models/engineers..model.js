@@ -36,6 +36,14 @@ const engineerSchema = new mongoose.Schema(
         assignedAt: { type: Date, default: Date.now },
         endTime: { type: Date },
         durationDays: { type: Number, default: 0 },
+        isMom: {
+          type: Boolean,
+          default: false,
+        },
+        isFinalMom: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     developmentProjectList: {

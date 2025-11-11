@@ -4,6 +4,8 @@ import ffmpeg from "fluent-ffmpeg";
 import { formidable } from "formidable";
 import { v4 as uuidv4 } from "uuid";
 import { copyAndDelete, isValidVideo, exists } from "../utils/videoUtils.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const uploadsDir = path.join(process.cwd(), "uploads");
 const videoDir = path.join(uploadsDir, "videos");
@@ -23,7 +25,9 @@ export const uploadVideo = async (req, res) => {
     });
 
     const [fields, files] = await new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => (err ? reject(err) : resolve([fields, files])));
+      form.parse(req, (err, fields, files) =>
+        err ? reject(err) : resolve([fields, files])
+      );
     });
 
     const file = Array.isArray(files.file) ? files.file[0] : files.file;
@@ -51,7 +55,9 @@ export const uploadVideo = async (req, res) => {
           "-b:a 128k",
           "-ac 2",
         ])
-        .on("end", () => copyAndDelete(tempOutputPath, outputPath).then(resolve).catch(reject))
+        .on("end", () =>
+          copyAndDelete(tempOutputPath, outputPath).then(resolve).catch(reject)
+        )
         .on("error", reject)
         .save(tempOutputPath);
     });
@@ -66,6 +72,12 @@ export const uploadVideo = async (req, res) => {
     });
   } catch (err) {
     console.error("❌ Video upload failed:", err);
-    res.status(500).json({ success: false, message: "Error uploading video", error: err.message });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Error uploading video",
+        error: err.message,
+      });
   }
 };

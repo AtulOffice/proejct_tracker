@@ -4,6 +4,8 @@ import sharp from "sharp";
 import mime from "mime-types";
 import { fileTypeFromBuffer } from "file-type";
 import { v4 as uuidv4 } from "uuid";
+import dotenv from "dotenv";
+dotenv.config();
 
 const uploadsDir = path.join(process.cwd(), "uploads");
 
@@ -60,7 +62,10 @@ export const serveImage = async (req, res) => {
     if (isImage && req.query.w) {
       const width = parseInt(req.query.w);
       const quality = parseInt(req.query.q) || 75;
-      buffer = await sharp(filePath).resize({ width }).webp({ quality }).toBuffer();
+      buffer = await sharp(filePath)
+        .resize({ width })
+        .webp({ quality })
+        .toBuffer();
       res.set("Content-Type", "image/webp");
     } else {
       buffer = fs.readFileSync(filePath);
@@ -95,7 +100,10 @@ export const deleteImage = (req, res) => {
     const deleteQueueDir = path.join(uploadsDir, "delete-queue");
     fs.mkdirSync(deleteQueueDir, { recursive: true });
 
-    const taskFile = path.join(deleteQueueDir, `${Date.now()}__${subfolder.replace(/\//g, "__")}__${imageName}.json`);
+    const taskFile = path.join(
+      deleteQueueDir,
+      `${Date.now()}__${subfolder.replace(/\//g, "__")}__${imageName}.json`
+    );
     fs.writeFileSync(taskFile, JSON.stringify({ path: imagePath }));
 
     res.json({ message: "Delete scheduled. File will be removed later." });

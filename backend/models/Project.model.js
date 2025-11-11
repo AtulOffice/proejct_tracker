@@ -20,6 +20,14 @@ const projectSchema = new mongoose.Schema(
         assignedAt: { type: Date },
         durationDays: { type: Number, default: 0 },
         endTime: { type: Date },
+        isMom: {
+          type: Boolean,
+          default: false,
+        },
+        isFinalMom: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     engineerName: {
