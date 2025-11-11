@@ -230,6 +230,12 @@ export const editEngineerRecord = async (req, res) => {
 export const deleteEngineerRecord = async (req, res) => {
   try {
     const { id } = req.params;
+    if (true) {
+      return res.status(400).json({
+        success: false,
+        message: "delete operation is closed by developer temperory",
+      });
+    }
     if (!id) {
       return res
         .status(400)

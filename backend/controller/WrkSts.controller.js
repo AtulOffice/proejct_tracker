@@ -102,6 +102,12 @@ export const updateWorkStatus = async (req, res) => {
 
 export const deleteWorkStatus = async (req, res) => {
   try {
+    if (true) {
+      return res.status(400).json({
+        success: false,
+        message: "delete operation is closed by developer temperory",
+      });
+    }
     const deleted = await workStratuModel.findByIdAndDelete(req.params.id);
     if (!deleted)
       return res.status(404).json({ success: false, error: "Not found" });

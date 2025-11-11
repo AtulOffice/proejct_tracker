@@ -141,9 +141,6 @@ export const Recordsformave = async (req, res) => {
   }
 };
 
-console.log("this is hello");
-console.log("nowe open");
-
 export const findrecord = async (req, res) => {
   try {
     const data = await ProjectModel.find();
@@ -362,10 +359,13 @@ export const deleteRecord = async (req, res) => {
   try {
     const { id } = req.params;
 
-    return res.status(400).json({
-      success: false,
-      message: "delete operation is closed by developer temperory",
-    });
+    if (true) {
+      return res.status(400).json({
+        success: false,
+        message: "delete operation is closed by developer temperory",
+      });
+    }
+
     const deletedRecord = await ProjectModel.findByIdAndDelete(id);
 
     if (!deletedRecord) {

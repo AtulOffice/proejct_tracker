@@ -13,7 +13,8 @@ export const createOrder = async (req, res) => {
     }
 
     const totalPercent =
-      Number(data.paymentPercent1 || 0) + Number(data.paymentPercent2 || 0 +Number(data.retentionPercent || 0));
+      Number(data.paymentPercent1 || 0) +
+      Number(data.paymentPercent2 || 0 + Number(data.retentionPercent || 0));
     if (totalPercent > 100) {
       return res.status(400).json({
         success: false,
@@ -247,6 +248,13 @@ export const getOrderById = async (req, res) => {
 export const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (true) {
+      return res.status(400).json({
+        success: false,
+        message: "delete operation is closed by developer temperory",
+      });
+    }
 
     const deletedOrder = await Order.findByIdAndDelete(id);
 
