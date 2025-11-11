@@ -142,6 +142,7 @@ export const Recordsformave = async (req, res) => {
 };
 
 console.log("this is hello");
+console.log("nowe open");
 
 export const findrecord = async (req, res) => {
   try {
