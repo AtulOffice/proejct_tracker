@@ -34,7 +34,7 @@ engineerAuthRouter.get(
 // userRouter.post("/resetuser", resetUser);
 engineerAuthRouter.get(
   "/logout",
-  refreshTokenMiddleware,
-  authenticate,
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
   logoutEngineer
 );
