@@ -33,6 +33,9 @@ const engineerSchema = new mongoose.Schema(
           type: String,
           trim: true,
         },
+        engToprojObjectId: {
+          type: mongoose.Schema.Types.ObjectId,
+        },
         assignedAt: { type: Date, default: Date.now },
         endTime: { type: Date },
         durationDays: { type: Number, default: 0 },

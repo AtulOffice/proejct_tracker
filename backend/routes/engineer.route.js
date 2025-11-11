@@ -6,10 +6,17 @@ import {
   saveEngineerRecord,
   editEngineerRecord,
   getAssignedEngineers,
+  getAllProjectsEngineers,
 } from "../controller/engineer.controller.js";
-import { authenticate } from "../middlware/authaticate.js";
+import {
+  authenticate,
+  authenticateEngineer,
+} from "../middlware/authaticate.js";
 import { authorizeRole } from "../middlware/authRole.js";
-import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
+import {
+  refreshTokenEngineerMiddleware,
+  refreshTokenMiddleware,
+} from "../middlware/refreshToken.js";
 
 export const EngineerRouter = express.Router();
 

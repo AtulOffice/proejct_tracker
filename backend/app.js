@@ -10,6 +10,7 @@ import { engineerStatus } from "./cronJobs.js";
 import { ProjectDevRouter } from "./routes/projectDev.route.js";
 import cookieParser from "cookie-parser";
 import { EngineerRouter } from "./routes/engineer.route.js";
+import { EngineerRouterside } from "./routes/engineerside.route.js";
 import { DevRecordRouter } from "./routes/devlopment.Record.router.js";
 import { PlannigRouter } from "./routes/dev.Planning.route.js";
 import { engineerAuthRouter } from "./routes/engineer.auth.route.js";
@@ -37,7 +38,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 const limiter = rateLimit({
   windowMs: 2 * 60 * 1000,
-  max: 240, 
+  max: 240,
   message: {
     success: false,
     message: "You hit too many requests. Please wait 2 minutes.",
@@ -55,11 +56,12 @@ app.use("/api/v1", userRouter);
 app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/projectDev", ProjectDevRouter);
 app.use("/api/v1/engineer", EngineerRouter);
+app.use("/api/v1/engineerside", EngineerRouterside);
 app.use("/api/v1/devrecord", DevRecordRouter);
 app.use("/api/v1/planningDev", PlannigRouter);
-app.use("/api/v1/engineer", engineerAuthRouter);
+app.use("/api/v1/engineerauth", engineerAuthRouter);
 app.use("/api/v1/order", OrderRouter);
-app.use("/api/v1/imageUploader",ImageUploadRouter)
+app.use("/api/v1/imageUploader", ImageUploadRouter);
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   console.log(`server is linsten on port ${port}`);

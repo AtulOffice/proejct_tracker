@@ -15,6 +15,9 @@ const projectSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "EngineerRecord",
         },
+        projToengObjectId: {
+          type: mongoose.Schema.Types.ObjectId,
+        },
         name: { type: String, required: true },
         empId: { type: String, trim: true },
         assignedAt: { type: Date },

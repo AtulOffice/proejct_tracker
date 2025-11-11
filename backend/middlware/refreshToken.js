@@ -69,18 +69,18 @@ export const refreshTokenMiddleware = (req, res, next) => {
 export const refreshTokenEngineerMiddleware = (req, res, next) => {
   try {
     const { refreshTokenEngineer } = req?.cookies;
-
     if (!refreshTokenEngineer) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Please login first" });
+      return res.status(401).json({
+        success: false,
+        message: "Please login first with engineer Id",
+      });
     }
     const decodedRefresh = verifyRefreshToken(refreshTokenEngineer);
 
     if (!decodedRefresh || !decodedRefresh?.user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid token. Please login again.",
+        message: "Invalid token. Please login again engineer Id",
       });
     }
 
