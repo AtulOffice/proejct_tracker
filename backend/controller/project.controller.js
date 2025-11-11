@@ -141,6 +141,8 @@ export const Recordsformave = async (req, res) => {
   }
 };
 
+console.log("this is hello");
+
 export const findrecord = async (req, res) => {
   try {
     const data = await ProjectModel.find();
