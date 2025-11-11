@@ -45,6 +45,8 @@ export const Recordsformave = async (req, res) => {
             assignedAt,
             durationDays,
             endTime,
+            isMom: eng.isMom ?? false,
+            isFinalMom: eng.isFinalMom ?? false,
             projToengObjectId: new mongoose.Types.ObjectId(),
           });
           return map;
@@ -97,6 +99,8 @@ export const Recordsformave = async (req, res) => {
                 assignedAt: eng.assignedAt,
                 durationDays: eng.durationDays,
                 endTime: eng.endTime,
+                isMom: eng.isMom ?? false,
+                isFinalMom: eng.isFinalMom ?? false,
                 engToprojObjectId: eng.projToengObjectId,
               },
             },
@@ -234,6 +238,8 @@ export const updateRecords = async (req, res) => {
           assignedAt,
           durationDays,
           endTime,
+          isMom: eng.isMom ?? false,
+          isFinalMom: eng.isFinalMom ?? false,
         };
       });
 
@@ -242,10 +248,20 @@ export const updateRecords = async (req, res) => {
       }
 
       transformedEngineers.forEach((newEng) => {
-        project.EngineerDetails = project.EngineerDetails.filter(
-          (e) => e.engineerId.toString() !== newEng.engineerId.toString()
+        const existing = project.EngineerDetails.find(
+          (e) => e.engineerId.toString() === newEng.engineerId.toString()
         );
-        project.EngineerDetails.push(newEng);
+        if (
+          existing &&
+          (existing.isMom === true || existing.isFinalMom === true)
+        ) {
+          project.EngineerDetails.push(newEng);
+        } else {
+          project.EngineerDetails = project.EngineerDetails.filter(
+            (e) => e.engineerId.toString() !== newEng.engineerId.toString()
+          );
+          project.EngineerDetails.push(newEng);
+        }
       });
     }
 
@@ -264,32 +280,55 @@ export const updateRecords = async (req, res) => {
           continue;
         }
 
-        if (engineer.isAssigned) {
+        if (engineer.isAssigned && !eng.isMom && !eng.isFinalMom) {
           skippedEngineers.push(engineer.name || eng.engineerId);
           continue;
         }
 
-        await EngineerReocord.findByIdAndUpdate(eng.engineerId, {
-          $set: { isAssigned: true, manualOverride: false },
-          $pull: { assignments: { projectId: project._id } },
-        });
-        await EngineerReocord.findByIdAndUpdate(
-          eng.engineerId,
-          {
-            $push: {
-              assignments: {
-                projectId: project._id,
-                projectName: project.projectName,
-                jobNumber: project.jobNumber,
-                assignedAt: eng.assignedAt,
-                durationDays: eng.durationDays,
-                endTime: eng.endTime,
-              },
-            },
-          },
-          { new: true }
+        const existingAssignment = engineer.assignments.find(
+          (a) => a.projectId.toString() === project._id.toString()
         );
 
+        const updateOps = {
+          $set: { isAssigned: true, manualOverride: false },
+        };
+
+        if (
+          existingAssignment &&
+          (existingAssignment.isMom === true ||
+            existingAssignment.isFinalMom === true)
+        ) {
+          updateOps.$push = {
+            assignments: {
+              projectId: project._id,
+              projectName: project.projectName,
+              jobNumber: project.jobNumber,
+              assignedAt: eng.assignedAt,
+              durationDays: eng.durationDays,
+              endTime: eng.endTime,
+              isMom: eng.isMom ?? false,
+              isFinalMom: eng.isFinalMom ?? false,
+            },
+          };
+        } else {
+          updateOps.$pull = { assignments: { projectId: project._id } };
+          updateOps.$push = {
+            assignments: {
+              projectId: project._id,
+              projectName: project.projectName,
+              jobNumber: project.jobNumber,
+              assignedAt: eng.assignedAt,
+              durationDays: eng.durationDays,
+              endTime: eng.endTime,
+              isMom: eng.isMom ?? false,
+              isFinalMom: eng.isFinalMom ?? false,
+            },
+          };
+        }
+
+        await EngineerReocord.findByIdAndUpdate(eng.engineerId, updateOps, {
+          new: true,
+        });
         updatedCount++;
       } catch (err) {
         console.error(
