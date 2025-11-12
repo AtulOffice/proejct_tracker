@@ -492,20 +492,6 @@ const AdminDashboard = () => {
                       PROJ INC DEV
                     </div>
                   </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("two");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ALL
-                    </div>
-                  </li>
-
                   {user?.role == "admin" && (
                     <>
                       <li>
@@ -526,19 +512,6 @@ const AdminDashboard = () => {
                     </>
                   )}
 
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("three");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      UPCOMING
-                    </div>
-                  </li>
                   <li>
                     <div
                       onClick={() => {
@@ -565,6 +538,48 @@ const AdminDashboard = () => {
                     >
                       <GoProjectRoadmap className="mr-3" size={20} />
                       ASSESSMENTS
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("fourteen");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fourteen" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      PROJECT DEV STATUS
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("two");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      ALL
+                    </div>
+                  </li>
+
+
+
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("three");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      UPCOMING
                     </div>
                   </li>
                   <li>
@@ -690,19 +705,7 @@ const AdminDashboard = () => {
                   </li>
                 </>
               )}
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("fourteen");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fourteen" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  PROJECT DEV STATUS
-                </div>
-              </li>
+
               {(user?.role == "admin" || user?.role == "reception") && (
                 <>
                   <li>
