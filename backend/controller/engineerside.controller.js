@@ -51,7 +51,6 @@ export const getAllProjectsEngineers = async (req, res) => {
 
 export const saveMomForEngineer = async (req, res) => {
   const uploadedUrls = [];
-
   try {
     const { engineerId } = req.params;
     const momData = req.body;
@@ -69,8 +68,7 @@ export const saveMomForEngineer = async (req, res) => {
         .json({ success: false, message: "Engineer not found" });
     }
 
-    const uploadedDocs = [];
-    if (momData.momDocuments && momData.momDocuments.length > 0) {
+    if (momData.momDocuments?.length > 0) {
       for (const file of momData.momDocuments) {
         try {
           const base64Data = file.data.replace(/^data:\w+\/\w+;base64,/, "");
@@ -81,81 +79,96 @@ export const saveMomForEngineer = async (req, res) => {
             "mom-documents"
           );
 
-          const imageUrl = uploadRes?.url || uploadRes;
-          uploadedDocs.push({
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            url: imageUrl,
-          });
+          if (!uploadRes || typeof uploadRes.url !== "string") {
+            throw new Error("Invalid upload response — missing file URL");
+          }
 
-          uploadedUrls.push(imageUrl);
+          uploadedUrls.push(uploadRes.url);
         } catch (uploadErr) {
-          console.error("❌ File upload failed:", file.name, uploadErr.message);
+          console.error(
+            `❌ File upload failed: ${file.name} → ${uploadErr.message}`
+          );
+          for (const url of uploadedUrls) await deleteImageToGlobalServer(url);
+          throw uploadErr;
         }
       }
     }
 
-    const assignmentIndex = engineer.assignments.findIndex(
-      (a) => a.projectId.toString() === momData.projectId
+    const assignment = engineer.assignments.find(
+      (a) =>
+        a.engToprojObjectId?.toString() ===
+        momData.assignmentDetails.engToprojObjectId
     );
-    if (assignmentIndex === -1) {
-      for (const url of uploadedUrls) {
-        await deleteImageToGlobalServer(url);
-      }
 
-      return res.status(404).json({
-        success: false,
-        message: "Assignment not found for this project",
-      });
-    }
-
-    engineer.assignments[assignmentIndex].isMom = true;
-    if (momData.isFinalMom) {
-      engineer.assignments[assignmentIndex].isFinalMom = true;
-    }
-
-    await engineer.save();
     const project = await ProjectModel.findById(momData.projectId);
-    if (!project) {
-      for (const url of uploadedUrls) {
-        await deleteImageToGlobalServer(url);
-      }
 
+    if (!assignment || !project) {
+      for (const url of uploadedUrls) await deleteImageToGlobalServer(url);
       return res.status(404).json({
         success: false,
-        message: "Project not found",
+        message:
+          "Assignment not found for this engineer or Project not found for this MOM record",
       });
     }
 
-    project.MOMRecords = project.MOMRecords || [];
-    project.MOMRecords.push({
-      engineerId,
-      engineerName: momData.engineerName,
-      momSrNo: momData.momSrNo,
-      finalMomSrNo: momData.finalMomSrNo,
-      isFinalMom: momData.isFinalMom,
-      pendingPoint: momData.pendingPoint,
-      siteStartDate: momData.siteStartDate,
-      siteEndDate: momData.siteEndDate,
-      location: momData.location,
-      momDocuments: uploadedDocs,
-      createdAt: new Date(),
-    });
+    const newStart = new Date(`${momData.siteStartDate}T00:00:00Z`);
+    const newEnd = new Date(`${momData.siteEndDate}T00:00:00Z`);
 
-    await project.save();
+    if (isNaN(newStart) || isNaN(newEnd)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid start or end date format",
+      });
+    }
+
+    if (newEnd < newStart) {
+      return res.status(400).json({
+        success: false,
+        message: "End date cannot be before start date",
+      });
+    }
+
+    if (momData.isFinalMom) assignment.isFinalMom = true;
+    assignment.isMom = true;
+    assignment.momDocuments = uploadedUrls;
+
+    assignment.assignedAt = newStart;
+    assignment.endTime = newEnd;
+
+    const diffMs = newEnd - newStart;
+    assignment.durationDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    const engineerDetail = project.EngineerDetails.find(
+      (e) =>
+        e.projToengObjectId?.toString() ===
+        momData.assignmentDetails.engToprojObjectId
+    );
+
+    if (engineerDetail) {
+      if (momData.isFinalMom) engineerDetail.isFinalMom = true;
+      engineerDetail.isMom = true;
+      engineerDetail.momDocuments = uploadedUrls;
+
+      engineerDetail.assignedAt = newStart;
+      engineerDetail.endTime = newEnd;
+
+      const diffMsProj = newEnd - newStart;
+      engineerDetail.durationDays = Math.ceil(
+        diffMsProj / (1000 * 60 * 60 * 24)
+      );
+    }
+
+    // await Promise.all([engineer.save(), project.save()]);
 
     return res.status(200).json({
       success: true,
-      message: "✅ MOM saved successfully with document uploads",
+      message:
+        "✅ MOM saved successfully (dates, durations, and flags synced in both models)",
+      urls: uploadedUrls,
     });
   } catch (err) {
     console.error("❌ Error saving MOM:", err.message);
-
-    for (const url of uploadedUrls) {
-      await deleteImageToGlobalServer(url);
-    }
-
+    for (const url of uploadedUrls) await deleteImageToGlobalServer(url);
     return res.status(500).json({
       success: false,
       message: "Error saving MOM data",

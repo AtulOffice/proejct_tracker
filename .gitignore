@@ -28,3 +28,5 @@ dist-ssr
 
 #  files
 backend/utils/updatemany.js
+
+/imageServer/uploads

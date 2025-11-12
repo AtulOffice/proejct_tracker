@@ -10,7 +10,7 @@ export const imageRoutes = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
 imageRoutes.post(
-  "/uploadimage",
+  "/uploadImage",
   upload.fields([{ name: "image" }, { name: "file" }]),
   uploadImage
 );

@@ -31,6 +31,7 @@ const projectSchema = new mongoose.Schema(
           type: Boolean,
           default: false,
         },
+        momDocuments: [String],
       },
     ],
     engineerName: {
