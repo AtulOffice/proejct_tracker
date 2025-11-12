@@ -1,8 +1,12 @@
 import express from "express";
-import { uploadVideo } from "../controller/video.controller.js";
+import {
+  uploadVideo,
+  serveVideo,
+  deleteVideo,
+} from "../controller/video.controller.js";
 
-const router = express.Router();
+export const videoRoutes = express.Router();
 
-router.post("/upload-stream", uploadVideo);
-
-export default router;
+videoRoutes.post("/uploadVideo", uploadVideo);
+videoRoutes.get(/^\/videos\/(.+)$/, serveVideo);
+videoRoutes.delete("/deleteVideo", deleteVideo);
