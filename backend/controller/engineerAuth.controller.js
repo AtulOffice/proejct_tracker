@@ -50,11 +50,9 @@ import { createAccessToken, createRefreshToken } from "../utils/utils.js";
 export const loginEngineer = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email);
     const engineer = await EngineerReocord.findOne({ email }).select(
       "+password -createdAt -updatedAt -developmentProjectList -assignments"
     );
-    console.log(engineer);
     if (!engineer) {
       return res
         .status(404)
