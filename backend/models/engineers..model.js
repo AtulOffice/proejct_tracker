@@ -16,9 +16,14 @@ const engineerSchema = new mongoose.Schema(
     phone: { type: String, trim: true, default: "" },
     empId: { type: String, trim: true, unique: true },
     password: { type: String, select: false },
-    role: { type: String, enum: ["ENGINEER"], default: "ENGINEER" },
+    role: {
+      type: String,
+      enum: ["ENGINEER"],
+      default: "ENGINEER",
+      select: false,
+    },
     active: { type: Boolean, default: true },
-    lastLogin: { type: Date },
+    lastLogin: { type: Date, select: false },
     isAssigned: { type: Boolean, default: false },
     manualOverride: { type: Boolean, default: false },
     resetOtp: {

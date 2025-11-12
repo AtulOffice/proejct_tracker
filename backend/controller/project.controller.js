@@ -1,5 +1,4 @@
 import ProjectModel from "../models/Project.model.js";
-import dayjs from "dayjs";
 import workStatusModel from "../models/WorkStatus.model.js";
 import EngineerReocord from "../models/engineers..model.js";
 import ProjectDevModel from "../models/Project.Dev.model.js";
@@ -307,6 +306,7 @@ export const updateRecords = async (req, res) => {
             existingAssignment.isFinalMom === true)
             ? eng.projToengObjectId
             : existingAssignment?.engToprojObjectId || eng.projToengObjectId;
+
         const updateOps = {
           $set: { isAssigned: true, manualOverride: false },
         };
@@ -346,9 +346,30 @@ export const updateRecords = async (req, res) => {
           };
         }
 
-        await EngineerReocord.findByIdAndUpdate(eng.engineerId, updateOps, {
-          new: true,
-        });
+        try {
+          if (updateOps.$pull && updateOps.$push) {
+            await EngineerReocord.findByIdAndUpdate(eng.engineerId, {
+              $pull: updateOps.$pull,
+            });
+
+            const { $set, $push } = updateOps;
+            await EngineerReocord.findByIdAndUpdate(
+              eng.engineerId,
+              { $set, $push },
+              { new: true }
+            );
+          } else {
+            await EngineerReocord.findByIdAndUpdate(eng.engineerId, updateOps, {
+              new: true,
+            });
+          }
+        } catch (err) {
+          console.error(
+            `Error updating assignments for ${eng.engineerId}:`,
+            err
+          );
+        }
+
         updatedCount++;
       } catch (err) {
         console.error(

@@ -17,19 +17,6 @@ engineerAuthRouter.get(
   findEngineerDetails
 );
 
-// userRouter.get(
-//   "/finduser/:id",
-//   refreshTokenMiddleware,
-//   authenticate,
-//   authorizeRole("admin"),
-//   finduser
-// );
-// userRouter.get(
-//   "/fetchUserDeatails",
-//   refreshTokenMiddleware,
-//   authenticate,
-//   findUserDetails
-// );
 // userRouter.post("/forgetuser", forgotUser);
 // userRouter.post("/resetuser", resetUser);
 engineerAuthRouter.get(

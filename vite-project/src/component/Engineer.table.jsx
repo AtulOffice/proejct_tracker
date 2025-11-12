@@ -86,6 +86,9 @@ const EngineerTable = ({ data }) => {
       toast.success("data deleted successfully");
       setToggle((prev) => !prev);
     } catch (error) {
+      if (error.response) {
+        toast.error(error.response.data.message || "something whent wrong")
+      }
       console.error("Failed to delete project", error);
     }
   };
@@ -101,7 +104,7 @@ const EngineerTable = ({ data }) => {
       setEditOpen(false);
     } catch (error) {
       if (error?.response) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message || "something went wrong");
       }
       console.log("error while saving the engineer details", error);
     }
@@ -220,11 +223,10 @@ const EngineerTable = ({ data }) => {
               {data.map((project, indx) => (
                 <tr
                   key={indx}
-                  className={`hover:bg-blue-50/80 transition-colors duration-150 ${
-                    indx % 2 === 0
-                      ? "bg-gradient-to-r from-white via-blue-50/30 to-white"
-                      : "bg-gradient-to-r from-white via-blue-100/40 to-white"
-                  }`}
+                  className={`hover:bg-blue-50/80 transition-colors duration-150 ${indx % 2 === 0
+                    ? "bg-gradient-to-r from-white via-blue-50/30 to-white"
+                    : "bg-gradient-to-r from-white via-blue-100/40 to-white"
+                    }`}
                 >
                   <td className="px-6 py-4">
                     <div
@@ -240,11 +242,10 @@ const EngineerTable = ({ data }) => {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border shadow-sm transition whitespace-nowrap ${
-                        !project.isAssigned
-                          ? "bg-green-100 text-green-700 border-green-300"
-                          : "bg-red-100 text-red-700 border-red-300"
-                      }`}
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border shadow-sm transition whitespace-nowrap ${!project.isAssigned
+                        ? "bg-green-100 text-green-700 border-green-300"
+                        : "bg-red-100 text-red-700 border-red-300"
+                        }`}
                     >
                       {project.isAssigned ? "No" : "Yes"}
                     </span>
@@ -300,11 +301,10 @@ const EngineerTable = ({ data }) => {
                 {project.name}
               </div>
               <span
-                className={`inline-flex items-center px-2 py-1 border rounded-full font-semibold text-xs ${
-                  !project.isAssigned
-                    ? "bg-green-100 text-green-700 border-green-300"
-                    : "bg-red-100 text-red-700 border-red-300"
-                }`}
+                className={`inline-flex items-center px-2 py-1 border rounded-full font-semibold text-xs ${!project.isAssigned
+                  ? "bg-green-100 text-green-700 border-green-300"
+                  : "bg-red-100 text-red-700 border-red-300"
+                  }`}
               >
                 {project.isAssigned ? "No" : "Yes"}
               </span>

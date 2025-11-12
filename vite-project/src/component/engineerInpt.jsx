@@ -4,7 +4,7 @@ import { Listbox } from "@headlessui/react";
 import { getavailableEngineers } from "../utils/apiCall";
 import { useAppContext } from "../appContex";
 
-export const  EngineerAssignment = ({ setEngineerData, required = false }) => {
+export const EngineerAssignment = ({ setEngineerData, required = false }) => {
   const [selectedEngineer, setSelectedEngineer] = useState("");
   const [days, setDays] = useState("");
   const [date, setDate] = useState("");
@@ -14,11 +14,11 @@ export const  EngineerAssignment = ({ setEngineerData, required = false }) => {
   const availableEngineers =
     Array.isArray(engineers) && Array.isArray(currentAssignments)
       ? engineers.filter(
-          (eng) =>
-            !currentAssignments.some(
-              (assigned) => assigned.engineerId === eng.id
-            )
-        )
+        (eng) =>
+          !currentAssignments.some(
+            (assigned) => assigned.engineerId === eng.id
+          )
+      )
       : [];
 
   const handleAddEngineer = () => {
@@ -101,7 +101,7 @@ export const  EngineerAssignment = ({ setEngineerData, required = false }) => {
               <Listbox.Button className="w-full py-2.5 px-4 text-base  rounded-lg shadow bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 text-white focus:outline-none transition">
                 {selectedEngineer
                   ? availableEngineers.find((e) => e.id === selectedEngineer)
-                      ?.name || "ENGINEER"
+                    ?.name || "ENGINEER"
                   : "ENGINEER"}
               </Listbox.Button>
               <Listbox.Options className="absolute mt-2 w-full rounded-xl bg-white shadow-lg ring-1 ring-black/10 z-20 overflow-auto max-h-60 animate-fade-in scrollbar-glass">
@@ -114,11 +114,10 @@ export const  EngineerAssignment = ({ setEngineerData, required = false }) => {
                     {({ selected, active }) => (
                       <li
                         className={`cursor-pointer select-none px-4 py-3 rounded-lg transition 
-          ${
-            active
-              ? "bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 text-indigo-700"
-              : "text-gray-900"
-          }
+          ${active
+                            ? "bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 text-indigo-700"
+                            : "text-gray-900"
+                          }
           ${selected ? "font-bold" : ""}`}
                       >
                         {engineer.name}

@@ -157,9 +157,7 @@ const CardStatus = ({
       setToggle((prev) => !prev);
     } catch (e) {
       if (e.response) {
-        toast.error(e.response?.data?.message);
-      } else {
-        toast.error("something went wrong");
+        toast.error(e.response?.data?.message || "something went wrong");
       }
       console.log(e);
     } finally {

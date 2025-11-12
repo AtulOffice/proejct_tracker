@@ -50,9 +50,11 @@ import { createAccessToken, createRefreshToken } from "../utils/utils.js";
 export const loginEngineer = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(email);
     const engineer = await EngineerReocord.findOne({ email }).select(
-      "+password"
+      "+password -createdAt -updatedAt -developmentProjectList -assignments"
     );
+    console.log(engineer);
     if (!engineer) {
       return res
         .status(404)
@@ -121,7 +123,7 @@ export const findEngineerDetails = async (req, res) => {
       });
     }
     const EngineerData = await EngineerReocord.findById(_id).select(
-      "-createdAt -updatedAt"
+      "-createdAt -updatedAt -developmentProjectList -assignments"
     );
     if (!EngineerData) {
       return res.status(404).json({

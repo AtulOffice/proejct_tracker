@@ -8,7 +8,6 @@ const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
   const { setToggle, setToggleDev } = useAppContext();
-  console.log(selectedProject);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsDisabled(true);
@@ -74,12 +73,11 @@ const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
             <button
               type="submit"
               onClick={handleSubmit}
-              disabled={isDisabled}
-              className={`px-4 py-2 rounded-lg text-white transition w-full sm:w-auto ${
-                isDisabled
-                  ? "bg-blue-300 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
+              disabled={isDisabled || engineerData.length === 0}
+              className={`px-4 py-2 rounded-lg text-white transition w-full sm:w-auto ${(isDisabled || engineerData.length === 0)
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+                }`}
             >
               {isDisabled ? "Saving..." : "Save"}
             </button>

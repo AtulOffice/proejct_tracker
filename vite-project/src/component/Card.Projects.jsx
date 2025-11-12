@@ -34,6 +34,9 @@ const CardAll = ({
       setDeleteflag(false);
       setToggle((prev) => !prev);
     } catch (e) {
+      if (e.data) {
+        toast.error(e?.data?.message || "something went wrong");
+      }
       console.log(e);
     } finally {
       setIsdisabled(false);

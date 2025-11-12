@@ -1,12 +1,12 @@
 {
-  "name": "backend",
+  "name": "imageserver",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "ImageServer.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node ImageServer.js",
+    "dev": "nodemon ImageServer.js"
   },
   "keywords": [],
   "author": "",

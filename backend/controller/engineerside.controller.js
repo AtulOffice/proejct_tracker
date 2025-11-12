@@ -9,6 +9,7 @@ export const getAllProjectsEngineers = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid Engineer ID" });
     }
+
     const engineer = await EngineerReocord.findById(id)
       .populate({
         path: "assignments.projectId",
@@ -20,8 +21,10 @@ export const getAllProjectsEngineers = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Engineer not found" });
     }
-
-    const lastFiveAssignments = (engineer.assignments || [])
+    const filteredAssignments = (engineer.assignments || []).filter(
+      (assignment) => !(assignment.isMom && assignment.isFinalMom)
+    );
+    const lastFiveAssignments = filteredAssignments
       .sort((a, b) => new Date(b.assignedAt) - new Date(a.assignedAt))
       .slice(0, 5);
 
@@ -30,7 +33,7 @@ export const getAllProjectsEngineers = async (req, res) => {
       engineerId: engineer._id,
       name: engineer.name,
       empId: engineer.empId,
-      totalAssignments: engineer.assignments.length,
+      totalAssignments: filteredAssignments.length,
       lastFiveAssignments,
     });
   } catch (e) {
