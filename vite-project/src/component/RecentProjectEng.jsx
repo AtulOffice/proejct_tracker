@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const AssignmentModal = ({ open, onClose, assignments }) => {
     const formRef = useRef(null);
@@ -38,7 +39,6 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
     };
 
     if (!open) return null;
-
     return (
         <>
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300 p-6">
@@ -116,7 +116,7 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
 
             {/* PDF Viewer Modal */}
             {pdfViewerOpen && selectedPdf && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
                     <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col">
                         {/* Header with Close and Download buttons */}
                         <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gray-50 rounded-t-2xl">

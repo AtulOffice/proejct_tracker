@@ -212,9 +212,21 @@ const EngineerTable = ({ data }) => {
                   <td className="px-6 py-4">
                     <div
                       onClick={() => {
-                        setOpen(true);
-                        setShowData(project);
+                        if (project && project?.assignments?.length > 0) {
+                          setOpen(true);
+                          setShowData(project);
+                        } else {
+                          toast("No available projects for this engineer.", {
+                            icon: "👏",
+                            style: {
+                              borderRadius: "10px",
+                              background: "#333",
+                              color: "#fff",
+                            },
+                          });
+                        }
                       }}
+
                       className="text-base font-semibold text-blue-900 truncate cursor-pointer"
                       title={project.name}
                     >
@@ -267,7 +279,8 @@ const EngineerTable = ({ data }) => {
         </div>
       ) : (
         <NoDataFound />
-      )}
+      )
+      }
       <div className="md:hidden mt-4 space-y-4">
         {data.map((project) => (
           <div
@@ -325,7 +338,7 @@ const EngineerTable = ({ data }) => {
           </div>
         ))}
       </div>
-    </div>
+    </div >
   );
 };
 
