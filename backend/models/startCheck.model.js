@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-const yesNoEnum = ["YES", "NO"];
-const ENUMVAL = ["YES", "NO", "N/A"];
+const yesNoEnum = ["YES", "NO", ""];
+const ENUMVAL = ["YES", "NO", "N/A", ""];
 
 const startchecklistsSchema = new mongoose.Schema(
   {
@@ -63,10 +63,16 @@ const startchecklistsSchema = new mongoose.Schema(
 
     readinessConfirmation: { type: String, enum: ENUMVAL },
 
-    travelArrangementBy: { type: String, enum: ["SIEVPL", "CUSTOMER"] },
-    travelCostBy: { type: String, enum: ["SIEVPL", "CUSTOMER"] },
-    boardingArrangementBy: { type: String, enum: ["SIEVPL", "CUSTOMER"] },
-    boardingCostBy: { type: String, enum: ["SIEVPL", "CUSTOMER"] },
+    travelArrangementBy: {
+      type: String,
+      enum: ["SIEVPL", "CUSTOMER", "N/A", ""],
+    },
+    travelCostBy: { type: String, enum: ["SIEVPL", "CUSTOMER", "N/A", ""] },
+    boardingArrangementBy: {
+      type: String,
+      enum: ["SIEVPL", "CUSTOMER", "N/A", ""],
+    },
+    boardingCostBy: { type: String, enum: ["SIEVPL", "CUSTOMER", "N/A", ""] },
     gatePassDocsSent: { type: String, enum: ENUMVAL },
 
     projectId: {

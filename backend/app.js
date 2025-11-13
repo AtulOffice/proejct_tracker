@@ -16,6 +16,8 @@ import { PlannigRouter } from "./routes/dev.Planning.route.js";
 import { engineerAuthRouter } from "./routes/engineer.auth.route.js";
 import { OrderRouter } from "./routes/Order.route.js";
 import { ImageUploadRouter } from "./routes/image.router.js";
+import { StartRouter } from "./routes/startCheckList.routes.js";
+import { EndRouter } from "./routes/endCheckList.routes.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -53,7 +55,6 @@ app.get("/", (req, res) => {
 });
 app.use("/api/v1", ProjectRouter);
 app.use("/api/v1", userRouter);
-app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/projectDev", ProjectDevRouter);
 app.use("/api/v1/engineer", EngineerRouter);
 app.use("/api/v1/engineerside", EngineerRouterside);
@@ -62,6 +63,10 @@ app.use("/api/v1/planningDev", PlannigRouter);
 app.use("/api/v1/engineerauth", engineerAuthRouter);
 app.use("/api/v1/order", OrderRouter);
 app.use("/api/v1/imageUploader", ImageUploadRouter);
+app.use("/api/v1/worksts", WorkstsRouter);
+app.use("/api/v1/startCheck", StartRouter);
+app.use("/api/v1/endCheck", EndRouter);
+
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   console.log(`server is linsten on port ${port}`);

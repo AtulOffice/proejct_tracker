@@ -28,7 +28,7 @@ export const getAllProjectsEngineers = async (req, res) => {
         .json({ success: false, message: "Engineer not found" });
     }
     const filteredAssignments = (engineer.assignments || []).filter(
-      (assignment) => !(assignment.isMom ||  assignment.isFinalMom)
+      (assignment) => !(assignment.isMom || assignment.isFinalMom)
     );
     const lastFiveAssignments = filteredAssignments
       .sort((a, b) => new Date(b.assignedAt) - new Date(a.assignedAt))
@@ -41,6 +41,34 @@ export const getAllProjectsEngineers = async (req, res) => {
       empId: engineer.empId,
       totalAssignments: filteredAssignments.length,
       lastFiveAssignments,
+    });
+  } catch (e) {
+    console.error("Error fetching engineer project history:", e);
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching engineer data" });
+  }
+};
+
+export const getAllProjectsEngineersshow = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid Engineer ID" });
+    }
+
+    const engineer = await EngineerReocord.findById(id);
+    if (!engineer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Engineer not found" });
+    }
+    return res.status(200).json({
+      success: true,
+      name: engineer.name,
+      totalAssignments: engineer?.assignments,
     });
   } catch (e) {
     console.error("Error fetching engineer project history:", e);

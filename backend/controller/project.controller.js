@@ -1312,8 +1312,7 @@ export const getEngineerProjectsPaginated = async (req, res) => {
       { $unwind: { path: "$projectData", preserveNullAndEmptyArrays: true } },
       {
         $project: {
-          _id: 0,
-          projectId: "$projectData._id",
+          _id: "$projectData._id",
           projectName: {
             $ifNull: ["$projectData.projectName", "$assignments.projectName"],
           },
@@ -1334,6 +1333,12 @@ export const getEngineerProjectsPaginated = async (req, res) => {
           assignedAt: "$assignments.assignedAt",
           endTime: "$assignments.endTime",
           durationDays: "$assignments.durationDays",
+          orderNumber: "$projectData.orderNumber",
+          orderDate: "$projectData.orderDate",
+          ContactPersonNumber: "$projectData.ContactPersonNumber",
+          technicalEmail: "$projectData.technicalEmail",
+          ContactPersonName: "$projectData.ContactPersonName",
+          visitDate: "$projectData.visitDate",
         },
       },
       { $skip: skip },

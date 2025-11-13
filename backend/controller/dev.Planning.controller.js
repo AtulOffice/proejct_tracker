@@ -24,7 +24,6 @@ export const PlanningSave = async (req, res) => {
         (await ProjectDevModel.findByIdAndUpdate(
           project.DevelopmentDetials,
           {
-            ...formDevbackData,
             jobNumber: project.jobNumber,
             startDate: restData?.documents?.startDate,
           },

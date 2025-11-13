@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getAllProjectsEngineers,
+  getAllProjectsEngineersshow,
   saveMomForEngineer,
 } from "../controller/engineerside.controller.js";
 import { authenticateEngineer } from "../middlware/authaticate.js";
@@ -13,6 +14,13 @@ EngineerRouterside.get(
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getAllProjectsEngineers
+);
+
+EngineerRouterside.get(
+  "/fetchAllEngineersProjectshow/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getAllProjectsEngineersshow
 );
 EngineerRouterside.post(
   "/saveMomoRelatedProject/:engineerId",
