@@ -234,6 +234,10 @@ const projectSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    SrvsdaysInLots: {
+      type: Number,
+      default: 0,
+    },
     manDaysRate: {
       type: Number,
       default: 0,

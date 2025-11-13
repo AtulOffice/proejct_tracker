@@ -4,6 +4,7 @@ import {
   deleteImageToGlobalServer,
   uploadImageToGlobalServer,
 } from "../utils/imageUtils.js";
+import ProjectModel from "../models/Project.model.js";
 
 export const getAllProjectsEngineers = async (req, res) => {
   try {
@@ -27,7 +28,7 @@ export const getAllProjectsEngineers = async (req, res) => {
         .json({ success: false, message: "Engineer not found" });
     }
     const filteredAssignments = (engineer.assignments || []).filter(
-      (assignment) => !(assignment.isMom && assignment.isFinalMom)
+      (assignment) => !(assignment.isMom ||  assignment.isFinalMom)
     );
     const lastFiveAssignments = filteredAssignments
       .sort((a, b) => new Date(b.assignedAt) - new Date(a.assignedAt))
@@ -67,6 +68,22 @@ export const saveMomForEngineer = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Engineer not found" });
     }
+
+    if (!engineer.assignments || engineer.assignments.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No assignments found for this engineer.",
+      });
+    }
+
+    const lastAssignment =
+      engineer.assignments[engineer.assignments.length - 1];
+
+    const isCurrentProj =
+      lastAssignment?.engToprojObjectId?.toString() ===
+      momData.assignmentDetails.engToprojObjectId;
+
+    engineer.isAssigned = isCurrentProj ? false : engineer.isAssigned;
 
     if (momData.momDocuments?.length > 0) {
       for (const file of momData.momDocuments) {
@@ -148,7 +165,6 @@ export const saveMomForEngineer = async (req, res) => {
       if (momData.isFinalMom) engineerDetail.isFinalMom = true;
       engineerDetail.isMom = true;
       engineerDetail.momDocuments = uploadedUrls;
-
       engineerDetail.assignedAt = newStart;
       engineerDetail.endTime = newEnd;
 
@@ -158,7 +174,7 @@ export const saveMomForEngineer = async (req, res) => {
       );
     }
 
-    // await Promise.all([engineer.save(), project.save()]);
+    await Promise.all([engineer.save(), project.save()]);
 
     return res.status(200).json({
       success: true,
