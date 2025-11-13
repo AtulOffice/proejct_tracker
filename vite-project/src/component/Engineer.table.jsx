@@ -9,6 +9,7 @@ import {
 } from "../utils/apiCall.jsx";
 import toast from "react-hot-toast";
 import PopupConfirmation from "./PopuP.Page.jsx";
+import AssignmentModal from "./RecentProjectEng.jsx";
 
 const EngineerTable = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -145,32 +146,12 @@ const EngineerTable = ({ data }) => {
         />
       )}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300 p-4">
-          <div
-            ref={formRef}
-            className="bg-white bg-opacity-90 p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-sm md:max-w-md max-h-[70vh] overflow-y-auto border border-gray-200 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100"
-          >
-            <h2 className="text-xl font-bold mb-6 text-gray-800 text-center drop-shadow-sm">
-              Recent Project Assignments
-            </h2>
-            {showData?.assignments
-              ?.slice()
-              .reverse()
-              .map((project) => (
-                <div
-                  key={project._id}
-                  className="group bg-gradient-to-r from-green-100 via-blue-50 to-white rounded-xl mb-4 py-3 px-4 shadow hover:shadow-xl transition-shadow border-b border-gray-100 hover:bg-blue-50"
-                >
-                  <h3 className="font-semibold text-lg text-gray-800 group-hover:text-blue-600">
-                    {project.projectName}
-                  </h3>
-                  <p className="text-xs text-gray-500 mt-1 group-hover:text-gray-700">
-                    {project.jobNumber}
-                  </p>
-                </div>
-              ))}
-          </div>
-        </div>
+        <AssignmentModal
+          open={open}
+          onClose={() => setOpen(false)}
+          assignments={showData?.assignments || []}
+        />
+
       )}
 
       {(saveOpen || editOpen) && (
