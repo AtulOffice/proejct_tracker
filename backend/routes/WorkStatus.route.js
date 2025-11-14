@@ -4,6 +4,7 @@ import {
   getAllWorkStatus,
   getWorkStatusById,
   updateWorkStatus,
+  workStatusPaginationByEngineer,
   workStatusPegination,
   WrkStatusSave,
 } from "../controller/WrkSts.controller.js";
@@ -42,4 +43,11 @@ WorkstsRouter.get(
   refreshTokenMiddleware,
   authenticate,
   workStatusPegination
+);
+
+WorkstsRouter.get(
+  "/paginationeng/:engineerId",
+  refreshTokenMiddleware,
+  authenticate,
+  workStatusPaginationByEngineer
 );

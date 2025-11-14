@@ -79,7 +79,7 @@ const startchecklistsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
     },
-    submitteddBy: {
+    submittedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
     },

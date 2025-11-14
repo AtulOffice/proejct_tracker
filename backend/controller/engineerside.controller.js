@@ -50,7 +50,7 @@ export const getAllProjectsEngineers = async (req, res) => {
   }
 };
 
-export const getAllProjectsEngineersshow = async (req, res) => {
+export const getAllProjectsEngineerswork = async (req, res) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -59,6 +59,48 @@ export const getAllProjectsEngineersshow = async (req, res) => {
         .json({ success: false, message: "Invalid Engineer ID" });
     }
 
+    const engineer = await EngineerReocord.findById(id)
+      .populate({
+        path: "assignments.projectId",
+        select: "_id location StartChecklist EndChecklist projectName client",
+      })
+      .lean();
+
+    if (!engineer) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Engineer not found" });
+    }
+    const filteredAssignments = (engineer.assignments || []).filter(
+      (assignment) => !assignment.isFinalMom
+    );
+    const lastFiveAssignments = filteredAssignments
+      .sort((a, b) => new Date(b.assignedAt) - new Date(a.assignedAt))
+      .slice(0, 5);
+
+    return res.status(200).json({
+      success: true,
+      engineerId: engineer._id,
+      name: engineer.name,
+      totalAssignments: filteredAssignments.length,
+      lastFiveAssignments,
+    });
+  } catch (e) {
+    console.error("Error fetching engineer project history:", e);
+    res
+      .status(500)
+      .json({ success: false, message: "Error fetching engineer data" });
+  }
+};
+
+export const getAllProjectsEngineersshow = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid Engineer ID" });
+    }
     const engineer = await EngineerReocord.findById(id);
     if (!engineer) {
       return res

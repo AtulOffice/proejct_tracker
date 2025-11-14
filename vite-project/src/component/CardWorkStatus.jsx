@@ -116,12 +116,12 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           </div>
 
           <div className="flex justify-between items-start my-2">
-            <h3 className="text-xl font-extrabold text-transparent p-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 group-hover:from-pink-300 rounded-lg group-hover:via-purple-300 group-hover:to-indigo-300 transition-colors duration-300 shadow-lg">
+            <h3 className="truncate text-xl font-extrabold text-transparent p-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 group-hover:from-pink-300 rounded-lg group-hover:via-purple-300 group-hover:to-indigo-300 transition-colors duration-300 shadow-lg">
               {project.projectName.toUpperCase()}
             </h3>
           </div>
 
-          <ul className="text-sm text-gray-700 space-y-1 mb-4">
+          <ul className="text-sm text-gray-700 space-y-1 mb-4 truncate">
             <li>
               <strong>Project Name:</strong> {project.projectName || "-"}
             </li>
@@ -131,28 +131,6 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                 <strong>Engineer Name:</strong> {project.EngineerName}
               </li>
             )}
-
-            {project.entityType && (
-              <li>
-                <strong>Entity Type:</strong> {project.entityType}
-              </li>
-            )}
-
-            <li>
-              <strong>Backup Status:</strong> {project.BackupSubmission || "-"}
-            </li>
-
-            <li>
-              <strong>Expense Status:</strong> {project.ExpensSubmission || "-"}
-            </li>
-
-            <li>
-              <strong>Start Checklist:</strong> {project.StartChecklist || "-"}
-            </li>
-
-            <li>
-              <strong>End Checklist:</strong> {project.EndChecklist || "-"}
-            </li>
 
             {project.fromDate && (
               <li>
@@ -173,16 +151,12 @@ focus:outline-none focus:ring-4 focus:ring-red-400
             </li>
           </ul>
 
-          <div className="flex flex-wrap gap-2">
+          {project.createdAt && (
             <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
-              {project.soType}
+              At - {formattedDate(project.createdAt)}
             </span>
-            {project.createdAt && (
-              <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
-                {formattedDate(project.createdAt)}
-              </span>
-            )}
-          </div>
+          )}
+
         </div>
 
         <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-indigo-300 transition-all duration-300 pointer-events-none"></div>

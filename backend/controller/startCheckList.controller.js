@@ -12,8 +12,8 @@ export const saveStartChecklist = async (req, res) => {
       });
     }
     if (
-      data?.submitteddBy &&
-      !mongoose.Types.ObjectId.isValid(data.submitteddBy)
+      data?.submittedBy &&
+      !mongoose.Types.ObjectId.isValid(data.submittedBy)
     ) {
       return res.status(400).json({
         success: false,

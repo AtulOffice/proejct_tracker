@@ -298,6 +298,9 @@ const projectSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "StartChecklists",
     },
+    workStatusRecords: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "WorkStatus" },
+    ],
     EndChecklisttId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "EndChecklists",

@@ -1243,7 +1243,6 @@ export const getEngineerOverview = async (req, res) => {
     const totalEndChecklist = await EndChecklistsModel.countDocuments({
       submittedBy: new mongoose.Types.ObjectId(id),
     });
-
     const chartData = [
       { title: "Work Status", value: totalWorkStatus, color: "#3b82f6" },
       {
@@ -1263,6 +1262,7 @@ export const getEngineerOverview = async (req, res) => {
         active: engineer.active,
       },
       overview: {
+        projectIncludeDev: [],
         latestProjects,
         totalWorkStatus,
         totalStartChecklist,

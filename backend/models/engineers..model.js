@@ -16,6 +16,9 @@ const engineerSchema = new mongoose.Schema(
     phone: { type: String, trim: true, default: "" },
     empId: { type: String, trim: true, unique: true },
     password: { type: String, select: false },
+    workStatusRecords: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "WorkStatus" },
+    ],
     role: {
       type: String,
       enum: ["ENGINEER"],

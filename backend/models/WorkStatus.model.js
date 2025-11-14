@@ -10,10 +10,6 @@ const WrkStatusSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    soType: {
-      type: String,
-      required: true,
-    },
     location: {
       type: String,
     },
@@ -33,26 +29,38 @@ const WrkStatusSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    StartChecklist: {
-      type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
+    StartChecklisttId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "StartChecklists",
     },
-    EndChecklist: {
-      type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
+    EndChecklisttId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "EndChecklists",
     },
-    BackupSubmission: {
-      type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
+    ProjectDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
     },
-    ExpensSubmission: {
-      type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
-    },
+    // StartChecklist: {
+    //   type: String,
+    //   enum: ["YES", "NO", "N/A"],
+    //   default: "N/A",
+    // },
+    // EndChecklist: {
+    //   type: String,
+    //   enum: ["YES", "NO", "N/A"],
+    //   default: "N/A",
+    // },
+    // BackupSubmission: {
+    //   type: String,
+    //   enum: ["YES", "NO", "N/A"],
+    //   default: "N/A",
+    // },
+    // ExpensSubmission: {
+    //   type: String,
+    //   enum: ["YES", "NO", "N/A"],
+    //   default: "N/A",
+    // },
     submittedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
