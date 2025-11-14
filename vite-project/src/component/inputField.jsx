@@ -41,7 +41,7 @@ const FormField = ({
             />
             <SelectField
               {...InputConst[27]}
-              isEditable={!!selectData?.soType}
+              // isEditable={!!selectData?.soType}
               value={formData.soType}
               handleChange={handleChange}
             />

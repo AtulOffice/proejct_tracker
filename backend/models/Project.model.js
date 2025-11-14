@@ -235,12 +235,20 @@ const projectSchema = new mongoose.Schema(
       default: 0,
     },
     SrvsdaysInLots: {
-      type: Number,
-      default: 0,
+      value: { type: Number, default: 0 },
+      unit: {
+        type: String,
+        enum: ["DAYS", "MAN-DAYS", ""],
+        default: "DAYS",
+      },
     },
     manDaysRate: {
-      type: Number,
-      default: 0,
+      value: { type: Number, default: 0 },
+      unit: {
+        type: String,
+        enum: ["DAYS", "MAN-DAYS", ""],
+        default: "DAYS",
+      },
     },
     serviceVal: {
       type: Number,

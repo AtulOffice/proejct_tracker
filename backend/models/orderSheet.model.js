@@ -14,6 +14,7 @@ const OrderSchema = new mongoose.Schema(
     },
     jobNumber: { type: String, required: true, trim: true, unique: true },
     bookingDate: { type: Date },
+    actualDeleveryDate: { type: Date },
     client: {
       type: String,
       required: true,
@@ -25,13 +26,19 @@ const OrderSchema = new mongoose.Schema(
     orderDate: { type: Date },
     deleveryDate: { type: Date },
 
+    //
+    name: { type: String, trim: true },
+    email: { type: String, trim: true },
+    phone: { type: String, trim: true },
+    //
+
     formalOrderStatus: {
       type: String,
-      enum: ["RECEIVED", "PENDING", ""],
+      enum: ["RECEIVED", "PENDING", "N/A", ""],
     },
     amndReqrd: {
       type: String,
-      enum: ["RECEIVED", "PENDING", ""],
+      enum: ["YES", "NO", "N/A", ""],
     },
     orderValueSupply: { type: Number, default: 0, min: 0 },
     orderValueService: { type: Number, default: 0, min: 0 },
@@ -50,13 +57,13 @@ const OrderSchema = new mongoose.Schema(
     paymentPercent1: { type: Number, default: 0 },
     paymentType1: {
       type: String,
-      enum: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", ""],
+      enum: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", "OTHER", ""],
     },
     paymentAmount1: { type: Number, default: 0 },
     paymentPercent2: { type: Number, default: 0 },
     paymentType2: {
       type: String,
-      enum: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", ""],
+      enum: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", "OTHER", ""],
     },
     paymentAmount2: { type: Number, default: 0 },
 
@@ -76,7 +83,15 @@ const OrderSchema = new mongoose.Schema(
     billPending: { type: Number, default: 0 },
     billingStatus: {
       type: String,
-      enum: ["TBB", "ALL BILLED", "PART BILLED", "N/A", "CLOSED", "CANCELED"],
+      enum: [
+        "TBB",
+        "ALL BILLED",
+        "PART BILLED",
+        "N/A",
+        "CLOSED",
+        "CANCELED",
+        "",
+      ],
     },
 
     jobDescription: { type: String, trim: true },
@@ -96,6 +111,7 @@ const OrderSchema = new mongoose.Schema(
     },
 
     paymentAdvance: { type: String, enum: ["YES", "NO", ""], default: "" },
+    retentionYesNo: { type: String, enum: ["YES", "NO", ""], default: "" },
     payemntCGBG1: { type: String, enum: ["YES", "NO", ""], default: "" },
     paymentrecieved1: {
       type: String,
@@ -112,7 +128,7 @@ const OrderSchema = new mongoose.Schema(
     retentionAmount: { type: Number, default: 0 },
     retentionDocs: {
       type: String,
-      enum: ["YES", "NO", "N/A", ""],
+      enum: ["CG", "BG", "N/A", ""],
       default: "",
     },
     retentionType: {

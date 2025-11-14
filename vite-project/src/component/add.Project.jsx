@@ -17,7 +17,6 @@ const InputForm = () => {
   const [open, setOpen] = useState(false);
   const [selectData, setSelectData] = useState(null);
   const [Docs, setDocs] = useState(docsVal);
-  console.log(Docs)
   useEffect(() => {
     if (selectData) {
       const formatDate = (date) => {
@@ -62,7 +61,7 @@ const InputForm = () => {
   useEffect(() => {
     const handelJob = setTimeout(() => {
       setdebounceJobNumber(formData.jobNumber);
-    }, 2000);
+    }, 10);
     return () => clearTimeout(handelJob);
   }, [formData.jobNumber]);
 
@@ -70,7 +69,6 @@ const InputForm = () => {
     if (debounceJobnumber.length > 2) {
       const firstChar = debounceJobnumber[0].toUpperCase();
       const secondChar = debounceJobnumber[1].toUpperCase();
-
       const entityMap = {
         N: "SI NOIDA",
         S: "SI DELHI",
@@ -91,9 +89,9 @@ const InputForm = () => {
       if (soTypeMap[secondChar]) {
         updated.soType = soTypeMap[secondChar];
         if (secondChar === "R") {
-          updated.service = service.YES;
+          updated.service = "SERVICE";
         } else {
-          updated.service = service.NO;
+          updated.service = "N/A";
         }
       }
 
