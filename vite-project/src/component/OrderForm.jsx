@@ -2,7 +2,63 @@ import React, { useEffect, useState } from "react";
 import { AlertCircle, Save, Loader } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { fields } from "../utils/FieldConstant";
+// import { fields } from "../utils/FieldConstant";
+
+export const fields = {
+  entityType: "",
+  soType: "",
+  jobNumber: "",
+  orderNumber: "",
+  bookingDate: "",
+  client: "",
+  technicalEmail: "",
+  name: "",
+  email: "",
+  phone: "",
+  site: "",
+  endUser: "",
+  orderDate: "",
+  deleveryDate: "",
+  formalOrderStatus: "",
+  amndReqrd: "",
+  orderValueSupply: 0,
+  orderValueService: 0,
+  orderValueTotal: 0,
+  cancellation: "",
+  netOrderValue: 0,
+  paymentAgainst: "",
+  paymentAdvance: "",
+  paymentPercent1: 0,
+  paymentType1: "",
+  payemntCGBG1: "",
+  paymentrecieved1: "",
+  paymentAmount1: 0,
+  paymentPercent2: 0,
+  paymentType2: "",
+  payemntCGBG2: "",
+  paymentAmount2: 0,
+  paymentrecieved2: "",
+  retentionPercent: 0,
+  retentionAmount: 0,
+  retentionDocs: "",
+  retentionPeriod: "",
+  status: "",
+  creditDays: 0,
+  dispatchStatus: "",
+  salesBasic: 0,
+  salesTotal: 0,
+  billPending: 0,
+  billingStatus: "",
+  jobDescription: "",
+  remarks: "",
+  concerningSalesManager: "",
+  poReceived: "",
+  invoiceTerm: "",
+  invoicePercent: "",
+  mileStone: "",
+  actualDeleveryDate: "",
+  retentionYesNo: ""
+}
 
 export default function OrderForm() {
   const [formData, setFormData] = useState(fields);
@@ -99,63 +155,156 @@ export default function OrderForm() {
     setTouched((prev) => ({ ...prev, [name]: true }));
   };
 
+
+
   const validate = () => {
     const newErrors = {};
-    const requiredSelects = [
-      "entityType",
-      "soType",
-    ];
 
-    requiredSelects.forEach((field) => {
-      if (!formData[field] || formData[field].trim() === "") {
+    const isEmpty = (val) =>
+      val === undefined || val === null || String(val).trim() === "";
+    const toNumber = (val) => {
+      const n = parseFloat(val);
+      return Number.isFinite(n) ? n : NaN;
+    };
+
+    ["entityType", "soType"].forEach((field) => {
+      if (isEmpty(formData[field])) {
         newErrors[field] = `${field
           .replace(/([A-Z])/g, " $1")
-          .replace(/^./, (str) => str.toUpperCase())} is required`;
+          .replace(/^./, (s) => s.toUpperCase())} is required`;
       }
     });
 
-    if (!formData.jobNumber.trim())
-      newErrors.jobNumber = "Job Number is required";
-    if (!formData.technicalEmail.trim())
-      newErrors.technicalEmail = "Email is required";
+    if (isEmpty(formData.jobNumber)) newErrors.jobNumber = "Job Number is required";
+    if (isEmpty(formData.client)) newErrors.client = "Client is required";
 
-    if (!formData?.client?.trim()) newErrors.client = "Client is required";
+    if (isEmpty(formData.technicalEmail)) {
+      newErrors.technicalEmail = "Email is required";
+    } else {
+      const email = String(formData.technicalEmail).trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) newErrors.technicalEmail = "Enter a valid email";
+    }
 
     if (formData.bookingDate && formData.orderDate) {
-      if (new Date(formData.orderDate) < new Date(formData.bookingDate)) {
+      if (new Date(formData.orderDate) < new Date(formData.bookingDate))
         newErrors.orderDate = "Order Date cannot be before Booking Date";
-      }
-    }
-
-
-    if (!formData.bookingDate || !formData.poReceived || !formData.creditDays || !formData.invoiceTerm || !formData.invoicePercent || !formData.mileStone) {
-      newErrors.poReceived = "this field is required";
-      newErrors.creditDays = "this field is required";
-      newErrors.invoiceTerm = "this field is required";
-      newErrors.invoicePercent = "this field is required";
-      newErrors.mileStone = "this field is required";
-      newErrors.bookingDate = "this field is required";
-
-    }
-    if (!formData.concerningSalesManager) {
-      newErrors.concerningSalesManager = "sales Manager is required";
     }
 
     if (formData.orderDate && formData.deleveryDate) {
-      if (new Date(formData.deleveryDate) < new Date(formData.orderDate)) {
+      if (new Date(formData.deleveryDate) < new Date(formData.orderDate))
         newErrors.deleveryDate = "Delivery Date cannot be before Order Date";
+    }
+
+    if (isEmpty(formData.bookingDate)) newErrors.bookingDate = "Booking Date is required";
+    if (isEmpty(formData.poReceived)) newErrors.poReceived = "PO Received is required";
+    if (isEmpty(formData.creditDays)) {
+      newErrors.creditDays = "Credit Days is required";
+    } else {
+      const cd = toNumber(formData.creditDays);
+      if (isNaN(cd)) {
+        newErrors.creditDays = "Enter a valid number";
+      } else if (cd <= 0) {
+        newErrors.creditDays = "Credit Period must be greater than zero";
       }
     }
 
-    if (formData.paymentPercent1 + formData.paymentPercent2 > 100) {
-      newErrors.paymentPercent2 = "Total payment percentage cannot exceed 100%";
+
+    if (isEmpty(formData.invoiceTerm)) newErrors.invoiceTerm = "Invoice Type is required";
+
+    if (isEmpty(formData.invoicePercent)) newErrors.invoicePercent = "Invoice percent is required";
+    else {
+      const inv = toNumber(formData.invoicePercent);
+      if (isNaN(inv) || inv < 0 || inv > 100) newErrors.invoicePercent = "Invoice percent must be between 0 and 100";
+    }
+
+    if (isEmpty(formData.mileStone)) newErrors.mileStone = "Milestone is required";
+
+    if (isEmpty(formData.paymentAdvance)) newErrors.paymentAdvance = "Payment Advance selection is required";
+
+    const supply = Number(formData.orderValueSupply);
+    const service = Number(formData.orderValueService);
+
+    if (!touched.orderValueSupply) {
+      newErrors.orderValueSupply = "Supply value is required";
+    }
+    if (!touched.orderValueService) {
+      newErrors.orderValueService = "Service value is required";
+    }
+    if (touched.orderValueSupply && isNaN(supply)) {
+      newErrors.orderValueSupply = "Enter a valid number";
+    }
+    if (touched.orderValueService && isNaN(service)) {
+      newErrors.orderValueService = "Enter a valid number";
+    }
+    if (!isNaN(supply) && !isNaN(service)) {
+      if (supply + service <= 0) {
+        newErrors.orderValueTotal = "Total must be greater than zero";
+        newErrors.orderValueSupply = "Total must be greater than zero";
+        newErrors.orderValueService = "Total must be greater than zero";
+      }
+    }
+
+    if (String(formData.poReceived).toUpperCase() === "YES") {
+      if (isEmpty(formData.orderNumber)) newErrors.orderNumber = "PO number is required";
+      if (isEmpty(formData.orderDate)) newErrors.orderDate = "PO order date is required";
+      if (isEmpty(formData.deleveryDate)) newErrors.deleveryDate = "PO delivery date is required";
+    }
+
+    if (String(formData.paymentAdvance).toUpperCase() === "YES") {
+      if (isEmpty(formData.paymentAgainst)) newErrors.paymentAgainst = "Payment against is required";
+
+      const p1 = toNumber(formData.paymentPercent1);
+      const p2 = toNumber(formData.paymentPercent2);
+
+      if (isNaN(p1)) newErrors.paymentPercent1 = "Payment Percent 1 is required";
+      else if (p1 < 0 || p1 > 100) newErrors.paymentPercent1 = "Percent must be between 0 and 100";
+
+      if (isNaN(p2)) {
+        newErrors.paymentPercent2 = "Payment Percent 2 is required";
+      } else if (p2 < 0 || p2 > 100) newErrors.paymentPercent2 = "Percent must be between 0 and 100";
+
+      if (p1 > 0 && isEmpty(formData.paymentType1)) newErrors.paymentType1 = "Milestone for payment 1 is required";
+      if (p1 > 0 && isEmpty(formData.payemntCGBG1)) newErrors.payemntCGBG1 = "Payment CG/BG (1) is required";
+      if (p1 > 0 && isEmpty(formData.paymentrecieved1)) newErrors.paymentrecieved1 = "Payment status (1) is required";
+
+      if (p2 > 0) {
+        if (isEmpty(formData.paymentType2)) newErrors.paymentType2 = "Milestone for payment 2 is required";
+        if (isEmpty(formData.payemntCGBG2)) newErrors.payemntCGBG2 = "Payment CG/BG (2) is required";
+        if (isEmpty(formData.paymentrecieved2)) newErrors.paymentrecieved2 = "Payment status (2) is required";
+      }
+
+      const inv = toNumber(formData.invoicePercent) || 0;
+      const totalPercent = (isNaN(p1) ? 0 : p1) + (isNaN(p2) ? 0 : p2) + inv;
+      if (totalPercent > 100) newErrors.paymentPercent2 = "Total payment/invoice percentage cannot exceed 100%";
+    }
+
+
+    if (isEmpty(formData.retentionYesNo)) {
+      newErrors.retentionYesNo = "Retention selection is required";
+    } else if (String(formData.retentionYesNo).toUpperCase() === "YES") {
+      if (isEmpty(formData.retentionDocs)) newErrors.retentionDocs = "Retention docs are required";
+      if (isEmpty(formData.retentionPeriod)) newErrors.retentionPeriod = "Retention period is required";
+
+      const rPercent = toNumber(formData.retentionPercent);
+      if (isNaN(rPercent)) newErrors.retentionPercent = "Retention percent is required";
+      else if (rPercent < 0 || rPercent > 100) newErrors.retentionPercent = "Retention percent must be between 0 and 100";
+    }
+
+    if (isEmpty(formData.concerningSalesManager))
+      newErrors.concerningSalesManager = "Account Manager is required";
+
+    const p1s = toNumber(formData.paymentPercent1) || 0;
+    const p2s = toNumber(formData.paymentPercent2) || 0;
+    const invPercent = toNumber(formData.invoicePercent) || 0;
+    if (p1s + p2s + invPercent > 100) {
+      newErrors.paymentPercent2 = "Total percentage (payments + invoice) cannot exceed 100%";
     }
 
     setErrors(newErrors);
-    console.log(Object.keys(newErrors))
-
     return Object.keys(newErrors).length === 0;
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -165,9 +314,6 @@ export default function OrderForm() {
         return acc;
       }, {})
     );
-
-    console.log(validate());
-    console.log("this is called")
 
     if (validate()) {
       setIsSubmitting(true);
@@ -337,7 +483,7 @@ export default function OrderForm() {
               {renderInput("site", "Site Location", "text", "Enter site")}
               {renderInput(
                 "concerningSalesManager",
-                "Sales Manager",
+                "Account Manager",
                 "text",
                 "Enter sales manager name",
                 true
@@ -351,7 +497,7 @@ export default function OrderForm() {
               )}
               {renderInput(
                 "name",
-                "name",
+                "Name",
                 "text",
                 "Enter Name",
 
@@ -359,11 +505,9 @@ export default function OrderForm() {
               {renderInput(
                 "email",
                 "Email",
-                "text",
+                "email",
                 "Enter Email",
-
               )}
-
               {renderInput(
                 "phone",
                 "Contact No.",
@@ -410,18 +554,11 @@ export default function OrderForm() {
                 "Order Value - Total (₹)",
                 "number",
                 "",
-                true,
+                false,
                 { min: 0, step: "0.01", readOnly: true }
               )}
               {/* this is start */}
-              {renderInput(
-                "netOrderValue",
-                "Net Order Value (₹)",
-                "number",
-                "",
-                false,
-                { step: "0.01" }
-              )}
+
               {renderInput(
                 "salesBasic",
                 "Sales Basic (₹)",
@@ -437,6 +574,14 @@ export default function OrderForm() {
                 "",
                 false,
                 { min: 0, step: "0.01" }
+              )}
+              {renderInput(
+                "netOrderValue",
+                "Net Order Value (₹)",
+                "number",
+                "",
+                false,
+                { step: "0.01" }
               )}
               {/* {renderInput(
                 "billPending",
@@ -473,8 +618,8 @@ export default function OrderForm() {
 
               {formData.poReceived === "YES" && (
                 <>
-                  {renderInput("orderNumber", "PO Number", "text", "Enter po number")}
-                  {renderInput("orderDate", "PO Order Date", "date")}
+                  {renderInput("orderNumber", "PO Number", "text", "Enter po number", true)}
+                  {renderInput("orderDate", "PO Order Date", "date", "", true)}
                   {renderInput("deleveryDate", "PO Delivery Date", "date", "", true)}
                 </>
               )}
@@ -628,7 +773,7 @@ export default function OrderForm() {
                       "MileStone",
                       "select",
                       "",
-                      true,
+                      formData.paymentPercent2 > 0,
                       { choices: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", "OTHER"] }
                     )}
                     {renderInput(
@@ -636,7 +781,7 @@ export default function OrderForm() {
                       "Payment CG/BG ",
                       "select",
                       "",
-                      formData?.paymentPercent1 > 0,
+                      formData.paymentPercent2 > 0,
                       { choices: ["YES", "NO"] }
                     )}
 
@@ -645,7 +790,7 @@ export default function OrderForm() {
                       "Payment status",
                       "select",
                       "",
-                      formData?.paymentPercent1 > 0,
+                      formData.paymentPercent2 > 0,
                       { choices: ["RECIEVED", "NOT RECIEVED"] }
                     )}
                   </div>
@@ -733,7 +878,7 @@ export default function OrderForm() {
                   "Retention Amount  (₹)",
                   "number",
                   "",
-                  true,
+                  false,
                   { min: 0, step: "0.01", readOnly: true }
                 )}
                 {renderInput(

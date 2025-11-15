@@ -69,7 +69,7 @@ const OrderSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["OPEN", "CLOSED"],
+      enum: ["OPEN", "CLOSED", ""],
       default: "OPEN",
     },
     creditDays: { type: Number, default: 0 },
