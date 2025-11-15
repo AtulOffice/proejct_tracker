@@ -50,7 +50,7 @@ export default function UpdateOrderForm() {
     if (id) fetchData();
   }, [id]);
 
-
+  console.log("changes for handlechange reset fucntion")
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     const newValue =
