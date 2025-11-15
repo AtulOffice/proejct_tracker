@@ -40,6 +40,21 @@ const InputForm = () => {
         billStatus: selectData.billingStatus || "",
         bill: selectData.netOrderValue || "",
         dueBill: selectData.netOrderValue || "",
+        bookingDate: formatDate(selectData.bookingDate),
+        // 
+        name: selectData.name || "",
+        email: selectData.email || "",
+        phone: selectData.phone || "",
+        orderValueSupply: selectData.orderValueSupply || 0,
+        orderValueService: selectData.orderValueService || 0,
+        orderValueTotal: selectData.orderValueTotal || 0,
+        netOrderValue: selectData.netOrderValue || 0,
+        poReceived: selectData.poReceived || "",
+        orderNumber: selectData.orderNumber || "",
+        orderDate: formatDate(selectData.orderDate),
+        deleveryDate: formatDate(selectData.deleveryDate),
+        actualDeleveryDate: formatDate(selectData.actualDeleveryDate),
+        amndReqrd: selectData.amndReqrd || "",
       }));
       setDocs(docsVal)
     }

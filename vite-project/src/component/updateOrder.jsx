@@ -33,6 +33,9 @@ export default function UpdateOrderForm() {
             deleveryDate: val.deleveryDate
               ? new Date(val.deleveryDate).toISOString().split("T")[0]
               : "",
+            actualDeleveryDate: val.actualDeleveryDate
+              ? new Date(val.actualDeleveryDate).toISOString().split("T")[0]
+              : "",
           };
 
           setFormData(formattedData);
@@ -50,7 +53,6 @@ export default function UpdateOrderForm() {
     if (id) fetchData();
   }, [id]);
 
-  console.log("changes for handlechange reset fucntion")
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     const newValue =
@@ -85,7 +87,6 @@ export default function UpdateOrderForm() {
         updated.orderDate = "";
         updated.deleveryDate = "";
       }
-
 
 
       const orderValueSupply = parseFloat(updated.orderValueSupply) || 0;

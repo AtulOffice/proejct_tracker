@@ -180,7 +180,7 @@ const projectSchema = new mongoose.Schema(
     },
     Development: {
       type: String,
-      enum: ["OFFICE", "SITE", "N/A", ""],
+      enum: ["OFFICE", "SITE", "N/A", "","LOGIC",""],
       default: "",
     },
     DevelopmentSetcion: {
@@ -329,7 +329,65 @@ const projectSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    actualVisitDuration: { type: String, default: "not provided" },
+    actualVisitDuration: {
+      type: String,
+      default: "not provided",
+    },
+    bookingDate: { type: Date },
+    name: {
+      type: String,
+      trim: true,
+    },
+    email: {
+      type: String,
+      trim: true,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    orderValueSupply: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    orderValueService: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    orderValueTotal: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    netOrderValue: {
+      type: Number,
+      default: 0,
+    },
+    poReceived: {
+      type: String,
+      enum: ["YES", "NO", ""],
+      default: "",
+    },
+    orderNumber: {
+      type: String,
+      trim: true,
+    },
+    orderDate: {
+      type: Date,
+    },
+    deleveryDate: {
+      type: Date,
+    },
+    actualDeleveryDate: {
+      type: Date,
+    },
+    amndReqrd: {
+      type: String,
+      enum: ["YES", "NO", "N/A", ""],
+      default: "",
+    },
   },
   {
     timestamps: true,

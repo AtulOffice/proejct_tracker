@@ -48,7 +48,6 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       enum: ["NONE", "PARTIAL", "COMPLETE", ""],
     },
-    netOrderValue: { type: Number, default: 0 },
 
     paymentAgainst: {
       type: String,
@@ -80,6 +79,7 @@ const OrderSchema = new mongoose.Schema(
 
     salesBasic: { type: Number, default: 0 },
     salesTotal: { type: Number, default: 0 },
+    netOrderValue: { type: Number, default: 0 },
     billPending: { type: Number, default: 0 },
     billingStatus: {
       type: String,
@@ -118,7 +118,7 @@ const OrderSchema = new mongoose.Schema(
       enum: ["RECIEVED", "NOT RECIEVED", ""],
       default: "",
     },
-    payemntCGBG2: { type: String, num: ["YES", "NO", ""], default: "" },
+    payemntCGBG2: { type: String, enum: ["YES", "NO", ""], default: "" },
     paymentrecieved2: {
       type: String,
       enum: ["RECIEVED", "NOT RECIEVED", ""],

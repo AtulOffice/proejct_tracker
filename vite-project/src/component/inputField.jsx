@@ -27,12 +27,6 @@ const FormField = ({
               value={formData.jobNumber}
               handleChange={handleChange}
             />
-            <InputFiled
-              {...InputConst[8]}
-              isEditable={!!selectData?.orderNumber}
-              value={formData.orderNumber}
-              handleChange={handleChange}
-            />
             <SelectField
               {...InputConst[28]}
               value={formData.entityType}
@@ -45,30 +39,56 @@ const FormField = ({
               value={formData.soType}
               handleChange={handleChange}
             />
-            <SelectField
-              {...InputConst[31]}
-              handleChange={handleChange}
-              value={formData.priority}
-            />
-            <SelectField
-              {...InputConst[32]}
-              handleChange={handleChange}
-              value={formData.service}
-            />
-             <InputFiled
-              {...InputConst[41]}
-              value={formData.technicalEmail}
+            <InputFiled
+              {...InputConst[45]}
+              isEditable={!!selectData?.bookingDate}
+              value={formData.bookingDate}
               handleChange={handleChange}
             />
-          </div>
-        </div>
 
-        {/* 👥 Client & Contact Details */}
-        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-purple-300 shadow-sm">
-          <h3 className="font-bold text-lg text-purple-800 mb-4">
-            👥 Client & Contact Details
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <InputFiled
+              {...InputConst[46]}
+              isEditable={!!selectData?.name}
+              value={formData.name}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[47]}
+              isEditable={!!selectData?.email}
+              value={formData.email}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[48]}
+              isEditable={!!selectData?.phone}
+              value={formData.phone}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[49]}
+              isEditable={true}
+              value={formData.orderValueSupply}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[50]}
+              isEditable={true}
+              value={formData.orderValueService}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[51]}
+              isEditable={!!selectData?.orderValueTotal}
+              value={formData.orderValueTotal}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[52]}
+              isEditable={!!selectData?.netOrderValue}
+              value={formData.netOrderValue}
+              handleChange={handleChange}
+            />
+
             <InputFiled
               {...InputConst[5]}
               isEditable={!!selectData?.client}
@@ -87,6 +107,117 @@ const FormField = ({
               value={formData.location}
               handleChange={handleChange}
             />
+            <InputFiled
+              {...InputConst[8]}
+              isEditable={!!selectData?.orderNumber}
+              value={formData.orderNumber}
+              handleChange={handleChange}
+            />
+
+            <SelectField
+              {...InputConst[31]}
+              handleChange={handleChange}
+              value={formData.priority}
+            />
+
+            <InputFiled
+              {...InputConst[41]}
+              value={formData.technicalEmail}
+              handleChange={handleChange}
+            />
+          </div>
+        </div>
+        {/* order details */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-300 shadow-sm">
+          <h3 className="font-bold text-lg text-indigo-800 mb-4">
+            📋 Order value
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <InputFiled
+              {...InputConst[49]}
+              isEditable={true}
+              value={formData.orderValueSupply}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[50]}
+              isEditable={true}
+              value={formData.orderValueService}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[51]}
+              isEditable={!!selectData?.orderValueTotal}
+              value={formData.orderValueTotal}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[52]}
+              isEditable={!!selectData?.netOrderValue}
+              value={formData.netOrderValue}
+              handleChange={handleChange}
+            />
+
+          </div>
+        </div>
+
+        {/* po details */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-300 shadow-sm">
+          <h3 className="font-bold text-lg text-indigo-800 mb-4">
+            📋 Po details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+
+            <SelectField
+              {...InputConst[57]}
+              isEditable={!!selectData?.poReceived}
+              value={formData.poReceived}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[53]}
+              isEditable={!!selectData?.orderNumber}
+              value={formData.orderNumber}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[54]}
+              isEditable={!!selectData?.orderDate}
+              value={formData.orderDate}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[55]}
+              isEditable={!!selectData?.deleveryDate}
+              value={formData.deleveryDate}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[56]}
+              isEditable={!!selectData?.actualDeleveryDate}
+              value={formData.actualDeleveryDate}
+              handleChange={handleChange}
+            />
+            <SelectField
+              {...InputConst[58]}
+              isEditable={!!selectData?.amndReqrd}
+              value={formData.amndReqrd}
+              handleChange={handleChange}
+            />
+          </div>
+        </div>
+
+        {/* 👥 Client & Contact Details */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-purple-300 shadow-sm">
+          <h3 className="font-bold text-lg text-purple-800 mb-4">
+            👥 Client & Contact Details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+
+
             {(formData.status === "pending" || formData.status === "upcoming") && (
               <>
                 <InputFiled
@@ -112,7 +243,6 @@ const FormField = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputFiled
               {...InputConst[9]}
-              isEditable={!!selectData?.netOrderValue}
               value={formData.bill}
               handleChange={handleChange}
             />
@@ -213,6 +343,20 @@ const FormField = ({
           </div>
         </div>
 
+        {/* service details */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
+          <h3 className="font-bold text-lg text-green-800 mb-4">
+            💰 Service Details
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SelectField
+              {...InputConst[32]}
+              handleChange={handleChange}
+              value={formData.service}
+            />
+          </div>
+        </div>
+
         {/* 👷 Project Status & Engineer Assignment */}
         <div className="bg-indigo-50 p-6 rounded-lg border-2 border-orange-300 shadow-sm">
           <h3 className="font-bold text-lg text-orange-800 mb-4">
@@ -261,7 +405,7 @@ const FormField = ({
               value={formData.Development}
               handleChange={handleChange}
             />
-           
+
             <SelectField
               {...InputConst[42]}
               value={formData.isMailSent}
@@ -334,18 +478,19 @@ const FormField = ({
             📝 MOM & Documentation
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <InputFiled
+              {...InputConst[11]}
+              value={formData.momsrNo}
+              handleChange={handleChange}
+            />
+            <InputFiled
+              {...InputConst[20]}
+              value={formData.momDate}
+              handleChange={handleChange}
+            />
             {(formData.status === "completed" || formData.status === "closed") && (
               <>
-                <InputFiled
-                  {...InputConst[11]}
-                  value={formData.momsrNo}
-                  handleChange={handleChange}
-                />
-                <InputFiled
-                  {...InputConst[20]}
-                  value={formData.momDate}
-                  handleChange={handleChange}
-                />
                 <InputFiled
                   {...InputConst[24]}
                   value={formData.finalMomnumber}
@@ -377,7 +522,7 @@ const FormField = ({
 
         {/* 📎 Documents */}
         <DocumentsSection Docs={Docs} setDocs={setDocs} />
-      </div>
+      </div >
     </>
 
   );
