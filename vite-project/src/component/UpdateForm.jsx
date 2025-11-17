@@ -31,8 +31,6 @@ const UpdateForm = () => {
           `${import.meta.env.VITE_API_URL}/fetch/${id}`,
           { withCredentials: true }
         );
-        console.log(res.data?.data?.deleveryDate)
-
         if (res?.data?.data) {
           const dateFields = [
             "actualStartDate",
@@ -49,7 +47,6 @@ const UpdateForm = () => {
             "bookingDate",
             "deleveryDate",
             "actualDeleveryDate",
-
           ];
 
           const formattedData = { ...res.data.data };
@@ -86,21 +83,95 @@ const UpdateForm = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "CommisinionPO") {
+      setFormData(prev => ({
+        ...prev,
+        CommisinionPO: value,
+        ...(value === "NO" && {
+          Docscommission: {
+            commissioning: false,
+            erection: false,
+            instrumentation: false
+          }
+        })
+      }));
+      return;
+    }
+    if (name === "serviceDaysMention") {
+      setFormData(prev => ({
+        ...prev,
+        serviceDaysMention: value,
+        ...(value === "NO" && {
+          SrvsdaysInLots: { lots: 0, value: 0, unit: "DAYS" },
+          servicedayrate: 0
+        })
+      }));
+      return;
+    }
+    if (name === "expenseScopeside") {
+      setFormData(prev => ({
+        ...prev,
+        expenseScopeside: value,
+        ...(value === "NO" && {
+          companyExpense: [],
+          clientExpense: []
+        })
+      }));
+      return;
+    }
+    if (name === "status") {
+      setFormData(prev => ({
+        ...prev,
+        status: value,
+        ...(value !== "running" && {
+          engineerName: [],
+          engineerData: []
+        })
+      }));
+      return;
+    }
+    if (name === "Development") {
+      setFormData(prev => ({
+        ...prev,
+        Development: value,
+        ...(value === "LOGIC" && { ScadaPlace: "" }),
+        ...(value === "SCADA" && { LogicPlace: "" }),
+        ...((value === "" || value === "N/A") && {
+          LogicPlace: "",
+          ScadaPlace: "",
+          isDevlopmentApproved: "NO"
+        })
+      }));
+      return;
+    }
+    if (name === "service") {
+      setFormData(prev => ({
+        ...prev,
+        service: value,
+        ...(value !== "COMMISSIONING" && {
+          CommisinionPO: "",
+          Docscommission: {
+            commissioning: false,
+            erection: false,
+            instrumentation: false
+          }
+        })
+      }));
+      return;
+    }
     if (name === "companyExpense" || name === "clientExpense") {
       setFormData((prev) => {
         const prevArray = prev[name] || [];
-        if (checked) {
-          return { ...prev, [name]: [...prevArray, value] };
-        }
-        return { ...prev, [name]: prevArray.filter((v) => v !== value) };
+        return {
+          ...prev,
+          [name]: checked
+            ? [...prevArray, value]
+            : prevArray.filter((v) => v !== value),
+        };
       });
       return;
     }
-    if (
-      name === "Docscommission.commissioning" ||
-      name === "Docscommission.erection" ||
-      name === "Docscommission.instrumentation"
-    ) {
+    if (name.startsWith("Docscommission.")) {
       const [, key] = name.split(".");
       setFormData((prev) => ({
         ...prev,
@@ -113,17 +184,22 @@ const UpdateForm = () => {
     }
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
+
       setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...prev[parent],
-          [child]: child === "value" ? Number(value) : value,
+          [child]:
+            ["value", "lots"].includes(child)
+              ? Number(value)
+              : value,
         },
       }));
+
       return;
     }
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
@@ -144,8 +220,6 @@ const UpdateForm = () => {
       actualStartDate,
       visitDate,
       visitendDate,
-      deleveryDate,
-      requestDate,
     } = formData;
 
     if (
@@ -167,34 +241,6 @@ const UpdateForm = () => {
       setIsLoading(false);
       return;
     }
-    // if (
-    //   requestDate &&
-    //   deleveryDate &&
-    //   new Date(requestDate) >= new Date(deleveryDate)
-    // ) {
-    //   toast.error("requested date must be less than delivery date");
-    //   setIsLoading(false);
-    //   return;
-    // }
-
-    const dateFields = [
-      { key: "actualStartDate", value: actualStartDate },
-      { key: "actualEndDate", value: actualEndDate },
-      { key: "visitDate", value: visitDate },
-      { key: "visitendDate", value: visitendDate },
-      { key: "deleveryDate", value: deleveryDate },
-      { key: "requestDate", value: requestDate },
-    ];
-
-    // if (orderDate) {
-    //   for (const { key, value } of dateFields) {
-    //     if (value && new Date(orderDate) >= new Date(value)) {
-    //       toast.error(`Order date must be less than ${key}`);
-    //       setIsLoading(false);
-    //       return;
-    //     }
-    //   }
-    // }
     try {
       const finalData = {
         ...formData,
@@ -493,11 +539,6 @@ const UpdateForm = () => {
                 value={formData.billStatus}
                 handleChange={handleChange}
               />
-              {/* <InputFiled
-                     {...InputConst[3]}
-                     value={formData.expenseScope}
-                     handleChange={handleChange}
-                   /> */}
             </div>
           </div>
 
@@ -513,12 +554,6 @@ const UpdateForm = () => {
                 value={formData.orderDate}
                 handleChange={handleChange}
               />
-              {/* this is extra */}
-              {/* <InputFiled
-                {...InputConst[17]}
-                value={formData.deleveryDate}
-                handleChange={handleChange}
-              /> */}
               {/* <InputFiled
                      {...InputConst[1]}
                      value={formData.duration}
@@ -527,6 +562,7 @@ const UpdateForm = () => {
 
               <InputFiled
                 {...InputConst[16]}
+                required={false}
                 value={formData.requestDate}
                 handleChange={handleChange}
               />
@@ -535,17 +571,20 @@ const UpdateForm = () => {
 
               <InputFiled
                 {...InputConst[18]}
+                required={false}
                 value={formData.visitDate}
                 handleChange={handleChange}
               />
               <InputFiled
                 {...InputConst[19]}
+                required={false}
                 value={formData.visitendDate}
                 handleChange={handleChange}
               />
 
               <InputFiled
                 {...InputConst[14]}
+                required={false}
                 value={formData.actualStartDate}
                 handleChange={handleChange}
               />
@@ -553,16 +592,19 @@ const UpdateForm = () => {
 
               <InputFiled
                 {...InputConst[15]}
+                required={false}
                 value={formData.actualEndDate}
                 handleChange={handleChange}
               />
               <InputFiled
                 {...InputConst[39]}
+                required={false}
                 value={formData.daysspendsite}
                 handleChange={handleChange}
               />
               <InputFiled
                 {...InputConst[2]}
+                required={false}
                 value={formData.actualVisitDuration}
                 handleChange={handleChange}
               />
@@ -577,7 +619,6 @@ const UpdateForm = () => {
               💰 Service Details
             </h3>
 
-            {/* SERVICE + SERVICE DAYS MENTION → SIDE BY SIDE */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <SelectField
                 {...InputConst[32]}
@@ -592,9 +633,7 @@ const UpdateForm = () => {
               />
             </div>
 
-            {/* IF YES → SHOW SERVICE DAYS + RATE */}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            {formData.serviceDaysMention === "YES" && <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
 
               <div className="space-y-2">
 
@@ -607,9 +646,6 @@ const UpdateForm = () => {
                   <div className="h-8 w-px bg-gray-200"></div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
-                      Service Days in Lots
-                    </label>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
@@ -674,8 +710,7 @@ const UpdateForm = () => {
                   handleChange={handleChange}
                 />
               </div>
-            </div>
-
+            </div>}
 
           </div>
 
@@ -1069,20 +1104,6 @@ const UpdateForm = () => {
                 value={formData.supplyStatus}
                 handleChange={handleChange}
               />
-              {/* {formData.status === "upcoming" && (
-               <InputFiled
-                 {...InputConst[12]}
-                 value={formData.startDate}
-                 handleChange={handleChange}
-               />
-             )}
-             {formData.status === "upcoming" && (
-               <InputFiled
-                 {...InputConst[13]}
-                 value={formData.endDate}
-                 handleChange={handleChange}
-               />
-             )} */}
 
               {(formData.status === "running") && (
                 <EngineerAssignment setEngineerData={setEngineerData} />
@@ -1124,18 +1145,11 @@ const UpdateForm = () => {
               />
 
               {!["", "N/A"].includes(formData?.Development) && (
-                <>
-                  <SelectField
-                    {...InputConst[43]}
-                    value={formData.isDevlopmentApproved}
-                    handleChange={handleChange}
-                  />
-                  {/* <SelectField
-                         {...InputConst[44]}
-                         value={formData.DevelopmentSetcion}
-                         handleChange={handleChange}
-                       /> */}
-                </>
+                <SelectField
+                  {...InputConst[43]}
+                  value={formData.isDevlopmentApproved}
+                  handleChange={handleChange}
+                />
               )}
             </div>
           </div>
@@ -1189,6 +1203,7 @@ const UpdateForm = () => {
               />
               <InputFiled
                 {...InputConst[24]}
+                required={false}
                 value={formData.finalMomnumber}
                 handleChange={handleChange}
               />

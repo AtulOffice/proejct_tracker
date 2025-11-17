@@ -134,18 +134,16 @@ const InputForm = () => {
     if (name === "companyExpense" || name === "clientExpense") {
       setFormData((prev) => {
         const prevArray = prev[name] || [];
-        if (checked) {
-          return { ...prev, [name]: [...prevArray, value] };
-        }
-        return { ...prev, [name]: prevArray.filter((v) => v !== value) };
+        return {
+          ...prev,
+          [name]: checked
+            ? [...prevArray, value]
+            : prevArray.filter((v) => v !== value),
+        };
       });
       return;
     }
-    if (
-      name === "Docscommission.commissioning" ||
-      name === "Docscommission.erection" ||
-      name === "Docscommission.instrumentation"
-    ) {
+    if (name.startsWith("Docscommission.")) {
       const [, key] = name.split(".");
       setFormData((prev) => ({
         ...prev,
@@ -158,17 +156,22 @@ const InputForm = () => {
     }
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
+
       setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...prev[parent],
-          [child]: child === "value" ? Number(value) : value,
+          [child]:
+            ["value", "lots"].includes(child)
+              ? Number(value)
+              : value,
         },
       }));
+
       return;
     }
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
@@ -230,16 +233,6 @@ const InputForm = () => {
       setIsLoading(false);
       return;
     }
-
-    const dateFields = [
-      { key: "actualStartDate", value: actualStartDate },
-      { key: "actualEndDate", value: actualEndDate },
-      { key: "visitDate", value: visitDate },
-      { key: "visitendDate", value: visitendDate },
-      { key: "deleveryDate", value: deleveryDate },
-      { key: "requestDate", value: requestDate },
-    ];
-
     try {
       await addProject({
         formData: formData,

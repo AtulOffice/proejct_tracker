@@ -9,7 +9,6 @@ import Order from "../models/orderSheet.model.js";
 
 export const Recordsformave = async (req, res) => {
   console.log(req.body);
-  return;
   try {
     const { jobNumber, engineerData, OrderMongoId, ...projectFields } =
       req.body;
@@ -152,42 +151,6 @@ export const Recordsformave = async (req, res) => {
     });
   }
 };
-
-export const findrecord = async (req, res) => {
-  try {
-    const data = await ProjectModel.find();
-    return res.status(200).json({
-      success: true,
-      message: "data fetch successfully",
-      data,
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({
-      success: false,
-      message: "error while fetching data",
-    });
-  }
-};
-
-export const findrecordbyId = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await ProjectModel.findById(id);
-    return res.status(200).json({
-      success: true,
-      message: "data fetch successfully",
-      data,
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({
-      success: false,
-      message: "error while fetching data",
-    });
-  }
-};
-
 export const updateRecords = async (req, res) => {
   try {
     const { id } = req.params;
@@ -406,6 +369,41 @@ export const updateRecords = async (req, res) => {
     });
   } catch (e) {
     return res.status(500).json({ success: false, message: e.message });
+  }
+};
+
+export const findrecord = async (req, res) => {
+  try {
+    const data = await ProjectModel.find();
+    return res.status(200).json({
+      success: true,
+      message: "data fetch successfully",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json({
+      success: false,
+      message: "error while fetching data",
+    });
+  }
+};
+
+export const findrecordbyId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await ProjectModel.findById(id);
+    return res.status(200).json({
+      success: true,
+      message: "data fetch successfully",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json({
+      success: false,
+      message: "error while fetching data",
+    });
   }
 };
 

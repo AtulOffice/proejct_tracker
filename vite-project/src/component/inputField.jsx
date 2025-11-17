@@ -218,7 +218,7 @@ const FormField = ({
 
 
 
-            {(formData.status === "pending" || formData.status === "upcoming" || true) && (
+            {["pending", "upcoming"].includes(formData.status) && (
               <>
                 <InputFiled
                   {...InputConst[35]}
@@ -232,6 +232,7 @@ const FormField = ({
                 />
               </>
             )}
+
           </div>
         </div>
 
@@ -256,11 +257,30 @@ const FormField = ({
               value={formData.billStatus}
               handleChange={handleChange}
             />
-            {/* <InputFiled
-              {...InputConst[3]}
-              value={formData.expenseScope}
+          </div>
+        </div>
+
+
+        {/* 👷 Project Status & Engineer Assignment */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-orange-300 shadow-sm">
+          <h3 className="font-bold text-lg text-orange-800 mb-4">
+            👷 Project Status & Engineer Assignment
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SelectField
+              {...InputConst[29]}
+              value={formData.status}
               handleChange={handleChange}
-            /> */}
+            />
+            <SelectField
+              {...InputConst[26]}
+              value={formData.supplyStatus}
+              handleChange={handleChange}
+            />
+
+            {(formData.status === "running" || formData.status === "upcoming") && (
+              <EngineerAssignment setEngineerData={setEngineerData} />
+            )}
           </div>
         </div>
 
@@ -288,7 +308,7 @@ const FormField = ({
               handleChange={handleChange}
             /> */}
 
-            {(formData.status === "pending" || true) && (
+            {(formData.status === "pending") && (
               <InputFiled
                 {...InputConst[16]}
                 value={formData.requestDate}
@@ -296,7 +316,7 @@ const FormField = ({
               />
             )}
 
-            {(formData.status === "running" || formData.status === "upcoming" || true) && (
+            {["running", "upcoming"].includes(formData.status) && (
               <>
                 <InputFiled
                   {...InputConst[18]}
@@ -311,17 +331,17 @@ const FormField = ({
               </>
             )}
 
-            {(formData.status === "closed" ||
-              formData.status === "completed" ||
-              formData.status === "running" || true) && (
-                <InputFiled
-                  {...InputConst[14]}
-                  value={formData.actualStartDate}
-                  handleChange={handleChange}
-                />
-              )}
 
-            {(formData.status === "completed" || formData.status === "closed" || true) && (
+            {["closed", "completed", "running"].includes(formData.status) && (
+              <InputFiled
+                {...InputConst[14]}
+                value={formData.actualStartDate}
+                handleChange={handleChange}
+              />
+            )}
+
+
+            {["completed", "closed"].includes(formData.status) && (
               <>
                 <InputFiled
                   {...InputConst[15]}
@@ -340,6 +360,7 @@ const FormField = ({
                 />
               </>
             )}
+
           </div>
         </div>
 
@@ -380,10 +401,6 @@ const FormField = ({
                   <div className="h-8 w-px bg-gray-200"></div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-semibold text-gray-700">
-                      Service Days in Lots
-                    </label>
-
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                       {/* Of Lots */}
@@ -654,31 +671,6 @@ const FormField = ({
                     </div>
                   </label>
 
-                  {/* None */}
-                  <label className="group flex items-center justify-between p-3 bg-gray-50/80 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
-                    <span className="font-medium text-gray-800 text-sm group-hover:text-gray-700 transition-colors">
-                      None
-                    </span>
-                    <div className="relative">
-                      <input
-                        type="checkbox"
-                        name="companyExpense"
-                        value="none"
-                        checked={formData.companyExpense?.includes('none')}
-                        onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-gray-500 checked:to-gray-600 checked:border-gray-600 hover:border-gray-400 focus:ring-2 focus:ring-gray-200"
-                      />
-                      <svg
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  </label>
                 </div>
               </div>
 
@@ -793,73 +785,11 @@ const FormField = ({
                     </div>
                   </label>
 
-                  {/* None */}
-                  <label className="group flex items-center justify-between p-3 bg-gray-50/80 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
-                    <span className="font-medium text-gray-800 text-sm group-hover:text-gray-700 transition-colors">
-                      None
-                    </span>
-                    <div className="relative">
-                      <input
-                        type="checkbox"
-                        name="clientExpense"
-                        value="none"
-                        checked={formData.clientExpense?.includes('none')}
-                        onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-gray-500 checked:to-gray-600 checked:border-gray-600 hover:border-gray-400 focus:ring-2 focus:ring-gray-200"
-                      />
-                      <svg
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  </label>
                 </div>
               </div>
             </div>
 
           }
-        </div>
-
-        {/* 👷 Project Status & Engineer Assignment */}
-        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-orange-300 shadow-sm">
-          <h3 className="font-bold text-lg text-orange-800 mb-4">
-            👷 Project Status & Engineer Assignment
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectField
-              {...InputConst[29]}
-              value={formData.status}
-              handleChange={handleChange}
-            />
-            <SelectField
-              {...InputConst[26]}
-              value={formData.supplyStatus}
-              handleChange={handleChange}
-            />
-            {/* {formData.status === "upcoming" && (
-        <InputFiled
-          {...InputConst[12]}
-          value={formData.startDate}
-          handleChange={handleChange}
-        />
-      )}
-      {formData.status === "upcoming" && (
-        <InputFiled
-          {...InputConst[13]}
-          value={formData.endDate}
-          handleChange={handleChange}
-        />
-      )} */}
-
-            {(formData.status === "running" || formData.status === "upcoming" || true) && (
-              <EngineerAssignment setEngineerData={setEngineerData} />
-            )}
-          </div>
         </div>
 
         {/* 🔧 Development & Technical */}
@@ -902,11 +832,6 @@ const FormField = ({
                   value={formData.isDevlopmentApproved}
                   handleChange={handleChange}
                 />
-                {/* <SelectField
-                  {...InputConst[44]}
-                  value={formData.DevelopmentSetcion}
-                  handleChange={handleChange}
-                /> */}
               </>
             )}
           </div>
@@ -918,39 +843,35 @@ const FormField = ({
             ✅ Checklists & Submissions
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(formData.status === "running" ||
-              formData.status === "upcoming" ||
-              formData.status === "completed" ||
-              formData.status === "cancelled" ||
-              formData.status === "closed" || true) && (
-                <SelectField
-                  {...InputConst[30]}
-                  handleChange={handleChange}
-                  value={formData.StartChecklist}
-                />
-              )}
+            {["running", "upcoming", "completed", "cancelled", "closed"].includes(formData.status) && (
+              <SelectField
+                {...InputConst[30]}
+                handleChange={handleChange}
+                value={formData.StartChecklist}
+              />
+            )}
 
-            {(formData.status === "completed" ||
-              formData.status === "cancelled" ||
-              formData.status === "closed" || true) && (
-                <>
-                  <SelectField
-                    {...InputConst[34]}
-                    handleChange={handleChange}
-                    value={formData.EndChecklist}
-                  />
-                  <SelectField
-                    {...InputConst[37]}
-                    handleChange={handleChange}
-                    value={formData.BackupSubmission}
-                  />
-                  <SelectField
-                    {...InputConst[38]}
-                    handleChange={handleChange}
-                    value={formData.ExpensSubmission}
-                  />
-                </>
-              )}
+
+            {["completed", "cancelled", "closed"].includes(formData.status) && (
+              <>
+                <SelectField
+                  {...InputConst[34]}
+                  handleChange={handleChange}
+                  value={formData.EndChecklist}
+                />
+                <SelectField
+                  {...InputConst[37]}
+                  handleChange={handleChange}
+                  value={formData.BackupSubmission}
+                />
+                <SelectField
+                  {...InputConst[38]}
+                  handleChange={handleChange}
+                  value={formData.ExpensSubmission}
+                />
+              </>
+            )}
+
           </div>
         </div>
 
@@ -971,7 +892,7 @@ const FormField = ({
               value={formData.momDate}
               handleChange={handleChange}
             />
-            {(formData.status === "completed" || formData.status === "closed" || true) && (
+            {["completed", "closed"].includes(formData.status) && (
               <>
                 <InputFiled
                   {...InputConst[24]}
@@ -980,6 +901,7 @@ const FormField = ({
                 />
               </>
             )}
+
           </div>
         </div>
 

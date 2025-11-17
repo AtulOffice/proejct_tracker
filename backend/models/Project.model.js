@@ -146,6 +146,7 @@ const projectSchema = new mongoose.Schema(
       enum: ["E&C", "COMMISSIONING", "N/A", "AMC", "SERVICE"],
       default: "N/A",
     },
+
     technicalEmail: {
       type: String,
       trim: true,
@@ -269,6 +270,7 @@ const projectSchema = new mongoose.Schema(
         default: "DAYS",
       },
     },
+    servicedayrate: { type: Number, default: 0 },
     serviceVal: {
       type: Number,
       default: 0,
