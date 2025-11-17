@@ -180,14 +180,27 @@ const projectSchema = new mongoose.Schema(
     },
     Development: {
       type: String,
-      enum: ["OFFICE", "SITE", "N/A", "","LOGIC",""],
+      enum: ["LOGIC", "SCADA", "BOTH", "N/A", ""],
       default: "",
     },
+    LogicPlace: {
+      type: String,
+      enum: ["OFFICE", "SITE", ""],
+      default: "",
+    },
+    ScadaPlace: {
+      type: String,
+      enum: ["OFFICE", "SITE", ""],
+      default: "",
+    },
+    // ////////////
+    // this is not in used
     DevelopmentSetcion: {
       type: String,
       enum: ["LOGIC", "SCADA", "BOTH", ""],
       default: "",
     },
+    //  ///////////
     BackupSubmission: {
       type: String,
       enum: ["YES", "NO", "N/A"],
@@ -236,11 +249,17 @@ const projectSchema = new mongoose.Schema(
     },
     SrvsdaysInLots: {
       value: { type: Number, default: 0 },
+      lots: { type: Number, default: 0 },
       unit: {
         type: String,
         enum: ["DAYS", "MAN-DAYS", ""],
         default: "DAYS",
       },
+    },
+    serviceDaysMention: {
+      type: String,
+      enum: ["YES", "NO", "N/A", ""],
+      default: "N/A",
     },
     manDaysRate: {
       value: { type: Number, default: 0 },
@@ -387,6 +406,31 @@ const projectSchema = new mongoose.Schema(
       type: String,
       enum: ["YES", "NO", "N/A", ""],
       default: "",
+    },
+    CommisinionPO: {
+      type: String,
+      enum: ["", "YES", "NO"],
+      default: "",
+    },
+    Docscommission: {
+      commissioning: { type: Boolean, default: false },
+      erection: { type: Boolean, default: false },
+      instrumentation: { type: Boolean, default: false },
+    },
+    expenseScopeside: {
+      type: String,
+      enum: ["", "YES", "NO"],
+      default: "",
+    },
+
+    companyExpense: {
+      type: [String],
+      default: [],
+    },
+
+    clientExpense: {
+      type: [String],
+      default: [],
     },
   },
   {

@@ -9,7 +9,7 @@ export const InputFiled = ({
   value,
   handleChange,
   placeholder,
-  required,
+  required = false,
   readOnly = false,
   isEditable = false,
 }) => {
@@ -47,8 +47,8 @@ export const InputFiled = ({
         onKeyDown={handleKeyDown}
         onWheel={handleWheel}
         className={`w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200 ${isEditable
-            ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
-            : "border-purple-200 bg-gradient-to-br from-pink-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500 placeholder-gray-400"
+          ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
+          : "border-purple-200 bg-gradient-to-br from-pink-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500 placeholder-gray-400"
           }`}
         placeholder={placeholder}
         required={required}
@@ -67,7 +67,7 @@ export const SelectField = ({
   value,
   handleChange,
   options,
-  required,
+  required = false,
   isEditable = false,
 }) => {
   return (
@@ -90,8 +90,8 @@ export const SelectField = ({
         required={required}
         disabled={isEditable}
         className={`w-full px-4 py-2.5 border-2 rounded-lg font-medium transition-all duration-200 ${isEditable
-            ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
-            : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
+          ? "border-gray-300 bg-gray-100 text-gray-600 cursor-not-allowed"
+          : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300 focus:ring-2 focus:ring-pink-400 focus:border-pink-500"
           }`}
       >
         {options.map((item) => (
@@ -115,7 +115,7 @@ export const TextArea = ({
   rows,
   placeholder,
   handleChange,
-  required,
+  required = false,
 }) => {
   return (
     <div>

@@ -73,7 +73,7 @@ export const isProjectstatusExistFun = async (req, res) => {
     const projectStatus = await ProjectDevModel.findOne({ jobNumber });
     const projectParent = await ProjectModel.findOne({
       jobNumber: jobNumber,
-      Development: { $in: ["OFFICE", "SITE"] },
+      Development: { $in: ["LOGIC", "SCADA", "BOTH"] },
     });
 
     if (check) {

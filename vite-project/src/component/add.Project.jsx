@@ -41,7 +41,6 @@ const InputForm = () => {
         bill: selectData.netOrderValue || "",
         dueBill: selectData.netOrderValue || "",
         bookingDate: formatDate(selectData.bookingDate),
-        // 
         name: selectData.name || "",
         email: selectData.email || "",
         phone: selectData.phone || "",
@@ -132,12 +131,50 @@ const InputForm = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-
+    if (name === "companyExpense" || name === "clientExpense") {
+      setFormData((prev) => {
+        const prevArray = prev[name] || [];
+        if (checked) {
+          return { ...prev, [name]: [...prevArray, value] };
+        }
+        return { ...prev, [name]: prevArray.filter((v) => v !== value) };
+      });
+      return;
+    }
+    if (
+      name === "Docscommission.commissioning" ||
+      name === "Docscommission.erection" ||
+      name === "Docscommission.instrumentation"
+    ) {
+      const [, key] = name.split(".");
+      setFormData((prev) => ({
+        ...prev,
+        Docscommission: {
+          ...prev.Docscommission,
+          [key]: checked,
+        },
+      }));
+      return;
+    }
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
+      setFormData((prev) => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: child === "value" ? Number(value) : value,
+        },
+      }));
+      return;
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+
+
 
   const validateDocs = (docsVal) => {
     const VALID_VALUES = ["YES", "NO", "N/A"];
@@ -166,7 +203,6 @@ const InputForm = () => {
       visitendDate,
       deleveryDate,
       requestDate,
-      orderDate,
     } = formData;
 
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
@@ -194,19 +230,8 @@ const InputForm = () => {
       setIsLoading(false);
       return;
     }
-    // if (
-    //   requestDate &&
-    //   deleveryDate &&
-    //   new Date(requestDate) >= new Date(deleveryDate)
-    // ) {
-    //   toast.error("requested date must be less than delivery date");
-    //   setIsLoading(false);
-    //   return;
-    // }
 
     const dateFields = [
-      // { key: "startDate", value: startDate },
-      // { key: "endDate", value: endDate },
       { key: "actualStartDate", value: actualStartDate },
       { key: "actualEndDate", value: actualEndDate },
       { key: "visitDate", value: visitDate },
@@ -215,15 +240,6 @@ const InputForm = () => {
       { key: "requestDate", value: requestDate },
     ];
 
-    // if (orderDate) {
-    //   for (const { key, value } of dateFields) {
-    //     if (value && new Date(orderDate) >= new Date(value)) {
-    //       toast.error(`Order date must be less than ${key}`);
-    //       setIsLoading(false);
-    //       return;
-    //     }
-    //   }
-    // }
     try {
       await addProject({
         formData: formData,

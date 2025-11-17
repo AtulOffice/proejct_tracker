@@ -36,7 +36,7 @@ const DevPlanningSchema = new mongoose.Schema(
     },
     devScope: {
       type: String,
-      enum: ["OFFICE", "SITE", "N/A", ""],
+      enum: ["LOGIC", "SCADA", "BOTH", "N/A", ""],
       default: "",
     },
   },
