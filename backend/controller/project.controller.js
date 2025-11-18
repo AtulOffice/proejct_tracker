@@ -8,7 +8,6 @@ import EndChecklistsModel from "../models/endCheckList.js";
 import Order from "../models/orderSheet.model.js";
 
 export const Recordsformave = async (req, res) => {
-  console.log(req.body);
   try {
     const { jobNumber, engineerData, OrderMongoId, ...projectFields } =
       req.body;
@@ -25,17 +24,6 @@ export const Recordsformave = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Job number is already stored" });
     }
-
-    const projectdataval = await ProjectModel.create({
-      ...projectFields,
-      jobNumber,
-      OrderMongoId,
-    });
-    console.log(projectdataval);
-    return res
-      .status(201)
-      .json({ success: true, message: "this is temperory save" });
-
     const EngineerDetails = Array.from(
       engineerData
         .reduce((map, eng) => {
