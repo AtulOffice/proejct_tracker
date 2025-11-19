@@ -197,7 +197,12 @@ const UpdateForm = () => {
       }));
 
       return;
-    }
+    } <InputFiled
+      {...InputConst[17]}
+      isEditable={!!selectData?.deleveryDate}
+      value={formData.deleveryDate}
+      handleChange={handleChange}
+    />
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -559,6 +564,14 @@ const UpdateForm = () => {
                      value={formData.duration}
                      handleChange={handleChange}
                    /> */}
+
+              <InputFiled
+                {...InputConst[17]}
+                required={false}
+                isEditable={true}
+                value={formData.deleveryDate}
+                handleChange={handleChange}
+              />
 
               <InputFiled
                 {...InputConst[16]}

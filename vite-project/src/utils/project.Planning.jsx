@@ -13,7 +13,8 @@ import { mapFrontendToBackend } from "./frontToback";
 
 const ProjectTimelineForm = ({ open, onClose, project }) => {
   const { user } = useAppContext();
-  const [formdevData, setdevFormData] = useState({
+  const [collOpen, setCollOpen] = useState(false);
+  const [formdevData, _] = useState({
     document: {
       rows: documentRows(),
     },
@@ -203,6 +204,22 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
 
   if (!open) return null;
 
+  const Info = ({ label, value }) => {
+    return (
+      <div className="group bg-white/70 backdrop-blur-sm p-4 rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all duration-200">
+        <dt className="text-sm font-medium text-gray-600 mb-1 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 group-hover:bg-indigo-600 transition-colors"></span>
+          {label}
+        </dt>
+        <dd className="text-base font-semibold text-gray-900 truncate">
+          {value || <span className="text-gray-400 font-normal italic">Not specified</span>}
+        </dd>
+      </div>
+    );
+  };
+
+
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm p-4">
       <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-200 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 transition-all duration-300 scrollbar-glass">
@@ -217,6 +234,81 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                 {name.toUpperCase() || "—"}
               </span>
             </p>
+          )}
+        </div>
+
+        <div className="w-full mb-6">
+          <button
+            onClick={() => setCollOpen(!collOpen)}
+            className="w-full bg-gray-300 p-3 rounded-lg flex justify-between items-center"
+          >
+            <span className="text-lg font-medium">
+              {collOpen ? "Hide" : "Show"} Order
+            </span>
+            <span className="text-xl">{collOpen ? "▲" : "▼"}</span>
+          </button>
+          {collOpen && (
+            <div className="space-y-6 mb-6">
+              <div className="relative bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-xl border border-indigo-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-200/30 to-purple-200/30 rounded-bl-full blur-2xl"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-indigo-600 rounded-lg shadow-md">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-xl text-indigo-900">
+                      Basic Project Information
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Info label="Job Number" value={project.jobNumber} />
+                    <Info label="Entity Type" value={project.entityType} />
+                    <Info label="SO Type" value={project.soType} />
+                    <Info label="Booking Date" value={project.bookingDate ? new Date(project.bookingDate).toISOString().split("T")[0] : ""} />
+                    <Info label="Name" value={project.name} />
+                    <Info label="Email" value={project.email} />
+                    <Info label="Phone" value={project.phone} />
+                    <Info label="Order Value (Supply)" value={project.orderValueSupply} />
+                    <Info label="Order Value (Service)" value={project.orderValueService} />
+                    <Info label="Order Value (Total)" value={project.orderValueTotal} />
+                    <Info label="Net Order Value" value={project.netOrderValue} />
+                    <Info label="Client" value={project.client} />
+                    <Info label="End User" value={project.endUser} />
+                    <Info label="Location" value={project.location} />
+                    <Info label="Order Number" value={project.orderNumber} />
+                    <Info label="Priority" value={project.priority} />
+                    <Info label="Technical Email" value={project.technicalEmail} />
+                  </div>
+                </div>
+              </div>
+              <div className="relative bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-200/30 to-cyan-200/30 rounded-bl-full blur-2xl"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-600 rounded-lg shadow-md">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-xl text-blue-900">
+                      PO Details
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Info label="PO Received" value={project.poReceived} />
+                    <Info label="Order Number" value={project.orderNumber} />
+                    <Info label="Order Date" value={project.orderDate ? new Date(project.orderDate).toISOString().split("T")[0] : ""} />
+                    <Info label="Delivery Date" value={project.deleveryDate ? new Date(project.deleveryDate).toISOString().split("T")[0] : ""} />
+                    <Info label="Actual Delivery Date" value={project.actualDeleveryDate ? new Date(project.actualDeleveryDate).toISOString().split("T")[0] : ""} />
+                    <Info label="Amendment Required" value={project.amndReqrd} />
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

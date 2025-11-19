@@ -19,7 +19,6 @@ export const formval = {
   endUser: "",
   orderNumber: "",
   poReceived: "",
-  orderDate: "",
   daysspendsite: "",
   startDate: "",
   endDate: "",
@@ -32,7 +31,6 @@ export const formval = {
   workScope: "",
   expenseScope: "",
   supplyStatus: "DISPATCHED",
-  deleveryDate: "",
   requestDate: "",
   StartChecklist: "N/A",
   EndChecklist: "N/A",
@@ -55,7 +53,6 @@ export const formval = {
   orderValueTotal: "",
   netOrderValue: "",
   porecieved: "",
-  orderNumber: "",
   orderDate: "",
   deleveryDate: "",
   actualDeleveryDate: "",
@@ -71,7 +68,6 @@ export const formval = {
     unit: "DAYS"
   },
   servicedayrate: 0,
-  expenseScopeside: "",
   companyExpense: [],
   clientExpense: [],
   Docscommission: {
@@ -553,7 +549,7 @@ export const InputConst = [
   {
     htmlFor: "ContactPersonNumber",
     title: "Contact Person Number",
-    type: "text",
+    type: "number",
     id: "ContactPersonNumber",
     name: "ContactPersonNumber",
     placeholder: "Enter the contact person number",

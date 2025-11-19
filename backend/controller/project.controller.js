@@ -24,6 +24,7 @@ export const Recordsformave = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Job number is already stored" });
     }
+
     const EngineerDetails = Array.from(
       engineerData
         .reduce((map, eng) => {
@@ -935,26 +936,76 @@ export const allProjectsFetchDev = async (req, res) => {
     if (search) {
       filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
     }
-
-    const data = await ProjectModel.find(filter, {
+    const projectSelectFields = {
       projectName: 1,
       status: 1,
       jobNumber: 1,
       deleveryDate: 1,
       visitDate: 1,
       engineerName: 1,
-      updatedAt: 1,
       createdAt: 1,
+      updatedAt: 1,
       OrderMongoId: 1,
       DevelopmentSetcion: 1,
+      Development: 1,
+      LogicPlace: 1,
+      ScadaPlace: 1,
       PlanDetails: 1,
       DevelopmentDetials: 1,
       isPlanRecord: 1,
-    }).sort({
+
+      entityType: 1,
+      soType: 1,
+      client: 1,
+      priority: 1,
+      service: 1,
+      technicalEmail: 1,
+      bookingDate: 1,
+      name: 1,
+      email: 1,
+      phone: 1,
+      endUser: 1,
+      orderNumber: 1,
+      orderDate: 1,
+      SrvsdaysInPo: 1,
+      SrvsdaysInLots: 1,
+      serviceDaysMention: 1,
+      manDaysRate: 1,
+      servicedayrate: 1,
+      serviceVal: 1,
+      startDate: 1,
+      endDate: 1,
+      description: 1,
+      location: 1,
+      duration: 1,
+      workScope: 1,
+      expenseScope: 1,
+      ContactPersonName: 1,
+      ContactPersonNumber: 1,
+      StartChecklisttId: 1,
+      workStatusRecords: 1,
+      EndChecklisttId: 1,
+      OrderSheet: 1,
+      requestDate: 1,
+      actualVisitDuration: 1,
+      orderValueSupply: 1,
+      orderValueService: 1,
+      orderValueTotal: 1,
+      netOrderValue: 1,
+      poReceived: 1,
+      actualDeleveryDate: 1,
+      amndReqrd: 1,
+      CommisinionPO: 1,
+      Docscommission: 1,
+      expenseScopeside: 1,
+      companyExpense: 1,
+      clientExpense: 1,
+    };
+
+    const data = await ProjectModel.find(filter, projectSelectFields).sort({
       updatedAt: -1,
       createdAt: -1,
     });
-
     return res.json({
       success: true,
       message: "Data fetched successfully",

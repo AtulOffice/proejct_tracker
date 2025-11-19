@@ -286,6 +286,8 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           selectedProject={selectedProject}
         />
       )}
+
+      
       {planopen && (
         <ProjectTimelineForm
           project={selectedProject}
