@@ -61,66 +61,48 @@ export default function UpdateOrderForm() {
     setFormData((prev) => {
       const updated = { ...prev, [name]: newValue };
 
-      if (name === "paymentAdvance" && newValue === "NO") {
-        updated.paymentAgainst = "";
-        updated.paymentPercent1 = 0;
-        updated.paymentAmount1 = 0;
-        updated.paymentType1 = "";
-        updated.payemntCGBG1 = "";
-        updated.paymentrecieved1 = "";
+      if (name === "paymentAdvance") {
+        const allowed = newValue === "NO" ? 0 : Number(newValue) || 0;
 
-        updated.paymentPercent2 = 0;
-        updated.paymentAmount2 = 0;
-        updated.paymentType2 = "";
-        updated.payemntCGBG2 = "";
-        updated.paymentrecieved2 = "";
+        for (let i = 1; i <= 3; i++) {
+          if (i > allowed) {
+            updated[`paymentPercent${i}`] = "";
+            updated[`paymentAmount${i}`] = "";
+            updated[`paymentType${i}`] = "";
+            updated[`paymentType${i}other`] = "";
+            updated[`payemntCGBG${i}`] = "";
+            updated[`paymentrecieved${i}`] = "";
+          }
+        }
       }
-      if (name === "retentionYesNo" && newValue === "NO") {
-        updated.retentionDocs = "";
-        updated.retentionPeriod = "";
+
+      const supply = parseFloat(updated.orderValueSupply) || 0;
+      const service = parseFloat(updated.orderValueService) || 0;
+      const total = supply + service;
+
+      updated.orderValueTotal = total;
+      updated.paymentAmount1 = ((parseFloat(updated.paymentPercent1) || 0) / 100) * total;
+      updated.paymentAmount2 = ((parseFloat(updated.paymentPercent2) || 0) / 100) * total;
+      updated.paymentAmount3 = ((parseFloat(updated.paymentPercent3) || 0) / 100) * total;
+      updated.invoiceAmount = ((parseFloat(updated.invoicePercent) || 0) / 100) * total;
+
+      const activeTerms = Number(updated.paymentAdvance) || 0;
+
+      let totalPercent = parseFloat(updated.invoicePercent) || 0;
+      for (let i = 1; i <= activeTerms; i++) {
+        totalPercent += parseFloat(updated[`paymentPercent${i}`]) || 0;
+      }
+      if (updated.retentionYesNo === "YES" && totalPercent <= 100) {
+        const remaining = 100 - totalPercent;
+        updated.retentionPercent = remaining;
+        updated.retentionAmount = (remaining / 100) * total;
+      } else {
         updated.retentionPercent = 0;
         updated.retentionAmount = 0;
       }
-
-      if (name === "poReceived" && newValue === "NO") {
-        updated.orderNumber = "";
-        updated.orderDate = "";
-        updated.deleveryDate = "";
-      }
-
-
-      const orderValueSupply = parseFloat(updated.orderValueSupply) || 0;
-      const orderValueService = parseFloat(updated.orderValueService) || 0;
-      const orderValueTotal = orderValueSupply + orderValueService;
-
-      if (name === "orderValueSupply" || name === "orderValueService") {
-        updated.orderValueTotal = orderValueTotal;
-      }
-
-      const total = parseFloat(updated.orderValueTotal) || 0;
-
-      if (name === "paymentPercent1" || name === "orderValueTotal") {
-        updated.paymentAmount1 =
-          ((parseFloat(updated.paymentPercent1) || 0) / 100) * total;
-      }
-
-      if (name === "paymentPercent2" || name === "orderValueTotal") {
-        updated.paymentAmount2 =
-          ((parseFloat(updated.paymentPercent2) || 0) / 100) * total;
-      }
-      const totalPercent =
-        (parseFloat(updated.paymentPercent1) || 0) +
-        (parseFloat(updated.paymentPercent2) || 0) +
-        (parseFloat(updated.invoicePercent) || 0);
-
-
-      if (totalPercent <= 100 && updated.retentionYesNo === "YES") {
-        const temppercent = 100 - totalPercent;
-        updated.retentionPercent = temppercent;
-        updated.retentionAmount = ((parseFloat(temppercent) || 0) / 100) * total;
-      }
       return updated;
     });
+
 
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -137,148 +119,155 @@ export default function UpdateOrderForm() {
 
     const isEmpty = (val) =>
       val === undefined || val === null || String(val).trim() === "";
+
     const toNumber = (val) => {
       const n = parseFloat(val);
       return Number.isFinite(n) ? n : NaN;
     };
 
     ["entityType", "soType"].forEach((field) => {
-      if (isEmpty(formData[field])) {
+      if (touched[field] && isEmpty(formData[field])) {
         newErrors[field] = `${field
           .replace(/([A-Z])/g, " $1")
           .replace(/^./, (s) => s.toUpperCase())} is required`;
       }
     });
 
-    if (isEmpty(formData.jobNumber)) newErrors.jobNumber = "Job Number is required";
-    if (isEmpty(formData.client)) newErrors.client = "Client is required";
+    if (touched.jobNumber && isEmpty(formData.jobNumber))
+      newErrors.jobNumber = "Job Number is required";
 
-    if (isEmpty(formData.technicalEmail)) {
-      newErrors.technicalEmail = "Email is required";
-    } else {
-      const email = String(formData.technicalEmail).trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) newErrors.technicalEmail = "Enter a valid email";
+    if (touched.client && isEmpty(formData.client))
+      newErrors.client = "Client is required";
+
+    if (touched.technicalEmail) {
+      if (isEmpty(formData.technicalEmail)) {
+        newErrors.technicalEmail = "Email is required";
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.technicalEmail))
+          newErrors.technicalEmail = "Enter a valid email";
+      }
     }
 
-    if (formData.bookingDate && formData.orderDate) {
-      if (new Date(formData.orderDate) < new Date(formData.bookingDate))
-        newErrors.orderDate = "Order Date cannot be before Booking Date";
-    }
+    if (touched.bookingDate && isEmpty(formData.bookingDate))
+      newErrors.bookingDate = "Booking Date is required";
 
-    if (formData.orderDate && formData.deleveryDate) {
-      if (new Date(formData.deleveryDate) < new Date(formData.orderDate))
-        newErrors.deleveryDate = "Delivery Date cannot be before Order Date";
-    }
+    if (touched.poReceived && isEmpty(formData.poReceived))
+      newErrors.poReceived = "PO Received is required";
 
-    if (isEmpty(formData.bookingDate)) newErrors.bookingDate = "Booking Date is required";
-    if (isEmpty(formData.poReceived)) newErrors.poReceived = "PO Received is required";
-    if (isEmpty(formData.creditDays)) {
-      newErrors.creditDays = "Credit Days is required";
-    } else {
+    if (touched.creditDays) {
       const cd = toNumber(formData.creditDays);
-      if (isNaN(cd)) {
-        newErrors.creditDays = "Enter a valid number";
-      } else if (cd <= 0) {
-        newErrors.creditDays = "Credit Period must be greater than zero";
-      }
+      if (isNaN(cd)) newErrors.creditDays = "Enter a valid number";
+      else if (cd <= 0) newErrors.creditDays = "Credit Period must be greater than zero";
     }
 
+    if (touched.invoiceTerm && isEmpty(formData.invoiceTerm))
+      newErrors.invoiceTerm = "Invoice Type is required";
 
-    if (isEmpty(formData.invoiceTerm)) newErrors.invoiceTerm = "Invoice Type is required";
-
-    if (isEmpty(formData.invoicePercent)) newErrors.invoicePercent = "Invoice percent is required";
-    else {
+    if (touched.invoicePercent) {
       const inv = toNumber(formData.invoicePercent);
-      if (isNaN(inv) || inv < 0 || inv > 100) newErrors.invoicePercent = "Invoice percent must be between 0 and 100";
+      if (isNaN(inv) || inv < 0 || inv > 100)
+        newErrors.invoicePercent = "Invoice percent must be between 0 and 100";
     }
 
-    if (isEmpty(formData.mileStone)) newErrors.mileStone = "Milestone is required";
+    if (touched.mileStone && isEmpty(formData.mileStone))
+      newErrors.mileStone = "Milestone is required";
 
-    if (isEmpty(formData.paymentAdvance)) newErrors.paymentAdvance = "Payment Advance selection is required";
+    if (
+      touched.invoicemileStoneOther &&
+      formData.mileStone === "OTHER" &&
+      isEmpty(formData.invoicemileStoneOther)
+    ) {
+      newErrors.invoicemileStoneOther = "Please specify other milestone";
+    }
 
+    if (touched.paymentAdvance && isEmpty(formData.paymentAdvance))
+      newErrors.paymentAdvance = "Payment Advance selection is required";
 
-    const supply = Number(formData.orderValueSupply);
-    const service = Number(formData.orderValueService);
-    if (touched.orderValueSupply) {
-      if (isNaN(supply)) {
-        newErrors.orderValueSupply = "Enter a valid number";
+    const terms = Number(formData.paymentAdvance) || 0;
+
+    for (let i = 1; i <= terms; i++) {
+      if (touched[`paymentPercent${i}`] && !formData[`paymentPercent${i}`])
+        newErrors[`paymentPercent${i}`] = "Required";
+
+      if (touched[`paymentType${i}`] && isEmpty(formData[`paymentType${i}`]))
+        newErrors[`paymentType${i}`] = "Required";
+
+      if (touched[`payemntCGBG${i}`] && isEmpty(formData[`payemntCGBG${i}`]))
+        newErrors[`payemntCGBG${i}`] = "Required";
+
+      if (touched[`paymentrecieved${i}`] && isEmpty(formData[`paymentrecieved${i}`]))
+        newErrors[`paymentrecieved${i}`] = "Required";
+
+      if (
+        touched[`paymentType${i}other`] &&
+        formData[`paymentType${i}`] === "OTHER" &&
+        isEmpty(formData[`paymentType${i}other`])
+      ) {
+        newErrors[`paymentType${i}other`] = "Required";
       }
     }
 
-    if (touched.orderValueService) {
-      if (isNaN(service)) {
-        newErrors.orderValueService = "Enter a valid number";
-      }
-    }
-    if ((touched.orderValueSupply || touched.orderValueService)
-      && !isNaN(supply)
-      && !isNaN(service)) {
+    if (touched.orderValueSupply || touched.orderValueService) {
+      const supply = Number(formData.orderValueSupply);
+      const service = Number(formData.orderValueService);
 
-      if (supply + service <= 0) {
+      if (isNaN(supply)) newErrors.orderValueSupply = "Enter a valid number";
+      if (isNaN(service)) newErrors.orderValueService = "Enter a valid number";
+
+      if (!isNaN(supply) && !isNaN(service) && supply + service <= 0) {
         newErrors.orderValueSupply = "Total must be greater than zero";
         newErrors.orderValueService = "Total must be greater than zero";
       }
     }
-    if (String(formData.poReceived).toUpperCase() === "YES") {
-      if (isEmpty(formData.orderNumber)) newErrors.orderNumber = "PO number is required";
-      if (isEmpty(formData.orderDate)) newErrors.orderDate = "PO order date is required";
-      if (isEmpty(formData.deleveryDate)) newErrors.deleveryDate = "PO delivery date is required";
+
+    if (formData.poReceived === "YES") {
+      if (touched.orderNumber && isEmpty(formData.orderNumber))
+        newErrors.orderNumber = "PO number is required";
+      if (touched.orderDate && isEmpty(formData.orderDate))
+        newErrors.orderDate = "PO order date is required";
+      if (touched.deleveryDate && isEmpty(formData.deleveryDate))
+        newErrors.deleveryDate = "PO delivery date is required";
     }
 
-    if (String(formData.paymentAdvance).toUpperCase() === "YES") {
-      if (isEmpty(formData.paymentAgainst)) newErrors.paymentAgainst = "Payment against is required";
+    let totalPercent = parseFloat(formData.invoicePercent) || 0;
+    for (let i = 1; i <= terms; i++) {
+      totalPercent += parseFloat(formData[`paymentPercent${i}`]) || 0;
+    }
+    if ((touched.paymentPercent1 || touched.paymentPercent2 || touched.invoicePercent) && totalPercent > 100) {
+      newErrors.paymentPercent1 = "Total percentage must not exceed 100%";
+    }
 
-      const p1 = toNumber(formData.paymentPercent1);
-      const p2 = toNumber(formData.paymentPercent2);
+    if (touched.retentionYesNo && String(formData.retentionYesNo).toUpperCase() === "YES") {
+      if (touched.retentionDocs && isEmpty(formData.retentionDocs))
+        newErrors.retentionDocs = "Retention docs are required";
 
-      if (isNaN(p1)) newErrors.paymentPercent1 = "Payment Percent 1 is required";
-      else if (p1 < 0 || p1 > 100) newErrors.paymentPercent1 = "Percent must be between 0 and 100";
-
-      if (isNaN(p2)) {
-        newErrors.paymentPercent2 = "Payment Percent 2 is required";
-      } else if (p2 < 0 || p2 > 100) newErrors.paymentPercent2 = "Percent must be between 0 and 100";
-
-      if (p1 > 0 && isEmpty(formData.paymentType1)) newErrors.paymentType1 = "Milestone for payment 1 is required";
-      if (p1 > 0 && isEmpty(formData.payemntCGBG1)) newErrors.payemntCGBG1 = "Payment CG/BG (1) is required";
-      if (p1 > 0 && isEmpty(formData.paymentrecieved1)) newErrors.paymentrecieved1 = "Payment status (1) is required";
-
-      if (p2 > 0) {
-        if (isEmpty(formData.paymentType2)) newErrors.paymentType2 = "Milestone for payment 2 is required";
-        if (isEmpty(formData.payemntCGBG2)) newErrors.payemntCGBG2 = "Payment CG/BG (2) is required";
-        if (isEmpty(formData.paymentrecieved2)) newErrors.paymentrecieved2 = "Payment status (2) is required";
+      if (
+        touched.retentinoDocsOther &&
+        formData.retentionDocs === "OTHER" &&
+        isEmpty(formData.retentinoDocsOther)
+      ) {
+        newErrors.retentinoDocsOther = "Please specify other retention docs";
       }
 
-      const inv = toNumber(formData.invoicePercent) || 0;
-      const totalPercent = (isNaN(p1) ? 0 : p1) + (isNaN(p2) ? 0 : p2) + inv;
-      if (totalPercent > 100) newErrors.paymentPercent2 = "Total payment/invoice percentage cannot exceed 100%";
-    }
-
-
-    if (isEmpty(formData.retentionYesNo)) {
-      newErrors.retentionYesNo = "Retention selection is required";
-    } else if (String(formData.retentionYesNo).toUpperCase() === "YES") {
-      if (isEmpty(formData.retentionDocs)) newErrors.retentionDocs = "Retention docs are required";
-      if (isEmpty(formData.retentionPeriod)) newErrors.retentionPeriod = "Retention period is required";
+      if (touched.retentionPeriod && isEmpty(formData.retentionPeriod))
+        newErrors.retentionPeriod = "Retention period is required";
 
       const rPercent = toNumber(formData.retentionPercent);
-      if (isNaN(rPercent)) newErrors.retentionPercent = "Retention percent is required";
-      else if (rPercent < 0 || rPercent > 100) newErrors.retentionPercent = "Retention percent must be between 0 and 100";
+      if (touched.retentionPercent && (isNaN(rPercent) || rPercent < 0 || rPercent > 100))
+        newErrors.retentionPercent = "Retention percent must be between 0 and 100";
     }
 
-    if (isEmpty(formData.concerningSalesManager))
-      newErrors.concerningSalesManager = "Account Manager is required";
-
-    const p1s = toNumber(formData.paymentPercent1) || 0;
-    const p2s = toNumber(formData.paymentPercent2) || 0;
-    const invPercent = toNumber(formData.invoicePercent) || 0;
-    if (p1s + p2s + invPercent > 100) {
-      newErrors.paymentPercent2 = "Total percentage (payments + invoice) cannot exceed 100%";
+    if (touched.concerningSalesManager && !isEmpty(formData.concerningSalesManager)) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.concerningSalesManager))
+        newErrors.concerningSalesManager = "Enter valid email";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -356,11 +345,16 @@ export default function UpdateOrderForm() {
             <option value="">
               {options.placeholder || "Select an option"}
             </option>
-            {options.choices?.map((choice) => (
-              <option key={choice} value={choice}>
-                {choice}
-              </option>
-            ))}
+            {options.choices?.map((choice) => {
+              const value = typeof choice === "string" ? choice : choice.value;
+              const label = typeof choice === "string" ? choice : choice.label;
+              return (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              );
+            })}
+
           </select>
         ) : type === "textarea" ? (
           <textarea
@@ -463,15 +457,8 @@ export default function UpdateOrderForm() {
               {renderInput(
                 "concerningSalesManager",
                 "Account Manager",
-                "text",
-                "Enter sales manager name",
-                true
-              )}
-              {renderInput(
-                "technicalEmail",
-                "Client Technical Email",
                 "email",
-                "Enter technical person email id",
+                "Enter sales manager Email",
                 true
               )}
               {renderInput(
@@ -482,11 +469,13 @@ export default function UpdateOrderForm() {
 
               )}
               {renderInput(
-                "email",
+                "technicalEmail",
                 "Email",
                 "email",
-                "Enter Email",
+                "Enter technical person email id",
+                true
               )}
+
               {renderInput(
                 "phone",
                 "Contact No.",
@@ -494,12 +483,6 @@ export default function UpdateOrderForm() {
                 "Enter Contact Number",
 
               )}
-              {renderInput("status", "Status", "select", "", false, {
-                choices: ["OPEN", "CLOSED"],
-                placeholder: "Select Status",
-              })}
-
-
             </div>
           </section>
 
@@ -536,51 +519,10 @@ export default function UpdateOrderForm() {
                 false,
                 { min: 0, step: "0.01", readOnly: true }
               )}
-              {/* this is start */}
-
-              {renderInput(
-                "salesBasic",
-                "Sales Basic (₹)",
-                "number",
-                "",
-                false,
-                { min: 0, step: "0.01" }
-              )}
-              {renderInput(
-                "salesTotal",
-                "Sales Total (₹)",
-                "number",
-                "",
-                false,
-                { min: 0, step: "0.01" }
-              )}
-              {renderInput(
-                "netOrderValue",
-                "Net Order Value (₹)",
-                "number",
-                "",
-                false,
-                { step: "0.01" }
-              )}
-              {/* {renderInput(
-                  "billPending",
-                  "Bill Pending (₹)",
-                  "number",
-                  "",
-                  false,
-                  { min: 0, step: "0.01" }
-                )} */}
-              {/*  this is end*/}
-              {/* {renderInput(
-                  "billingStatus",
-                  "Billing Status",
-                  "select",
-                  "",
-                  false,
-                  { choices: ["TBB", "ALL BILLED"] }
-                )} */}
             </div>
           </section>
+
+
           {/* Order Details Section */}
           <section className="bg-linear-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
@@ -600,45 +542,30 @@ export default function UpdateOrderForm() {
                   {renderInput("orderNumber", "PO Number", "text", "Enter po number", true)}
                   {renderInput("orderDate", "PO Order Date", "date", "", true)}
                   {renderInput("deleveryDate", "PO Delivery Date", "date", "", true)}
+
+                  {renderInput(
+                    "amndReqrd",
+                    "Amendment Required",
+                    "select",
+                    "",
+                    false,
+                    { choices: ["YES", "NO"] }
+                  )}
+                  {renderInput(
+                    "cancellation",
+                    "Cancellation",
+                    "select",
+                    "",
+                    false,
+                    { choices: ["NONE", "PARTIAL", "COMPLETE"] }
+                  )}
                 </>
               )}
 
 
-              {renderInput(
-                "formalOrderStatus",
-                "Formal Order Status",
-                "select",
-                "",
-                false,
-                { choices: ["RECEIVED", "PENDING"] }
-              )}
+              {renderInput("actualDeleveryDate", "Target Delevery Date", "date")}
 
-              {renderInput("actualDeleveryDate", "actual Delevery Date", "date")}
 
-              {renderInput(
-                "amndReqrd",
-                "Amendment Required",
-                "select",
-                "",
-                false,
-                { choices: ["YES", "NO"] }
-              )}
-              {renderInput(
-                "cancellation",
-                "Cancellation",
-                "select",
-                "",
-                false,
-                { choices: ["NONE", "PARTIAL", "COMPLETE"] }
-              )}
-              {/* {renderInput(
-                  "dispatchStatus",
-                  "Dispatch Status",
-                  "select",
-                  "",
-                  false,
-                  { choices: ["DISPATCHED", "LD APPLIED", "URGENT"] }
-                )} */}
             </div>
           </section>
 
@@ -660,122 +587,69 @@ export default function UpdateOrderForm() {
                 "",
                 true,
                 {
-                  choices: ["YES", "NO"],
+                  choices: [
+                    { label: "Yes with 1 terms", value: "1" },
+                    { label: "Yes with 2 terms", value: "2" },
+                    { label: "Yes with 3 terms", value: "3" },
+                    { label: "NO", value: "NO" },
+
+                  ]
                 }
               )}
             </div>
 
             {/* Payment Stage 1 */}
-            {formData.paymentAdvance === "YES" && (
-              <>
 
-                <div className="mb-6">
-                  {renderInput(
-                    "paymentAgainst",
-                    "Payment against PI/DISPATCH",
-                    "text",
-                    "Enter payment against details",
-                    true
-                  )}
-                </div>
-                <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
-                  <h3 className="font-bold text-lg text-cyan-800 mb-4">
-                    💳 Advance Terms 1
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {renderInput(
-                      "paymentPercent1",
-                      "Payment Percent (%)",
-                      "number",
-                      "",
-                      true,
-                      { min: 0, max: 100, step: "0.01" }
-                    )}
-                    {renderInput(
-                      "paymentAmount1",
-                      "Payment Amount  (₹)",
-                      "number",
-                      "",
-                      true,
-                      { min: 0, step: "0.01", readOnly: true }
-                    )}
-                    {renderInput(
-                      "paymentType1",
-                      "MileStone",
-                      "select",
-                      "",
-                      true,
-                      { choices: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", "OTHER"] }
-                    )}
-                    {renderInput(
-                      "payemntCGBG1",
-                      "Payment CG/BG ",
-                      "select",
-                      "",
-                      true,
-                      { choices: ["YES", "NO"] }
-                    )}
+            {["1", "2", "3"].includes(formData.paymentAdvance) && (
+              <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
+                <h3 className="font-bold text-lg text-cyan-800 mb-4">💳 Advance Terms 1</h3>
 
-                    {renderInput(
-                      "paymentrecieved1",
-                      "Payment status",
-                      "select",
-                      "",
-                      true,
-                      { choices: ["RECIEVED", "NOT RECIEVED"] }
-                    )}
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {renderInput("paymentPercent1", "Payment Percent (%)", "number", "", true, { min: 0, max: 100, step: "0.01" })}
+                  {renderInput("paymentAmount1", "Payment Amount (₹)", "number", "", true, { min: 0, step: "0.01", readOnly: true })}
+                  {renderInput("paymentType1", "MileStone", "select", "", true, { choices: ["OA", "PO", "DWG APPR.", "OTHER"] })}
+                  {formData.paymentType1 === "OTHER" &&
+                    renderInput("paymentType1other", "Other MileStone", "text", "Enter MileStone", true)
+                  }
+                  {renderInput("payemntCGBG1", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("paymentrecieved1", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
                 </div>
-                <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
-                  <h3 className="font-bold text-lg text-cyan-800 mb-4">
-                    💳 Advance Terms 2
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {renderInput(
-                      "paymentPercent2",
-                      "Payment Percent (%)",
-                      "number",
-                      "",
-                      true,
-                      { min: 0, max: 100, step: "0.01" }
-                    )}
-                    {renderInput(
-                      "paymentAmount2",
-                      "Payment Amount  (₹)",
-                      "number",
-                      "",
-                      false,
-                      { min: 0, step: "0.01", readOnly: true }
-                    )}
-                    {renderInput(
-                      "paymentType2",
-                      "MileStone",
-                      "select",
-                      "",
-                      formData.paymentPercent2 > 0,
-                      { choices: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", "OTHER"] }
-                    )}
-                    {renderInput(
-                      "payemntCGBG2",
-                      "Payment CG/BG ",
-                      "select",
-                      "",
-                      formData.paymentPercent2 > 0,
-                      { choices: ["YES", "NO"] }
-                    )}
-
-                    {renderInput(
-                      "paymentrecieved2",
-                      "Payment status",
-                      "select",
-                      "",
-                      formData.paymentPercent2 > 0,
-                      { choices: ["RECIEVED", "NOT RECIEVED"] }
-                    )}
-                  </div>
-                </div>
-              </>
+              </div>
             )}
+
+            {["2", "3"].includes(formData.paymentAdvance) && (
+              <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
+                <h3 className="font-bold text-lg text-cyan-800 mb-4">💳 Advance Terms 2</h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {renderInput("paymentPercent2", "Payment Percent (%)", "number", "", true, { min: 0, max: 100, step: "0.01" })}
+                  {renderInput("paymentAmount2", "Payment Amount (₹)", "number", "", false, { min: 0, step: "0.01", readOnly: true })}
+                  {renderInput("paymentType2", "MileStone", "select", "", true, { choices: ["OA", "PO", "DWG APPR.", "OTHER"] })}
+                  {formData.paymentType2 === "OTHER" &&
+                    renderInput("paymentType2other", "Other MileStone", "text", "Enter MileStone", true)
+                  }
+                  {renderInput("payemntCGBG2", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("paymentrecieved2", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
+                </div>
+              </div>
+            )}
+            {formData.paymentAdvance === "3" && (
+              <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
+                <h3 className="font-bold text-lg text-cyan-800 mb-4">💳 Advance Terms 3</h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {renderInput("paymentPercent3", "Payment Percent (%)", "number", "", true, { min: 0, max: 100, step: "0.01" })}
+                  {renderInput("paymentAmount3", "Payment Amount (₹)", "number", "", false, { min: 0, step: "0.01", readOnly: true })}
+                  {renderInput("paymentType3", "MileStone", "select", "", true, { choices: ["OA", "PO", "DWG APPR.", "OTHER"] })}
+                  {formData.paymentType3 === "OTHER" &&
+                    renderInput("paymentType3other", "Other MileStone", "text", "Enter MileStone", true)
+                  }
+                  {renderInput("payemntCGBG3", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("paymentrecieved3", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
+                </div>
+              </div>
+            )}
+
 
             {/* Payment Stage 2 */}
 
@@ -793,7 +667,7 @@ export default function UpdateOrderForm() {
                   "select",
                   "",
                   true,
-                  { choices: ["PI", "SI", "N/A"] }
+                  { choices: ["PI", "SI",] }
                 )}
                 {renderInput(
                   "invoicePercent",
@@ -803,17 +677,19 @@ export default function UpdateOrderForm() {
                   true,
                   { min: 0, max: 100, step: "0.01" }
                 )}
-                {renderInput(
-                  "creditDays",
-                  "Credit Periods",
-                  "number",
-                  "",
-                  true,
-                  {
-                    min: 0,
-                  }
-                )}
+                {renderInput("invoiceAmount", "Amount (₹)", "number", "", true, { min: 0, step: "0.01", readOnly: true })}
 
+                {(formData.invoiceTerm === "SI") &&
+                  renderInput(
+                    "creditDays",
+                    "Credit Periods",
+                    "number",
+                    "",
+                    true,
+                    {
+                      min: 0,
+                    }
+                  )}
 
                 {renderInput(
                   "mileStone",
@@ -823,8 +699,13 @@ export default function UpdateOrderForm() {
                   true,
                   { choices: ["INSP CLRNCE", "DISPATCH", "DELEVERY", "OTHER"] }
                 )}
+                {formData.mileStone === "OTHER" &&
+                  renderInput("invoicemileStoneOther", "Other MileStone", "text", "Enter specific MileStone", true)
+                }
+
               </div>
             </div>
+
 
             <div className="my-4 ">
               {renderInput(
@@ -866,8 +747,13 @@ export default function UpdateOrderForm() {
                   "select",
                   "",
                   true,
-                  { choices: ["CG", "BG", "N/A"] }
+                  { choices: ["CG", "BG", "N/A", "OTHER"] }
                 )}
+                {
+                  formData.retentionDocs === "OTHER"
+                  &&
+                  renderInput("retentinoDocsOther", "Other Docs", "text", "Enter Docs", true)
+                }
                 {renderInput(
                   "retentionPeriod",
                   "Retention days",
