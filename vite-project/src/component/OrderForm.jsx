@@ -2,63 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AlertCircle, Save, Loader } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
-// import { fields } from "../utils/FieldConstant";
-
-export const fields = {
-  entityType: "",
-  soType: "",
-  jobNumber: "",
-  orderNumber: "",
-  bookingDate: "",
-  client: "",
-  technicalEmail: "",
-  name: "",
-  email: "",
-  phone: "",
-  site: "",
-  endUser: "",
-  orderDate: "",
-  deleveryDate: "",
-  formalOrderStatus: "",
-  amndReqrd: "",
-  orderValueSupply: 0,
-  orderValueService: 0,
-  orderValueTotal: 0,
-  cancellation: "",
-  netOrderValue: 0,
-  paymentAgainst: "",
-  paymentAdvance: "",
-  paymentPercent1: 0,
-  paymentType1: "",
-  payemntCGBG1: "",
-  paymentrecieved1: "",
-  paymentAmount1: 0,
-  paymentPercent2: 0,
-  paymentType2: "",
-  payemntCGBG2: "",
-  paymentAmount2: 0,
-  paymentrecieved2: "",
-  retentionPercent: 0,
-  retentionAmount: 0,
-  retentionDocs: "",
-  retentionPeriod: "",
-  status: "",
-  creditDays: 0,
-  dispatchStatus: "",
-  salesBasic: 0,
-  salesTotal: 0,
-  billPending: 0,
-  billingStatus: "",
-  jobDescription: "",
-  remarks: "",
-  concerningSalesManager: "",
-  poReceived: "",
-  invoiceTerm: "",
-  invoicePercent: "",
-  mileStone: "",
-  actualDeleveryDate: "",
-  retentionYesNo: ""
-}
+import { fields } from "../utils/FieldConstant";
 
 export default function OrderForm() {
   const [formData, setFormData] = useState(fields);
@@ -484,15 +428,8 @@ export default function OrderForm() {
               {renderInput(
                 "concerningSalesManager",
                 "Account Manager",
-                "text",
-                "Enter sales manager name",
-                true
-              )}
-              {renderInput(
-                "technicalEmail",
-                "Client Technical Email",
                 "email",
-                "Enter technical person email id",
+                "Enter sales manager Email",
                 true
               )}
               {renderInput(
@@ -503,11 +440,18 @@ export default function OrderForm() {
 
               )}
               {renderInput(
+                "technicalEmail",
+                "Email",
+                "email",
+                "Enter technical person email id",
+                true
+              )}
+              {/* {renderInput(
                 "email",
                 "Email",
                 "email",
                 "Enter Email",
-              )}
+              )} */}
               {renderInput(
                 "phone",
                 "Contact No.",
@@ -515,10 +459,11 @@ export default function OrderForm() {
                 "Enter Contact Number",
 
               )}
-              {renderInput("status", "Status", "select", "", false, {
+
+              {/* {renderInput("status", "Status", "select", "", false, {
                 choices: ["OPEN", "CLOSED"],
                 placeholder: "Select Status",
-              })}
+              })} */}
 
 
             </div>
@@ -559,7 +504,7 @@ export default function OrderForm() {
               )}
               {/* this is start */}
 
-              {renderInput(
+              {/* {renderInput(
                 "salesBasic",
                 "Sales Basic (₹)",
                 "number",
@@ -582,7 +527,7 @@ export default function OrderForm() {
                 "",
                 false,
                 { step: "0.01" }
-              )}
+              )} */}
               {/* {renderInput(
                 "billPending",
                 "Bill Pending (₹)",
@@ -621,37 +566,38 @@ export default function OrderForm() {
                   {renderInput("orderNumber", "PO Number", "text", "Enter po number", true)}
                   {renderInput("orderDate", "PO Order Date", "date", "", true)}
                   {renderInput("deleveryDate", "PO Delivery Date", "date", "", true)}
+
+                  {renderInput(
+                    "amndReqrd",
+                    "Amendment Required",
+                    "select",
+                    "",
+                    false,
+                    { choices: ["YES", "NO"] }
+                  )}
+                  {renderInput(
+                    "cancellation",
+                    "Cancellation",
+                    "select",
+                    "",
+                    false,
+                    { choices: ["NONE", "PARTIAL", "COMPLETE"] }
+                  )}
                 </>
               )}
 
 
-              {renderInput(
+              {/* {renderInput(
                 "formalOrderStatus",
                 "Formal Order Status",
                 "select",
                 "",
                 false,
                 { choices: ["RECEIVED", "PENDING"] }
-              )}
+              )} */}
 
-              {renderInput("actualDeleveryDate", "actual Delevery Date", "date")}
+              {renderInput("actualDeleveryDate", "Target Delevery Date", "date")}
 
-              {renderInput(
-                "amndReqrd",
-                "Amendment Required",
-                "select",
-                "",
-                false,
-                { choices: ["YES", "NO"] }
-              )}
-              {renderInput(
-                "cancellation",
-                "Cancellation",
-                "select",
-                "",
-                false,
-                { choices: ["NONE", "PARTIAL", "COMPLETE"] }
-              )}
               {/* {renderInput(
                 "dispatchStatus",
                 "Dispatch Status",
@@ -814,7 +760,7 @@ export default function OrderForm() {
                   "select",
                   "",
                   true,
-                  { choices: ["PI", "SI", "N/A"] }
+                  { choices: ["PI", "SI",] }
                 )}
                 {renderInput(
                   "invoicePercent",
@@ -824,16 +770,17 @@ export default function OrderForm() {
                   true,
                   { min: 0, max: 100, step: "0.01" }
                 )}
-                {renderInput(
-                  "creditDays",
-                  "Credit Periods",
-                  "number",
-                  "",
-                  true,
-                  {
-                    min: 0,
-                  }
-                )}
+                {(formData.invoiceTerm === "SI") &&
+                  renderInput(
+                    "creditDays",
+                    "Credit Periods",
+                    "number",
+                    "",
+                    true,
+                    {
+                      min: 0,
+                    }
+                  )}
 
 
                 {renderInput(
@@ -887,7 +834,7 @@ export default function OrderForm() {
                   "select",
                   "",
                   true,
-                  { choices: ["CG", "BG", "N/A"] }
+                  { choices: ["CG", "BG", "N/A", "OTHER"] }
                 )}
                 {renderInput(
                   "retentionPeriod",
@@ -944,7 +891,7 @@ export default function OrderForm() {
               ) : (
                 <>
                   <Save size={18} />
-                  Save Order
+                  Create Order
                 </>
               )}
             </button>

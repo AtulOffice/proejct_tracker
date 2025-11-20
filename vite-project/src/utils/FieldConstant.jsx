@@ -116,7 +116,7 @@ export const fields = {
   retentionAmount: 0,
   retentionDocs: "",
   retentionPeriod: "",
-  status: "",
+  status: "OPEN",
   creditDays: 0,
   dispatchStatus: "",
   salesBasic: 0,

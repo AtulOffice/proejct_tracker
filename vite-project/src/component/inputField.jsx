@@ -209,6 +209,229 @@ const FormField = ({
           </div>
         </div>
 
+        {/* service details */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
+
+          <h3 className="font-bold text-lg text-green-800 mb-4">
+            💰 Service Details -{formData.soType}
+          </h3>
+
+          {/* SERVICE + SERVICE DAYS MENTION → SIDE BY SIDE */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <SelectField
+              {...InputConst[32]}
+              handleChange={handleChange}
+              value={formData.service}
+            />
+
+            {/*  check this after meeting  */}
+            <SelectField
+              {...InputConst[63]}
+              value={formData.serviceDaysMention}
+              handleChange={handleChange}
+            />
+          </div>
+
+          {/* IF YES → SHOW SERVICE DAYS + RATE */}
+          {formData?.serviceDaysMention === "YES" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+
+              <div className="space-y-2">
+
+                <label className="block text-sm font-semibold text-gray-700">
+                  Service Days in Lots
+                </label>
+
+                <div className="relative flex items-center bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
+
+                  <div className="h-8 w-px bg-gray-200"></div>
+
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                      {/* Of Lots */}
+                      <div>
+                        <label className="text-xs text-gray-600 font-medium">Of Lots</label>
+                        <input
+                          type="number"
+                          name="SrvsdaysInLots.lots"
+                          value={formData.SrvsdaysInLots?.lots || ""}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
+                          placeholder="0"
+                          min="0"
+                        />
+                      </div>
+
+                      {/* Of Days */}
+                      <div>
+                        <label className="text-xs text-gray-600 font-medium">Of Days</label>
+                        <input
+                          type="number"
+                          name="SrvsdaysInLots.value"
+                          value={formData.SrvsdaysInLots?.value || ""}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
+                          placeholder="0"
+                          min="0"
+                        />
+                      </div>
+
+                      {/* Unit Selector */}
+                      <div>
+                        <label className="text-xs text-gray-600 font-medium">Unit</label>
+                        <div className="relative">
+                          <select
+                            name="SrvsdaysInLots.unit"
+                            value={formData.SrvsdaysInLots?.unit || "DAYS"}
+                            onChange={handleChange}
+                            className="w-full appearance-none px-4 py-3 border-2 border-gray-200 rounded-xl outline-none cursor-pointer"
+                          >
+                            <option value="DAYS">Days</option>
+                            <option value="MAN-DAYS">Man-Days</option>
+                          </select>
+
+                          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+
+                <InputFiled
+                  {...InputConst[64]}
+                  value={formData.servicedayrate}
+                  handleChange={handleChange}
+                />
+              </div>
+            </div>
+          )}
+
+
+
+        </div>
+
+        {/* 🔧 Development & Technical */}
+        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-cyan-300 shadow-sm">
+          <h3 className="font-bold text-lg text-cyan-800 mb-4">
+            🔧 Development & Technical
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SelectField
+              {...InputConst[40]}
+              value={formData.Development}
+              handleChange={handleChange}
+            />
+            {["BOTH", "LOGIC"].includes(formData.Development) && (
+              <SelectField
+                {...InputConst[59]}
+                value={formData.LogicPlace}
+                handleChange={handleChange}
+              />
+            )}
+
+            {["BOTH", "SCADA"].includes(formData.Development) && (
+              <SelectField
+                {...InputConst[60]}
+                value={formData.ScadaPlace}
+                handleChange={handleChange}
+              />
+            )}
+
+            <SelectField
+              {...InputConst[42]}
+              value={formData.isMailSent}
+              handleChange={handleChange}
+            />
+
+            {!["", "N/A"].includes(formData?.Development) && (
+              <>
+                <SelectField
+                  {...InputConst[43]}
+                  value={formData.isDevlopmentApproved}
+                  handleChange={handleChange}
+                />
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* this is the commisioning scope */}
+        {formData.service === "COMMISSIONING" && <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
+
+          <h3 className="font-bold text-lg text-green-800 mb-4">
+            📝 Commissioning
+          </h3>
+
+          {/* Select PO */}
+          <SelectField
+            {...InputConst[61]}
+            value={formData.CommisinionPO}
+            handleChange={handleChange}
+          />
+
+          {/* Show service scope only if YES */}
+          {formData?.CommisinionPO === "YES" && (
+            <div className="mt-6">
+              <h4 className="font-semibold text-green-700 mb-3">Commisioning Scope</h4>
+
+              <div className="flex flex-wrap gap-4">
+
+                {/* Supervision of Commissioning */}
+                <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
+                  <input
+                    type="checkbox"
+                    name="Docscommission.commissioning"
+                    checked={formData?.Docscommission?.commissioning}
+                    onChange={handleChange}
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                  <span className="text-gray-800 font-medium text-sm">
+                    Supervision of Commissioning
+                  </span>
+                </label>
+
+                {/* Erection */}
+                <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
+                  <input
+                    type="checkbox"
+                    name="Docscommission.erection"
+                    checked={formData?.Docscommission?.erection}
+                    onChange={handleChange}
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                  <span className="text-gray-800 font-medium text-sm">
+                    Erection
+                  </span>
+                </label>
+
+                {/* Instrumentation */}
+                <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
+                  <input
+                    type="checkbox"
+                    name="Docscommission.instrumentation"
+                    checked={formData?.Docscommission?.instrumentation}
+                    onChange={handleChange}
+                    className="w-5 h-5 cursor-pointer"
+                  />
+                  <span className="text-gray-800 font-medium text-sm">
+                    Instrumentation
+                  </span>
+                </label>
+
+              </div>
+            </div>
+          )}
+
+        </div>}
+
+
         {/* 👥 Client & Contact Details */}
         <div className="bg-indigo-50 p-6 rounded-lg border-2 border-purple-300 shadow-sm">
           <h3 className="font-bold text-lg text-purple-800 mb-4">
@@ -364,179 +587,8 @@ const FormField = ({
           </div>
         </div>
 
-        {/* service details */}
-        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
 
-          <h3 className="font-bold text-lg text-green-800 mb-4">
-            💰 Service Details
-          </h3>
 
-          {/* SERVICE + SERVICE DAYS MENTION → SIDE BY SIDE */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <SelectField
-              {...InputConst[32]}
-              handleChange={handleChange}
-              value={formData.service}
-            />
-
-            <SelectField
-              {...InputConst[63]}
-              value={formData.serviceDaysMention}
-              handleChange={handleChange}
-            />
-          </div>
-
-          {/* IF YES → SHOW SERVICE DAYS + RATE */}
-          {formData?.serviceDaysMention === "YES" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-
-              <div className="space-y-2">
-
-                <label className="block text-sm font-semibold text-gray-700">
-                  Service Days in Lots
-                </label>
-
-                <div className="relative flex items-center bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
-
-                  <div className="h-8 w-px bg-gray-200"></div>
-
-                  <div className="space-y-2">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                      {/* Of Lots */}
-                      <div>
-                        <label className="text-xs text-gray-600 font-medium">Of Lots</label>
-                        <input
-                          type="number"
-                          name="SrvsdaysInLots.lots"
-                          value={formData.SrvsdaysInLots?.lots || ""}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
-                          placeholder="0"
-                          min="0"
-                        />
-                      </div>
-
-                      {/* Of Days */}
-                      <div>
-                        <label className="text-xs text-gray-600 font-medium">Of Days</label>
-                        <input
-                          type="number"
-                          name="SrvsdaysInLots.value"
-                          value={formData.SrvsdaysInLots?.value || ""}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
-                          placeholder="0"
-                          min="0"
-                        />
-                      </div>
-
-                      {/* Unit Selector */}
-                      <div>
-                        <label className="text-xs text-gray-600 font-medium">Unit</label>
-                        <div className="relative">
-                          <select
-                            name="SrvsdaysInLots.unit"
-                            value={formData.SrvsdaysInLots?.unit || "DAYS"}
-                            onChange={handleChange}
-                            className="w-full appearance-none px-4 py-3 border-2 border-gray-200 rounded-xl outline-none cursor-pointer"
-                          >
-                            <option value="DAYS">Days</option>
-                            <option value="MAN-DAYS">Man-Days</option>
-                          </select>
-
-                          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                </div>
-
-                <InputFiled
-                  {...InputConst[64]}
-                  value={formData.servicedayrate}
-                  handleChange={handleChange}
-                />
-              </div>
-            </div>
-          )}
-
-        </div>
-
-        {/* this is the commisioning scope */}
-        {formData.service === "COMMISSIONING" && <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
-
-          <h3 className="font-bold text-lg text-green-800 mb-4">
-            📝 Commissioning
-          </h3>
-
-          {/* Select PO */}
-          <SelectField
-            {...InputConst[61]}
-            value={formData.CommisinionPO}
-            handleChange={handleChange}
-          />
-
-          {/* Show service scope only if YES */}
-          {formData?.CommisinionPO === "YES" && (
-            <div className="mt-6">
-              <h4 className="font-semibold text-green-700 mb-3">Service Scope</h4>
-
-              <div className="flex flex-wrap gap-4">
-
-                {/* Supervision of Commissioning */}
-                <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
-                  <input
-                    type="checkbox"
-                    name="Docscommission.commissioning"
-                    checked={formData?.Docscommission?.commissioning}
-                    onChange={handleChange}
-                    className="w-5 h-5 cursor-pointer"
-                  />
-                  <span className="text-gray-800 font-medium text-sm">
-                    Supervision of Commissioning
-                  </span>
-                </label>
-
-                {/* Erection */}
-                <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
-                  <input
-                    type="checkbox"
-                    name="Docscommission.erection"
-                    checked={formData?.Docscommission?.erection}
-                    onChange={handleChange}
-                    className="w-5 h-5 cursor-pointer"
-                  />
-                  <span className="text-gray-800 font-medium text-sm">
-                    Erection
-                  </span>
-                </label>
-
-                {/* Instrumentation */}
-                <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
-                  <input
-                    type="checkbox"
-                    name="Docscommission.instrumentation"
-                    checked={formData?.Docscommission?.instrumentation}
-                    onChange={handleChange}
-                    className="w-5 h-5 cursor-pointer"
-                  />
-                  <span className="text-gray-800 font-medium text-sm">
-                    Instrumentation
-                  </span>
-                </label>
-
-              </div>
-            </div>
-          )}
-
-        </div>}
 
         {/* this is the expesns scope */}
         <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
@@ -792,50 +844,7 @@ const FormField = ({
           }
         </div>
 
-        {/* 🔧 Development & Technical */}
-        <div className="bg-indigo-50 p-6 rounded-lg border-2 border-cyan-300 shadow-sm">
-          <h3 className="font-bold text-lg text-cyan-800 mb-4">
-            🔧 Development & Technical
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectField
-              {...InputConst[40]}
-              value={formData.Development}
-              handleChange={handleChange}
-            />
-            {["BOTH", "LOGIC"].includes(formData.Development) && (
-              <SelectField
-                {...InputConst[59]}
-                value={formData.LogicPlace}
-                handleChange={handleChange}
-              />
-            )}
 
-            {["BOTH", "SCADA"].includes(formData.Development) && (
-              <SelectField
-                {...InputConst[60]}
-                value={formData.ScadaPlace}
-                handleChange={handleChange}
-              />
-            )}
-
-            <SelectField
-              {...InputConst[42]}
-              value={formData.isMailSent}
-              handleChange={handleChange}
-            />
-
-            {!["", "N/A"].includes(formData?.Development) && (
-              <>
-                <SelectField
-                  {...InputConst[43]}
-                  value={formData.isDevlopmentApproved}
-                  handleChange={handleChange}
-                />
-              </>
-            )}
-          </div>
-        </div>
 
         {/* ✅ Checklists & Submissions */}
         <div className="bg-indigo-50 p-6 rounded-lg border-2 border-pink-300 shadow-sm">
