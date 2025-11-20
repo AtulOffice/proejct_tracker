@@ -98,7 +98,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div className="relative w-full max-w-xs">
             <Listbox value={selectedEngineer} onChange={setSelectedEngineer}>
-              <Listbox.Button className="w-full py-2.5 px-4 text-base  rounded-lg shadow bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 text-white focus:outline-none transition">
+              <Listbox.Button className="w-full py-2.5 px-4 text-base  rounded-lg shadow bg-linear-to-r from-pink-400 via-purple-400 to-indigo-400 text-white focus:outline-none transition">
                 {selectedEngineer
                   ? availableEngineers.find((e) => e.id === selectedEngineer)
                     ?.name || "ENGINEER"
@@ -115,7 +115,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
                       <li
                         className={`cursor-pointer select-none px-4 py-3 rounded-lg transition 
           ${active
-                            ? "bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 text-indigo-700"
+                            ? "bg-linear-to-r from-pink-100 via-purple-100 to-indigo-100 text-indigo-700"
                             : "text-gray-900"
                           }
           ${selected ? "font-bold" : ""}`}
@@ -173,7 +173,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
               key={assignment.engineerId}
               className="
           flex items-center gap-2
-          bg-gradient-to-r from-purple-500/70 via-pink-500/60 to-indigo-500/60
+          bg-linear-to-r from-purple-500/70 via-pink-500/60 to-indigo-500/60
           border border-white/20
           rounded-full px-3 py-1.5 text-xs text-white
           shadow-md backdrop-blur-sm
@@ -204,7 +204,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
           ))}
         </div>
       ) : (
-        <div className="bg-gradient-to-r from-purple-400/10 via-pink-400/10 to-indigo-400/10 border border-white/30 rounded-lg p-6 text-center shadow-sm">
+        <div className="bg-linear-to-r from-purple-400/10 via-pink-400/10 to-indigo-400/10 border border-white/30 rounded-lg p-6 text-center shadow-sm">
           <p className="text-white/80 text-sm">No engineers assigned yet</p>
         </div>
       )}

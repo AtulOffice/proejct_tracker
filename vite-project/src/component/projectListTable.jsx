@@ -112,7 +112,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   }, []);
 
   return (
-    <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+    <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
       {selectedProjectForPopup &&
         (isOrderFetched ? (
           <OrderDetailsPopup
@@ -129,17 +129,17 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
         <div ref={printRef} className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
+              <tr className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
                 {tableVal.map((col, idx) => (
                   <th
                     key={idx}
-                    className="px-6 py-5 text-left text-base font-bold tracking-wide uppercase !text-gray-400"
+                    className="px-6 py-5 text-left text-base font-bold tracking-wide uppercase text-gray-400!"
                   >
                     {col.head}
                   </th>
                 ))}
                 {isEdit && (
-                  <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase !text-gray-400">
+                  <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                     Action
                   </th>
                 )}
@@ -192,8 +192,8 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
     hover:scale-110 hover:-rotate-6
     ring-2 ring-transparent focus:outline-none focus:ring-4
     ${row?.isPlanRecord
-                              ? "bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:ring-emerald-300 focus:ring-emerald-400"
-                              : "bg-gradient-to-tr from-rose-500 via-pink-400 to-red-400 hover:from-rose-600 hover:via-pink-500 hover:to-red-500 hover:ring-rose-300 focus:ring-rose-400"
+                              ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:ring-emerald-300 focus:ring-emerald-400"
+                              : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 hover:from-rose-600 hover:via-pink-500 hover:to-red-500 hover:ring-rose-300 focus:ring-rose-400"
                             }`}
                           aria-label="Update"
                           type="button"
@@ -203,7 +203,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       ) : (
                         <button
                           onClick={() => handleEditAction(onEditFun, row)}
-                          className="inline-flex items-center justify-center p-2.5 rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
+                          className="inline-flex items-center justify-center p-2.5 rounded-lg bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
                         >
                           <MdEdit
                             size={18}
@@ -226,7 +226,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           <div
             key={indx}
             onClick={() => hadleOpenPopup(project)}
-            className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-lg rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
+            className="bg-linear-to-br from-blue-50 via-white to-indigo-50 shadow-lg rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
           >
             <div className="flex items-center justify-between mb-3">
               <div
@@ -270,7 +270,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           </div>
         ))}
       </div>
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
+      <div className="bg-linear-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
           <p className="text-base text-blue-700">
             Showing{" "}
@@ -287,7 +287,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
         />
       )}
 
-      
+
       {planopen && (
         <ProjectTimelineForm
           project={selectedProject}

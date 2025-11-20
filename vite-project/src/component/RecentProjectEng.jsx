@@ -41,7 +41,7 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
     if (!open) return null;
     return (
         <>
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300 p-6">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-br from-black/60 to-gray-900/40 backdrop-blur-sm transition-all duration-300 p-6">
                 <div
                     ref={formRef}
                     className="bg-white bg-opacity-90 p-10 md:p-12 rounded-3xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-y-auto border border-gray-200 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100"
@@ -68,7 +68,7 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
                             .map((project) => (
                                 <div
                                     key={project._id}
-                                    className="group bg-gradient-to-r from-green-100 via-blue-50 to-white rounded-xl py-6 px-6 shadow-md hover:shadow-xl transition-all border border-gray-100 hover:bg-blue-50"
+                                    className="group bg-linear-to-r from-green-100 via-blue-50 to-white rounded-xl py-6 px-6 shadow-md hover:shadow-xl transition-all border border-gray-100 hover:bg-blue-50"
                                 >
                                     <h3 className="font-semibold text-xl md:text-2xl text-gray-800 group-hover:text-blue-600 mb-3">
                                         {project.projectName}

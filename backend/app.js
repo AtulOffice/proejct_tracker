@@ -50,8 +50,11 @@ const limiter = rateLimit({
 app.use(express.json());
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send("hello i am server of form submission");
+app.get("/hello", (req, res) => {
+  // res.send("hello i am server of form submission");
+  return res
+    .status(200)
+    .json({ success: true, message: "hello i am server of form submission" });
 });
 app.use("/api/v1", ProjectRouter);
 app.use("/api/v1", userRouter);

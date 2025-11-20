@@ -47,7 +47,7 @@ const EngineerManagementForm = ({
             className="w-full px-4 py-2 border rounded-lg"
           />
           {isEditExtra && (
-            <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 via-white to-blue-100 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
+            <div className="flex items-center gap-3 p-3 bg-linear-to-r from-blue-50 via-white to-blue-100 rounded-xl shadow-md transition-all duration-300 hover:shadow-lg">
               <label className="text-base font-semibold text-blue-700 tracking-wide">
                 Are you manually changing the availability of the engineer?
               </label>

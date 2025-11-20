@@ -350,7 +350,7 @@ export default function UpdateOrderForm() {
             onBlur={handleBlur}
             className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${hasError
               ? "border-red-500 bg-red-50"
-              : "border-purple-200 bg-gradient-to-br from-blue-50 to-purple-50 hover:border-purple-300"
+              : "border-purple-200 bg-linear-to-br from-blue-50 to-purple-50 hover:border-purple-300"
               }`}
           >
             <option value="">
@@ -372,7 +372,7 @@ export default function UpdateOrderForm() {
             placeholder={placeholder}
             className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 resize-none font-medium ${hasError
               ? "border-red-500 bg-red-50"
-              : "border-purple-200 bg-gradient-to-br from-indigo-50 to-purple-50 hover:border-purple-300"
+              : "border-purple-200 bg-linear-to-br from-indigo-50 to-purple-50 hover:border-purple-300"
               }`}
           />
         ) : (
@@ -398,13 +398,13 @@ export default function UpdateOrderForm() {
             className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${hasError
               ? "border-red-500 bg-red-50"
               : options.readOnly
-                ? "border-purple-200 bg-gradient-to-br from-gray-100 to-purple-50 cursor-not-allowed text-gray-600"
-                : "border-purple-200 bg-gradient-to-br from-pink-50 to-purple-50 hover:border-purple-300"
+                ? "border-purple-200 bg-linear-to-br from-gray-100 to-purple-50 cursor-not-allowed text-gray-600"
+                : "border-purple-200 bg-linear-to-br from-pink-50 to-purple-50 hover:border-purple-300"
               }`}
           />
         )}
         {hasError && (
-          <p className="mt-2 text-sm !text-red-600 flex items-center gap-1 font-semibold">
+          <p className="mt-2 text-sm text-red-600! flex items-center gap-1 font-semibold">
             <AlertCircle size={14} /> {errors[name]}
           </p>
         )}
@@ -414,14 +414,14 @@ export default function UpdateOrderForm() {
 
 
   return (
-    <div className="transition-all duration-300  pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="transition-all duration-300  pt-16 min-h-screen bg-linear-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-white drop-shadow-md">
           {formData?.client || ""}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          <section className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition-shadow">
+          <section className="bg-linear-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-blue-600 rounded"></div>
               <h2 className="text-2xl font-bold text-blue-900">
@@ -504,7 +504,7 @@ export default function UpdateOrderForm() {
           </section>
 
           {/* Financial Information Section */}
-          <section className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200 shadow-sm hover:shadow-md transition-shadow">
+          <section className="bg-linear-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-orange-600 rounded"></div>
               <h2 className="text-2xl font-bold text-orange-900">
@@ -582,7 +582,7 @@ export default function UpdateOrderForm() {
             </div>
           </section>
           {/* Order Details Section */}
-          <section className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
+          <section className="bg-linear-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-purple-600 rounded"></div>
               <h2 className="text-2xl font-bold text-purple-900">
@@ -643,7 +643,7 @@ export default function UpdateOrderForm() {
           </section>
 
           {/* Payment Information Section */}
-          <section className="bg-gradient-to-br from-cyan-50 to-cyan-100 p-6 rounded-lg border border-cyan-200 shadow-sm hover:shadow-md transition-shadow">
+          <section className="bg-linear-to-br from-cyan-50 to-cyan-100 p-6 rounded-lg border border-cyan-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-cyan-600 rounded"></div>
               <h2 className="text-2xl font-bold text-cyan-900">
@@ -881,7 +881,7 @@ export default function UpdateOrderForm() {
           </section>
 
           {/* Additional Information Section */}
-          <section className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border border-indigo-200 shadow-sm hover:shadow-md transition-shadow">
+          <section className="bg-linear-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border border-indigo-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-indigo-600 rounded"></div>
               <h2 className="text-2xl font-bold text-indigo-900">
@@ -913,7 +913,7 @@ export default function UpdateOrderForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-lg hover:from-pink-600 hover:to-rose-600 disabled:from-pink-400 disabled:to-rose-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="flex items-center gap-2 px-8 py-3 bg-linear-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-lg hover:from-pink-600 hover:to-rose-600 disabled:from-pink-400 disabled:to-rose-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               {isSubmitting ? (
                 <>

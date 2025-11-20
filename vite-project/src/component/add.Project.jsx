@@ -248,7 +248,7 @@ const InputForm = () => {
   };
 
   return (
-    <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+    <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-linear-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
         <div className="flex flex-col w-full">
           {open && (
@@ -266,7 +266,7 @@ const InputForm = () => {
               <button
                 className="
       flex items-center justify-center
-      bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
+      bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400
       hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
       text-white p-2 rounded-full shadow-lg
       transition-all duration-200

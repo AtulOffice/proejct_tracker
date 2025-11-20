@@ -631,7 +631,7 @@ const FormField = ({
                         value="travel"
                         checked={formData.companyExpense?.includes('travel')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -657,7 +657,7 @@ const FormField = ({
                         value="accommodation"
                         checked={formData.companyExpense?.includes('accommodation')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -683,7 +683,7 @@ const FormField = ({
                         value="food"
                         checked={formData.companyExpense?.includes('food')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -709,7 +709,7 @@ const FormField = ({
                         value="conveyance"
                         checked={formData.companyExpense?.includes('conveyance')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -745,7 +745,7 @@ const FormField = ({
                         value="travel"
                         checked={formData.clientExpense?.includes('travel')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -771,7 +771,7 @@ const FormField = ({
                         value="accommodation"
                         checked={formData.clientExpense?.includes('accommodation')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -797,7 +797,7 @@ const FormField = ({
                         value="food"
                         checked={formData.clientExpense?.includes('food')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
@@ -823,7 +823,7 @@ const FormField = ({
                         value="conveyance"
                         checked={formData.clientExpense?.includes('conveyance')}
                         onChange={handleChange}
-                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-gradient-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                        className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
                       />
                       <svg
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"

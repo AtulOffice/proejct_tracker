@@ -135,7 +135,7 @@ const EngineerTable = ({ data }) => {
   };
 
   return (
-    <div className="relative col-span-full w-full overflow-hidden rounded-2xl shadow-2xl bg-gradient-to-b from-white via-blue-50 to-blue-100 border border-blue-200 p-4">
+    <div className="relative col-span-full w-full overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200 p-4">
       {deleteFlag && (
         <PopupConfirmation
           setCancelflag={setDeleteflag}
@@ -165,7 +165,7 @@ const EngineerTable = ({ data }) => {
         />
       )}
 
-      <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-pink-600 px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 rounded-xl">
+      <div className="bg-linear-to-r from-purple-600 via-pink-500 to-pink-600 px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 rounded-xl">
         <h2 className="text-xl font-bold text-white tracking-wide">
           ENGINEER MANAGEMENT
         </h2>
@@ -182,7 +182,7 @@ const EngineerTable = ({ data }) => {
         <div className="overflow-x-auto hidden md:block mt-4">
           <table className="w-full table-fixed">
             <thead>
-              <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md ">
+              <tr className="bg-linear-to-r from-blue-600 to-blue-700 text-white shadow-md ">
                 <th className="w-1/5 px-6 py-4 text-left text-sm font-bold tracking-wide uppercase">
                   Engineer Name
                 </th>
@@ -205,8 +205,8 @@ const EngineerTable = ({ data }) => {
                 <tr
                   key={indx}
                   className={`hover:bg-blue-50/80 transition-colors duration-150 ${indx % 2 === 0
-                    ? "bg-gradient-to-r from-white via-blue-50/30 to-white"
-                    : "bg-gradient-to-r from-white via-blue-100/40 to-white"
+                    ? "bg-linear-to-r from-white via-blue-50/30 to-white"
+                    : "bg-linear-to-r from-white via-blue-100/40 to-white"
                     }`}
                 >
                   <td className="px-6 py-4">
@@ -285,7 +285,7 @@ const EngineerTable = ({ data }) => {
         {data.map((project) => (
           <div
             key={project._id}
-            className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 shadow-xl rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
+            className="bg-linear-to-br from-blue-50 via-white to-indigo-50 shadow-xl rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
           >
             <div className="flex items-start justify-between mb-2 gap-2">
               <div

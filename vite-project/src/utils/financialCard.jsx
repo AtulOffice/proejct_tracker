@@ -5,14 +5,14 @@ export const OrderDetailsCard = ({ order }) => {
   return (
     <>
       <div className="relative w-full flex items-center justify-center my-10">
-        <div className="absolute inset-x-0 h-[3px] bg-gradient-to-r from-transparent via-indigo-500 to-transparent rounded-full shadow-lg" />
-        <span className="relative px-6 py-1.5 text-base sm:text-lg font-extrabold tracking-wider text-indigo-800 uppercase bg-gradient-to-r from-white via-white to-white border-2 border-indigo-400 rounded-full shadow-md">
+        <div className="absolute inset-x-0 h-[3px] bg-linear-to-r from-transparent via-indigo-500 to-transparent rounded-full shadow-lg" />
+        <span className="relative px-6 py-1.5 text-base sm:text-lg font-extrabold tracking-wider text-indigo-800 uppercase bg-linear-to-r from-white via-white to-white border-2 border-indigo-400 rounded-full shadow-md">
           Financial Overview
         </span>
       </div>
       <section className="mb-8">
         <div className="flex items-center gap-3 mb-5">
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
+          <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
             <svg
               className="w-5 h-5 text-white"
               fill="none"
@@ -30,7 +30,7 @@ export const OrderDetailsCard = ({ order }) => {
           <h3 className="text-xl font-bold text-gray-900">
             Financial Overview
           </h3>
-          <div className="flex-1 h-px bg-gradient-to-r from-blue-200 to-transparent"></div>
+          <div className="flex-1 h-px bg-linear-to-r from-blue-200 to-transparent"></div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -56,8 +56,8 @@ export const OrderDetailsCard = ({ order }) => {
                 ? (order.orderValueTotal / 100000).toFixed(2)
                 : "0.00"
             }
-            gradient="from-blue-500 to-blue-600"
-            bgGradient="from-blue-50 to-blue-100"
+            linear="from-blue-500 to-blue-600"
+            bglinear="from-blue-50 to-blue-100"
             borderColor="border-blue-200"
           />
           <FinancialCard
@@ -82,8 +82,8 @@ export const OrderDetailsCard = ({ order }) => {
                 ? (order.orderValueSupply / 100000).toFixed(2)
                 : "0.00"
             }
-            gradient="from-green-500 to-emerald-600"
-            bgGradient="from-green-50 to-emerald-100"
+            linear="from-green-500 to-emerald-600"
+            bglinear="from-green-50 to-emerald-100"
             borderColor="border-green-200"
           />
           <FinancialCard
@@ -114,8 +114,8 @@ export const OrderDetailsCard = ({ order }) => {
                 ? (order.orderValueService / 100000).toFixed(2)
                 : "0.00"
             }
-            gradient="from-purple-500 to-purple-600"
-            bgGradient="from-purple-50 to-purple-100"
+            linear="from-purple-500 to-purple-600"
+            bglinear="from-purple-50 to-purple-100"
             borderColor="border-purple-200"
           />
           <FinancialCard
@@ -140,8 +140,8 @@ export const OrderDetailsCard = ({ order }) => {
                 ? (order.netOrderValue / 100000).toFixed(2)
                 : "0.00"
             }
-            gradient="from-orange-500 to-amber-600"
-            bgGradient="from-orange-50 to-amber-100"
+            linear="from-orange-500 to-amber-600"
+            bglinear="from-orange-50 to-amber-100"
             borderColor="border-orange-200"
           />
         </div>
@@ -322,16 +322,16 @@ export const OrderDetailsCard = ({ order }) => {
               type={order?.paymentType1}
               percentage={order?.paymentPercent1}
               amount={order?.paymentAmount1}
-              gradientFrom="from-blue-500"
-              gradientTo="to-cyan-500"
+              linearFrom="from-blue-500"
+              linearTo="to-cyan-500"
             />
             <PaymentTermCard
               title="Retention Amount"
               type={order?.paymentType2}
               percentage={order?.paymentPercent2}
               amount={order?.paymentAmount2}
-              gradientFrom="from-purple-500"
-              gradientTo="to-pink-500"
+              linearFrom="from-purple-500"
+              linearTo="to-pink-500"
             />
           </div>
 
@@ -408,22 +408,22 @@ const FinancialCard = ({
   icon,
   label,
   value,
-  gradient,
-  bgGradient,
+  linear,
+  bglinear,
   borderColor,
 }) => (
   <div
-    className={`group relative bg-gradient-to-br ${bgGradient} p-6 rounded-2xl border-2 ${borderColor} shadow-md hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}
+    className={`group relative bg-linear-to-br ${bglinear} p-6 rounded-2xl border-2 ${borderColor} shadow-md hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden`}
   >
     <div className="absolute top-0 right-0 w-32 h-32 bg-white/30 rounded-full blur-3xl transform translate-x-16 -translate-y-16 group-hover:scale-150 transition-transform duration-500"></div>
     <div
-      className={`relative inline-flex p-3 rounded-xl bg-gradient-to-r ${gradient} text-white mb-3 shadow-lg`}
+      className={`relative inline-flex p-3 rounded-xl bg-linear-to-r ${linear} text-white mb-3 shadow-lg`}
     >
       {icon}
     </div>
     <p className="relative text-xs font-medium text-gray-600 mb-2">{label}</p>
     <p
-      className={`relative text-3xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}
+      className={`relative text-3xl font-bold bg-linear-to-r ${linear} bg-clip-text text-transparent`}
     >
       ₹{value}
       <span className="text-base font-normal ml-1.5 text-gray-600">Lacs</span>
@@ -434,11 +434,11 @@ const FinancialCard = ({
 // Enhanced Section Header
 const SectionHeader = ({ icon, title }) => (
   <div className="flex items-center gap-3 mb-6">
-    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2.5 rounded-xl shadow-md">
+    <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-2.5 rounded-xl shadow-md">
       {React.cloneElement(icon, { className: "w-5 h-5 text-white" })}
     </div>
     <h3 className="text-xl font-bold text-gray-900">{title}</h3>
-    <div className="flex-1 h-px bg-gradient-to-r from-blue-200 via-indigo-200 to-transparent"></div>
+    <div className="flex-1 h-px bg-linear-to-r from-blue-200 via-indigo-200 to-transparent"></div>
   </div>
 );
 
@@ -477,11 +477,11 @@ const PaymentTermCard = ({
   type,
   percentage,
   amount,
-  gradientFrom,
-  gradientTo,
+  linearFrom,
+  linearTo,
 }) => (
   <div
-    className={`relative bg-gradient-to-br ${gradientFrom} ${gradientTo} p-6 rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300`}
+    className={`relative bg-linear-to-br ${linearFrom} ${linearTo} p-6 rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300`}
   >
     <div className="absolute top-0 right-0 w-40 h-40 bg-white/20 rounded-full blur-3xl transform translate-x-20 -translate-y-20 group-hover:scale-150 transition-transform duration-500"></div>
     <h4 className="relative text-base font-bold text-white mb-4 flex items-center gap-2">

@@ -14,8 +14,8 @@ const PopupConfirmation = ({
       <div
         className={
           deleteFlag
-            ? "bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-3xl shadow-2xl p-8 w-120 max-w-md animate-fade-in border-4 border-gradient-to-r"
-            : "bg-white rounded-3xl shadow-2xl p-8 w-120 max-w-md animate-fade-in border-4 border-gradient-to-r from-pink-500 via-red-500 to-yellow-500"
+            ? "bg-linear-to-r from-pink-500 via-red-500 to-yellow-500 rounded-3xl shadow-2xl p-8 w-120 max-w-md animate-fade-in border-4 border-linear-to-r"
+            : "bg-white rounded-3xl shadow-2xl p-8 w-120 max-w-md animate-fade-in border-4 border-linear-to-r from-pink-500 via-red-500 to-yellow-500"
         }
       >
         <h2 className="text-2xl font-extrabold text-red-600 mb-4 flex items-center">
@@ -42,7 +42,7 @@ const PopupConfirmation = ({
               e.stopPropagation();
               setCancelflag(false);
             }}
-            className="px-5 py-2 rounded-lg bg-gradient-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-900 font-semibold transition shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-5 py-2 rounded-lg bg-linear-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-900 font-semibold transition shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
@@ -52,7 +52,7 @@ const PopupConfirmation = ({
               e.stopPropagation();
               handleConfirm();
             }}
-            className="px-5 py-2 rounded-lg bg-gradient-to-r from-red-500 via-pink-500 to-yellow-400 hover:from-red-600 hover:via-pink-600 hover:to-yellow-500 text-white font-semibold transition shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-5 py-2 rounded-lg bg-linear-to-r from-red-500 via-pink-500 to-yellow-400 hover:from-red-600 hover:via-pink-600 hover:to-yellow-500 text-white font-semibold transition shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {btnval}
           </button>

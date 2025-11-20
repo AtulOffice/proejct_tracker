@@ -261,7 +261,7 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
     >
       <div
         className="
-          bg-gradient-to-br from-white to-gray-50
+          bg-linear-to-br from-white to-gray-50
           rounded-3xl shadow-2xl 
           w-full 
           max-w-md sm:max-w-3xl lg:max-w-5xl 
@@ -273,7 +273,7 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Description removed */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 sm:p-8 relative overflow-hidden">
+        <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white p-6 sm:p-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10">
             <h2 className="text-2xl sm:text-3xl font-bold">
@@ -297,7 +297,7 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
             >
               {/* Section Header */}
               <div
-                className={`bg-gradient-to-r ${
+                className={`bg-linear-to-r ${
                   colorMap[section.color]
                 } text-white px-4 py-3 flex items-center gap-2`}
               >
@@ -373,7 +373,7 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
         {/* <div className="bg-gray-50 border-t border-gray-200 p-4 flex justify-center gap-3">
           <button
             onClick={onClose}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
             Close
           </button>

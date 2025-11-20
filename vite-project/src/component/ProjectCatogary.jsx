@@ -165,7 +165,7 @@ export const ProjectCatogary = ({
   }
 
   return (
-    <div className="max-w-8xl min-h-[140vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="max-w-8xl min-h-[140vh] lg:ml-60 px-6 py-12 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">{title}</h2>
 
       {devStatus ? (
@@ -230,10 +230,10 @@ export const ProjectCatogary = ({
             onClick={handlePrevPage}
             disabled={currentPage === 1}
             className="flex items-center gap-2 py-3 px-4 sm:px-6 rounded-full font-semibold text-white shadow-lg
-                 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500
+                 bg-linear-to-r from-pink-500 via-purple-500 to-indigo-500
                  hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600
                  transform transition-all duration-300
-                 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                 disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -254,9 +254,9 @@ export const ProjectCatogary = ({
           <button
             onClick={handleNextPage}
             className="flex items-center gap-2 py-3 px-4 sm:px-6 rounded-full font-semibold text-white shadow-lg
-                 bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600
+                 bg-linear-to-r from-green-400 via-blue-500 to-indigo-600
                  hover:from-green-500 hover:via-blue-600 hover:to-indigo-700
-                 transform transition-all duration-300 flex-shrink-0"
+                 transform transition-all duration-300 shrink-0"
           >
             <span className="hidden sm:inline">Next</span>
             <svg

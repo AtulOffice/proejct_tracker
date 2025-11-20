@@ -109,10 +109,10 @@ const ProjectdevlopForm = () => {
     return <Navigate to="/" replace />;
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-2 border-purple-200 rounded-2xl p-8 shadow-xl backdrop-blur-sm">
-          <h1 className="truncate text-4xl md:text-5xl font-black mb-4 text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text drop-shadow-sm">
+        <div className="text-center mb-12 bg-linear-to-br from-blue-50 via-purple-50 to-pink-50 border-2 border-purple-200 rounded-2xl p-8 shadow-xl backdrop-blur-sm">
+          <h1 className="truncate text-4xl md:text-5xl font-black mb-4 text-transparent bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text drop-shadow-sm">
             {formData.project.rows[0]?.projectName
               ? formData.project.rows[0]?.projectName?.toUpperCase()
               : "PROJECT DEVELOPMENT STATUS"}
@@ -124,9 +124,9 @@ const ProjectdevlopForm = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
+              className="bg-linear-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
             >
-              <div className="bg-gradient-to-r from-blue-200 to-indigo-400 p-6 flex justify-between items-center rounded-xl">
+              <div className="bg-linear-to-r from-blue-200 to-indigo-400 p-6 flex justify-between items-center rounded-xl">
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">📄</span>
                   <h2 className="text-xl font-bold text-white">DOCUMENTS</h2>
@@ -148,7 +148,7 @@ const ProjectdevlopForm = () => {
               </div>
 
               <div className="p-6">
-                <div className="hidden md:grid grid-cols-6 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="hidden md:grid grid-cols-6 gap-4 mb-4 px-4 py-3 bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
                   <div className="flex items-center">✅ Required Status</div>
                   <div className="flex items-center">📅 Start Date</div>
@@ -165,7 +165,7 @@ const ProjectdevlopForm = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className="grid grid-cols-1 md:grid-cols-6 gap-4 p-5 bg-gradient-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
+                      className="grid grid-cols-1 md:grid-cols-6 gap-4 p-5 bg-linear-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
                     >
                       <span className="text-sm font-semibold text-gray-800 bg-blue-200 px-3 py-2 rounded-lg border border-blue-100">
                         {row.title || `Task ${i + 1}`}
@@ -275,8 +275,8 @@ const ProjectdevlopForm = () => {
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                               className={`h-2 rounded-full transition-all duration-300 ${row.completed
-                                ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
-                                : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
+                                ? "bg-linear-to-r from-green-400 to-emerald-500 w-full"
+                                : "bg-linear-to-r from-blue-300 to-blue-400 w-1/5"
                                 }`}
                             />
                           </div>
@@ -292,9 +292,9 @@ const ProjectdevlopForm = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
+            className="bg-linear-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
           >
-            <div className="bg-gradient-to-r from-emerald-400 to-teal-400 p-6 flex justify-between items-center rounded-xl">
+            <div className="bg-linear-to-r from-emerald-400 to-teal-400 p-6 flex justify-between items-center rounded-xl">
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🖥️</span>
                 <h2 className="text-xl font-bold text-white">Screen</h2>
@@ -315,7 +315,7 @@ const ProjectdevlopForm = () => {
               </div>
             </div>
             <div className="p-6">
-              <div className="hidden md:grid grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+              <div className="hidden md:grid grid-cols-5 gap-4 mb-4 px-4 py-3 bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                 <div className="flex items-center">📋 Task Title</div>
                 <div className="flex items-center">📅 Start Date</div>
                 <div className="flex items-center">🏁 End Date</div>
@@ -331,7 +331,7 @@ const ProjectdevlopForm = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-gradient-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
+                    className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-linear-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
                   >
                     <span className="text-sm font-semibold text-gray-800 bg-blue-200 px-3 py-2 rounded-lg border border-blue-100">
                       {row.title || `Task ${i + 1}`}
@@ -406,8 +406,8 @@ const ProjectdevlopForm = () => {
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full transition-all duration-300 ${row.completed
-                              ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
-                              : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
+                              ? "bg-linear-to-r from-green-400 to-emerald-500 w-full"
+                              : "bg-linear-to-r from-blue-300 to-blue-400 w-1/5"
                               }`}
                           />
                         </div>
@@ -424,9 +424,9 @@ const ProjectdevlopForm = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
+              className="bg-linear-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
             >
-              <div className="bg-gradient-to-r from-blue-200 to-indigo-400 p-6 flex justify-between items-center rounded-xl">
+              <div className="bg-linear-to-r from-blue-200 to-indigo-400 p-6 flex justify-between items-center rounded-xl">
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">📄</span>
                   <h2 className="text-xl font-bold text-white">Logic</h2>
@@ -448,7 +448,7 @@ const ProjectdevlopForm = () => {
               </div>
 
               <div className="p-6">
-                <div className="hidden md:grid grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="hidden md:grid grid-cols-5 gap-4 mb-4 px-4 py-3 bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
                   <div className="flex items-center">📅 Start Date</div>
                   <div className="flex items-center">🏁 End Date</div>
@@ -464,7 +464,7 @@ const ProjectdevlopForm = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-gradient-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
+                      className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-linear-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
                     >
                       <span className="text-sm font-semibold text-gray-800 bg-blue-200 px-3 py-2 rounded-lg border border-blue-100">
                         {row.title || `Task ${i + 1}`}
@@ -543,8 +543,8 @@ const ProjectdevlopForm = () => {
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                               className={`h-2 rounded-full transition-all duration-300 ${row.completed
-                                ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
-                                : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
+                                ? "bg-linear-to-r from-green-400 to-emerald-500 w-full"
+                                : "bg-linear-to-r from-blue-300 to-blue-400 w-1/5"
                                 }`}
                             />
                           </div>
@@ -562,9 +562,9 @@ const ProjectdevlopForm = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
+              className="bg-linear-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
             >
-              <div className="bg-gradient-to-r from-orange-400 to-yellow-400 p-6 flex justify-between items-center rounded-xl">
+              <div className="bg-linear-to-r from-orange-400 to-yellow-400 p-6 flex justify-between items-center rounded-xl">
                 <div className="flex items-center space-x-3">
                   <span className="text-2xl">🧪</span>
                   <h2 className="text-xl font-bold text-white">Testing</h2>
@@ -586,7 +586,7 @@ const ProjectdevlopForm = () => {
               </div>
 
               <div className="p-6">
-                <div className="hidden md:flex justify-between items-center mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="hidden md:flex justify-between items-center mb-4 px-4 py-3 bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Task Title</div>
                   <div className="flex items-center">🎯 Status</div>
                 </div>
@@ -598,7 +598,7 @@ const ProjectdevlopForm = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className="flex justify-between items-center p-5 bg-gradient-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
+                      className="flex justify-between items-center p-5 bg-linear-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
                     >
                       <span className="text-sm font-semibold text-gray-800 bg-blue-200 px-3 py-2 rounded-lg border border-blue-100">
                         {row.title || `Task ${i + 1}`}
@@ -630,8 +630,8 @@ const ProjectdevlopForm = () => {
                           <div className="w-32 bg-gray-200 rounded-full h-2">
                             <div
                               className={`h-2 rounded-full transition-all duration-300 ${row.completed
-                                ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
-                                : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
+                                ? "bg-linear-to-r from-green-400 to-emerald-500 w-full"
+                                : "bg-linear-to-r from-blue-300 to-blue-400 w-1/5"
                                 }`}
                             />
                           </div>
@@ -649,10 +649,10 @@ const ProjectdevlopForm = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
+              className="bg-linear-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
             >
               <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4 px-4 py-3 bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                   <div className="flex items-center">📋 Job Number</div>
                   <div className="flex items-center">📅 Start Date</div>
                   <div className="flex items-center">🏁 End Date</div>
@@ -668,7 +668,7 @@ const ProjectdevlopForm = () => {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-gradient-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
+                      className="grid grid-cols-1 md:grid-cols-5 gap-4 p-5 bg-linear-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
                     >
                       <span className="text-sm font-semibold text-gray-800 bg-blue-200 px-3 py-2 rounded-lg border border-blue-100">
                         {row.jobNumber || ""}
@@ -748,8 +748,8 @@ const ProjectdevlopForm = () => {
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                               className={`h-2 rounded-full transition-all duration-300 ${row.completed
-                                ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
-                                : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
+                                ? "bg-linear-to-r from-green-400 to-emerald-500 w-full"
+                                : "bg-linear-to-r from-blue-300 to-blue-400 w-1/5"
                                 }`}
                             />
                           </div>
@@ -766,7 +766,7 @@ const ProjectdevlopForm = () => {
           <div className="flex justify-center pt-8">
             <button
               type="submit"
-              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105"
+              className="px-8 py-3 bg-linear-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105"
             >
               SAVE
             </button>

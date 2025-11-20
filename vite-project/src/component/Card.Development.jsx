@@ -14,19 +14,19 @@ const Description = ({ one, two, three, HomeStatus }) => {
   return (
     <div className="flex flex-wrap gap-2">
       {one && (
-        <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
+        <span className="px-3 py-1 rounded-full text-xs font-medium bg-linear-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
           {one}
         </span>
       )}
       {two && (
-        <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
+        <span className="px-3 py-1 rounded-full text-xs font-medium bg-linear-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
           {two}
         </span>
       )}
-      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
+      <span className="px-3 py-1 rounded-full text-xs font-medium bg-linear-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
         {three} days
       </span>
-      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200 flex items-center gap-1">
+      <span className="px-3 py-1 rounded-full text-xs font-medium bg-linear-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200 flex items-center gap-1">
         {HomeStatus === "OFFICE" ? (
           <>
             <FaHome className="text-indigo-700 text-sm" />
@@ -57,8 +57,8 @@ const ProgressBar = ({
       </span>
     </div>
 
-    <div className="relative w-full h-5 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full overflow-hidden shadow-inner border border-gray-300">
-      <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent rounded-full"></div>
+    <div className="relative w-full h-5 bg-linear-to-r from-gray-200 to-gray-300 rounded-full overflow-hidden shadow-inner border border-gray-300">
+      <div className="absolute inset-0 bg-linear-to-r from-white/30 to-transparent rounded-full"></div>
 
       <motion.div
         initial={{ width: 0, opacity: 0 }}
@@ -70,13 +70,13 @@ const ProgressBar = ({
           damping: 15,
         }}
         className={`absolute top-0 left-0 h-5 rounded-full
-          bg-gradient-to-r ${colorFrom} ${colorVia ? colorVia : ""} ${colorTo}
+          bg-linear-to-r ${colorFrom} ${colorVia ? colorVia : ""} ${colorTo}
           shadow-lg relative overflow-hidden
         `}
         style={{ width: `${value || 0}%` }}
       >
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+          className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
           animate={{
             x: ["-100%", "200%"],
           }}
@@ -87,7 +87,7 @@ const ProgressBar = ({
             ease: "easeInOut",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-full"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-white/20 to-transparent rounded-full"></div>
       </motion.div>
 
       {value > 5 && (
@@ -110,7 +110,7 @@ const ProgressBar = ({
           <div
             key={index}
             className={`w-2 h-1 rounded-full transition-all duration-300 ${index < Math.ceil((value || 0) / 20)
-              ? `bg-gradient-to-r ${colorFrom} ${colorTo} shadow-sm`
+              ? `bg-linear-to-r ${colorFrom} ${colorTo} shadow-sm`
               : "bg-gray-300"
               }`}
           />
@@ -237,7 +237,7 @@ const CardStatus = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="group relative rounded-xl bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-300 border border-transparent hover:border-purple-300 shadow-lg hover:shadow-2xl transition-all duration-300"
+        className="group relative rounded-xl bg-linear-to-br from-indigo-400 via-purple-400 to-pink-300 border border-transparent hover:border-purple-300 shadow-lg hover:shadow-2xl transition-all duration-300"
       >
         <div className="p-6">
           <div className="flex items-center justify-between w-full">
@@ -263,7 +263,7 @@ const CardStatus = ({
               <button
                 className="
 flex items-center justify-center
-bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
+bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400
 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200
@@ -282,7 +282,7 @@ focus:outline-none focus:ring-4 focus:ring-emerald-400
               <button
                 className="
 flex items-center justify-center
-bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
+bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400
 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200
@@ -302,7 +302,7 @@ focus:outline-none focus:ring-4 focus:ring-emerald-400
                 onClick={() => setDeleteflag(true)}
                 className="relative group
 flex items-center justify-center
-bg-gradient-to-tr from-red-500 via-rose-400 to-pink-400
+bg-linear-to-tr from-red-500 via-rose-400 to-pink-400
 hover:from-red-600 hover:via-rose-500 hover:to-pink-500
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200

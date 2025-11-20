@@ -33,7 +33,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
     pending: { name: "Pending", cnt: 0, color: "#a78bfa" },
     urgent: { name: "Urgent", cnt: 0, color: "#f87171" },
   };
-  const gradients = [
+  const linears = [
     "from-orange-100 via-pink-100 to-rose-100 hover:from-orange-200 hover:via-pink-200 hover:to-rose-200",
     "from-cyan-100 via-blue-100 to-indigo-100 hover:from-cyan-200 hover:via-blue-200 hover:to-indigo-200",
     "from-emerald-100 via-teal-100 to-cyan-100 hover:from-emerald-200 hover:via-teal-200 hover:to-cyan-200",
@@ -65,9 +65,9 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
               <div
                 onClick={() => setActiveCard(router[item.name])}
                 key={index}
-                className="cursor-pointer relative overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px]"
+                className="cursor-pointer relative overflow-hidden bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl hover:translate-y-0.5"
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-100/40 to-purple-100/30 rounded-bl-[100px] -z-10"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-indigo-100/40 to-purple-100/30 rounded-bl-[100px] -z-10"></div>
 
                 <div className="flex items-center justify-between">
                   <div>
@@ -80,13 +80,13 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
                       </span>
                     </h3>
                   </div>
-                  <div className="flex items-center justify-center rounded-full p-3 bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20">
+                  <div className="flex items-center justify-center rounded-full p-3 bg-linear-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20">
                     <FaBook className="text-white" size={26} />
                   </div>
                 </div>
 
                 <div className="mt-5 h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full width-full"></div>
+                  <div className="h-full bg-linear-to-r from-indigo-500 to-purple-500 rounded-full width-full"></div>
                 </div>
 
                 <div className="mt-3 flex items-center">
@@ -107,9 +107,8 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
               <div
                 key={key}
                 onClick={() => setActiveCard(router[item.name])}
-                className={`relative overflow-hidden p-4 rounded-2xl border border-indigo-100 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col justify-between bg-gradient-to-br ${
-                  gradients[index % gradients.length]
-                }`}
+                className={`relative overflow-hidden p-4 rounded-2xl border border-indigo-100 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col justify-between bg-linear-to-br ${linears[index % linears.length]
+                  }`}
               >
                 <div className="absolute inset-0 rounded-2xl bg-white/20 backdrop-blur-sm" />
 

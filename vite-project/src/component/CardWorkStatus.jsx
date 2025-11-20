@@ -75,7 +75,7 @@ const CardWorkStatus = ({ project, indx }) => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="group relative rounded-xl bg-gradient-to-br from-blue-200 via-purple-50 to-indigo-50 border border-transparent hover:border-indigo-300 shadow-md hover:shadow-xl transition-all duration-300 "
+        className="group relative rounded-xl bg-linear-to-br from-blue-200 via-purple-50 to-indigo-50 border border-transparent hover:border-indigo-300 shadow-md hover:shadow-xl transition-all duration-300 "
       >
         <div className="p-6">
           <div className="flex items-center justify-between w-full">
@@ -100,7 +100,7 @@ const CardWorkStatus = ({ project, indx }) => {
               }}
               className="relative group
 flex items-center justify-center
-bg-gradient-to-tr from-red-500 via-pink-500 to-yellow-500
+bg-linear-to-tr from-red-500 via-pink-500 to-yellow-500
 hover:from-red-600 hover:via-pink-600 hover:to-yellow-600
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200
@@ -116,7 +116,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           </div>
 
           <div className="flex justify-between items-start my-2">
-            <h3 className="truncate text-xl font-extrabold text-transparent p-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 group-hover:from-pink-300 rounded-lg group-hover:via-purple-300 group-hover:to-indigo-300 transition-colors duration-300 shadow-lg">
+            <h3 className="truncate text-xl font-extrabold text-transparent p-2 bg-linear-to-r from-indigo-300 via-purple-300 to-pink-300 group-hover:from-pink-300 rounded-lg group-hover:via-purple-300 group-hover:to-indigo-300 transition-colors duration-300 shadow-lg">
               {project.projectName.toUpperCase()}
             </h3>
           </div>
@@ -152,7 +152,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           </ul>
 
           {project.createdAt && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-linear-to-r from-indigo-100 to-pink-100 text-indigo-800 shadow-sm hover:shadow-md transition duration-200">
               At - {formattedDate(project.createdAt)}
             </span>
           )}

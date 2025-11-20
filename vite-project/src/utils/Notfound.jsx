@@ -10,7 +10,7 @@ const Notfound = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="col-span-full flex flex-col items-center justify-center py-20 px-4 relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-br from-blue-50 to-purple-50 pointer-events-none" />
       <div className="relative z-10 flex flex-col items-center">
         <motion.div
           initial={{ scale: 0 }}
@@ -63,7 +63,7 @@ const Notfound = () => {
           transition={{ delay: 0.4, duration: 0.5 }}
           className="text-center"
         >
-          <h3 className="text-2xl font-bold text-gray-800 mb-2 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-clip-text text-transparent">
+          <h3 className="text-2xl font-bold text-gray-800 mb-2 bg-linear-to-r from-gray-700 via-gray-800 to-gray-700 bg-clip-text ">
             No Results Found
           </h3>
           <motion.p

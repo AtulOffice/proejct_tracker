@@ -298,7 +298,7 @@ const AdminDashboard = () => {
   }, [sidebarRef, setSidebarOpen]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-100">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-blue-100 to-indigo-100">
       {open && <NotificationForm formRef={formRef} setOpen={setOpen} />}
       <header className="bg-white shadow-md fixed w-full z-30">
         <div className="flex items-center justify-between px-6 h-16">
@@ -315,7 +315,7 @@ const AdminDashboard = () => {
             </button>
             <div className="ml-4 lg:ml-0">
               {" "}
-              <h1 className="text-xl sm:text-xl font-bold bg-gradient-to-r from-pink-500 via-indigo-600 to-teal-400 text-transparent bg-clip-text animate-pulse shadow-lg p-2 rounded-lg border-2 border-indigo-300 hover:border-indigo-500 transition-all duration-300 transform hover:scale-110 tracking-wider flex items-center">
+              <h1 className="text-xl sm:text-xl font-bold bg-linear-to-r from-pink-500 via-indigo-600 to-teal-400 text-transparent bg-clip-text animate-pulse shadow-lg p-2 rounded-lg border-2 border-indigo-300 hover:border-indigo-500 transition-all duration-300 transform hover:scale-110 tracking-wider flex items-center">
                 <span className="mr-2">✨</span>
                 <span className="hidden sm:inline">
                   {user.role === "admin"
@@ -343,7 +343,7 @@ const AdminDashboard = () => {
               className="text-gray-600 relative cursor-pointer"
             >
               <RiNotification3Line size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-500 !text-white rounded-full w-4 h-4 flex items-center justify-center text-xs">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white! rounded-full w-4 h-4 flex items-center justify-center text-xs">
                 {overvew?.todayNotice ?? 0}
               </span>
             </button>

@@ -47,26 +47,26 @@ const OrderTableAll = ({ data }) => {
         <div className="max-h-[690px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
-              <tr className="bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
-                <th className="w-1/5 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
+              <tr className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
+                <th className="w-1/5 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Client Name
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
+                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Job ID
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
+                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Booking Date
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
+                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Entity Type
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
+                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   SO Type
                 </th>
-                <th className="w-1/5 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase !text-white">
+                <th className="w-1/5 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Site
                 </th>
-                <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase !text-white">
+                <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
                   Action
                 </th>
               </tr>
@@ -118,7 +118,7 @@ const OrderTableAll = ({ data }) => {
                   <td className="px-6 py-4 text-center">
                     <button
                       onClick={() => handleUpdate(order?._id)}
-                      className="inline-flex items-center justify-center p-2.5 rounded-lg bg-gradient-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
+                      className="inline-flex items-center justify-center p-2.5 rounded-lg bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
                       title="Edit this order"
                     >
                       <MdEdit

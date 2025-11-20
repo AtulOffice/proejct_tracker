@@ -100,7 +100,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
     );
   };
 
-  const renderSection = (sectionKey, icon, gradientColors) => {
+  const renderSection = (sectionKey, icon, linearColors) => {
     const { filled, total } = getSectionProgress(sectionKey);
     const progress = total > 0 ? Math.round((filled / total) * 100) : 0;
 
@@ -109,7 +109,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
         <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
           <div className="flex items-center gap-4">
             <div
-              className={`p-3 rounded-xl bg-gradient-to-br ${gradientColors}`}
+              className={`p-3 rounded-xl bg-linear-to-br ${linearColors}`}
             >
               {icon}
             </div>
@@ -120,7 +120,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
             </div>
             <div className="relative w-28 sm:w-32 h-3 bg-gray-200 rounded-full overflow-hidden">
               <div
-                className={`h-full bg-gradient-to-r ${gradientColors}`}
+                className={`h-full bg-linear-to-r ${linearColors}`}
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -144,7 +144,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
 
   return (
     <div className="w-full max-w-5xl mx-auto">
-      <div className="bg-gradient-to-br from-purple-100 via-purple-100 to-pink-100 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+      <div className="bg-linear-to-br from-purple-100 via-purple-100 to-pink-100 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
         <div className="p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left side: full height section */}
           <div className="flex flex-col">

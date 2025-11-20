@@ -112,7 +112,7 @@ const CardAll = ({
           window.innerWidth < 640 && setSelectedProjectForPopup(project)
         }
         className={`group relative rounded-xl border border-transparent shadow-md hover:shadow-xl transition-all duration-300
-    bg-gradient-to-br
+    bg-linear-to-br
     ${!editoptionflag
             ? project.Development === "SITE"
               ? "from-green-200 via-lime-100 to-emerald-100 hover:border-green-300"
@@ -146,7 +146,7 @@ const CardAll = ({
                   <button
                     className="
 flex items-center justify-center
-bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400
+bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400
 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200
@@ -171,7 +171,7 @@ focus:outline-none focus:ring-4 focus:ring-emerald-400
                   <button
                     className="
 flex items-center justify-center
-bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
+bg-linear-to-tr from-blue-500 via-cyan-500 to-indigo-500
 hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200
@@ -195,7 +195,7 @@ focus:outline-none focus:ring-4 focus:ring-blue-400
                 <button
                   className="
 flex items-center justify-center
-bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
+bg-linear-to-tr from-blue-500 via-cyan-500 to-indigo-500
 hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200
@@ -216,7 +216,7 @@ focus:outline-none focus:ring-4 focus:ring-blue-400
                 onClick={() => setDeleteflag(true)}
                 className="relative group
 flex items-center justify-center
-bg-gradient-to-tr from-red-500 via-pink-500 to-yellow-500
+bg-linear-to-tr from-red-500 via-pink-500 to-yellow-500
 hover:from-red-600 hover:via-pink-600 hover:to-yellow-600
 text-white p-2 rounded-full shadow-lg
 transition-all duration-200
@@ -233,7 +233,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
           </div>
 
           <div className="flex justify-between items-start my-2">
-            <h3 className="text-xl font-extrabold text-transparent p-2 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 group-hover:from-pink-300 rounded-lg group-hover:via-purple-300 group-hover:to-indigo-300 transition-colors duration-300 shadow-lg truncate">
+            <h3 className="text-xl font-extrabold text-transparent p-2 bg-linear-to-r from-indigo-300 via-purple-300 to-pink-300 group-hover:from-pink-300 rounded-lg group-hover:via-purple-300 group-hover:to-indigo-300 transition-colors duration-300 shadow-lg truncate">
               {project.projectName.toUpperCase()}
             </h3>
           </div>

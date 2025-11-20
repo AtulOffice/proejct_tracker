@@ -54,7 +54,7 @@ const WeekRecordList = () => {
   }
 
   return (
-    <div className="max-w-8xl h-full lg:ml-60 px-6 py-20 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="max-w-8xl h-full lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <FilterCompoWeek searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <div

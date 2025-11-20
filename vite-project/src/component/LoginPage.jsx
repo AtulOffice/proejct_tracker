@@ -129,7 +129,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-blue-200  flex items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="w-full max-w-md mx-auto overflow-hidden bg-white   rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl border border-gray-100 ">
-        <div className="bg-gradient-to-r from-blue-400 to-indigo-400 p-6 text-white text-center">
+        <div className="bg-linear-to-r from-blue-400 to-indigo-400 p-6 text-white text-center">
           <h2 className="text-2xl font-bold tracking-tight italic">
             {change ? "LOGIN" : "PASSWORD GENERATION"}
           </h2>
@@ -204,7 +204,7 @@ const LoginPage = () => {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full relative overflow-hidden group bg-gradient-to-r from-blue-400 to-indigo-400 text-white font-medium py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400/40"
+                  className="w-full relative overflow-hidden group bg-linear-to-r from-blue-400 to-indigo-400 text-white font-medium py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400/40"
                 >
                   <span className="absolute top-0 left-0 w-0 h-full bg-white opacity-20 transition-all duration-300 group-hover:w-full"></span>
                   <span className="relative flex items-center justify-center gap-2">
@@ -327,7 +327,7 @@ const LoginPage = () => {
                 <button
                   type="submit"
                   disabled={isOtpLoading}
-                  className="w-full relative overflow-hidden group bg-gradient-to-r from-blue-400 to-indigo-400 text-white font-medium py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400/40"
+                  className="w-full relative overflow-hidden group bg-linear-to-r from-blue-400 to-indigo-400 text-white font-medium py-3 px-4 rounded-xl hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400/40"
                 >
                   <span className="absolute top-0 left-0 w-0 h-full bg-white opacity-20 transition-all duration-300 group-hover:w-full"></span>
                   <span

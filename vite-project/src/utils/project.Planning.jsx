@@ -221,7 +221,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
 
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-black/60 to-gray-900/40 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-br from-black/60 to-gray-900/40 backdrop-blur-sm p-4">
       <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-200 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 transition-all duration-300 scrollbar-glass">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-800 drop-shadow-sm">
@@ -249,8 +249,8 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
           </button>
           {collOpen && (
             <div className="space-y-6 mb-6">
-              <div className="relative bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-xl border border-indigo-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-200/30 to-purple-200/30 rounded-bl-full blur-2xl"></div>
+              <div className="relative bg-linear-to-br from-indigo-50 to-purple-50 p-6 rounded-xl border border-indigo-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-indigo-200/30 to-purple-200/30 rounded-bl-full blur-2xl"></div>
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="p-2 bg-indigo-600 rounded-lg shadow-md">
@@ -284,8 +284,8 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                   </div>
                 </div>
               </div>
-              <div className="relative bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-200/30 to-cyan-200/30 rounded-bl-full blur-2xl"></div>
+              <div className="relative bg-linear-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-blue-200/30 to-cyan-200/30 rounded-bl-full blur-2xl"></div>
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="p-2 bg-blue-600 rounded-lg shadow-md">
@@ -318,7 +318,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
             return (
               <div
                 key={phase}
-                className="p-5 bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-2xl shadow-sm border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300"
+                className="p-5 bg-linear-to-br from-gray-50 to-gray-100/50 rounded-2xl shadow-sm border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300"
               >
                 <h3 className="font-semibold text-lg text-gray-800 mb-4 capitalize flex items-center gap-2">
                   <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
@@ -359,7 +359,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
 
                 {phase !== "documents" && (
                   <div className="mt-5">
-                    <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-3  items-center gap-2">
                       <svg
                         className="w-5 h-5 text-teal-500"
                         fill="none"
@@ -385,7 +385,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                             <span
                               key={engId}
                               title={fullName}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-teal-100 to-cyan-100 text-teal-800 text-sm rounded-full shadow-sm hover:shadow-md transition-all duration-200 group cursor-pointer border border-teal-200"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-teal-100 to-cyan-100 text-teal-800 text-sm rounded-full shadow-sm hover:shadow-md transition-all duration-200 group cursor-pointer border border-teal-200"
                             >
                               <svg
                                 className="w-4 h-4"
@@ -465,7 +465,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                                   : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
                                   }`}
                               >
-                                <div className="relative flex-shrink-0">
+                                <div className="relative shrink-0">
                                   <input
                                     type="checkbox"
                                     checked={isChecked}
@@ -499,7 +499,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                                 </div>
                                 <div className="flex items-center gap-2 flex-1 min-w-0">
                                   <div
-                                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isChecked ? "bg-teal-100" : "bg-gray-100"
+                                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isChecked ? "bg-teal-100" : "bg-gray-100"
                                       }`}
                                   >
                                     <svg
@@ -565,7 +565,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 hover:shadow-xl transition-all font-medium"
+              className="px-6 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 hover:shadow-xl transition-all font-medium"
             >
               Save Timeline
             </button>

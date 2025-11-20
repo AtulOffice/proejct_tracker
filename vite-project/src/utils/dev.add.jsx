@@ -24,8 +24,8 @@ export const InputField = ({
                 shadow-md border-2 backdrop-blur-sm
                 ${
                   disabled
-                    ? "bg-gradient-to-r from-gray-100 to-gray-50 text-gray-500 border-gray-300 cursor-not-allowed"
-                    : `bg-gradient-to-r from-white to-blue-50/50 text-gray-800 border-blue-300/50
+                    ? "bg-linear-to-r from-gray-100 to-gray-50 text-gray-500 border-gray-300 cursor-not-allowed"
+                    : `bg-linear-to-r from-white to-blue-50/50 text-gray-800 border-blue-300/50
                        hover:border-purple-400 hover:shadow-lg hover:shadow-purple-200/30
                        focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200/50 
                        focus:shadow-xl focus:shadow-indigo-200/40
@@ -55,7 +55,7 @@ export const SelectField = ({
         className="
                     w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
                     shadow-md border-2 backdrop-blur-sm appearance-none cursor-pointer
-                    bg-gradient-to-r from-white to-blue-50/50 text-gray-800 border-blue-300/50
+                    bg-linear-to-r from-white to-blue-50/50 text-gray-800 border-blue-300/50
                     hover:border-purple-400 hover:shadow-lg hover:shadow-purple-200/30
                     focus:border-indigo-500 focus:ring-4 focus:ring-indigo-200/50 
                     focus:shadow-xl focus:shadow-indigo-200/40

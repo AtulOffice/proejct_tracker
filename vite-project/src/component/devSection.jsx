@@ -5,7 +5,7 @@ import { CheckboxField, InputField, SelectField } from "../utils/dev.add";
 export const Section = ({
     title,
     icon,
-    gradient,
+    gradient: linear,
     columns,
     rows,
     onRowChange,
@@ -15,15 +15,15 @@ export const Section = ({
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
+            className="bg-linear-to-br from-orange-100 via-amber-50 to-yellow-100 rounded-xl shadow-lg overflow-hidden border border-red-200"
         >
-            <div className={`p-6 flex items-center space-x-3 ${gradient}`}>
+            <div className={`p-6 flex items-center space-x-3 ${linear}`}>
                 <span className="text-2xl">{icon}</span>
                 <h2 className="text-xl font-bold text-white">{title}</h2>
             </div>
 
             <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4 px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
+                <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4 px-4 py-3 bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-sm font-semibold text-blue-800">
                     {columns.map((col, i) => (
                         <div key={i} className="flex items-center justify-center md:justify-start">
                             {col}
@@ -38,7 +38,7 @@ export const Section = ({
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="grid grid-cols-1 md:grid-cols-6 gap-4 p-5 bg-gradient-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
+                            className="grid grid-cols-1 md:grid-cols-6 gap-4 p-5 bg-linear-to-r from-white to-blue-50/30 rounded-xl border border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-blue-200 group"
                         >
 
                             <span className="text-sm font-semibold text-gray-800 bg-blue-200 px-3 py-2 rounded-lg border border-blue-100">
@@ -109,8 +109,8 @@ export const Section = ({
                                     <div className="w-full bg-gray-200 rounded-full h-2">
                                         <div
                                             className={`h-2 rounded-full transition-all duration-300 ${row.completed
-                                                ? "bg-gradient-to-r from-green-400 to-emerald-500 w-full"
-                                                : "bg-gradient-to-r from-blue-300 to-blue-400 w-1/5"
+                                                ? "bg-linear-to-r from-green-400 to-emerald-500 w-full"
+                                                : "bg-linear-to-r from-blue-300 to-blue-400 w-1/5"
                                                 }`}
                                         />
                                     </div>

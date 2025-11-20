@@ -7,25 +7,25 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
 
   const assignmentsArray = weekData?.assignments
     ? Object.entries(weekData.assignments).map(([date, engineers]) => ({
-        date,
-        engineers: engineers.map(
-          ({
-            engineerId,
-            engineerName,
-            projectName,
-            jobNumber,
-            tasks,
-            _id,
-          }) => ({
-            engineerId,
-            engineerName,
-            projectName,
-            jobNumber,
-            tasks,
-            _id,
-          })
-        ),
-      }))
+      date,
+      engineers: engineers.map(
+        ({
+          engineerId,
+          engineerName,
+          projectName,
+          jobNumber,
+          tasks,
+          _id,
+        }) => ({
+          engineerId,
+          engineerName,
+          projectName,
+          jobNumber,
+          tasks,
+          _id,
+        })
+      ),
+    }))
     : [];
 
   return (
@@ -52,7 +52,7 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
             ).toLocaleDateString()}.pdf`}
           >
             {({ loading }) => (
-              <button className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-5 py-2 rounded-lg shadow-md hover:opacity-90 transition">
+              <button className="bg-linear-to-r from-indigo-500 to-blue-500 text-white px-5 py-2 rounded-lg shadow-md hover:opacity-90 transition">
                 {loading ? "Generating PDF..." : "⬇️ Download PDF"}
               </button>
             )}
@@ -61,7 +61,7 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-500 via-indigo-400 to-purple-500 bg-clip-text text-transparent italic">
+          <h2 className="text-3xl font-bold bg-linear-to-r from-blue-500 via-indigo-400 to-purple-500 bg-clip-text text-transparent italic">
             📋{" "}
             {weekData?.weekStart
               ? new Date(weekData.weekStart).toLocaleDateString()
@@ -81,7 +81,7 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
             {assignmentsArray.map((day, index) => (
               <div
                 key={index}
-                className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 shadow-sm hover:shadow-md transition"
+                className="rounded-2xl border border-indigo-200 bg-linear-to-br from-blue-50 to-indigo-50 p-6 shadow-sm hover:shadow-md transition"
               >
                 <h3 className="text-2xl font-semibold text-indigo-700 mb-5 flex items-center gap-2">
                   📅 {day.date}
@@ -115,7 +115,7 @@ const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
                           <td className="border border-gray-300 px-4 py-3 font-medium text-gray-800">
                             {eng.engineerName || eng.engineerId}
                           </td>
-                          <td className="border border-gray-300 px-4 py-3 text-gray-700 whitespace-pre-wrap break-words">
+                          <td className="border border-gray-300 px-4 py-3 text-gray-700 whitespace-pre-wrap wrap-break-words">
                             {eng.tasks || "-"}
                           </td>
                           <td className="border border-gray-300 px-4 py-3 text-gray-700">

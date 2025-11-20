@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema(
   {
+    jobNumber: { type: String, required: true, trim: true, unique: true },
     entityType: {
       type: String,
       required: true,
@@ -12,30 +13,30 @@ const OrderSchema = new mongoose.Schema(
       required: true,
       enum: ["PROJECT", "AMC", "SERVICE", "WARRANTY", "SUPPLY"],
     },
-    jobNumber: { type: String, required: true, trim: true, unique: true },
     bookingDate: { type: Date },
-    actualDeleveryDate: { type: Date },
     client: {
       type: String,
       required: true,
       trim: true,
     },
-    site: { type: String, trim: true },
     endUser: { type: String, trim: true },
+    site: { type: String, trim: true },
+    actualDeleveryDate: { type: Date },
+
     orderNumber: { type: String, trim: true },
     orderDate: { type: Date },
     deleveryDate: { type: Date },
 
-    //
     name: { type: String, trim: true },
-    email: { type: String, trim: true },
-    phone: { type: String, trim: true },
-    //
-
-    formalOrderStatus: {
+    technicalEmail: {
       type: String,
-      enum: ["RECEIVED", "PENDING", "N/A", ""],
+      required: true,
+      trim: true,
+      lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
     },
+    phone: { type: String, trim: true },
+
     amndReqrd: {
       type: String,
       enum: ["YES", "NO", "N/A", ""],
@@ -49,23 +50,68 @@ const OrderSchema = new mongoose.Schema(
       enum: ["NONE", "PARTIAL", "COMPLETE", ""],
     },
 
-    paymentAgainst: {
-      type: String,
-    },
+    // payment Advance
 
+    paymentAdvance: {
+      type: String,
+      enum: ["YES", "1", "2", "3", "NO", "N/A", ""],
+      default: "",
+    },
     paymentPercent1: { type: Number, default: 0 },
     paymentType1: {
       type: String,
-      enum: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", "OTHER", ""],
+      enum: ["PO", "OA", "DWG APPR.", "OTHER", ""],
     },
+    paymentType1other: { type: String, trim: true },
     paymentAmount1: { type: Number, default: 0 },
+    payemntCGBG1: {
+      type: String,
+      enum: ["YES", "NO", "CG", "BG", "N/A", "OTHER", ""],
+      default: "",
+    },
+    paymentrecieved1: {
+      type: String,
+      enum: ["RECIEVED", "NOT RECIEVED", ""],
+      default: "",
+    },
+
     paymentPercent2: { type: Number, default: 0 },
     paymentType2: {
       type: String,
-      enum: ["A/W ABG", "A/W PI", "A/W PO/OA/DWG", "OTHER", ""],
+      enum: ["PO", "OA", "DWG APPR.", "OTHER", ""],
     },
+    paymentType2other: { type: String, trim: true },
     paymentAmount2: { type: Number, default: 0 },
 
+    payemntCGBG2: {
+      type: String,
+      enum: ["YES", "NO", "CG", "BG", "N/A", "OTHER", ""],
+      default: "",
+    },
+    paymentrecieved2: {
+      type: String,
+      enum: ["RECIEVED", "NOT RECIEVED", ""],
+      default: "",
+    },
+    paymentPercent3: { type: Number, default: 0 },
+    paymentType3: {
+      type: String,
+      enum: ["PO", "OA", "DWG APPR.", "OTHER", ""],
+    },
+    paymentType3other: { type: String, trim: true },
+    paymentAmount3: { type: Number, default: 0 },
+    payemntCGBG3: {
+      type: String,
+      enum: ["YES", "NO", "CG", "BG", "N/A", "OTHER", ""],
+      default: "",
+    },
+    paymentrecieved3: {
+      type: String,
+      enum: ["RECIEVED", "NOT RECIEVED", ""],
+      default: "",
+    },
+
+    poReceived: { type: String, enum: ["YES", "NO", ""], default: "" },
     status: {
       type: String,
       enum: ["OPEN", "CLOSED", ""],
@@ -76,11 +122,13 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       enum: ["DISPATCHED", "LD APPLIED", "URGENT", ""],
     },
-
+    ////////////////////////////
+    //  this is used in future
     salesBasic: { type: Number, default: 0 },
     salesTotal: { type: Number, default: 0 },
     netOrderValue: { type: Number, default: 0 },
-    billPending: { type: Number, default: 0 },
+    //    /////////////////////////
+    billPending: { type: Number },
     billingStatus: {
       type: String,
       enum: [
@@ -102,28 +150,9 @@ const OrderSchema = new mongoose.Schema(
       ref: "Project",
     },
     isSaveInProject: { type: Boolean, default: false },
-    technicalEmail: {
-      type: String,
-      required: true,
-      trim: true,
-      lowercase: true,
-      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email address"],
-    },
 
-    paymentAdvance: { type: String, enum: ["YES", "NO", ""], default: "" },
     retentionYesNo: { type: String, enum: ["YES", "NO", ""], default: "" },
-    payemntCGBG1: { type: String, enum: ["YES", "NO", ""], default: "" },
-    paymentrecieved1: {
-      type: String,
-      enum: ["RECIEVED", "NOT RECIEVED", ""],
-      default: "",
-    },
-    payemntCGBG2: { type: String, enum: ["YES", "NO", ""], default: "" },
-    paymentrecieved2: {
-      type: String,
-      enum: ["RECIEVED", "NOT RECIEVED", ""],
-      default: "",
-    },
+
     retentionPercent: { type: Number, default: 0 },
     retentionAmount: { type: Number, default: 0 },
     retentionDocs: {
@@ -131,16 +160,17 @@ const OrderSchema = new mongoose.Schema(
       enum: ["CG", "BG", "N/A", ""],
       default: "",
     },
+    retentinoDocsOther: { type: String, trim: true },
     retentionType: {
       type: String,
       enum: ["A/W CPG", "A/W PBG", "A/W COMMISSIONING", ""],
       default: "",
     },
     retentionPeriod: { type: Number, default: 0 },
-    poReceived: { type: String, enum: ["YES", "NO", ""], default: "" },
     invoiceTerm: { type: String, enum: ["PI", "SI", "N/A", ""], default: "" },
     invoicePercent: { type: Number, default: 0 },
     mileStone: { type: String, trim: true },
+    invoicemileStoneOther: { type: String, trim: true },
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

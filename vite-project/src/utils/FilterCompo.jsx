@@ -58,7 +58,7 @@ const FilterCompo = ({
                 refreshIcon.classList.remove("animate-spin");
               }, 1000);
             }}
-            className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 transition-all duration-200 flex items-center justify-center shadow-md flex-shrink-0"
+            className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 transition-all duration-200 flex items-center justify-center shadow-md shrink-0"
             title="Refresh tasks"
           >
             <svg
@@ -80,7 +80,7 @@ const FilterCompo = ({
           <div ref={filterRef} className="relative w-auto lg:w-auto">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="w-full lg:w-auto text-gray-800 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-indigo-200 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-md transition-all flex-shrink-0 border border-gray-300"
+              className="w-full lg:w-auto text-gray-800 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-indigo-200 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-md transition-all shrink-0 border border-gray-300"
               type="button"
             >
               <svg
@@ -119,7 +119,7 @@ const FilterCompo = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100 dark:bg-gray-400 z-20"
+                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100 dark:bg-gray-400"
                 >
                   <ul className="p-4 space-y-2 text-sm text-gray-700 dark:text-gray-200">
                     {["all", "today", "thisWeek", "thisMonth", "thisYear"].map(

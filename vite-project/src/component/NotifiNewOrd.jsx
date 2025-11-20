@@ -2,9 +2,9 @@ import React from "react";
 
 const NotifiNewOrd = ({ setOpen, data, setSelectData }) => {
   return (
-    <div className="fixed top-6 right-6 z-[9999] animate-slideIn">
+    <div className="fixed top-6 right-6 z-999 animate-slideIn">
       <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl w-96 max-w-[calc(100vw-3rem)] border border-indigo-200/50 overflow-hidden">
-        <div className="relative bg-gradient-to-r from-indigo-600 via-purple-700 to-purple-900 text-white px-5 py-3 overflow-hidden">
+        <div className="relative bg-linear-to-r from-indigo-600 via-purple-700 to-purple-900 text-white px-5 py-3 overflow-hidden">
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl transform translate-x-16 -translate-y-16"></div>
           </div>
@@ -67,10 +67,10 @@ const NotifiNewOrd = ({ setOpen, data, setSelectData }) => {
                     setOpen(false);
                   }}
                   key={i}
-                  className="group px-4 py-3 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 transition-all duration-200 cursor-pointer"
+                  className="group px-4 py-3 hover:bg-linear-to-r hover:from-indigo-50 hover:to-purple-50 transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex items-start gap-2.5">
-                    <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                    <div className="shrink-0 w-8 h-8 bg-linear-to-br from-indigo-100 to-purple-100 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                       <svg
                         className="w-4 h-4 text-indigo-600"
                         fill="none"
@@ -91,7 +91,7 @@ const NotifiNewOrd = ({ setOpen, data, setSelectData }) => {
                         <p className="text-xs font-bold text-gray-900 truncate">
                           {note.jobNumber || "—"}
                         </p>
-                        <span className="flex-shrink-0 text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                        <span className="shrink-0 text-xs text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded-full whitespace-nowrap">
                           New
                         </span>
                       </div>
@@ -109,7 +109,7 @@ const NotifiNewOrd = ({ setOpen, data, setSelectData }) => {
 
                     {/* Arrow Icon */}
                     <svg
-                      className="flex-shrink-0 w-3.5 h-3.5 text-gray-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"
+                      className="shrink-0 w-3.5 h-3.5 text-gray-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -127,7 +127,7 @@ const NotifiNewOrd = ({ setOpen, data, setSelectData }) => {
             </div>
           ) : (
             <div className="px-4 py-8 text-center">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl mb-2">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-linear-to-br from-gray-100 to-gray-200 rounded-xl mb-2">
                 <svg
                   className="w-6 h-6 text-gray-400"
                   fill="none"

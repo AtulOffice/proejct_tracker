@@ -57,7 +57,7 @@ const FilterCompodev = ({
                 refreshIcon.classList.remove("animate-spin");
               }, 1000);
             }}
-            className="p-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 text-white transition-all duration-200 flex items-center justify-center shadow-sm flex-shrink-0"
+            className="p-2 rounded-lg bg-linear-to-r from-pink-500 via-purple-500 to-indigo-500 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 text-white transition-all duration-200 flex items-center justify-center shadow-sm shrink-0"
             title="Refresh tasks"
           >
             <svg
@@ -79,7 +79,7 @@ const FilterCompodev = ({
           <div ref={filterRef} className="relative w-auto lg:w-auto">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="w-full lg:w-auto text-white bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 hover:from-green-500 hover:via-blue-600 hover:to-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-all flex-shrink-0"
+              className="w-full lg:w-auto text-white bg-linear-to-r from-green-400 via-blue-500 to-indigo-600 hover:from-green-500 hover:via-blue-600 hover:to-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-all shrink-0"
               type="button"
             >
               <svg

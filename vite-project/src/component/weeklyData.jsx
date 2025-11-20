@@ -38,8 +38,7 @@ const WeeklyAssignmentForm = () => {
   const FetchData = async (weekStart) => {
     try {
       const res = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL
+        `${import.meta.env.VITE_API_URL
         }/devrecord/fetch?weekStart=${weekStart}`,
         { withCredentials: true }
       );
@@ -156,17 +155,17 @@ const WeeklyAssignmentForm = () => {
   };
 
   return (
-    <div className="min-h-screen lg:ml-60 pt-20 bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4 pl-8">
+    <div className="min-h-screen lg:ml-60 pt-20 bg-linear-to-br from-blue-50 to-indigo-100 py-8 px-4 pl-8">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-pink-500 via-yellow-400 via-green-400 via-blue-400 via-purple-500 to-red-500 px-8 py-6 rounded-lg">
-            <h2 className="text-3xl font-bold italic inline-block bg-gradient-to-r from-pink-500 via-yellow-400 via-green-400 via-blue-400 via-purple-500 to-red-500 bg-clip-text text-transparent">
+          <div className="px-8 py-6 rounded-lg bg-[linear-gradient(to_right,#ec4899,#facc15,#4ade80,#60a5fa,#a855f7,#ef4444)]">
+            <h2 className="text-3xl font-bold italic bg-clip-text text-transparent bg-[linear-gradient(to_right,#ec4899,#facc15,#4ade80,#60a5fa,#a855f7,#ef4444)]">
               WEEKLY ASSIGNMENT PLANNER
             </h2>
           </div>
 
           <div className="p-8">
-            <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
+            <div className="mb-8 bg-linear-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
               <label className="text-lg font-semibold text-gray-700 block mb-3">
                 📅 Select Week Start (Monday)
               </label>
@@ -184,7 +183,7 @@ const WeeklyAssignmentForm = () => {
               />
             </div>
 
-            <div className="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
+            <div className="mb-8 bg-linear-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
               <h3 className="text-lg font-semibold text-gray-700 mb-4">
                 👤 Add New Engineer
               </h3>
@@ -198,7 +197,7 @@ const WeeklyAssignmentForm = () => {
                 />
                 <button
                   onClick={addEngineer}
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition shadow-sm hover:shadow-md"
+                  className="bg-linear-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition shadow-sm hover:shadow-md"
                 >
                   ➕ Add Engineer
                 </button>
@@ -209,8 +208,8 @@ const WeeklyAssignmentForm = () => {
               <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-lg font-sans font-medium">
                 <table className="w-full border-collapse text-[15px]">
                   <thead>
-                    <tr className="bg-gradient-to-r from-blue-500/80 to-indigo-500/90 text-white">
-                      <th className="border-none px-4 py-4 text-left sticky left-0 bg-gradient-to-r from-blue-400/70 to-indigo-400/60 z-10 text-xl font-bold rounded-tl-2xl">
+                    <tr className="bg-linear-to-r from-blue-500/80 to-indigo-500/90 text-white">
+                      <th className="border-none px-4 py-4 text-left sticky left-0 bg-linear-to-r from-blue-400/70 to-indigo-400/60 z-10 text-xl font-bold rounded-tl-2xl">
                         Engineer
                       </th>
                       {Object.keys(tasksByDate).map((date) => (
@@ -239,9 +238,8 @@ const WeeklyAssignmentForm = () => {
                     {engineers.map((eng, engIdx) => (
                       <tr
                         key={eng.engineerId}
-                        className={`transition ${
-                          engIdx % 2 ? "bg-gray-50/60" : "bg-white/90"
-                        } hover:bg-indigo-50`}
+                        className={`transition ${engIdx % 2 ? "bg-gray-50/60" : "bg-white/90"
+                          } hover:bg-indigo-50`}
                       >
                         <td
                           className="sticky left-0 z-10 px-4 py-5 bg-white/80 border-none"
@@ -260,7 +258,7 @@ const WeeklyAssignmentForm = () => {
                             </div>
                             <button
                               onClick={() => removeEngineer(eng.engineerId)}
-                              className="group bg-gradient-to-br from-pink-300 to-red-500 hover:from-red-600 hover:to-red-700 text-white w-8 h-8 rounded-lg flex items-center justify-center text-lg transition active:scale-95 shadow hover:shadow-xl"
+                              className="group bg-linear-to-br from-pink-300 to-red-500 hover:from-red-600 hover:to-red-700 text-white w-8 h-8 rounded-lg flex items-center justify-center text-lg transition active:scale-95 shadow hover:shadow-xl"
                               title="Remove engineer"
                             >
                               <span className="group-hover:rotate-90 duration-200 transition-transform">
@@ -312,7 +310,7 @@ const WeeklyAssignmentForm = () => {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={handleSubmit}
-                  className="font-sans bg-gradient-to-r from-blue-100 to-indigo-600 hover:from-indigo-600 hover:to-blue-100 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition transform hover:scale-105"
+                  className="font-sans bg-linear-to-r from-blue-100 to-indigo-600 hover:from-indigo-600 hover:to-blue-100 text-white px-10 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition transform hover:scale-105"
                 >
                   💾 SAVE
                 </button>

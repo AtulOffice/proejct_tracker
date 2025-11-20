@@ -20,18 +20,6 @@ const NotificationForm = ({ setOpen, formRef }) => {
     };
   }, [formRef, setOpen]);
 
-  // useEffect(() => {
-  //   const getProjects = async () => {
-  //     try {
-  //       const val = await getAssignedEngineers();
-  //       setNotifications(val?.data || []);
-  //     } catch (error) {
-  //       console.error("Failed to fetch", error);
-  //     }
-  //   };
-  //   getProjects();
-  // }, [toggle]);
-
   useEffect(() => {
     const getProjects = async () => {
       try {
@@ -73,7 +61,7 @@ const NotificationForm = ({ setOpen, formRef }) => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "p") {
         e.preventDefault();
-        handlePrint(printRef,"ENGINEER LIST",false);
+        handlePrint(printRef, "ENGINEER LIST", false);
       }
     };
 
@@ -82,7 +70,7 @@ const NotificationForm = ({ setOpen, formRef }) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-sky-900/80 via-indigo-700/70 to-blue-950/80 backdrop-blur-sm transition">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-br from-sky-900/80 via-indigo-700/70 to-blue-950/80 backdrop-blur-sm transition">
       <div
         ref={formRef}
         className="bg-white/60 backdrop-blur-xl rounded-3xl shadow-2xl w-full sm:max-w-3xl md:max-w-5xl max-h-[90vh] overflow-y-auto border border-blue-200 scrollbar-glass p-4 sm:p-8"
@@ -96,7 +84,7 @@ const NotificationForm = ({ setOpen, formRef }) => {
           <button
             type="button"
             onClick={() => setToggle((prev) => !prev)}
-            className="px-6 sm:px-8 py-2 rounded-lg text-white font-semibold shadow transition bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-700 hover:bg-blue-700/90 hover:shadow-lg"
+            className="px-6 sm:px-8 py-2 rounded-lg text-white font-semibold shadow transition bg-linear-to-r from-blue-600 via-indigo-500 to-sky-700 hover:bg-blue-700/90 hover:shadow-lg"
           >
             Refresh
           </button>
@@ -110,17 +98,17 @@ const NotificationForm = ({ setOpen, formRef }) => {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="px-6 py-2 rounded-lg bg-gradient-to-r from-gray-200 to-gray-300 text-gray-800 shadow-sm hover:shadow-md hover:bg-gray-400/50 transition"
+            className="px-6 py-2 rounded-lg bg-linear-to-r from-gray-200 to-gray-300 text-gray-800 shadow-sm hover:shadow-md hover:bg-gray-400/50 transition"
           >
             Close
           </button>
         </div>
 
-        <div className="relative w-full overflow-x-auto rounded-2xl shadow-xl border border-indigo-400 bg-gradient-to-b from-white/80 via-blue-50 to-blue-100">
+        <div className="relative w-full overflow-x-auto rounded-2xl shadow-xl border border-indigo-400 bg-linear-to-b from-white/80 via-blue-50 to-blue-100">
           <div ref={printRef}>
             <table className="w-full table-fixed text-sm sm:text-base">
               <thead>
-                <tr className="bg-gradient-to-r from-blue-800 via-indigo-700 to-blue-600 text-white shadow-lg text-xs sm:text-sm">
+                <tr className="bg-linear-to-r from-blue-800 via-indigo-700 to-blue-600 text-white shadow-lg text-xs sm:text-sm">
                   <th className="px-4 sm:px-6 py-3 text-left font-bold tracking-wide uppercase">
                     Engineer
                   </th>
@@ -144,11 +132,10 @@ const NotificationForm = ({ setOpen, formRef }) => {
                 {notifications.map((note, i) => (
                   <tr
                     key={i}
-                    className={`hover:bg-blue-200/30 transition duration-150 ${
-                      i % 2 === 0
-                        ? "bg-gradient-to-r from-white via-indigo-50 to-white"
-                        : "bg-gradient-to-r from-white via-blue-100 to-white"
-                    }`}
+                    className={`hover:bg-blue-200/30 transition duration-150 ${i % 2 === 0
+                      ? "bg-linear-to-r from-white via-indigo-50 to-white"
+                      : "bg-linear-to-r from-white via-blue-100 to-white"
+                      }`}
                   >
                     <td className="px-4 sm:px-6 py-3 text-indigo-900 font-medium truncate">
                       {note?.name}
@@ -159,26 +146,25 @@ const NotificationForm = ({ setOpen, formRef }) => {
                           ?.jobNumber}
                     </td>
                     <td
-                      className={`px-4 sm:px-6 py-3 font-bold truncate ${
-                        note.priority === "High"
-                          ? "text-red-600"
-                          : note.priority === "Medium"
+                      className={`px-4 sm:px-6 py-3 font-bold truncate ${note.priority === "High"
+                        ? "text-red-600"
+                        : note.priority === "Medium"
                           ? "text-orange-500"
                           : "text-green-600"
-                      }`}
+                        }`}
                     >
                       {note?.assignments &&
                         note?.assignments[note?.assignments.length - 1]
                           ?.projectName}
                     </td>
-                    <td className="px-4 sm:px-6 py-3 text-gray-700 text-sm break-words">
+                    <td className="px-4 sm:px-6 py-3 text-gray-700 text-sm wrap-break-words">
                       {note?.assignments?.length > 0 &&
                         toLocaltimeString(
                           new Date(note.assignments.at(-1)?.assignedAt)
                         )}
                     </td>
 
-                    <td className="px-4 sm:px-6 py-3 text-gray-700 text-sm break-words">
+                    <td className="px-4 sm:px-6 py-3 text-gray-700 text-sm wrap-break-words">
                       {note?.assignments?.length > 0 &&
                         toLocaltimeString(
                           new Date(note.assignments.at(-1)?.endTime)
@@ -191,7 +177,7 @@ const NotificationForm = ({ setOpen, formRef }) => {
           </div>
 
           {/* Footer */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50/70 px-4 sm:px-6 py-3 border-t border-indigo-200">
+          <div className="bg-linear-to-r from-blue-50 to-indigo-50/70 px-4 sm:px-6 py-3 border-t border-indigo-200">
             <p className="text-sm sm:text-base text-blue-700">
               Showing{" "}
               <span className="font-bold text-indigo-800">
