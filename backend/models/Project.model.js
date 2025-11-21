@@ -292,7 +292,7 @@ const projectSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    description: {
+    commScope: {
       type: String,
       maxlength: 400,
     },
@@ -304,7 +304,7 @@ const projectSchema = new mongoose.Schema(
       default: "0",
     },
 
-    workScope: {
+    devScope: {
       type: String,
       default: "not provided",
     },

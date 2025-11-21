@@ -76,12 +76,12 @@ const DocumentsSection = ({ Docs, setDocs }) => {
             <label
               key={val}
               className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-bold cursor-pointer transition-all duration-200 ${Docs[section][field] === val
-                  ? val === "YES"
-                    ? "bg-emerald-500 text-white"
-                    : val === "NO"
-                      ? "bg-rose-500 text-white"
-                      : "bg-amber-500 text-white"
-                  : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-100"
+                ? val === "YES"
+                  ? "bg-emerald-500 text-white"
+                  : val === "NO"
+                    ? "bg-rose-500 text-white"
+                    : "bg-amber-500 text-white"
+                : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-100"
                 }`}
             >
               <input

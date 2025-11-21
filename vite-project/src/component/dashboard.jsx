@@ -412,7 +412,7 @@ const AdminDashboard = () => {
                         }`}
                     >
                       <FaShoppingCart className="mr-3" size={20} />
-                      ADD ORDER
+                      CREATE ORDER
                     </div>
                   </li>
                   <li>
@@ -440,7 +440,7 @@ const AdminDashboard = () => {
                         }`}
                     >
                       <FaRegSquarePlus className="mr-3" size={20} />
-                      ADD NEW
+                      ADD SRVC DETAILS
                     </div>
                   </li>
                   <li>

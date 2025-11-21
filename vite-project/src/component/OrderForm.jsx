@@ -457,21 +457,21 @@ export default function OrderForm() {
               {renderInput("site", "Site Location", "text", "Enter site")}
               {renderInput(
                 "concerningSalesManager",
-                "Account Manager",
+                "SIEPL Acct. Mgr. Email",
                 "email",
                 "Enter sales manager Email",
                 true
               )}
               {renderInput(
                 "name",
-                "Name",
+                "Client Technical Person Name",
                 "text",
                 "Enter Name",
 
               )}
               {renderInput(
                 "technicalEmail",
-                "Email",
+                "Client Technical Person Email",
                 "email",
                 "Enter technical person email id",
                 true
@@ -479,7 +479,7 @@ export default function OrderForm() {
 
               {renderInput(
                 "phone",
-                "Contact No.",
+                "Client Technical Person Contact No.",
                 "text",
                 "Enter Contact Number",
 
