@@ -143,13 +143,21 @@ const projectSchema = new mongoose.Schema(
     },
     service: {
       type: String,
-      enum: ["E&C", "COMMISSIONING", "N/A", "AMC", "SERVICE"],
+      enum: [
+        "DEV",
+        "DEVCOM",
+        "COMMISSIONING",
+        "N/A",
+        "AMC",
+        "SERVICE",
+        "SEPERATE",
+        "",
+      ],
       default: "N/A",
     },
-
-    technicalEmail: {
+    LinkedOrderNumber: {
       type: String,
-      trim: true,
+      trime: true,
     },
     isMailSent: {
       type: String,
@@ -359,7 +367,7 @@ const projectSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    email: {
+    technicalEmail: {
       type: String,
       trim: true,
     },

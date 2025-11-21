@@ -27,7 +27,7 @@ export const formval = {
   status: "upcoming",
   priority: "high",
   duration: "",
-  service: "N/A",
+  service: "",
   workScope: "",
   expenseScope: "",
   supplyStatus: "DISPATCHED",
@@ -76,7 +76,7 @@ export const formval = {
     instrumentation: false,
   },
   CommisinionPO: "",
-
+  LinkedOrderNumber: ""
 };
 export const fields = {
   entityType: "",
@@ -505,17 +505,20 @@ export const InputConst = [
   },
   {
     htmlFor: "service",
-    title: "Service",
+    title: "Scope",
     type: "select",
     id: "service",
     name: "service",
     required: true,
     options: [
-      { value: "N/A", label: "N/A" },
+      { value: "", label: "Select Option" },
       { value: "SERVICE", label: "SERVICE" },
-      { value: "E&C", label: "E&C" },
-      { value: "COMMISSIONING", label: "COMMISSIONING" },
-      { value: "AMC", label: "AMC" }
+      { value: "AMC", label: "AMC" },
+      { value: "DEV", label: "DEV ONLY" },
+      { value: "DEVCOM", label: "DEV+COMM" },
+      { value: "COMMISSIONING", label: "COMM ONLY" },
+      { value: "SEPERATE", label: "SEPERATE PO" },
+      { value: "N/A", label: "N/A" },
     ],
   },
   {
@@ -874,6 +877,15 @@ export const InputConst = [
     name: "servicedayrate",
     placeholder: "enter Per day Rate",
     required: false,
+  },
+  {
+    htmlFor: "LinkedOrderNumber",
+    title: "Linked Order Number",
+    type: "text",
+    id: "LinkedOrderNumber",
+    name: "LinkedOrderNumber",
+    placeholder: "Enter the Linked Order Number",
+    required: true,
   },
 
 ];

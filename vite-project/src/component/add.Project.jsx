@@ -128,6 +128,15 @@ const InputForm = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "expenseScopeside" && value === "NO") {
+      setFormData((prev) => ({
+        ...prev,
+        expenseScopeside: value,
+        companyExpense: [],
+        clientExpense: [],
+      }));
+      return;
+    }
     if (name === "companyExpense" || name === "clientExpense") {
       setFormData((prev) => {
         const prevArray = prev[name] || [];
@@ -311,7 +320,7 @@ const InputForm = () => {
               disabled={isLoading}
               className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
-              Submit
+              Create Details
             </button>
           </div>
         </form>
