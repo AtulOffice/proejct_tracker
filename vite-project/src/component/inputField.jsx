@@ -15,144 +15,118 @@ const FormField = ({
   return (
     <>
       <div className="space-y-6">
-        {selectData?.jobNumber && <>
-          {/* 📋 Basic Project Information */}
-          < div className="bg-linear-to-br from-indigo-50 to-indigo-100 p-5 rounded-xl border border-indigo-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-4 border-b border-indigo-200 pb-3">
-              <span className="text-2xl mr-2">📋</span>
-              <h3 className="font-bold text-lg text-indigo-900">Basic Order Information</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">Job Number</p>
-                <p className="font-bold text-gray-900 text-base">{formData.jobNumber || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">Entity Type</p>
-                <p className="font-bold text-gray-900 text-base">{formData.entityType || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">SO Type</p>
-                <p className="font-bold text-gray-900 text-base">{formData.soType || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">Booking Date</p>
-                <p className="font-bold text-gray-900 text-base">{formData.bookingDate || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">Client Tech Name</p>
-                <p className="font-bold text-gray-900 text-base">{formData.name || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">Client Tech Email</p>
-                <p className="font-bold text-gray-900 text-sm truncate">{formData?.technicalEmail || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1"> Client Tech Ph</p>
-                <p className="font-bold text-gray-900 text-base">{formData.phone || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">Client</p>
-                <p className="font-bold text-gray-900 text-base">{formData.client || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">End User</p>
-                <p className="font-bold text-gray-900 text-base">{formData.endUser || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">Location</p>
-                <p className="font-bold text-gray-900 text-base">{formData.location || '-'}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 💰 Order Value */}
-          <div className="bg-linear-to-br from-emerald-50 to-green-100 p-5 rounded-xl border border-emerald-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-4 border-b border-emerald-200 pb-3">
-              <span className="text-2xl mr-2">💰</span>
-              <h3 className="font-bold text-lg text-emerald-900">Order Value</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:scale-105 transform">
-                <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wide mb-2">Supply Value</p>
-                <p className="font-bold text-gray-900 text-xl">₹ {formData.orderValueSupply || '0'}</p>
-              </div>
-              <div className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:scale-105 transform">
-                <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wide mb-2">Service Value</p>
-                <p className="font-bold text-gray-900 text-xl">₹ {formData.orderValueService || '0'}</p>
-              </div>
-              <div className="bg-linear-to-br from-emerald-100 to-emerald-200 p-4 rounded-lg border-2 border-emerald-400 shadow-md">
-                <p className="text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-2">Total Value</p>
-                <p className="font-extrabold text-emerald-900 text-xl">₹ {formData.orderValueTotal || '0'}</p>
+        {selectData?.jobNumber && (
+          <>
+            {/* 📋 Basic Order Information */}
+            <div className="bg-linear-to-br from-indigo-50 to-indigo-100 p-5 rounded-xl border border-indigo-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center mb-4 border-b border-indigo-200 pb-3">
+                <span className="text-2xl mr-2">📋</span>
+                <h3 className="font-bold text-lg text-indigo-900">Basic Order Information</h3>
               </div>
 
-            </div>
-          </div>
-
-          {/* 📦 PO Details */}
-          <div className="bg-linear-to-br from-purple-50 to-purple-100 p-5 rounded-xl border border-purple-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center mb-4 border-b border-purple-200 pb-3">
-              <span className="text-2xl mr-2">📦</span>
-              <h3 className="font-bold text-lg text-purple-900">PO Details</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">PO Received</p>
-                <p className="font-bold text-gray-900 text-base">
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.poReceived === 'Yes' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                    }`}>
-                    {formData.poReceived || '-'}
-                  </span>
-                </p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Order Number</p>
-                <p className="font-bold text-gray-900 text-base">{formData.orderNumber || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Order Date</p>
-                <p className="font-bold text-gray-900 text-base">{formData.orderDate || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">PO Delivery Date</p>
-                <p className="font-bold text-gray-900 text-base">{formData.deleveryDate || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Target Delivery</p>
-                <p className="font-bold text-gray-900 text-base">{formData.actualDeleveryDate || '-'}</p>
-              </div>
-              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Amendment Reqrd</p>
-                <p className="font-bold text-gray-900 text-base">
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.amndReqrd === 'Yes' ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-700'
-                    }`}>
-                    {formData.amndReqrd || '-'}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="relative my-12">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t-2 border-dashed border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center">
-              <div className="bg-linear-to-r from-orange-500 to-red-500 px-6 py-3 rounded-full shadow-lg">
-                <div className="flex items-center gap-3 text-white">
-                  <span className="text-2xl">✏️</span>
-                  <div className="text-center">
-                    <p className="font-bold text-lg">Fillup Mode Starts Below</p>
-
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {[
+                  ["Job Number", formData.jobNumber],
+                  ["Entity Type", formData.entityType],
+                  ["SO Type", formData.soType],
+                  ["Booking Date", formData.bookingDate],
+                  ["Client Tech Name", formData.name],
+                  ["Client Tech Email", formData.technicalEmail],
+                  ["Client Tech Ph", formData.phone],
+                  ["Client", formData.client],
+                  ["End User", formData.endUser],
+                  ["Location", formData.location],
+                ].map(([label, value], i) => (
+                  <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
+                    <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+                    <p className="font-bold text-gray-900 text-base truncate">{value || "-"}</p>
                   </div>
-                  <span className="text-2xl">📝</span>
+                ))}
+              </div>
+            </div>
+
+            {/* 💰 Order Value */}
+            <div className="bg-linear-to-br from-emerald-50 to-green-100 p-5 rounded-xl border border-emerald-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center mb-4 border-b border-emerald-200 pb-3">
+                <span className="text-2xl mr-2">💰</span>
+                <h3 className="font-bold text-lg text-emerald-900">Order Value</h3>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  ["Supply Value", formData.orderValueSupply],
+                  ["Service Value", formData.orderValueService],
+                ].map(([label, value], i) => (
+                  <div key={i} className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:scale-105 transform">
+                    <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wide mb-2">{label}</p>
+                    <p className="font-bold text-gray-900 text-xl">₹ {value || "0"}</p>
+                  </div>
+                ))}
+
+                <div className="bg-linear-to-br from-emerald-100 to-emerald-200 p-4 rounded-lg border-2 border-emerald-400 shadow-md">
+                  <p className="text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-2">Total Value</p>
+                  <p className="font-extrabold text-emerald-900 text-xl">
+                    ₹ {formData.orderValueTotal || "0"}
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
-        </>}
 
+            {/* 📦 PO Details */}
+            <div className="bg-linear-to-br from-purple-50 to-purple-100 p-5 rounded-xl border border-purple-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center mb-4 border-b border-purple-200 pb-3">
+                <span className="text-2xl mr-2">📦</span>
+                <h3 className="font-bold text-lg text-purple-900">PO Details</h3>
+              </div>
 
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[
+                  ["Order Number", formData.orderNumber],
+                  ["Order Date", formData.orderDate],
+                  ["PO Delivery Date", formData.deleveryDate],
+                  ["Target Delivery", formData.actualDeleveryDate],
+                ].map(([label, value], i) => (
+                  <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                    <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+                    <p className="font-bold text-gray-900 text-base">{value || "-"}</p>
+                  </div>
+                ))}
 
+                {/* PO Received */}
+                <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                  <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">PO Received</p>
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.poReceived === "Yes" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                    {formData.poReceived || "-"}
+                  </span>
+                </div>
+
+                {/* Amendment Required */}
+                <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                  <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Amendment Reqrd</p>
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.amndReqrd === "Yes" ? "bg-orange-100 text-orange-700" : "bg-gray-100 text-gray-700"}`}>
+                    {formData.amndReqrd || "-"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* ✏️ Divider */}
+            <div className="relative my-12">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <div className="bg-linear-to-r from-orange-500 to-red-500 px-6 py-3 rounded-full shadow-lg">
+                  <div className="flex items-center gap-3 text-white">
+                    <span className="text-2xl">✏️</span>
+                    <p className="font-bold text-lg">Fillup Mode Starts Below</p>
+                    <span className="text-2xl">📝</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
 
 

@@ -16,6 +16,7 @@ import {
   RiLogoutBoxRLine,
 } from "react-icons/ri";
 import OneCard from "./add.Project";
+import AddDocs from "./add.Docs";
 import ZeroCard from "./overview.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
@@ -149,6 +150,8 @@ const AdminDashboard = () => {
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
       case "one":
         return <OneCard />;
+      case "twentyfour":
+        return <AddDocs />;
       case "two":
         return <ProjectCatogary key={"all"} all={true} title="ALL" />;
       case "three":
@@ -441,6 +444,19 @@ const AdminDashboard = () => {
                     >
                       <FaRegSquarePlus className="mr-3" size={20} />
                       ADD SRVC DETAILS
+                    </div>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("twentyfour");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twentyfour" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <FaRegSquarePlus className="mr-3" size={20} />
+                      ADD DOCS DETAILS
                     </div>
                   </li>
                   <li>
