@@ -206,9 +206,6 @@ const FormField = ({
                   handleChange={handleChange}
                 />
               )}
-
-
-
               {/* <SelectField
                 {...InputConst[42]}
                 value={formData.isMailSent}
