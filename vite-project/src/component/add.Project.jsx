@@ -1,11 +1,95 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { dateFields, formval, docsVal } from "../utils/FieldConstant";
+import { dateFields, docsVal } from "../utils/FieldConstant";
 import FormField from "./inputField";
 import { useAppContext } from "../appContex";
 import { addProject, fetfchOrdersAllnew } from "../utils/apiCall";
 import { FaFolderPlus } from "react-icons/fa6";
 import NotifiNewOrd from "./NotifiNewOrd";
+
+
+export const formval = {
+  jobNumber: "",
+  entityType: "SI DELHI",
+  soType: "PROJECT",
+  bookingDate: "",
+  client: "",
+  endUser: "",
+
+
+  
+  name: "",
+  email: "",
+  phone: "",
+  projectName: "",
+  Development: "",
+  engineerName: "",
+  finalMomnumber: "",
+  actualStartDate: "",
+  actualEndDate: "",
+  bill: "",
+  dueBill: "",
+  billStatus: "N/A",
+  visitDate: "",
+  visitendDate: "",
+  momDate: "",
+  momsrNo: "",
+  orderNumber: "",
+  poReceived: "",
+  daysspendsite: "",
+  startDate: "",
+  endDate: "",
+  commScope: "",
+  location: "",
+  status: "",
+  priority: "",
+  duration: "",
+  service: "",
+  devScope: "",
+  expenseScope: "",
+  supplyStatus: "DISPATCHED",
+  requestDate: "",
+  StartChecklist: "N/A",
+  EndChecklist: "N/A",
+  actualVisitDuration: "",
+  ContactPersonNumber: "",
+  ContactPersonName: "",
+  ExpensSubmission: "N/A",
+  BackupSubmission: "N/A",
+  technicalEmail: "",
+  isMailSent: "NO",
+  isDevlopmentApproved: "NO",
+  DevelopmentSetcion: "",
+  OrderMongoId: "",
+  orderValueSupply: "",
+  orderValueService: "",
+  orderValueTotal: "",
+  porecieved: "",
+  orderDate: "",
+  deleveryDate: "",
+  actualDeleveryDate: "",
+  amndReqrd: "",
+  LogicPlace: "",
+  ScadaPlace: "",
+  Commissioning: "",
+  expenseScopeside: "",
+  serviceDaysMention: "",
+  SrvsdaysInLots: {
+    lots: 0,
+    value: 0,
+    unit: "DAYS"
+  },
+  servicedayrate: 0,
+  companyExpense: [],
+  clientExpense: [],
+  Docscommission: {
+    commissioning: false,
+    erection: false,
+    instrumentation: false,
+  },
+  CommisinionPO: "",
+  LinkedOrderNumber: ""
+};
 
 const InputForm = () => {
   const { toggle, setToggle, setToggleDev } = useAppContext();
@@ -37,8 +121,8 @@ const InputForm = () => {
         orderDate: formatDate(selectData.orderDate),
         technicalEmail: selectData.technicalEmail || "",
         billStatus: selectData.billingStatus || "",
-        bill: selectData.netOrderValue || "",
-        dueBill: selectData.netOrderValue || "",
+        bill: selectData.orderValueTotal || "",
+        dueBill: selectData.orderValueTotal || "",
         bookingDate: formatDate(selectData.bookingDate),
         name: selectData.name || "",
         email: selectData.email || "",
@@ -46,7 +130,7 @@ const InputForm = () => {
         orderValueSupply: selectData.orderValueSupply || 0,
         orderValueService: selectData.orderValueService || 0,
         orderValueTotal: selectData.orderValueTotal || 0,
-        netOrderValue: selectData.netOrderValue || 0,
+
         poReceived: selectData.poReceived || "",
         deleveryDate: formatDate(selectData.deleveryDate),
         actualDeleveryDate: formatDate(selectData.actualDeleveryDate),
@@ -184,24 +268,8 @@ const InputForm = () => {
 
 
 
-
-  const validateDocs = (docsVal) => {
-    const VALID_VALUES = ["YES", "NO", "N/A"];
-    console.log(docsVal);
-    return ![
-      ...Object.values(docsVal.internalDocuments),
-      ...Object.values(docsVal.customerDocuments),
-      ...Object.values(docsVal.dispatchDocuments),
-    ].every((val) => VALID_VALUES.includes(val));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (validateDocs(Docs)) {
-      toast.error(`Please select YES, NO, or N/A for Documents}`);
-      return;
-    }
     setIsLoading(true);
     const {
       actualEndDate,
@@ -210,8 +278,6 @@ const InputForm = () => {
       actualStartDate,
       visitDate,
       visitendDate,
-      deleveryDate,
-      requestDate,
     } = formData;
 
     if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
@@ -269,7 +335,7 @@ const InputForm = () => {
           )}
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-extrabold text-white drop-shadow-md flex-1 text-center">
-              DETAILS
+              SERVICE DETAILS
             </h2>
             <div onClick={() => setOpen(true)} className="relative group ml-4">
               <button

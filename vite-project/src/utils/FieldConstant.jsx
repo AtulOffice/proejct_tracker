@@ -24,7 +24,7 @@ export const formval = {
   endDate: "",
   commScope: "",
   location: "",
-  status: "upcoming",
+  status: "",
   priority: "",
   duration: "",
   service: "",
@@ -468,6 +468,7 @@ export const InputConst = [
     name: "status",
     required: true,
     options: [
+      { value: "", label: "Select Option" },
       { value: "upcoming", label: "Up Coming" },
       { value: "pending", label: "Pending" },
       { value: "completed", label: "Completed" },

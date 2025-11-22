@@ -122,12 +122,6 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       enum: ["DISPATCHED", "LD APPLIED", "URGENT", ""],
     },
-    ////////////////////////////
-    //  this is used in future
-    salesBasic: { type: Number, default: 0 },
-    salesTotal: { type: Number, default: 0 },
-    netOrderValue: { type: Number, default: 0 },
-    //    /////////////////////////
     billPending: { type: Number },
     billingStatus: {
       type: String,

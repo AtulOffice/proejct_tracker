@@ -158,7 +158,7 @@ export default function UpdateOrderForm() {
     if (touched.creditDays) {
       const cd = toNumber(formData.creditDays);
       if (isNaN(cd)) newErrors.creditDays = "Enter a valid number";
-      else if (cd <= 0) newErrors.creditDays = "Credit Period must be greater than zero";
+      else if (cd < 0) newErrors.creditDays = "Credit Period must be greater than zero";
     }
 
     if (touched.invoiceTerm && isEmpty(formData.invoiceTerm))
@@ -456,21 +456,21 @@ export default function UpdateOrderForm() {
               {renderInput("site", "Site Location", "text", "Enter site")}
               {renderInput(
                 "concerningSalesManager",
-                "Account Manager",
+                "SIEPL Acct. Mgr. Email",
                 "email",
                 "Enter sales manager Email",
                 true
               )}
               {renderInput(
                 "name",
-                "Name",
+                "Client Technical Person Name",
                 "text",
                 "Enter Name",
 
               )}
               {renderInput(
                 "technicalEmail",
-                "Email",
+                "Client Technical Person Email",
                 "email",
                 "Enter technical person email id",
                 true
@@ -478,7 +478,7 @@ export default function UpdateOrderForm() {
 
               {renderInput(
                 "phone",
-                "Contact No.",
+                "Client Technical Person Contact No.",
                 "text",
                 "Enter Contact Number",
 
@@ -611,7 +611,7 @@ export default function UpdateOrderForm() {
                   {formData.paymentType1 === "OTHER" &&
                     renderInput("paymentType1other", "Other MileStone", "text", "Enter MileStone", true)
                   }
-                  {renderInput("payemntCGBG1", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("payemntCGBG1", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A"] })}
                   {renderInput("paymentrecieved1", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
                 </div>
               </div>
@@ -628,7 +628,7 @@ export default function UpdateOrderForm() {
                   {formData.paymentType2 === "OTHER" &&
                     renderInput("paymentType2other", "Other MileStone", "text", "Enter MileStone", true)
                   }
-                  {renderInput("payemntCGBG2", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("payemntCGBG2", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A"] })}
                   {renderInput("paymentrecieved2", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
                 </div>
               </div>
@@ -644,7 +644,7 @@ export default function UpdateOrderForm() {
                   {formData.paymentType3 === "OTHER" &&
                     renderInput("paymentType3other", "Other MileStone", "text", "Enter MileStone", true)
                   }
-                  {renderInput("payemntCGBG3", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("payemntCGBG3", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A"] })}
                   {renderInput("paymentrecieved3", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
                 </div>
               </div>
@@ -731,7 +731,7 @@ export default function UpdateOrderForm() {
                   "number",
                   "",
                   true,
-                  { min: 0, max: 100, step: "0.01" }
+                  { min: 0, max: 100, step: "0.01", readOnly: true }
                 )}
                 {renderInput(
                   "retentionAmount",
@@ -809,7 +809,7 @@ export default function UpdateOrderForm() {
               ) : (
                 <>
                   <Save size={18} />
-                  Save Order
+                  Create Order
                 </>
               )}
             </button>

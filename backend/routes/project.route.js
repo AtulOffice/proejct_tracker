@@ -18,6 +18,7 @@ import {
   getEngineerProjectsPaginated,
   getEngineerOverview,
   allProjectsFetchDev,
+  RecordsformaveNew,
 } from "../controller/project.controller.js";
 import {
   authenticate,
@@ -31,12 +32,19 @@ import { authorizeRole } from "../middlware/authRole.js";
 
 export const ProjectRouter = express.Router();
 
+// ProjectRouter.post(
+//   "/save",
+//   refreshTokenMiddleware,
+//   authenticate,
+//   authorizeRole("admin", "reception"),
+//   Recordsformave
+// );
 ProjectRouter.post(
   "/save",
   refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
-  Recordsformave
+  RecordsformaveNew
 );
 ProjectRouter.get(
   "/getProjectOverview",

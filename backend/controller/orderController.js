@@ -133,13 +133,13 @@ export const getAllOrdersnew = async (req, res) => {
         orderValueSupply: 1,
         orderValueService: 1,
         orderValueTotal: 1,
-        netOrderValue: 1,
         poReceived: 1,
         orderNumber: 1,
         orderDate: 1,
         deleveryDate: 1,
         actualDeleveryDate: 1,
         amndReqrd: 1,
+        concerningSalesManager: 1,
       }
     ).sort({
       updatedAt: -1,

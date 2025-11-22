@@ -34,32 +34,7 @@ export const OrderDetailsCard = ({ order }) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <FinancialCard
-            icon={
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
-            }
-            label="Total Order Value"
-            value={
-              order?.orderValueTotal
-                ? (order.orderValueTotal / 100000).toFixed(2)
-                : "0.00"
-            }
-            linear="from-blue-500 to-blue-600"
-            bglinear="from-blue-50 to-blue-100"
-            borderColor="border-blue-200"
-          />
+
           <FinancialCard
             icon={
               <svg
@@ -130,19 +105,19 @@ export const OrderDetailsCard = ({ order }) => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                 />
               </svg>
             }
-            label="Net Order Value"
+            label="Total Order Value"
             value={
-              order?.netOrderValue
-                ? (order.netOrderValue / 100000).toFixed(2)
+              order?.orderValueTotal
+                ? (order.orderValueTotal / 100000).toFixed(2)
                 : "0.00"
             }
-            linear="from-orange-500 to-amber-600"
-            bglinear="from-orange-50 to-amber-100"
-            borderColor="border-orange-200"
+            linear="from-blue-500 to-blue-600"
+            bglinear="from-blue-50 to-blue-100"
+            borderColor="border-blue-200"
           />
         </div>
       </section>
@@ -165,25 +140,55 @@ export const OrderDetailsCard = ({ order }) => {
               />
             </svg>
           }
-          title="Client & Order Information"
+          title="Client Information"
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-white/70 backdrop-blur-sm p-6 rounded-2xl border border-gray-200/50 shadow-lg">
           <EnhancedInfoRow label="Client" value={order?.client} />
           <EnhancedInfoRow label="End User" value={order?.endUser} />
-          <EnhancedInfoRow label="Order Number" value={order?.orderNumber} />
           <EnhancedInfoRow label="Job Number" value={order?.jobNumber} />
           <EnhancedInfoRow label="SO Type" value={order?.soType} />
           <EnhancedInfoRow label="Entity Type" value={order?.entityType} />
           <EnhancedInfoRow label="Site Location" value={order?.site} />
           <EnhancedInfoRow
-            label="Sales Manager"
-            value={order?.concerningSalesManager}
-          />
-          <EnhancedInfoRow
             label="Technical Person Email"
             value={order?.technicalEmail}
           />
         </div>
+      </section>
+
+      {/* Client & Order Information */}
+      <section className="mb-8">
+        <SectionHeader
+          icon={
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+          }
+          title="Order Information"
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-white/70 backdrop-blur-sm p-6 rounded-2xl border border-gray-200/50 shadow-lg">
+          <EnhancedInfoRow label="Order Number" value={order?.orderNumber} />
+          <EnhancedInfoRow label="Job Number" value={order?.jobNumber} />
+          <EnhancedInfoRow
+            label="Sales Manager"
+            value={order?.concerningSalesManager}
+          />
+          <EnhancedInfoRow
+            label="Amendment Req."
+            value={order?.amndReqrd}
+          />
+        </div>
+
       </section>
 
       {/* Timeline & Delivery */}
@@ -232,8 +237,12 @@ export const OrderDetailsCard = ({ order }) => {
             }
           />
           <EnhancedInfoRow
-            label="Credit Days"
-            value={order?.creditDays ? `${order.creditDays} days` : null}
+            label="Target Delivery Date"
+            value={
+              order?.deleveryDate
+                ? new Date(order.actualDeleveryDate).toLocaleDateString()
+                : null
+            }
           />
         </div>
       </section>
@@ -256,36 +265,13 @@ export const OrderDetailsCard = ({ order }) => {
               />
             </svg>
           }
-          title="Status & Dispatch"
+          title="Order Status"
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <EnhancedStatusCard
             label="Order Status"
             value={order?.status}
             colorClass={getStatusColor(order?.status)}
-          />
-          <EnhancedStatusCard
-            label="Billing Status"
-            value={order?.billingStatus}
-            colorClass="bg-blue-500 text-white"
-          />
-          <EnhancedStatusCard
-            label="Dispatch Status"
-            value={order?.dispatchStatus}
-            colorClass={
-              order?.dispatchStatus === "URGENT"
-                ? "bg-red-500 text-white"
-                : "bg-green-500 text-white"
-            }
-          />
-          <EnhancedStatusCard
-            label="Formal Order"
-            value={order?.formalOrderStatus}
-            colorClass={
-              order?.formalOrderStatus === "RECEIVED"
-                ? "bg-green-500 text-white"
-                : "bg-orange-500 text-white"
-            }
           />
         </div>
       </section>
@@ -310,48 +296,57 @@ export const OrderDetailsCard = ({ order }) => {
           }
           title="Payment Terms"
         />
-        <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl border border-gray-200/50 shadow-lg space-y-6">
-          <EnhancedInfoRow
-            label="Payment Against"
-            value={order?.paymentAgainst}
-          />
 
+        <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl border border-gray-200/50 shadow-lg space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <PaymentTermCard
-              title="Adavance Term"
+            {["1", "2", "3"].includes(order?.paymentAdvance) && <PaymentTermCard
+              title="Adavance Term-1"
               type={order?.paymentType1}
-              percentage={order?.paymentPercent1}
+              Typeother={order?.paymentType1other}
               amount={order?.paymentAmount1}
+              percentage={order?.paymentPercent1}
+              paymentCGBG={order?.payemntCGBG1}
+              paymentrecieved={order?.paymentrecieved1}
               linearFrom="from-blue-500"
               linearTo="to-cyan-500"
             />
-            <PaymentTermCard
-              title="Retention Amount"
+            }
+            {["2", "3"].includes(order?.paymentAdvance) && <PaymentTermCard
+              title="Adavance Term-2"
               type={order?.paymentType2}
-              percentage={order?.paymentPercent2}
+              Typeother={order?.paymentType2other}
               amount={order?.paymentAmount2}
+              percentage={order?.paymentPercent2}
+              paymentCGBG={order?.payemntCGBG2}
+              paymentrecieved={order?.paymentrecieved2}
+              linearFrom="from-blue-500"
+              linearTo="to-cyan-500"
+            />}
+            {order?.paymentAdvance === "3" && <PaymentTermCard
+              title="Adavance Term-3"
+              type={order?.paymentType3}
+              Typeother={order?.paymentType3other}
+              amount={order?.paymentAmount3}
+              percentage={order?.paymentPercent3}
+              paymentCGBG={order?.payemntCGBG3}
+              paymentrecieved={order?.paymentrecieved3}
+              linearFrom="from-blue-500"
+              linearTo="to-cyan-500"
+            />}
+
+
+            {order?.retentionYesNo === "YES" && <PaymentTermCard
+              title="Retention Amount"
+              isRetention={order?.retentionYesNo === "YES" ? true : false}
+              type={order?.retentionDocs}
+              Typeother={order?.retentinoDocsOther}
+              percentage={order?.retentionPercent}
+              amount={order?.retentionAmount}
+              paymentCGBG={order?.retentionDocs}
+              creditDays={order?.creditDays}
               linearFrom="from-purple-500"
               linearTo="to-pink-500"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-200">
-            <EnhancedInfoRow
-              label="Sales Basic"
-              value={
-                order?.salesBasic
-                  ? `₹${(order.salesBasic / 100000).toFixed(2)} Lacs`
-                  : null
-              }
-            />
-            <EnhancedInfoRow
-              label="Sales Total"
-              value={
-                order?.salesTotal
-                  ? `₹${(order.salesTotal / 100000).toFixed(2)} Lacs`
-                  : null
-              }
-            />
+            />}
           </div>
         </div>
       </section>
@@ -383,21 +378,6 @@ export const OrderDetailsCard = ({ order }) => {
             fullWidth
           />
           <EnhancedInfoRow label="Remarks" value={order?.remarks} fullWidth />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-200">
-            <EnhancedInfoRow
-              label="Amendment Required"
-              value={order?.amndReqrd}
-            />
-            <EnhancedInfoRow label="Cancellation" value={order?.cancellation} />
-            <EnhancedInfoRow
-              label="Bill Pending"
-              value={order?.billPending}
-            />
-            {/* <EnhancedInfoRow
-              label="Saved in Project"
-              value={order?.isSaveInProject ? "Yes" : "No"}
-            /> */}
-          </div>
         </div>
       </section>
     </>
@@ -475,51 +455,85 @@ const EnhancedStatusCard = ({ label, value, colorClass }) => (
 const PaymentTermCard = ({
   title,
   type,
+  Typeother,
   percentage,
   amount,
+  paymentCGBG,
+  paymentrecieved,
+  creditDays,
   linearFrom,
   linearTo,
-}) => (
-  <div
-    className={`relative bg-linear-to-br ${linearFrom} ${linearTo} p-6 rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300`}
-  >
-    <div className="absolute top-0 right-0 w-40 h-40 bg-white/20 rounded-full blur-3xl transform translate-x-20 -translate-y-20 group-hover:scale-150 transition-transform duration-500"></div>
-    <h4 className="relative text-base font-bold text-white mb-4 flex items-center gap-2">
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-        />
-      </svg>
-      {title}
-    </h4>
-    <div className="relative space-y-3">
-      <div className="flex justify-between items-center">
-        <span className="text-xs text-white/80 font-medium">Type</span>
-        <span className="text-sm text-white font-bold">{type || "N/A"}</span>
-      </div>
-      <div className="flex justify-between items-center">
-        <span className="text-xs text-white/80 font-medium">Percentage</span>
-        <span className="text-sm text-white font-bold">
-          {percentage ? `${percentage}%` : "N/A"}
-        </span>
-      </div>
-      <div className="flex justify-between items-center pt-3 border-t border-white/30">
-        <span className="text-xs text-white/80 font-medium">Amount</span>
-        <span className="text-lg text-white font-bold">
-          {amount ? `₹${(amount / 100000).toFixed(2)} L` : "N/A"}
-        </span>
+  isRetention = false,
+}) => {
+
+  const mainLabel = isRetention
+    ? type === "OTHER" ? "Specific Retention Docs" : "Retention Docs"
+    : type === "OTHER" ? "Specific Milestone" : "Milestone";
+
+  const mainValue = type === "OTHER" ? Typeother || "N/A" : type || "N/A";
+
+  return (
+    <div
+      className={`relative bg-linear-to-br ${linearFrom} ${linearTo} p-6 rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300`}
+    >
+      <div className="absolute top-0 right-0 w-40 h-40 bg-white/20 rounded-full blur-3xl translate-x-20 -translate-y-20 group-hover:scale-150 transition-transform duration-500"></div>
+
+      <h4 className="relative text-base font-bold text-white mb-4 flex items-center gap-2">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+          />
+        </svg>
+        {title}
+      </h4>
+
+      <div className="relative space-y-3">
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-white/80 font-medium">{mainLabel}</span>
+          <span className="text-sm text-white font-bold truncate">{mainValue}</span>
+        </div>
+        {!isRetention && (
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-white/80 font-medium">Payment CG/BG</span>
+            <span className="text-sm text-white font-bold truncate">{paymentCGBG || "N/A"}</span>
+          </div>
+        )}
+
+        <div className="flex justify-between items-center">
+          <span className="text-xs text-white/80 font-medium">Percentage</span>
+          <span className="text-sm text-white font-bold">
+            {percentage ? `${percentage}%` : "N/A"}
+          </span>
+        </div>
+        <div className="flex justify-between items-center pt-3 border-t border-white/30">
+          <span className="text-xs text-white/80 font-medium">Amount</span>
+          <span className="text-lg text-white font-bold">
+            {amount ? `₹${(amount / 100000).toFixed(2)} L` : "N/A"}
+          </span>
+        </div>
+        {isRetention ? (
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-white/80 font-medium">Credit Days</span>
+            <span className="text-sm text-white font-bold truncate">
+              {creditDays || "N/A"} days
+            </span>
+          </div>
+        ) : (
+          <div className="flex justify-between items-center">
+            <span className="text-xs text-white/80 font-medium">Payment Received</span>
+            <span className="text-sm text-white font-bold truncate">
+              {paymentrecieved || "N/A"}
+            </span>
+          </div>
+        )}
       </div>
     </div>
-  </div>
-);
+  );
+};
+
 
 // Enhanced Status Color Function
 const getStatusColor = (status) => {

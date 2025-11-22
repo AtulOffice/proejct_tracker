@@ -7,6 +7,62 @@ import StartChecklistsModel from "../models/startCheck.model.js";
 import EndChecklistsModel from "../models/endCheckList.js";
 import Order from "../models/orderSheet.model.js";
 
+export const RecordsformaveNew = async (req, res) => {
+  try {
+    const { jobNumber, OrderMongoId, ...projectFields } = req.body;
+
+    if (!jobNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Job number is required",
+      });
+    }
+
+    if (!OrderMongoId) {
+      return res.status(400).json({
+        success: false,
+        message: "OrderMongoId is required",
+      });
+    }
+    const existingProject = await ProjectModel.findOne({ jobNumber });
+    if (existingProject) {
+      return res.status(400).json({
+        success: false,
+        message: "Job number is already stored",
+      });
+    }
+
+    const project = await ProjectModel.create({
+      ...projectFields,
+      jobNumber,
+      OrderMongoId,
+    });
+    const updatedOrder = await Order.findByIdAndUpdate(
+      OrderMongoId,
+      {
+        ProjectDetails: project._id,
+        isSaveInProject: true,
+      },
+      { new: true }
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: "Project saved and linked to order successfully.",
+      data: {
+        project,
+        order: updatedOrder,
+      },
+    });
+  } catch (error) {
+    console.error("Project Save Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+
 export const Recordsformave = async (req, res) => {
   try {
     const { jobNumber, engineerData, OrderMongoId, ...projectFields } =

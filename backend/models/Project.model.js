@@ -442,6 +442,10 @@ const projectSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    isProjectDocssave: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

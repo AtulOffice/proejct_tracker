@@ -7,10 +7,7 @@ import DocumentsSection from "../utils/addDevDocs";
 const FormField = ({
   formData,
   handleChange,
-  setEngineerData,
   selectData,
-  Docs,
-  setDocs,
 }) => {
   return (
     <>
@@ -26,16 +23,17 @@ const FormField = ({
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {[
-                  ["Job Number", formData.jobNumber],
-                  ["Entity Type", formData.entityType],
-                  ["SO Type", formData.soType],
+                  ["Job Number", selectData.jobNumber],
+                  ["Entity Type", selectData.entityType],
+                  ["SO Type", selectData.soType],
                   ["Booking Date", formData.bookingDate],
-                  ["Client Tech Name", formData.name],
-                  ["Client Tech Email", formData.technicalEmail],
-                  ["Client Tech Ph", formData.phone],
-                  ["Client", formData.client],
-                  ["End User", formData.endUser],
-                  ["Location", formData.location],
+                  ["Client Name", selectData.client],
+                  ["End User", selectData.endUser],
+                  ["Site Location", selectData.site],
+                  ["SIEPL Acct. Mgr. Email ", selectData.concerningSalesManager],
+                  ["Client Tech Person Name", selectData.name],
+                  ["Client Tech Person Email", selectData.technicalEmail],
+                  ["Client Tech Person Ph", selectData.phone],
                 ].map(([label, value], i) => (
                   <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
                     <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
@@ -54,8 +52,8 @@ const FormField = ({
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  ["Supply Value", formData.orderValueSupply],
-                  ["Service Value", formData.orderValueService],
+                  ["Supply Value", selectData.orderValueSupply],
+                  ["Service Value", selectData.orderValueService],
                 ].map(([label, value], i) => (
                   <div key={i} className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:scale-105 transform">
                     <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wide mb-2">{label}</p>
@@ -80,18 +78,6 @@ const FormField = ({
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {[
-                  ["Order Number", formData.orderNumber],
-                  ["Order Date", formData.orderDate],
-                  ["PO Delivery Date", formData.deleveryDate],
-                  ["Target Delivery", formData.actualDeleveryDate],
-                ].map(([label, value], i) => (
-                  <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                    <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
-                    <p className="font-bold text-gray-900 text-base">{value || "-"}</p>
-                  </div>
-                ))}
-
                 {/* PO Received */}
                 <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
                   <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">PO Received</p>
@@ -99,6 +85,18 @@ const FormField = ({
                     {formData.poReceived || "-"}
                   </span>
                 </div>
+
+                {[
+                  ["Order Number", formData.orderNumber],
+                  ["Order Date", formData.orderDate],
+                  ["PO Delivery Date", formData.deleveryDate],
+                ].map(([label, value], i) => (
+                  <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                    <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+                    <p className="font-bold text-gray-900 text-base">{value || "-"}</p>
+                  </div>
+                ))}
+
 
                 {/* Amendment Required */}
                 <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
@@ -109,6 +107,14 @@ const FormField = ({
                 </div>
               </div>
             </div>
+
+            {[["Target Delivery", formData.actualDeleveryDate],
+            ].map(([label, value], i) => (
+              <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+                <p className="font-bold text-gray-900 text-base">{value || "-"}</p>
+              </div>
+            ))}
 
             {/* ✏️ Divider */}
             <div className="relative my-12">
@@ -128,8 +134,6 @@ const FormField = ({
           </>
         )}
 
-
-
         {/* service details */}
         <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
           <h3 className="font-bold text-lg  mb-4">
@@ -137,6 +141,12 @@ const FormField = ({
           </h3>
           {/* SERVICE + SERVICE DAYS MENTION → SIDE BY SIDE */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <SelectField
+              {...InputConst[29]}
+              handleChange={handleChange}
+              value={formData.status}
+            />
+
             <SelectField
               {...InputConst[32]}
               handleChange={handleChange}
@@ -180,21 +190,6 @@ const FormField = ({
                   handleChange={handleChange}
                 />
               )}
-              {/* <SelectField
-                {...InputConst[42]}
-                value={formData.isMailSent}
-                handleChange={handleChange}
-              />
-
-              {!["", "N/A"].includes(formData?.Development) && (
-                <>
-                  <SelectField
-                    {...InputConst[43]}
-                    value={formData.isDevlopmentApproved}
-                    handleChange={handleChange}
-                  />
-                </>
-              )} */}
             </div>
             {
               ["BOTH", "LOGIC", "SCADA"].includes(formData.Development) &&
@@ -295,7 +290,7 @@ const FormField = ({
           </div>
         }
 
-
+        {/* lots and man days info */}
         {(formData?.CommisinionPO === "YES") && (
           <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
             <h3 className="font-bold text-lg  mb-4">
@@ -691,244 +686,12 @@ const FormField = ({
                           </svg>
                         </div>
                       </label>
-
-
                     </div>
                   </div>
                 </div>
 
               }
             </div>}
-
-            {/* 👥 Client & Contact Details */}
-
-            {/*  this saved in temp-1 */}
-            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-purple-300 shadow-sm">
-              <h3 className="font-bold text-lg text-purple-800 mb-4">
-                👥 Client & Contact Details
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-
-
-                {["pending", "upcoming"].includes(formData.status) && (
-                  <>
-                    <InputFiled
-                      {...InputConst[35]}
-                      value={formData.ContactPersonName}
-                      handleChange={handleChange}
-                    />
-                    <InputFiled
-                      {...InputConst[36]}
-                      value={formData.ContactPersonNumber}
-                      handleChange={handleChange}
-                    />
-                  </>
-                )}
-
-              </div>
-            </div>
-
-            {/* 💰 Billing Information */}
-            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
-              <h3 className="font-bold text-lg text-green-800 mb-4">
-                💰 Billing Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputFiled
-                  {...InputConst[9]}
-                  value={formData.bill}
-                  handleChange={handleChange}
-                />
-                <InputFiled
-                  {...InputConst[10]}
-                  value={formData.dueBill}
-                  handleChange={handleChange}
-                />
-                <SelectField
-                  {...InputConst[25]}
-                  value={formData.billStatus}
-                  handleChange={handleChange}
-                />
-              </div>
-            </div>
-
-
-            {/* 👷 Project Status & Engineer Assignment */}
-            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-orange-300 shadow-sm">
-              <h3 className="font-bold text-lg text-orange-800 mb-4">
-                👷 Project Status & Engineer Assignment
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <SelectField
-                  {...InputConst[29]}
-                  value={formData.status}
-                  handleChange={handleChange}
-                />
-                <SelectField
-                  {...InputConst[26]}
-                  value={formData.supplyStatus}
-                  handleChange={handleChange}
-                />
-
-                {(formData.status === "running" || formData.status === "upcoming") && (
-                  <EngineerAssignment setEngineerData={setEngineerData} />
-                )}
-              </div>
-            </div>
-
-            {/* 📅 Timeline & Scheduling */}
-            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-blue-300 shadow-sm">
-              <h3 className="font-bold text-lg text-blue-800 mb-4">
-                📅 Timeline & Scheduling
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputFiled
-                  {...InputConst[21]}
-                  isEditable={!!selectData?.orderDate}
-                  value={formData.orderDate}
-                  handleChange={handleChange}
-                />
-                <InputFiled
-                  {...InputConst[17]}
-                  isEditable={!!selectData?.deleveryDate}
-                  value={formData.deleveryDate}
-                  handleChange={handleChange}
-                />
-                {/* <InputFiled
-              {...InputConst[1]}
-              value={formData.duration}
-              handleChange={handleChange}
-            /> */}
-
-                {(formData.status === "pending") && (
-                  <InputFiled
-                    {...InputConst[16]}
-                    value={formData.requestDate}
-                    handleChange={handleChange}
-                  />
-                )}
-
-                {["running", "upcoming"].includes(formData.status) && (
-                  <>
-                    <InputFiled
-                      {...InputConst[18]}
-                      value={formData.visitDate}
-                      handleChange={handleChange}
-                    />
-                    <InputFiled
-                      {...InputConst[19]}
-                      value={formData.visitendDate}
-                      handleChange={handleChange}
-                    />
-                  </>
-                )}
-
-
-                {["closed", "completed", "running"].includes(formData.status) && (
-                  <InputFiled
-                    {...InputConst[14]}
-                    value={formData.actualStartDate}
-                    handleChange={handleChange}
-                  />
-                )}
-
-
-                {["completed", "closed"].includes(formData.status) && (
-                  <>
-                    <InputFiled
-                      {...InputConst[15]}
-                      value={formData.actualEndDate}
-                      handleChange={handleChange}
-                    />
-                    <InputFiled
-                      {...InputConst[39]}
-                      value={formData.daysspendsite}
-                      handleChange={handleChange}
-                    />
-                    <InputFiled
-                      {...InputConst[2]}
-                      value={formData.actualVisitDuration}
-                      handleChange={handleChange}
-                    />
-                  </>
-                )}
-
-              </div>
-            </div>
-
-            {/* ✅ Checklists & Submissions */}
-            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-pink-300 shadow-sm">
-              <h3 className="font-bold text-lg text-pink-800 mb-4">
-                ✅ Checklists & Submissions
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {["running", "upcoming", "completed", "cancelled", "closed"].includes(formData.status) && (
-                  <SelectField
-                    {...InputConst[30]}
-                    handleChange={handleChange}
-                    value={formData.StartChecklist}
-                  />
-                )}
-
-
-                {["completed", "cancelled", "closed"].includes(formData.status) && (
-                  <>
-                    <SelectField
-                      {...InputConst[34]}
-                      handleChange={handleChange}
-                      value={formData.EndChecklist}
-                    />
-                    <SelectField
-                      {...InputConst[37]}
-                      handleChange={handleChange}
-                      value={formData.BackupSubmission}
-                    />
-                    <SelectField
-                      {...InputConst[38]}
-                      handleChange={handleChange}
-                      value={formData.ExpensSubmission}
-                    />
-                  </>
-                )}
-
-              </div>
-            </div>
-
-            {/* 📝 MOM & Documentation */}
-            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-yellow-300 shadow-sm">
-              <h3 className="font-bold text-lg text-yellow-800 mb-4">
-                📝 MOM & Documentation
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                <InputFiled
-                  {...InputConst[11]}
-                  value={formData.momsrNo}
-                  handleChange={handleChange}
-                />
-                <InputFiled
-                  {...InputConst[20]}
-                  value={formData.momDate}
-                  handleChange={handleChange}
-                />
-                {["completed", "closed"].includes(formData.status) && (
-                  <>
-                    <InputFiled
-                      {...InputConst[24]}
-                      value={formData.finalMomnumber}
-                      handleChange={handleChange}
-                    />
-                  </>
-                )}
-
-              </div>
-            </div>
-
-
-            {/* 📎 Documents */}
-            <DocumentsSection Docs={Docs} setDocs={setDocs} />
-
           </>
         }
       </div >

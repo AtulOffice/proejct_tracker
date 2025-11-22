@@ -153,13 +153,13 @@ export default function OrderForm() {
 
     if (isEmpty(formData.bookingDate)) newErrors.bookingDate = "Booking Date is required";
     if (isEmpty(formData.poReceived)) newErrors.poReceived = "PO Received is required";
-    if (isEmpty(formData.creditDays)) {
+    if (formData.invoiceTerm === "SI" && isEmpty(formData.creditDays)) {
       newErrors.creditDays = "Credit Days is required";
     } else {
       const cd = toNumber(formData.creditDays);
       if (isNaN(cd)) {
         newErrors.creditDays = "Enter a valid number";
-      } else if (cd <= 0) {
+      } else if (cd < 0) {
         newErrors.creditDays = "Credit Period must be greater than zero";
       }
     }
@@ -268,6 +268,7 @@ export default function OrderForm() {
       }
     }
     setErrors(newErrors);
+    console.log("Validation Errors:", newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -280,9 +281,6 @@ export default function OrderForm() {
         return acc;
       }, {})
     );
-
-    console.log(validate());
-    console.log("Submitting form data:", formData);
 
     if (validate()) {
       setIsSubmitting(true);
@@ -612,7 +610,7 @@ export default function OrderForm() {
                   {formData.paymentType1 === "OTHER" &&
                     renderInput("paymentType1other", "Other MileStone", "text", "Enter MileStone", true)
                   }
-                  {renderInput("payemntCGBG1", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("payemntCGBG1", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A"] })}
                   {renderInput("paymentrecieved1", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
                 </div>
               </div>
@@ -629,7 +627,7 @@ export default function OrderForm() {
                   {formData.paymentType2 === "OTHER" &&
                     renderInput("paymentType2other", "Other MileStone", "text", "Enter MileStone", true)
                   }
-                  {renderInput("payemntCGBG2", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("payemntCGBG2", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A"] })}
                   {renderInput("paymentrecieved2", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
                 </div>
               </div>
@@ -645,7 +643,7 @@ export default function OrderForm() {
                   {formData.paymentType3 === "OTHER" &&
                     renderInput("paymentType3other", "Other MileStone", "text", "Enter MileStone", true)
                   }
-                  {renderInput("payemntCGBG3", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A", "OTHER"] })}
+                  {renderInput("payemntCGBG3", "Payment CG/BG", "select", "", true, { choices: ["CG", "BG", "N/A"] })}
                   {renderInput("paymentrecieved3", "Payment Status", "select", "", true, { choices: ["RECIEVED", "NOT RECIEVED"] })}
                 </div>
               </div>
@@ -732,7 +730,7 @@ export default function OrderForm() {
                   "number",
                   "",
                   true,
-                  { min: 0, max: 100, step: "0.01" }
+                  { min: 0, max: 100, step: "0.01", readOnly: true }
                 )}
                 {renderInput(
                   "retentionAmount",
