@@ -9,20 +9,47 @@ import NotifiNewOrd from "./NotifiNewOrd";
 
 
 export const formval = {
+  projectName: "",
   jobNumber: "",
   entityType: "SI DELHI",
   soType: "PROJECT",
   bookingDate: "",
   client: "",
   endUser: "",
-
-
-  
+  location: "",
+  // concerningSalesManager:"",
   name: "",
   email: "",
   phone: "",
-  projectName: "",
+
+  status: "",
+  service: "",
+  priority: "",
   Development: "",
+  LogicPlace: "",
+  ScadaPlace: "",
+  devScope: "",
+  CommisinionPO: "",
+  LinkedOrderNumber: "",
+  Workcommission: {
+    commissioning: false,
+    erection: false,
+    instrumentation: false,
+  },
+  commScope: "",
+  serviceDaysMention: "",
+  SrvsdaysInLots: {
+    lots: 0,
+    value: 0,
+    unit: "DAYS"
+  },
+  servicedayrate: 0,
+  expenseScopeside: "",
+  companyExpense: [],
+  clientExpense: [],
+
+
+
   engineerName: "",
   finalMomnumber: "",
   actualStartDate: "",
@@ -39,13 +66,8 @@ export const formval = {
   daysspendsite: "",
   startDate: "",
   endDate: "",
-  commScope: "",
-  location: "",
-  status: "",
-  priority: "",
   duration: "",
-  service: "",
-  devScope: "",
+
   expenseScope: "",
   supplyStatus: "DISPATCHED",
   requestDate: "",
@@ -69,26 +91,6 @@ export const formval = {
   deleveryDate: "",
   actualDeleveryDate: "",
   amndReqrd: "",
-  LogicPlace: "",
-  ScadaPlace: "",
-  Commissioning: "",
-  expenseScopeside: "",
-  serviceDaysMention: "",
-  SrvsdaysInLots: {
-    lots: 0,
-    value: 0,
-    unit: "DAYS"
-  },
-  servicedayrate: 0,
-  companyExpense: [],
-  clientExpense: [],
-  Docscommission: {
-    commissioning: false,
-    erection: false,
-    instrumentation: false,
-  },
-  CommisinionPO: "",
-  LinkedOrderNumber: ""
 };
 
 const InputForm = () => {
@@ -115,6 +117,7 @@ const InputForm = () => {
         soType: selectData.soType || prev.soType,
         jobNumber: selectData.jobNumber || "",
         client: selectData.client || "",
+        projectName: selectData.client || "",
         endUser: selectData.endUser || "",
         location: selectData.site || "",
         orderNumber: selectData.orderNumber || "",
@@ -183,32 +186,12 @@ const InputForm = () => {
       }
       if (soTypeMap[secondChar]) {
         updated.soType = soTypeMap[secondChar];
-        if (secondChar === "R") {
-          updated.service = "SERVICE";
-        } else {
-          updated.service = "N/A";
-        }
       }
-
       if (Object.keys(updated).length > 0) {
         setFormData((prev) => ({ ...prev, ...updated }));
       }
     }
   }, [debounceJobnumber]);
-
-  useEffect(() => {
-    setFormData((prevData) => {
-      const newData = { ...prevData };
-      dateFields.forEach((field) => {
-        if (Array.isArray(prevData[field])) {
-          newData[field] = [];
-        } else {
-          newData[field] = "";
-        }
-      });
-      return newData;
-    });
-  }, [formData.status]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -233,12 +216,12 @@ const InputForm = () => {
       });
       return;
     }
-    if (name.startsWith("Docscommission.")) {
+    if (name.startsWith("Workcommission.")) {
       const [, key] = name.split(".");
       setFormData((prev) => ({
         ...prev,
-        Docscommission: {
-          ...prev.Docscommission,
+        Workcommission: {
+          ...prev.Workcommission,
           [key]: checked,
         },
       }));

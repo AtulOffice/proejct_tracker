@@ -59,7 +59,6 @@ export const formval = {
   amndReqrd: "",
   LogicPlace: "",
   ScadaPlace: "",
-  Commissioning: "",
   expenseScopeside: "",
   serviceDaysMention: "",
   SrvsdaysInLots: {
@@ -70,7 +69,7 @@ export const formval = {
   servicedayrate: 0,
   companyExpense: [],
   clientExpense: [],
-  Docscommission: {
+  Workcommission: {
     commissioning: false,
     erection: false,
     instrumentation: false,
@@ -829,7 +828,7 @@ export const InputConst = [
   },
   {
     htmlFor: "CommisinionPO",
-    title: "Commisioning  Status",
+    title: "Commisioning Status",
     type: "select",
     id: "CommisinionPO",
     name: "CommisinionPO",

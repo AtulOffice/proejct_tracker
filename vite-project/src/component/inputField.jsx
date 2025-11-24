@@ -193,11 +193,13 @@ const FormField = ({
             </div>
             {
               ["BOTH", "LOGIC", "SCADA"].includes(formData.Development) &&
-              <TextArea
-                {...InputConst[4]}
-                value={formData.devScope}
-                handleChange={handleChange}
-              />
+              <div className="pt-5">
+                <TextArea
+                  {...InputConst[4]}
+                  value={formData.devScope}
+                  handleChange={handleChange}
+                />
+              </div>
             }
           </div>
         }
@@ -232,7 +234,7 @@ const FormField = ({
             {formData?.CommisinionPO === "YES" && (
               <>
                 <div className="mt-6">
-                  <h4 className="font-semibold text-green-700 mb-3">Commisioning Scope</h4>
+                  <h4 className="font-semibold text-green-700 mb-3">Commisioning Includes</h4>
 
                   <div className="flex flex-wrap gap-4">
 
@@ -240,8 +242,8 @@ const FormField = ({
                     <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
                       <input
                         type="checkbox"
-                        name="Docscommission.commissioning"
-                        checked={formData?.Docscommission?.commissioning}
+                        name="Workcommission.commissioning"
+                        checked={formData?.Workcommission?.commissioning}
                         onChange={handleChange}
                         className="w-5 h-5 cursor-pointer"
                       />
@@ -254,8 +256,8 @@ const FormField = ({
                     <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
                       <input
                         type="checkbox"
-                        name="Docscommission.erection"
-                        checked={formData?.Docscommission?.erection}
+                        name="Workcommission.erection"
+                        checked={formData?.Workcommission?.erection}
                         onChange={handleChange}
                         className="w-5 h-5 cursor-pointer"
                       />
@@ -268,8 +270,8 @@ const FormField = ({
                     <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
                       <input
                         type="checkbox"
-                        name="Docscommission.instrumentation"
-                        checked={formData?.Docscommission?.instrumentation}
+                        name="Workcommission.instrumentation"
+                        checked={formData?.Workcommission?.instrumentation}
                         onChange={handleChange}
                         className="w-5 h-5 cursor-pointer"
                       />
@@ -280,11 +282,13 @@ const FormField = ({
 
                   </div>
                 </div>
-                <TextArea
-                  {...InputConst[33]}
-                  handleChange={handleChange}
-                  value={formData.commScope}
-                />
+                <div className="pt-5">
+                  <TextArea
+                    {...InputConst[33]}
+                    handleChange={handleChange}
+                    value={formData.commScope}
+                  />
+                </div>
               </>
             )}
           </div>

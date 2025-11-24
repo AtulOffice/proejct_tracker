@@ -1,6 +1,7 @@
 import React from "react";
 
 const NotifiNewOrd = ({ setOpen, data, setSelectData }) => {
+
   return (
     <div className="fixed top-6 right-6 z-999 animate-slideIn">
       <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl w-96 max-w-[calc(100vw-3rem)] border border-indigo-200/50 overflow-hidden">

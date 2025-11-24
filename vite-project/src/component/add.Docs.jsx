@@ -154,12 +154,12 @@ const InputForm = () => {
             });
             return;
         }
-        if (name.startsWith("Docscommission.")) {
+        if (name.startsWith("Workcommission.")) {
             const [, key] = name.split(".");
             setFormData((prev) => ({
                 ...prev,
-                Docscommission: {
-                    ...prev.Docscommission,
+                Workcommission: {
+                    ...prev.Workcommission,
                     [key]: checked,
                 },
             }));

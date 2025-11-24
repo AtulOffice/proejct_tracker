@@ -88,7 +88,7 @@ const UpdateForm = () => {
         ...prev,
         CommisinionPO: value,
         ...(value === "NO" && {
-          Docscommission: {
+          Workcommission: {
             commissioning: false,
             erection: false,
             instrumentation: false
@@ -150,7 +150,7 @@ const UpdateForm = () => {
         service: value,
         ...(value !== "COMMISSIONING" && {
           CommisinionPO: "",
-          Docscommission: {
+          Workcommission: {
             commissioning: false,
             erection: false,
             instrumentation: false
@@ -171,12 +171,12 @@ const UpdateForm = () => {
       });
       return;
     }
-    if (name.startsWith("Docscommission.")) {
+    if (name.startsWith("Workcommission.")) {
       const [, key] = name.split(".");
       setFormData((prev) => ({
         ...prev,
-        Docscommission: {
-          ...prev.Docscommission,
+        Workcommission: {
+          ...prev.Workcommission,
           [key]: checked,
         },
       }));
@@ -753,8 +753,8 @@ const UpdateForm = () => {
                     <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
                       <input
                         type="checkbox"
-                        name="Docscommission.commissioning"
-                        checked={formData?.Docscommission?.commissioning}
+                        name="Workcommission.commissioning"
+                        checked={formData?.Workcommission?.commissioning}
                         onChange={handleChange}
                         className="w-5 h-5 cursor-pointer"
                       />
@@ -767,8 +767,8 @@ const UpdateForm = () => {
                     <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
                       <input
                         type="checkbox"
-                        name="Docscommission.erection"
-                        checked={formData?.Docscommission?.erection}
+                        name="Workcommission.erection"
+                        checked={formData?.Workcommission?.erection}
                         onChange={handleChange}
                         className="w-5 h-5 cursor-pointer"
                       />
@@ -781,8 +781,8 @@ const UpdateForm = () => {
                     <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
                       <input
                         type="checkbox"
-                        name="Docscommission.instrumentation"
-                        checked={formData?.Docscommission?.instrumentation}
+                        name="Workcommission.instrumentation"
+                        checked={formData?.Workcommission?.instrumentation}
                         onChange={handleChange}
                         className="w-5 h-5 cursor-pointer"
                       />

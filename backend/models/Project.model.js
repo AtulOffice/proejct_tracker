@@ -422,7 +422,7 @@ const projectSchema = new mongoose.Schema(
       enum: ["", "YES", "NO"],
       default: "",
     },
-    Docscommission: {
+    Workcommission: {
       commissioning: { type: Boolean, default: false },
       erection: { type: Boolean, default: false },
       instrumentation: { type: Boolean, default: false },

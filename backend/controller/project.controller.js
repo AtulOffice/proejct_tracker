@@ -1,8 +1,8 @@
+import mongoose from "mongoose";
 import ProjectModel from "../models/Project.model.js";
 import workStatusModel from "../models/WorkStatus.model.js";
 import EngineerReocord from "../models/engineers..model.js";
 import ProjectDevModel from "../models/Project.Dev.model.js";
-import mongoose from "mongoose";
 import StartChecklistsModel from "../models/startCheck.model.js";
 import EndChecklistsModel from "../models/endCheckList.js";
 import Order from "../models/orderSheet.model.js";
@@ -10,6 +10,8 @@ import Order from "../models/orderSheet.model.js";
 export const RecordsformaveNew = async (req, res) => {
   try {
     const { jobNumber, OrderMongoId, ...projectFields } = req.body;
+    console.log(projectFields);
+    return;
 
     if (!jobNumber) {
       return res.status(400).json({
@@ -1052,7 +1054,7 @@ export const allProjectsFetchDev = async (req, res) => {
       actualDeleveryDate: 1,
       amndReqrd: 1,
       CommisinionPO: 1,
-      Docscommission: 1,
+      Workcommission: 1,
       expenseScopeside: 1,
       companyExpense: 1,
       clientExpense: 1,
