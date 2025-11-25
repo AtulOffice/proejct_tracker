@@ -82,8 +82,16 @@ const projectSchema = new mongoose.Schema(
     },
     billStatus: {
       type: String,
-      enum: ["TBB", "ALL BILLED", "PART BILLED", "N/A", "CLOSED", "CANCELED"],
-      default: "N/A",
+      enum: [
+        "TBB",
+        "ALL BILLED",
+        "PART BILLED",
+        "N/A",
+        "CLOSED",
+        "CANCELED",
+        "",
+      ],
+      default: "",
     },
     status: {
       type: String,
@@ -174,18 +182,19 @@ const projectSchema = new mongoose.Schema(
         "CANCELED",
         "DELIVERED",
         "PENDING",
+        "",
       ],
-      default: "N/A",
+      default: "",
     },
     StartChecklist: {
       type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
+      enum: ["YES", "NO", "N/A", ""],
+      default: "",
     },
     EndChecklist: {
       type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
+      enum: ["YES", "NO", "N/A", ""],
+      default: "",
     },
     Development: {
       type: String,
@@ -202,23 +211,15 @@ const projectSchema = new mongoose.Schema(
       enum: ["OFFICE", "SITE", ""],
       default: "",
     },
-    // ////////////
-    // this is not in used
-    DevelopmentSetcion: {
-      type: String,
-      enum: ["LOGIC", "SCADA", "BOTH", ""],
-      default: "",
-    },
-    //  ///////////
     BackupSubmission: {
       type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
+      enum: ["YES", "NO", "N/A", ""],
+      default: "",
     },
     ExpensSubmission: {
       type: String,
-      enum: ["YES", "NO", "N/A"],
-      default: "N/A",
+      enum: ["YES", "NO", "N/A", ""],
+      default: "",
     },
     visitDate: {
       type: Date,
@@ -362,60 +363,17 @@ const projectSchema = new mongoose.Schema(
       type: String,
       default: "not provided",
     },
-    bookingDate: { type: Date },
-    name: {
+    swname: {
       type: String,
       trim: true,
     },
-    technicalEmail: {
+    swtechnicalEmail: {
       type: String,
       trim: true,
     },
-    phone: {
+    swphone: {
       type: String,
       trim: true,
-    },
-    orderValueSupply: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    orderValueService: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    orderValueTotal: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    netOrderValue: {
-      type: Number,
-      default: 0,
-    },
-    poReceived: {
-      type: String,
-      enum: ["YES", "NO", ""],
-      default: "",
-    },
-    orderNumber: {
-      type: String,
-      trim: true,
-    },
-    orderDate: {
-      type: Date,
-    },
-    deleveryDate: {
-      type: Date,
-    },
-    actualDeleveryDate: {
-      type: Date,
-    },
-    amndReqrd: {
-      type: String,
-      enum: ["YES", "NO", "N/A", ""],
-      default: "",
     },
     CommisinionPO: {
       type: String,

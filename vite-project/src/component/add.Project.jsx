@@ -17,10 +17,11 @@ export const formval = {
   client: "",
   endUser: "",
   location: "",
-  // concerningSalesManager:"",
   name: "",
   email: "",
   phone: "",
+  OrderMongoId: "",
+
 
   status: "",
   service: "",
@@ -48,49 +49,35 @@ export const formval = {
   companyExpense: [],
   clientExpense: [],
 
-
-
   engineerName: "",
   finalMomnumber: "",
   actualStartDate: "",
   actualEndDate: "",
   bill: "",
   dueBill: "",
-  billStatus: "N/A",
+  billStatus: "",
   visitDate: "",
   visitendDate: "",
   momDate: "",
   momsrNo: "",
-  orderNumber: "",
-  poReceived: "",
   daysspendsite: "",
   startDate: "",
   endDate: "",
   duration: "",
-
   expenseScope: "",
-  supplyStatus: "DISPATCHED",
+  supplyStatus: "",
   requestDate: "",
-  StartChecklist: "N/A",
-  EndChecklist: "N/A",
+  StartChecklist: "",
+  EndChecklist: "",
   actualVisitDuration: "",
   ContactPersonNumber: "",
   ContactPersonName: "",
-  ExpensSubmission: "N/A",
-  BackupSubmission: "N/A",
-  technicalEmail: "",
+  ExpensSubmission: "",
+  BackupSubmission: "",
   isMailSent: "NO",
   isDevlopmentApproved: "NO",
   DevelopmentSetcion: "",
-  OrderMongoId: "",
-  orderValueSupply: "",
-  orderValueService: "",
-  orderValueTotal: "",
-  porecieved: "",
-  orderDate: "",
-  deleveryDate: "",
-  actualDeleveryDate: "",
-  amndReqrd: "",
+
 };
 
 const InputForm = () => {
@@ -120,8 +107,6 @@ const InputForm = () => {
         projectName: selectData.client || "",
         endUser: selectData.endUser || "",
         location: selectData.site || "",
-        orderNumber: selectData.orderNumber || "",
-        orderDate: formatDate(selectData.orderDate),
         technicalEmail: selectData.technicalEmail || "",
         billStatus: selectData.billingStatus || "",
         bill: selectData.orderValueTotal || "",
@@ -130,14 +115,6 @@ const InputForm = () => {
         name: selectData.name || "",
         email: selectData.email || "",
         phone: selectData.phone || "",
-        orderValueSupply: selectData.orderValueSupply || 0,
-        orderValueService: selectData.orderValueService || 0,
-        orderValueTotal: selectData.orderValueTotal || 0,
-
-        poReceived: selectData.poReceived || "",
-        deleveryDate: formatDate(selectData.deleveryDate),
-        actualDeleveryDate: formatDate(selectData.actualDeleveryDate),
-        amndReqrd: selectData.amndReqrd || "",
       }));
       setDocs(docsVal)
     }

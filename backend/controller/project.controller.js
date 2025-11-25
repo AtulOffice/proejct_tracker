@@ -1054,7 +1054,7 @@ export const allProjectsFetchDev = async (req, res) => {
       actualDeleveryDate: 1,
       amndReqrd: 1,
       CommisinionPO: 1,
-      Workcommission: 1,
+      Docscommission: 1,
       expenseScopeside: 1,
       companyExpense: 1,
       clientExpense: 1,
