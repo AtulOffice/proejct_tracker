@@ -18,7 +18,7 @@ export const formval = {
   endUser: "",
   location: "",
   name: "",
-  email: "",
+  technicalEmail: "",
   phone: "",
   OrderMongoId: "",
 
@@ -49,6 +49,10 @@ export const formval = {
   companyExpense: [],
   clientExpense: [],
 
+
+
+  //  Not applicable
+
   engineerName: "",
   finalMomnumber: "",
   actualStartDate: "",
@@ -77,7 +81,6 @@ export const formval = {
   isMailSent: "NO",
   isDevlopmentApproved: "NO",
   DevelopmentSetcion: "",
-
 };
 
 const InputForm = () => {
@@ -107,13 +110,12 @@ const InputForm = () => {
         projectName: selectData.client || "",
         endUser: selectData.endUser || "",
         location: selectData.site || "",
-        technicalEmail: selectData.technicalEmail || "",
         billStatus: selectData.billingStatus || "",
         bill: selectData.orderValueTotal || "",
         dueBill: selectData.orderValueTotal || "",
         bookingDate: formatDate(selectData.bookingDate),
         name: selectData.name || "",
-        email: selectData.email || "",
+        technicalEmail: selectData.technicalEmail || "",
         phone: selectData.phone || "",
       }));
       setDocs(docsVal)

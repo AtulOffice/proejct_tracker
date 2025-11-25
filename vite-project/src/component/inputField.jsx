@@ -9,6 +9,10 @@ const FormField = ({
   handleChange,
   selectData,
 }) => {
+  const formatDate = (date) => {
+    if (!date) return "";
+    return new Date(date).toISOString().split("T")[0];
+  };
   return (
     <>
       <div className="space-y-6">
@@ -64,7 +68,7 @@ const FormField = ({
                 <div className="bg-linear-to-br from-emerald-100 to-emerald-200 p-4 rounded-lg border-2 border-emerald-400 shadow-md">
                   <p className="text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-2">Total Value</p>
                   <p className="font-extrabold text-emerald-900 text-xl">
-                    ₹ {formData.orderValueTotal || "0"}
+                    ₹ {selectData.orderValueTotal || "0"}
                   </p>
                 </div>
               </div>
@@ -81,15 +85,15 @@ const FormField = ({
                 {/* PO Received */}
                 <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
                   <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">PO Received</p>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.poReceived === "Yes" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                    {formData.poReceived || "-"}
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${selectData.poReceived === "Yes" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                    {selectData.poReceived || "-"}
                   </span>
                 </div>
 
                 {[
-                  ["Order Number", formData.orderNumber],
-                  ["Order Date", formData.orderDate],
-                  ["PO Delivery Date", formData.deleveryDate],
+                  ["Order Number", selectData.orderNumber],
+                  ["Order Date", formatDate(selectData.orderDate)],
+                  ["PO Delivery Date", formatDate(selectData.deleveryDate)],
                 ].map(([label, value], i) => (
                   <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
                     <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
@@ -101,14 +105,14 @@ const FormField = ({
                 {/* Amendment Required */}
                 <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
                   <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Amendment Reqrd</p>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.amndReqrd === "Yes" ? "bg-orange-100 text-orange-700" : "bg-gray-100 text-gray-700"}`}>
-                    {formData.amndReqrd || "-"}
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${selectData.amndReqrd === "Yes" ? "bg-orange-100 text-orange-700" : "bg-gray-100 text-gray-700"}`}>
+                    {selectData.amndReqrd || "-"}
                   </span>
                 </div>
               </div>
             </div>
 
-            {[["Target Delivery", formData.actualDeleveryDate],
+            {[["Target Delivery", formatDate(selectData.actualDeleveryDate)],
             ].map(([label, value], i) => (
               <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
                 <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>

@@ -10,9 +10,6 @@ import Order from "../models/orderSheet.model.js";
 export const RecordsformaveNew = async (req, res) => {
   try {
     const { jobNumber, OrderMongoId, ...projectFields } = req.body;
-    console.log(projectFields);
-    return;
-
     if (!jobNumber) {
       return res.status(400).json({
         success: false,

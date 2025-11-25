@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ENUMVAL = ["YES", "NO", "N/A"];
+const ENUMVAL = ["YES", "NO", "N/A", ""];
 
 const projectSchema = new mongoose.Schema(
   {
