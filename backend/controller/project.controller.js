@@ -62,6 +62,81 @@ export const RecordsformaveNew = async (req, res) => {
   }
 };
 
+export const updateRecordsDocs = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    console.log(req.body);
+    return;
+    const {
+      completionDocuments,
+      dispatchDocuments,
+      customerDocuments,
+      internalDocuments,
+      ...otherData
+    } = req.body;
+
+    if (!id)
+      return res
+        .status(400)
+        .json({ success: false, message: "ID is required" });
+
+    const project = await ProjectModel.findById(id);
+    if (!project)
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+
+    Object.keys(otherData).forEach((key) => {
+      if (project.schema.path(key)) {
+        project[key] = otherData[key];
+      }
+    });
+    const mergeNested = (target = {}, source) => {
+      if (!source) return target;
+
+      Object.entries(source).forEach(([key, value]) => {
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          target[key] = mergeNested(target[key] || {}, value);
+        } else {
+          target[key] = value;
+        }
+      });
+
+      return target;
+    };
+
+    project.completionDocuments = mergeNested(
+      project.completionDocuments,
+      completionDocuments
+    );
+
+    project.dispatchDocuments = mergeNested(
+      project.dispatchDocuments,
+      dispatchDocuments
+    );
+
+    project.customerDocuments = mergeNested(
+      project.customerDocuments,
+      customerDocuments
+    );
+
+    project.internalDocuments = mergeNested(
+      project.internalDocuments,
+      internalDocuments
+    );
+
+    await project.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Docs Update process completed.",
+    });
+  } catch (e) {
+    return res.status(500).json({ success: false, message: e.message });
+  }
+};
+
 export const Recordsformave = async (req, res) => {
   try {
     const { jobNumber, engineerData, OrderMongoId, ...projectFields } =
@@ -937,6 +1012,37 @@ export const UrgentProjectAction = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
+export const getAllProjectsnew = async (req, res) => {
+  try {
+    const docsProjects = await ProjectModel.find({
+      isProjectDocssave: false,
+    })
+      .select(
+        "jobNumber entityType soType client _id Development priority ScadaPlace LogicPlace devScope CommisinionPO Workcommission commScope LinkedOrderNumber"
+      )
+      .populate(
+        "OrderMongoId",
+        "name technicalEmail phone bookingDate client endUser site concerningSalesManager deleveryDate actualDeleveryDate"
+      )
+      .sort({
+        updatedAt: -1,
+        createdAt: -1,
+      });
+    res.status(200).json({
+      success: true,
+      count: docsProjects.length,
+      docsProjects,
+    });
+  } catch (error) {
+    console.error("Error fetching Projects For docs save:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching Docs Project",
+      error: error.message,
+    });
   }
 };
 

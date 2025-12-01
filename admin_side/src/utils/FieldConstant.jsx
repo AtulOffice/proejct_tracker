@@ -630,6 +630,7 @@ export const InputConst = [
     name: "isMailSent",
     required: true,
     options: [
+      { value: "", label: "select Option" },
       { value: "NO", label: "NO" },
       { value: "YES", label: "YES" },
     ],

@@ -113,8 +113,8 @@ const projectSchema = new mongoose.Schema(
     },
     isDevlopmentApproved: {
       type: String,
-      enum: ["YES", "NO"],
-      default: "NO",
+      enum: ["YES", "NO", ""],
+      default: "",
     },
     isDataSavedProject: {
       type: Boolean,
@@ -169,7 +169,7 @@ const projectSchema = new mongoose.Schema(
     },
     isMailSent: {
       type: String,
-      enum: ["YES", "NO"],
+      enum: ["YES", "NO", ""],
       default: "NO",
     },
     supplyStatus: {

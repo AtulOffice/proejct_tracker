@@ -19,6 +19,8 @@ import {
   getEngineerOverview,
   allProjectsFetchDev,
   RecordsformaveNew,
+  getAllProjectsnew,
+  updateRecordsDocs,
 } from "../controller/project.controller.js";
 import {
   authenticate,
@@ -46,12 +48,21 @@ ProjectRouter.post(
   authorizeRole("admin", "reception"),
   RecordsformaveNew
 );
+
 ProjectRouter.get(
   "/getProjectOverview",
   refreshTokenMiddleware,
   // authenticate,
   // authorizeRole("admin", "reception"),
   getProjectOverview
+);
+
+ProjectRouter.get(
+  "/getProjectforDocs",
+  refreshTokenMiddleware,
+  authenticate,
+  authorizeRole("admin", "reception"),
+  getAllProjectsnew
 );
 
 ProjectRouter.get(
@@ -84,6 +95,13 @@ ProjectRouter.put(
   authenticate,
   authorizeRole("admin", "reception"),
   updateRecords
+);
+ProjectRouter.put(
+  "/updateDocs/:id",
+  refreshTokenMiddleware,
+  authenticate,
+  authorizeRole("admin", "reception"),
+  updateRecordsDocs
 );
 ProjectRouter.delete(
   "/delete/:id",

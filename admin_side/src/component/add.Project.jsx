@@ -78,8 +78,8 @@ export const formval = {
   ContactPersonName: "",
   ExpensSubmission: "",
   BackupSubmission: "",
-  isMailSent: "NO",
-  isDevlopmentApproved: "NO",
+  isMailSent: "",
+  isDevlopmentApproved: "",
   DevelopmentSetcion: "",
 };
 
@@ -276,11 +276,13 @@ const InputForm = () => {
       setToggleDev((prev) => !prev);
       setFormData(formval);
       setDocs(docsVal);
+
       setToggle((prev) => !prev);
     } catch (e) {
       console.log(e);
     } finally {
       setIsLoading(false);
+      setSelectData(null)
     }
   };
 
@@ -332,26 +334,33 @@ const InputForm = () => {
             </div>
           </div>
         </div>
+        <div className={`${selectData
+          ? ""
+          : "opacity-50 cursor-not-allowed pointer-events-none"
+          }`}>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <FormField
+              Docs={Docs}
+              setDocs={setDocs}
+              selectData={selectData}
+              formData={formData}
+              handleChange={handleChange}
+              setEngineerData={setEngineerData}
+            />
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <FormField
-            Docs={Docs}
-            setDocs={setDocs}
-            selectData={selectData}
-            formData={formData}
-            handleChange={handleChange}
-            setEngineerData={setEngineerData}
-          />
-          <div className="flex justify-center mt-8">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="text-white bg-white hover:bg-indigo-200 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-            >
-              Submit service details
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-center mt-8">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="text-white bg-white hover:bg-indigo-200 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                Submit service details
+              </button>
+            </div>
+          </form>
+        </div>
+
+
       </div>
     </div>
   );

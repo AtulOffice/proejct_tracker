@@ -145,11 +145,11 @@ const FormField = ({
           </h3>
           {/* SERVICE + SERVICE DAYS MENTION → SIDE BY SIDE */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <SelectField
+            {/* <SelectField
               {...InputConst[29]}
               handleChange={handleChange}
               value={formData.status}
-            />
+            /> */}
 
             <SelectField
               {...InputConst[32]}

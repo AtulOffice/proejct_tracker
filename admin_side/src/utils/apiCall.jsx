@@ -348,8 +348,9 @@ export const addProject = async ({ formData, engineerData, Docs }) => {
   } catch (e) {
     if (e.response) {
       toast.error(e.response?.data?.message);
+    } else {
+      toast.error("something went wrong");
     }
-    toast.error("something went wrong");
     console.log(e);
     throw e;
   }
@@ -463,6 +464,22 @@ export const fetfchOrdersAllnew = async () => {
     throw err;
   }
 };
+
+
+
+export const fetchProjectsAllnewDocs = async () => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/getProjectforDocs`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
 
 export const fetchbyOrderbyId = async (id) => {
   try {

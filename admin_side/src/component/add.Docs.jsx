@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { dateFields, formval, docsVal } from "../utils/FieldConstant";
 import FormField from "./inputField";
 import { useAppContext } from "../appContex";
-import { addProject, fetfchOrdersAllnew } from "../utils/apiCall";
+import { addProject, fetchProjectsAllnewDocs } from "../utils/apiCall";
 import { FaFolderPlus } from "react-icons/fa6";
 import NotifiNewOrd from "./NotifiNewOrd";
 
@@ -11,51 +11,30 @@ import { InputConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField, TextArea } from "./subField";
 import { EngineerAssignment } from "./engineerInpt";
 import DocumentsSection from "../utils/addDevDocs";
+import axios from "axios";
 
 const InputForm = () => {
     const { toggle, setToggle, setToggleDev } = useAppContext();
-    const [formData, setFormData] = useState(formval);
+    const [formData, setFormData] = useState({
+        jobNumber: "",
+        name: "",
+        technicalEmail: "",
+        phone: "",
+    });
     const [isLoading, setIsLoading] = useState(false);
     const [debounceJobnumber, setdebounceJobNumber] = useState("");
-    const [engineerData, setEngineerData] = useState([]);
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [selectData, setSelectData] = useState(null);
     const [Docs, setDocs] = useState(docsVal);
     useEffect(() => {
         if (selectData) {
-            const formatDate = (date) => {
-                if (!date) return "";
-                return new Date(date).toISOString().split("T")[0];
-            };
-
             setFormData((prev) => ({
                 ...prev,
-                OrderMongoId: selectData._id,
-                entityType: selectData.entityType || prev.entityType,
-                soType: selectData.soType || prev.soType,
                 jobNumber: selectData.jobNumber || "",
-                client: selectData.client || "",
-                endUser: selectData.endUser || "",
-                location: selectData.site || "",
-                orderNumber: selectData.orderNumber || "",
-                orderDate: formatDate(selectData.orderDate),
-                technicalEmail: selectData.technicalEmail || "",
-                billStatus: selectData.billingStatus || "",
-                bill: selectData.netOrderValue || "",
-                dueBill: selectData.netOrderValue || "",
-                bookingDate: formatDate(selectData.bookingDate),
-                name: selectData.name || "",
-                email: selectData.email || "",
-                phone: selectData.phone || "",
-                orderValueSupply: selectData.orderValueSupply || 0,
-                orderValueService: selectData.orderValueService || 0,
-                orderValueTotal: selectData.orderValueTotal || 0,
-                netOrderValue: selectData.netOrderValue || 0,
-                poReceived: selectData.poReceived || "",
-                deleveryDate: formatDate(selectData.deleveryDate),
-                actualDeleveryDate: formatDate(selectData.actualDeleveryDate),
-                amndReqrd: selectData.amndReqrd || "",
+                name: selectData?.OrderMongoId?.name || "",
+                technicalEmail: selectData.OrderMongoId?.technicalEmail || "",
+                phone: selectData.OrderMongoId?.phone || "",
             }));
             setDocs(docsVal)
         }
@@ -63,9 +42,9 @@ const InputForm = () => {
     useEffect(() => {
         const getOrdersnew = async () => {
             try {
-                const val = await fetfchOrdersAllnew();
+                const val = await fetchProjectsAllnewDocs();
                 if (val) {
-                    setData(val?.orders);
+                    setData(val?.docsProjects);
                 }
             } catch (error) {
                 console.error("Failed to fetch new Projects", error);
@@ -73,13 +52,18 @@ const InputForm = () => {
         };
         getOrdersnew();
     }, [toggle]);
-
+    console.log(selectData)
     useEffect(() => {
         const handelJob = setTimeout(() => {
             setdebounceJobNumber(formData.jobNumber);
         }, 10);
         return () => clearTimeout(handelJob);
     }, [formData.jobNumber]);
+
+    const formatDate = (date) => {
+        if (!date) return "";
+        return new Date(date).toISOString().split("T")[0];
+    };
 
     useEffect(() => {
         if (debounceJobnumber.length > 2) {
@@ -187,9 +171,6 @@ const InputForm = () => {
         }));
     };
 
-
-
-
     const validateDocs = (docsVal) => {
         const VALID_VALUES = ["YES", "NO", "N/A"];
         console.log(docsVal);
@@ -202,64 +183,39 @@ const InputForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (validateDocs(Docs)) {
             toast.error(`Please select YES, NO, or N/A for Documents}`);
             return;
         }
         setIsLoading(true);
-        const {
-            actualEndDate,
-            startDate,
-            endDate,
-            actualStartDate,
-            visitDate,
-            visitendDate,
-            deleveryDate,
-            requestDate,
-        } = formData;
 
-        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
-            toast.error("Start date must be less than end date");
-            false;
-            return;
-        }
-
-        if (
-            actualStartDate &&
-            actualEndDate &&
-            new Date(actualStartDate) > new Date(actualEndDate)
-        ) {
-            toast.error("Actual Start date must be less than Acual end date");
-            setIsLoading(false);
-            return;
-        }
-
-        if (
-            visitDate &&
-            visitendDate &&
-            new Date(visitDate) > new Date(visitendDate)
-        ) {
-            toast.error("Visit Start date must be less than Visit end date");
-            setIsLoading(false);
-            return;
-        }
         try {
-            await addProject({
-                formData: formData,
-                engineerData: engineerData,
-                Docs: Docs,
-            });
-            setToggleDev((prev) => !prev);
+            const finalData = {
+                ...formData,
+                ...Docs,
+            };
+            const response = await axios.put(
+                `${import.meta.env.VITE_API_URL}/updateDocs/${selectData._id}`,
+                finalData,
+                { withCredentials: true }
+            );
+            toast.success("Data updated successfully");
             setFormData(formval);
             setDocs(docsVal);
             setToggle((prev) => !prev);
+            setToggleDev((prev) => !prev);
+            navigate("/page", {
+                replace: true,
+            });
         } catch (e) {
             console.log(e);
         } finally {
             setIsLoading(false);
         }
     };
+
+
+
 
     return (
         <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-linear-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
@@ -321,18 +277,22 @@ const InputForm = () => {
                                         <h3 className="font-bold text-lg text-indigo-900">Basic Order Information</h3>
                                     </div>
 
+
                                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                         {[
-                                            ["Job Number", formData.jobNumber],
-                                            ["Entity Type", formData.entityType],
-                                            ["SO Type", formData.soType],
-                                            ["Booking Date", formData.bookingDate],
-                                            ["Client Tech Name", formData.name],
-                                            ["Client Tech Email", formData.technicalEmail],
-                                            ["Client Tech Ph", formData.phone],
-                                            ["Client", formData.client],
-                                            ["End User", formData.endUser],
-                                            ["Location", formData.location],
+                                            ["Job Number", selectData.jobNumber],
+                                            ["Entity Type", selectData.entityType],
+                                            ["SO Type", selectData.soType],
+                                            ["Booking Date", formatDate(selectData.OrderMongoId?.bookingDate)],
+                                            ["Client Name", selectData.client],
+                                            ["End User", selectData.OrderMongoId?.endUser],
+                                            ["Site Location", selectData.OrderMongoId?.site],
+                                            ["SIEPL Acct. Mgr. Email ", selectData.OrderMongoId?.concerningSalesManager],
+                                            ["Client Tech Person Name", selectData.OrderMongoId?.name],
+                                            ["Client Tech Person Email", selectData.OrderMongoId?.technicalEmail],
+                                            ["Client Tech Person Ph", selectData.OrderMongoId?.phone],
+                                            ["Target Delevery Date", formatDate(selectData.OrderMongoId?.actualDeleveryDate)],
+
                                         ].map(([label, value], i) => (
                                             <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
                                                 <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
@@ -342,68 +302,37 @@ const InputForm = () => {
                                     </div>
                                 </div>
 
-                                {/* 💰 Order Value */}
-                                <div className="bg-linear-to-br from-emerald-50 to-green-100 p-5 rounded-xl border border-emerald-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                                    <div className="flex items-center mb-4 border-b border-emerald-200 pb-3">
-                                        <span className="text-2xl mr-2">💰</span>
-                                        <h3 className="font-bold text-lg text-emerald-900">Order Value</h3>
+                                <div className="bg-linear-to-br from-indigo-50 to-indigo-100 p-5 rounded-xl border border-indigo-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                    <div className="flex items-center mb-4 border-b border-indigo-200 pb-3">
+                                        <span className="text-2xl mr-2">📋</span>
+                                        <h3 className="font-bold text-lg text-indigo-900">Development Information</h3>
                                     </div>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                         {[
-                                            ["Supply Value", formData.orderValueSupply],
-                                            ["Service Value", formData.orderValueService],
+                                            ["Priority", selectData.priority],
+                                            ["Development Scope", selectData.Development],
+                                            ["Logic dev Place", selectData.LogicPlace],
+                                            ["Scada dev Place", selectData.ScadaPlace],
+                                            [
+                                                "Commsioning Scope",
+                                                [
+                                                    selectData.Workcommission?.commissioning && "Commissioning",
+                                                    selectData.Workcommission?.erection && "Erection",
+                                                    selectData.Workcommission?.instrumentation && "Instrumentation"
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(", ")
+                                            ],
+                                            ["Linked Order Number", selectData.LinkedOrderNumber],
+
                                         ].map(([label, value], i) => (
-                                            <div key={i} className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:scale-105 transform">
-                                                <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wide mb-2">{label}</p>
-                                                <p className="font-bold text-gray-900 text-xl">₹ {value || "0"}</p>
+                                            <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
+                                                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+                                                <p className="font-bold text-gray-900 text-base truncate">{value || "-"}</p>
                                             </div>
                                         ))}
-
-                                        <div className="bg-linear-to-br from-emerald-100 to-emerald-200 p-4 rounded-lg border-2 border-emerald-400 shadow-md">
-                                            <p className="text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-2">Total Value</p>
-                                            <p className="font-extrabold text-emerald-900 text-xl">
-                                                ₹ {formData.orderValueTotal || "0"}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* 📦 PO Details */}
-                                <div className="bg-linear-to-br from-purple-50 to-purple-100 p-5 rounded-xl border border-purple-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                                    <div className="flex items-center mb-4 border-b border-purple-200 pb-3">
-                                        <span className="text-2xl mr-2">📦</span>
-                                        <h3 className="font-bold text-lg text-purple-900">PO Details</h3>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                        {[
-                                            ["Order Number", formData.orderNumber],
-                                            ["Order Date", formData.orderDate],
-                                            ["PO Delivery Date", formData.deleveryDate],
-                                            ["Target Delivery", formData.actualDeleveryDate],
-                                        ].map(([label, value], i) => (
-                                            <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                                                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
-                                                <p className="font-bold text-gray-900 text-base">{value || "-"}</p>
-                                            </div>
-                                        ))}
-
-                                        {/* PO Received */}
-                                        <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                                            <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">PO Received</p>
-                                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.poReceived === "Yes" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                                                {formData.poReceived || "-"}
-                                            </span>
-                                        </div>
-
-                                        {/* Amendment Required */}
-                                        <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
-                                            <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Amendment Reqrd</p>
-                                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${formData.amndReqrd === "Yes" ? "bg-orange-100 text-orange-700" : "bg-gray-100 text-gray-700"}`}>
-                                                {formData.amndReqrd || "-"}
-                                            </span>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -425,16 +354,48 @@ const InputForm = () => {
                             </>
                         )}
 
-                        <DocumentsSection Docs={Docs} setDocs={setDocs} />
+                        <div className={`${selectData
+                            ? ""
+                            : "opacity-50 cursor-not-allowed pointer-events-none"
+                            }`}>     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <InputFiled
+                                    {...InputConst[46]}
+                                    value={formData.name}
+                                    handleChange={handleChange}
+                                />
+                                <InputFiled
+                                    {...InputConst[41]}
+                                    value={formData.technicalEmail}
+                                    handleChange={handleChange}
+                                />
+                                <InputFiled
+                                    {...InputConst[48]}
+                                    value={formData.phone}
+                                    handleChange={handleChange}
+                                />
+                                <SelectField
+                                    {...InputConst[42]}
+                                    value={formData.isMailSent}
+                                    handleChange={handleChange}
+                                />
+
+
+                            </div>
+                            <DocumentsSection Docs={Docs} setDocs={setDocs} /></div>
                     </div >
-                    <div className="flex justify-center mt-8">
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="text-white bg-white hover:bg-indigo-200 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                        >
-                            Submit Docs details
-                        </button>
+                    <div className={`${selectData
+                        ? ""
+                        : "opacity-50 cursor-not-allowed pointer-events-none"
+                        }`}>
+                        <div className="flex justify-center mt-8">
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="text-white bg-white hover:bg-indigo-200 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-8 py-3 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                            >
+                                Save Docs details
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
