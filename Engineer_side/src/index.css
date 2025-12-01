@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+* {
+  color: black;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+
+
+/*  for the scrollbar popup */
+
+/* src/index.css */
+.scrollbar-glass {
+  scrollbar-width: thin;
+  /* For Firefox */
+  scrollbar-color: transparent transparent;
+}
+
+.scrollbar-glass::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.scrollbar-glass::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+.scrollbar-glass::-webkit-scrollbar-thumb {
+  background-color: rgba(180, 180, 255, 0.15);
+  /* ultra-light for glass effect */
+  border-radius: 9999px;
+  border: 2px solid transparent;
+}
+
+
+/* input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+input[type="date"] {
+  color: transparent;
+} */
