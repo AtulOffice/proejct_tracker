@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { dateFields, docsVal } from "../utils/FieldConstant";
+import { docsVal } from "../utils/FieldConstant";
 import FormField from "./inputField";
 import { useAppContext } from "../appContex";
 import { addProject, fetfchOrdersAllnew } from "../utils/apiCall";
@@ -8,80 +8,7 @@ import { FaFolderPlus } from "react-icons/fa6";
 import NotifiNewOrd from "./NotifiNewOrd";
 
 
-export const formval = {
-  projectName: "",
-  jobNumber: "",
-  entityType: "SI DELHI",
-  soType: "PROJECT",
-  bookingDate: "",
-  client: "",
-  endUser: "",
-  location: "",
-  name: "",
-  technicalEmail: "",
-  phone: "",
-  OrderMongoId: "",
 
-
-  status: "",
-  service: "",
-  priority: "",
-  Development: "",
-  LogicPlace: "",
-  ScadaPlace: "",
-  devScope: "",
-  CommisinionPO: "",
-  LinkedOrderNumber: "",
-  Workcommission: {
-    commissioning: false,
-    erection: false,
-    instrumentation: false,
-  },
-  commScope: "",
-  serviceDaysMention: "",
-  SrvsdaysInLots: {
-    lots: 0,
-    value: 0,
-    unit: "DAYS"
-  },
-  servicedayrate: 0,
-  expenseScopeside: "",
-  companyExpense: [],
-  clientExpense: [],
-
-
-
-  //  Not applicable
-
-  engineerName: "",
-  finalMomnumber: "",
-  actualStartDate: "",
-  actualEndDate: "",
-  bill: "",
-  dueBill: "",
-  billStatus: "",
-  visitDate: "",
-  visitendDate: "",
-  momDate: "",
-  momsrNo: "",
-  daysspendsite: "",
-  startDate: "",
-  endDate: "",
-  duration: "",
-  expenseScope: "",
-  supplyStatus: "",
-  requestDate: "",
-  StartChecklist: "",
-  EndChecklist: "",
-  actualVisitDuration: "",
-  ContactPersonNumber: "",
-  ContactPersonName: "",
-  ExpensSubmission: "",
-  BackupSubmission: "",
-  isMailSent: "",
-  isDevlopmentApproved: "",
-  DevelopmentSetcion: "",
-};
 
 const InputForm = () => {
   const { toggle, setToggle, setToggleDev } = useAppContext();
@@ -340,12 +267,9 @@ const InputForm = () => {
           }`}>
           <form onSubmit={handleSubmit} className="space-y-6">
             <FormField
-              Docs={Docs}
-              setDocs={setDocs}
-              selectData={selectData}
               formData={formData}
+              selectData={selectData}
               handleChange={handleChange}
-              setEngineerData={setEngineerData}
             />
 
             <div className="flex justify-center mt-8">

@@ -28,7 +28,6 @@ const FilterCompo = ({
               className="w-5 h-5 text-indigo-500 group-focus-within:text-indigo-600 transition-colors"
               fill="currentColor"
               viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 fillRule="evenodd"
@@ -37,6 +36,7 @@ const FilterCompo = ({
               ></path>
             </svg>
           </div>
+
           <input
             type="text"
             className="bg-white border-2 border-gray-200 text-gray-900 text-md rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block w-full pl-12 p-3.5 transition-all shadow-sm"
@@ -45,7 +45,9 @@ const FilterCompo = ({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+
         <div className="flex w-full lg:w-auto justify-between lg:justify-start gap-4">
+
           <button
             onClick={async (e) => {
               e.stopPropagation();
@@ -58,13 +60,13 @@ const FilterCompo = ({
                 refreshIcon.classList.remove("animate-spin");
               }, 1000);
             }}
-            className="p-2 rounded-lg bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 text-white transition-all duration-200 flex items-center justify-center shadow-sm flex-shrink-0"
+            className="p-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 transition-all duration-200 flex items-center justify-center shadow-sm flex-shrink-0"
             title="Refresh tasks"
           >
             <svg
               id="refreshIcon"
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 transition-transform duration-1000"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -77,17 +79,19 @@ const FilterCompo = ({
               />
             </svg>
           </button>
+
+
           <div ref={filterRef} className="relative w-auto lg:w-auto">
+
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="w-full lg:w-auto text-white bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 hover:from-green-500 hover:via-blue-600 hover:to-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-all flex-shrink-0"
+              className="w-full lg:w-auto text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-sm transition-all flex-shrink-0"
               type="button"
             >
               <svg
                 className="w-5 h-5 mr-2"
                 fill="currentColor"
                 viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 <path
                   fillRule="evenodd"
@@ -95,22 +99,20 @@ const FilterCompo = ({
                   clipRule="evenodd"
                 ></path>
               </svg>
+
               {mapTime[timeFilter] || "Filter by time"}
+
               <svg
                 className="w-4 h-4 ml-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </button>
+
+
             <AnimatePresence>
               {isFilterOpen && (
                 <motion.div
@@ -118,13 +120,13 @@ const FilterCompo = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100 dark:bg-gray-400"
+                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100"
                 >
-                  <ul className="p-4 space-y-2 text-sm text-gray-700 dark:text-gray-200">
+                  <ul className="p-4 space-y-2 text-sm text-gray-700">
                     {["all", "today", "thisWeek", "thisMonth", "thisYear"].map(
                       (filter) => (
                         <li key={filter}>
-                          <div className="flex p-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors">
+                          <div className="flex p-2 rounded-lg hover:bg-indigo-50 transition-colors">
                             <input
                               type="radio"
                               id={`filter-${filter}`}
@@ -135,11 +137,11 @@ const FilterCompo = ({
                                 setIsFilterOpen(false);
                                 setTimeFilter(filter);
                               }}
-                              className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-700"
+                              className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500"
                             />
                             <label
                               htmlFor={`filter-${filter}`}
-                              className="ml-2 w-full text-md font-medium text-gray-900 dark:text-gray-300"
+                              className="ml-2 w-full text-md font-medium text-gray-900"
                             >
                               {filter === "all" && "All time"}
                               {filter === "today" && "Today"}
@@ -168,6 +170,7 @@ const FilterCompo = ({
         </div>
       )}
     </>
+
   );
 };
 

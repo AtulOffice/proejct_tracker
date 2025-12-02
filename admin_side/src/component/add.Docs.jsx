@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { dateFields, formval, docsVal } from "../utils/FieldConstant";
-import FormField from "./inputField";
+import { docsVal } from "../utils/FieldConstant";
 import { useAppContext } from "../appContex";
-import { addProject, fetchProjectsAllnewDocs } from "../utils/apiCall";
+import { fetchProjectsAllnewDocs } from "../utils/apiCall";
 import { FaFolderPlus } from "react-icons/fa6";
 import NotifiNewOrd from "./NotifiNewOrd";
-
 import { InputConst } from "../utils/FieldConstant";
-import { InputFiled, SelectField, TextArea } from "./subField";
-import { EngineerAssignment } from "./engineerInpt";
+import { InputFiled, SelectField } from "./subField";
 import DocumentsSection from "../utils/addDevDocs";
 import axios from "axios";
 
@@ -22,7 +19,6 @@ const InputForm = () => {
         phone: "",
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [debounceJobnumber, setdebounceJobNumber] = useState("");
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [selectData, setSelectData] = useState(null);
@@ -39,8 +35,9 @@ const InputForm = () => {
             setDocs(docsVal)
         }
     }, [selectData]);
+
     useEffect(() => {
-        const getOrdersnew = async () => {
+        const getProjectDocsnew = async () => {
             try {
                 const val = await fetchProjectsAllnewDocs();
                 if (val) {
@@ -50,135 +47,70 @@ const InputForm = () => {
                 console.error("Failed to fetch new Projects", error);
             }
         };
-        getOrdersnew();
+        getProjectDocsnew();
     }, [toggle]);
-    console.log(selectData)
-    useEffect(() => {
-        const handelJob = setTimeout(() => {
-            setdebounceJobNumber(formData.jobNumber);
-        }, 10);
-        return () => clearTimeout(handelJob);
-    }, [formData.jobNumber]);
 
     const formatDate = (date) => {
         if (!date) return "";
         return new Date(date).toISOString().split("T")[0];
     };
 
-    useEffect(() => {
-        if (debounceJobnumber.length > 2) {
-            const firstChar = debounceJobnumber[0].toUpperCase();
-            const secondChar = debounceJobnumber[1].toUpperCase();
-            const entityMap = {
-                N: "SI NOIDA",
-                S: "SI DELHI",
-                P: "SI PUNE",
-                M: "MS DELHI",
-            };
-
-            const soTypeMap = {
-                P: "PROJECT",
-                A: "AMC",
-                R: "SERVICE",
-            };
-
-            const updated = {};
-            if (entityMap[firstChar]) {
-                updated.entityType = entityMap[firstChar];
-            }
-            if (soTypeMap[secondChar]) {
-                updated.soType = soTypeMap[secondChar];
-                if (secondChar === "R") {
-                    updated.service = "SERVICE";
-                } else {
-                    updated.service = "N/A";
-                }
-            }
-
-            if (Object.keys(updated).length > 0) {
-                setFormData((prev) => ({ ...prev, ...updated }));
-            }
-        }
-    }, [debounceJobnumber]);
-
-    useEffect(() => {
-        setFormData((prevData) => {
-            const newData = { ...prevData };
-            dateFields.forEach((field) => {
-                if (Array.isArray(prevData[field])) {
-                    newData[field] = [];
-                } else {
-                    newData[field] = "";
-                }
-            });
-            return newData;
-        });
-    }, [formData.status]);
-
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        if (name === "expenseScopeside" && value === "NO") {
-            setFormData((prev) => ({
+        const finalValue = type === "checkbox" ? checked : value;
+        if (!name.includes(".")) {
+            setFormData(prev => ({
                 ...prev,
-                expenseScopeside: value,
-                companyExpense: [],
-                clientExpense: [],
+                [name]: finalValue,
             }));
             return;
         }
-        if (name === "companyExpense" || name === "clientExpense") {
-            setFormData((prev) => {
-                const prevArray = prev[name] || [];
-                return {
-                    ...prev,
-                    [name]: checked
-                        ? [...prevArray, value]
-                        : prevArray.filter((v) => v !== value),
-                };
-            });
-            return;
-        }
-        if (name.startsWith("Workcommission.")) {
-            const [, key] = name.split(".");
-            setFormData((prev) => ({
-                ...prev,
-                Workcommission: {
-                    ...prev.Workcommission,
-                    [key]: checked,
-                },
-            }));
-            return;
-        }
-        if (name.includes(".")) {
-            const [parent, child] = name.split(".");
 
-            setFormData((prev) => ({
-                ...prev,
-                [parent]: {
-                    ...prev[parent],
-                    [child]:
-                        ["value", "lots"].includes(child)
-                            ? Number(value)
-                            : value,
-                },
-            }));
+        const keys = name.split(".");
+        setFormData(prev => {
+            const newData = { ...prev };
+            let current = newData;
 
-            return;
-        }
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : value,
-        }));
+            for (let i = 0; i < keys.length - 1; i++) {
+                const key = keys[i];
+                if (!isNaN(key)) {
+                    const index = Number(key);
+                    current[keys[i - 1]][index] = {
+                        ...current[keys[i - 1]][index],
+                    };
+                    current = current[keys[i - 1]][index];
+                    continue;
+                }
+
+                current[key] = { ...current[key] };
+                current = current[key];
+            }
+            const lastKey = keys[keys.length - 1];
+            current[lastKey] = finalValue;
+
+            return newData;
+        });
     };
+
 
     const validateDocs = (docsVal) => {
         const VALID_VALUES = ["YES", "NO", "N/A"];
-        console.log(docsVal);
-        return ![
-            ...Object.values(docsVal.internalDocuments),
-            ...Object.values(docsVal.customerDocuments),
-            ...Object.values(docsVal.dispatchDocuments),
-        ].every((val) => VALID_VALUES.includes(val));
+        const invalid = [];
+        const scan = (obj) => {
+            if (!obj) return;
+            if (typeof obj === "object" && "value" in obj) {
+                if (!VALID_VALUES.includes(obj.value)) {
+                    invalid.push(obj);
+                }
+            }
+            if (Array.isArray(obj)) {
+                obj.forEach((item) => scan(item));
+            } else if (typeof obj === "object") {
+                Object.values(obj).forEach((val) => scan(val));
+            }
+        };
+        scan(docsVal);
+        return invalid.length > 0;
     };
 
     const handleSubmit = async (e) => {
@@ -200,7 +132,12 @@ const InputForm = () => {
                 { withCredentials: true }
             );
             toast.success("Data updated successfully");
-            setFormData(formval);
+            setFormData({
+                jobNumber: "",
+                name: "",
+                technicalEmail: "",
+                phone: "",
+            });
             setDocs(docsVal);
             setToggle((prev) => !prev);
             setToggleDev((prev) => !prev);
@@ -312,27 +249,38 @@ const InputForm = () => {
                                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                         {[
                                             ["Priority", selectData.priority],
-                                            ["Development Scope", selectData.Development],
-                                            ["Logic dev Place", selectData.LogicPlace],
-                                            ["Scada dev Place", selectData.ScadaPlace],
+                                            ["Scope", selectData.service],
+                                            ["Development Section", selectData.Development],
+                                            selectData.LogicPlace !== "" && ["Logic dev Place", selectData.LogicPlace],
+                                            selectData.ScadaPlace !== "" && ["Scada dev Place", selectData.ScadaPlace],
                                             [
                                                 "Commsioning Scope",
                                                 [
-                                                    selectData.Workcommission?.commissioning && "Commissioning",
-                                                    selectData.Workcommission?.erection && "Erection",
-                                                    selectData.Workcommission?.instrumentation && "Instrumentation"
-                                                ]
-                                                    .filter(Boolean)
-                                                    .join(", ")
+                                                    selectData.Workcommission?.commissioning && "Commiss",
+                                                    selectData.Workcommission?.erection && "Erect",
+                                                    selectData.Workcommission?.instrumentation && "Instru"
+                                                ].filter(Boolean).join(", ")
                                             ],
-                                            ["Linked Order Number", selectData.LinkedOrderNumber],
+                                            selectData.LinkedOrderNumber !== "" && [
+                                                "Linked Order Number",
+                                                selectData.LinkedOrderNumber
+                                            ]
+                                        ]
+                                            .filter(Boolean)
+                                            .map(([label, value], i) => (
+                                                <div
+                                                    key={i}
+                                                    className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all"
+                                                >
+                                                    <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">
+                                                        {label}
+                                                    </p>
+                                                    <p className="font-bold text-gray-900 text-base truncate">
+                                                        {value || "-"}
+                                                    </p>
+                                                </div>
+                                            ))}
 
-                                        ].map(([label, value], i) => (
-                                            <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
-                                                <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
-                                                <p className="font-bold text-gray-900 text-base truncate">{value || "-"}</p>
-                                            </div>
-                                        ))}
                                     </div>
                                 </div>
 
@@ -354,10 +302,12 @@ const InputForm = () => {
                             </>
                         )}
 
-                        <div className={`${selectData
+                        {/* <div className={`${selectData
                             ? ""
                             : "opacity-50 cursor-not-allowed pointer-events-none"
-                            }`}>     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            }`}>    */}
+                        <div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <InputFiled
                                     {...InputConst[46]}
                                     value={formData.name}
@@ -383,10 +333,11 @@ const InputForm = () => {
                             </div>
                             <DocumentsSection Docs={Docs} setDocs={setDocs} /></div>
                     </div >
-                    <div className={`${selectData
+                    {/* <div className={`${selectData
                         ? ""
                         : "opacity-50 cursor-not-allowed pointer-events-none"
-                        }`}>
+                        }`}> */}
+                    <div>
                         <div className="flex justify-center mt-8">
                             <button
                                 type="submit"

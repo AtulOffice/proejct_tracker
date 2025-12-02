@@ -100,7 +100,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
     );
   };
 
-  const renderSection = (sectionKey, icon, linearColors) => {
+  const renderSection = (sectionKey, Label, icon, linearColors) => {
     const { filled, total } = getSectionProgress(sectionKey);
     const progress = total > 0 ? Math.round((filled / total) * 100) : 0;
 
@@ -113,6 +113,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
             >
               {icon}
             </div>
+            <h3>{Label}</h3>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-lg font-bold text-blue-600">
@@ -150,6 +151,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
           <div className="flex flex-col">
             {renderSection(
               "internalDocuments",
+              "Doucements",
               <FileText className="w-6 h-6 text-white" />,
               "from-blue-500 to-cyan-500"
             )}
@@ -159,11 +161,13 @@ const DocumentsSection = ({ Docs, setDocs }) => {
           <div className="flex flex-col justify-between gap-6">
             {renderSection(
               "customerDocuments",
+              "Doucements",
               <Users className="w-6 h-6 text-white" />,
               "from-purple-500 to-pink-500"
             )}
             {renderSection(
               "dispatchDocuments",
+              "Doucements",
               <Package className="w-6 h-6 text-white" />,
               "from-amber-500 to-orange-500"
             )}
@@ -173,6 +177,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
           <div className="lg:col-span-2">
             {renderSection(
               "completionDocuments",
+              "Doucements",
               <FileText className="w-5 h-5 text-white" />,
               "from-green-400 to-green-500"
             )}

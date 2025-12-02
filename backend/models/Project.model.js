@@ -2,6 +2,31 @@ import mongoose from "mongoose";
 
 const ENUMVAL = ["YES", "NO", "N/A", ""];
 
+const documentFormetFirst = {
+  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  date: { type: Date, default: null },
+};
+
+const documentFormetSecond = {
+  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  date: { type: Date, default: null },
+  version: { type: String, default: "1.0" },
+};
+
+const documentFormetThird = {
+  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  date: { type: Date, default: null },
+  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+};
+
+const documentFormetFourth = {
+  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  date: { type: Date, default: null },
+  inputVal: { type: String, default: "" },
+  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  remarks: { type: String, default: "" },
+};
+
 const projectSchema = new mongoose.Schema(
   {
     projectName: {
@@ -120,31 +145,89 @@ const projectSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    internalDocuments: {
-      panelGA: { type: String, enum: ENUMVAL, default: "N/A" },
-      wiringDiagram: { type: String, enum: ENUMVAL, default: "N/A" },
-      ioList: { type: String, enum: ENUMVAL, default: "N/A" },
-      systemConfiguration: { type: String, enum: ENUMVAL, default: "N/A" },
-      cableSchedule: { type: String, enum: ENUMVAL, default: "N/A" },
-      logicSchedule: { type: String, enum: ENUMVAL, default: "N/A" },
-      logicBackup: { type: String, enum: ENUMVAL, default: "N/A" },
-      scada: { type: String, enum: ENUMVAL, default: "N/A" },
+    CustomerDevDocumentsRemarks: {
+      type: String,
     },
-    customerDocuments: {
-      pAndIDs: { type: String, enum: ENUMVAL, default: "N/A" },
-      controlPhilosophy: { type: String, enum: ENUMVAL, default: "N/A" },
-      anyOther: { type: String, enum: ENUMVAL, default: "N/A" },
+    SIEVPLDevDocumentsRemarks: {
+      type: String,
     },
-    dispatchDocuments: {
-      packingList: { type: String, enum: ENUMVAL, default: "N/A" },
-      deliveryChallan: { type: String, enum: ENUMVAL, default: "N/A" },
-      anyOther: { type: String, enum: ENUMVAL, default: "N/A" },
+    CustomerDevDocuments: {
+      pAndIDs: { type: documentFormetFirst },
+      controlPhilosophy: { type: documentFormetFirst },
+      ioList: { type: documentFormetFirst },
+      samaDiagram: { type: documentFormetFirst },
+      instrumentList: { type: documentFormetFirst },
+      cableSchedule: { type: documentFormetFirst },
+      existingDrawing: { type: documentFormetFirst },
+      existingBackup: { type: documentFormetFirst },
+      otherDocument: {
+        name: { type: String, default: "" },
+        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        date: { type: Date, default: null },
+      },
     },
-    completionDocuments: {
-      asBuiltDrawings: { type: String, enum: ENUMVAL, default: "N/A" },
-      finalLogicBackup: { type: String, enum: ENUMVAL, default: "N/A" },
-      finalScadaBackup: { type: String, enum: ENUMVAL, default: "N/A" },
-      expenseSettlement: { type: String, enum: ENUMVAL, default: "N/A" },
+    SIEVPLDevDocuments: {
+      indent: { type: documentFormetSecond },
+      systemConfiguration: { type: documentFormetSecond },
+      instrumentdataSheet: { type: documentFormetSecond },
+      ApprovedDrowing: { type: documentFormetSecond },
+      ioList: { type: documentFormetSecond },
+      cableSchedule: { type: documentFormetSecond },
+      otherDocument: {
+        name: { type: String, default: "" },
+        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        date: { type: Date, default: null },
+        version: { type: String, default: "1.0" },
+      },
+    },
+    swDevDocumentsforFat: {
+      logicBackup: { type: documentFormetSecond },
+      scadaBackup: { type: documentFormetSecond },
+      otherDocument: {
+        name: { type: String, default: "" },
+        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        date: { type: Date, default: null },
+        version: { type: String, default: "1.0" },
+      },
+    },
+    inspectionDocuments: {
+      itr: { type: documentFormetThird },
+      fat: { type: documentFormetThird },
+      otherDocument: {
+        name: { type: String, default: "" },
+        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        date: { type: Date, default: null },
+        submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      },
+    },
+    dispatchDocuments: [
+      {
+        phaseIndex: { type: Number, required: true },
+        packingList: { type: documentFormetFirst },
+        invoice: { type: documentFormetFirst },
+        DeleveryChallan: { type: documentFormetFirst },
+        otherDocument: {
+          name: { type: String, default: "" },
+          value: { type: String, enum: ENUMVAL, default: "N/A" },
+          date: { type: Date, default: null },
+          version: { type: String, default: "1.0" },
+        },
+      },
+    ],
+    PostCommisionDocuments: {
+      itr: { type: documentFormetFourth },
+      asBuiltDrawings: { type: documentFormetFourth },
+      logicBackup: { type: documentFormetFourth },
+      scadaBackup: { type: documentFormetFourth },
+      expenseReport: { type: documentFormetFourth },
+      otherDocument: {
+        name: { type: String, default: "" },
+        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        date: { type: Date, default: null },
+        inputVal: { type: String, default: "" },
+        submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        remarks: { type: String, default: "" },
+      },
     },
     developmentEngineer: {
       type: [String],
@@ -377,7 +460,7 @@ const projectSchema = new mongoose.Schema(
     },
     CommisinionPO: {
       type: String,
-      enum: ["", "YES", "NO"],
+      enum: ["", "YES", "NO", "SEPERATE"],
       default: "",
     },
     Workcommission: {

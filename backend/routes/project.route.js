@@ -98,9 +98,9 @@ ProjectRouter.put(
 );
 ProjectRouter.put(
   "/updateDocs/:id",
-  refreshTokenMiddleware,
-  authenticate,
-  authorizeRole("admin", "reception"),
+  // refreshTokenMiddleware,
+  // authenticate,
+  // authorizeRole("admin", "reception"),
   updateRecordsDocs
 );
 ProjectRouter.delete(

@@ -65,27 +65,33 @@ export const RecordsformaveNew = async (req, res) => {
 export const updateRecordsDocs = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    console.log(req.body);
-    return;
+
     const {
-      completionDocuments,
+      CustomerDevDocuments,
+      SIEVPLDevDocuments,
+      swDevDocumentsforFat,
+      inspectionDocuments,
       dispatchDocuments,
-      customerDocuments,
-      internalDocuments,
+      PostCommisionDocuments,
+      CustomerDevDocumentsRemarks,
+      SIEVPLDevDocumentsRemarks,
       ...otherData
     } = req.body;
 
-    if (!id)
-      return res
-        .status(400)
-        .json({ success: false, message: "ID is required" });
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "ID is required",
+      });
+    }
 
     const project = await ProjectModel.findById(id);
-    if (!project)
-      return res
-        .status(404)
-        .json({ success: false, message: "Project not found" });
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
 
     Object.keys(otherData).forEach((key) => {
       if (project.schema.path(key)) {
@@ -106,34 +112,74 @@ export const updateRecordsDocs = async (req, res) => {
       return target;
     };
 
-    project.completionDocuments = mergeNested(
-      project.completionDocuments,
-      completionDocuments
-    );
+    if (CustomerDevDocuments) {
+      project.CustomerDevDocuments = mergeNested(
+        project.CustomerDevDocuments,
+        CustomerDevDocuments
+      );
+    }
 
-    project.dispatchDocuments = mergeNested(
-      project.dispatchDocuments,
-      dispatchDocuments
-    );
+    if (SIEVPLDevDocuments) {
+      project.SIEVPLDevDocuments = mergeNested(
+        project.SIEVPLDevDocuments,
+        SIEVPLDevDocuments
+      );
+    }
 
-    project.customerDocuments = mergeNested(
-      project.customerDocuments,
-      customerDocuments
-    );
+    if (swDevDocumentsforFat) {
+      project.swDevDocumentsforFat = mergeNested(
+        project.swDevDocumentsforFat,
+        swDevDocumentsforFat
+      );
+    }
 
-    project.internalDocuments = mergeNested(
-      project.internalDocuments,
-      internalDocuments
-    );
+    if (inspectionDocuments) {
+      project.inspectionDocuments = mergeNested(
+        project.inspectionDocuments,
+        inspectionDocuments
+      );
+    }
 
+    if (PostCommisionDocuments) {
+      project.PostCommisionDocuments = mergeNested(
+        project.PostCommisionDocuments,
+        PostCommisionDocuments
+      );
+    }
+    if (dispatchDocuments && Array.isArray(dispatchDocuments)) {
+      dispatchDocuments.forEach((newPhase) => {
+        const phaseIndex = newPhase.phaseIndex;
+        if (phaseIndex == null) return;
+
+        const existingPhase = project.dispatchDocuments.find(
+          (p) => p.phaseIndex === phaseIndex
+        );
+
+        if (existingPhase) {
+          mergeNested(existingPhase, newPhase);
+        } else {
+          project.dispatchDocuments.push(newPhase);
+        }
+      });
+    }
+    if (typeof CustomerDevDocumentsRemarks === "string") {
+      project.CustomerDevDocumentsRemarks = CustomerDevDocumentsRemarks;
+    }
+
+    if (typeof SIEVPLDevDocumentsRemarks === "string") {
+      project.SIEVPLDevDocumentsRemarks = SIEVPLDevDocumentsRemarks;
+    }
     await project.save();
 
     return res.status(200).json({
       success: true,
-      message: "Docs Update process completed.",
+      message: "Documents updated successfully.",
     });
-  } catch (e) {
-    return res.status(500).json({ success: false, message: e.message });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -270,15 +316,20 @@ export const Recordsformave = async (req, res) => {
     });
   }
 };
+
 export const updateRecords = async (req, res) => {
   try {
     const { id } = req.params;
     const {
       engineerData,
-      completionDocuments,
+      CustomerDevDocuments,
+      SIEVPLDevDocuments,
+      swDevDocumentsforFat,
+      inspectionDocuments,
       dispatchDocuments,
-      customerDocuments,
-      internalDocuments,
+      PostCommisionDocuments,
+      CustomerDevDocumentsRemarks,
+      SIEVPLDevDocumentsRemarks,
       OrderMongoId,
       ...otherData
     } = req.body;
@@ -298,22 +349,77 @@ export const updateRecords = async (req, res) => {
       if (project.schema.path(key)) project[key] = otherData[key];
     });
 
-    const mergeNested = (target, source) => {
-      if (!source) return;
+    const mergeNested = (target = {}, source) => {
+      if (!source) return target;
+
       Object.entries(source).forEach(([key, value]) => {
         if (value && typeof value === "object" && !Array.isArray(value)) {
-          if (!target[key]) target[key] = {};
-          mergeNested(target[key], value);
+          target[key] = mergeNested(target[key] || {}, value);
         } else {
           target[key] = value;
         }
       });
+
+      return target;
     };
 
-    mergeNested(project.completionDocuments, completionDocuments);
-    mergeNested(project.dispatchDocuments, dispatchDocuments);
-    mergeNested(project.customerDocuments, customerDocuments);
-    mergeNested(project.internalDocuments, internalDocuments);
+    if (CustomerDevDocuments) {
+      project.CustomerDevDocuments = mergeNested(
+        project.CustomerDevDocuments,
+        CustomerDevDocuments
+      );
+    }
+
+    if (SIEVPLDevDocuments) {
+      project.SIEVPLDevDocuments = mergeNested(
+        project.SIEVPLDevDocuments,
+        SIEVPLDevDocuments
+      );
+    }
+
+    if (swDevDocumentsforFat) {
+      project.swDevDocumentsforFat = mergeNested(
+        project.swDevDocumentsforFat,
+        swDevDocumentsforFat
+      );
+    }
+
+    if (inspectionDocuments) {
+      project.inspectionDocuments = mergeNested(
+        project.inspectionDocuments,
+        inspectionDocuments
+      );
+    }
+
+    if (PostCommisionDocuments) {
+      project.PostCommisionDocuments = mergeNested(
+        project.PostCommisionDocuments,
+        PostCommisionDocuments
+      );
+    }
+    if (dispatchDocuments && Array.isArray(dispatchDocuments)) {
+      dispatchDocuments.forEach((newPhase) => {
+        const phaseIndex = newPhase.phaseIndex;
+        if (phaseIndex == null) return;
+
+        const existingPhase = project.dispatchDocuments.find(
+          (p) => p.phaseIndex === phaseIndex
+        );
+
+        if (existingPhase) {
+          mergeNested(existingPhase, newPhase);
+        } else {
+          project.dispatchDocuments.push(newPhase);
+        }
+      });
+    }
+    if (typeof CustomerDevDocumentsRemarks === "string") {
+      project.CustomerDevDocumentsRemarks = CustomerDevDocumentsRemarks;
+    }
+
+    if (typeof SIEVPLDevDocumentsRemarks === "string") {
+      project.SIEVPLDevDocumentsRemarks = SIEVPLDevDocumentsRemarks;
+    }
 
     let transformedEngineers = [];
     if (Array.isArray(engineerData) && engineerData.length > 0) {
@@ -487,6 +593,287 @@ export const updateRecords = async (req, res) => {
       details: { skippedEngineers, notFoundEngineers, failedEngineers },
     });
   } catch (e) {
+    return res.status(500).json({ success: false, message: e.message });
+  }
+};
+
+export const updateRecordsSession = async (req, res) => {
+  const session = await mongoose.startSession();  
+  session.startTransaction();                    
+
+  try {
+    const { id } = req.params;
+    const {
+      engineerData,
+      CustomerDevDocuments,
+      SIEVPLDevDocuments,
+      swDevDocumentsforFat,
+      inspectionDocuments,
+      dispatchDocuments,
+      PostCommisionDocuments,
+      CustomerDevDocumentsRemarks,
+      SIEVPLDevDocumentsRemarks,
+      OrderMongoId,
+      ...otherData
+    } = req.body;
+
+    if (!id) {
+      await session.abortTransaction();          
+      session.endSession();
+      return res
+        .status(400)
+        .json({ success: false, message: "ID is required" });
+    }
+
+    const project = await ProjectModel.findById(id).session(session);
+
+    if (!project) {
+      await session.abortTransaction();
+      session.endSession();
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+    }
+
+    Object.keys(otherData).forEach((key) => {
+      if (project.schema.path(key)) project[key] = otherData[key];
+    });
+
+    const mergeNested = (target = {}, source) => {
+      if (!source) return target;
+
+      Object.entries(source).forEach(([key, value]) => {
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          target[key] = mergeNested(target[key] || {}, value);
+        } else {
+          target[key] = value;
+        }
+      });
+
+      return target;
+    };
+
+    if (CustomerDevDocuments) {
+      project.CustomerDevDocuments = mergeNested(
+        project.CustomerDevDocuments,
+        CustomerDevDocuments
+      );
+    }
+
+    if (SIEVPLDevDocuments) {
+      project.SIEVPLDevDocuments = mergeNested(
+        project.SIEVPLDevDocuments,
+        SIEVPLDevDocuments
+      );
+    }
+
+    if (swDevDocumentsforFat) {
+      project.swDevDocumentsforFat = mergeNested(
+        project.swDevDocumentsforFat,
+        swDevDocumentsforFat
+      );
+    }
+
+    if (inspectionDocuments) {
+      project.inspectionDocuments = mergeNested(
+        project.inspectionDocuments,
+        inspectionDocuments
+      );
+    }
+
+    if (PostCommisionDocuments) {
+      project.PostCommisionDocuments = mergeNested(
+        project.PostCommisionDocuments,
+        PostCommisionDocuments
+      );
+    }
+
+    if (dispatchDocuments && Array.isArray(dispatchDocuments)) {
+      dispatchDocuments.forEach((newPhase) => {
+        const phaseIndex = newPhase.phaseIndex;
+        if (phaseIndex == null) return;
+
+        const existingPhase = project.dispatchDocuments.find(
+          (p) => p.phaseIndex === phaseIndex
+        );
+
+        if (existingPhase) {
+          mergeNested(existingPhase, newPhase);
+        } else {
+          project.dispatchDocuments.push(newPhase);
+        }
+      });
+    }
+
+    if (typeof CustomerDevDocumentsRemarks === "string") {
+      project.CustomerDevDocumentsRemarks = CustomerDevDocumentsRemarks;
+    }
+
+    if (typeof SIEVPLDevDocumentsRemarks === "string") {
+      project.SIEVPLDevDocumentsRemarks = SIEVPLDevDocumentsRemarks;
+    }
+
+    let transformedEngineers = [];
+    if (Array.isArray(engineerData) && engineerData.length > 0) {
+      transformedEngineers = engineerData.map((eng) => {
+        const assignedAt = eng.assignedAt
+          ? new Date(eng.assignedAt)
+          : new Date();
+        const durationDays = eng.days || 0;
+        const endTime = eng.endTime
+          ? new Date(eng.endTime)
+          : new Date(assignedAt.getTime() + durationDays * 24 * 60 * 60 * 1000);
+
+        const existing = project.EngineerDetails?.find(
+          (e) => e.engineerId.toString() === eng.engineerId.toString()
+        );
+        const linkObjectId =
+          existing && (existing.isMom === true || existing.isFinalMom === true)
+            ? new mongoose.Types.ObjectId()
+            : existing?.projToengObjectId || new mongoose.Types.ObjectId();
+
+        const projToengObjectId = linkObjectId;
+
+        return {
+          engineerId: eng.engineerId,
+          name: eng.engineerName || eng.name,
+          empId: eng.empId || "",
+          assignedAt,
+          durationDays,
+          endTime,
+          isMom: eng.isMom ?? false,
+          isFinalMom: eng.isFinalMom ?? false,
+          projToengObjectId,
+        };
+      });
+
+      if (!Array.isArray(project.EngineerDetails)) {
+        project.EngineerDetails = [];
+      }
+
+      transformedEngineers.forEach((newEng) => {
+        const existing = project.EngineerDetails.find(
+          (e) => e.engineerId.toString() === newEng.engineerId.toString()
+        );
+
+        if (
+          existing &&
+          (existing.isMom === true || existing.isFinalMom === true)
+        ) {
+          project.EngineerDetails.push(newEng);
+        } else {
+          project.EngineerDetails = project.EngineerDetails.filter(
+            (e) => e.engineerId.toString() !== newEng.engineerId.toString()
+          );
+          project.EngineerDetails.push(newEng);
+        }
+      });
+    }
+
+    await project.save({ session });
+
+    const updatedProject = await ProjectModel.findById(project._id)
+      .session(session)
+      .lean();
+
+    let updatedCount = 0;
+    let skippedEngineers = [];
+    let notFoundEngineers = [];
+    let failedEngineers = [];
+
+    for (const eng of transformedEngineers) {
+      try {
+        const engineer = await EngineerReocord.findById(eng.engineerId).session(session);
+
+        if (!engineer) {
+          notFoundEngineers.push(eng.engineerId);
+          continue;
+        }
+
+        if (engineer.isAssigned) {
+          skippedEngineers.push(engineer.name || eng.engineerId);
+          continue;
+        }
+
+        const existingAssignment = engineer.assignments.find(
+          (a) => a.projectId.toString() === project._id.toString()
+        );
+
+        const engToprojObjectId =
+          existingAssignment &&
+          (existingAssignment.isMom === true ||
+            existingAssignment.isFinalMom === true)
+            ? eng.projToengObjectId
+            : existingAssignment?.engToprojObjectId || eng.projToengObjectId;
+
+        const updateOps = {
+          $set: { isAssigned: true, manualOverride: false },
+        };
+
+        if (
+          existingAssignment &&
+          (existingAssignment.isMom === true ||
+            existingAssignment.isFinalMom === true)
+        ) {
+          updateOps.$push = {
+            assignments: {
+              projectId: project._id,
+              projectName: project.projectName,
+              jobNumber: project.jobNumber,
+              assignedAt: eng.assignedAt,
+              durationDays: eng.durationDays,
+              endTime: eng.endTime,
+              isMom: eng.isMom ?? false,
+              isFinalMom: eng.isFinalMom ?? false,
+              engToprojObjectId,
+            },
+          };
+        } else {
+          updateOps.$pull = { assignments: { projectId: project._id } };
+          updateOps.$push = {
+            assignments: {
+              projectId: project._id,
+              projectName: project.projectName,
+              jobNumber: project.jobNumber,
+              assignedAt: eng.assignedAt,
+              durationDays: eng.durationDays,
+              endTime: eng.endTime,
+              isMom: eng.isMom ?? false,
+              isFinalMom: eng.isFinalMom ?? false,
+              engToprojObjectId,
+            },
+          };
+        }
+
+        await EngineerReocord.findByIdAndUpdate(
+          eng.engineerId,
+          updateOps,
+          { new: true, session }
+        );
+
+        updatedCount++;
+      } catch (err) {
+        failedEngineers.push(eng.engineerId);
+      }
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return res.status(200).json({
+      message: "Update process completed.",
+      data: updatedProject,
+      summary: {
+        updated: updatedCount,
+        skipped: skippedEngineers.length,
+        notFound: notFoundEngineers.length,
+        failed: failedEngineers.length,
+      },
+      details: { skippedEngineers, notFoundEngineers, failedEngineers },
+    });
+  } catch (e) {
+    await session.abortTransaction();  
+    session.endSession();
     return res.status(500).json({ success: false, message: e.message });
   }
 };
@@ -1021,7 +1408,7 @@ export const getAllProjectsnew = async (req, res) => {
       isProjectDocssave: false,
     })
       .select(
-        "jobNumber entityType soType client _id Development priority ScadaPlace LogicPlace devScope CommisinionPO Workcommission commScope LinkedOrderNumber"
+        "jobNumber entityType soType client _id Development priority ScadaPlace LogicPlace devScope CommisinionPO Workcommission commScope LinkedOrderNumber service"
       )
       .populate(
         "OrderMongoId",
