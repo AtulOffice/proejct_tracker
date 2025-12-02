@@ -1,204 +1,377 @@
-import React, { useState } from "react";
+import React from "react";
 import { CheckCircle, FileText, Package, Users } from "lucide-react";
+
 const ENUMVAL = ["YES", "NO", "N/A"];
 
-const FIELD_LABELS = {
-  internalDocuments: {
-    panelGA: "Panel GA",
-    wiringDiagram: "Wiring Diagram",
-    ioList: "I/O List",
-    systemConfiguration: "System Configuration",
-    cableSchedule: "Cable Schedule",
-    logicSchedule: "Logic Schedule",
-    logicBackup: "Logic Backup",
-    scada: "SCADA",
-  },
-  customerDocuments: {
-    pAndIDs: "P&IDs",
-    controlPhilosophy: "Control Philosophy",
-    anyOther: "Any Other",
-  },
-  dispatchDocuments: {
-    packingList: "Packing List",
-    deliveryChallan: "Delivery Challan",
-    anyOther: "Any Other",
-  },
-  completionDocuments: {
-    asBuiltDrawings: "As Built",
-    finalLogicBackup: "Final Logic Backup",
-    finalScadaBackup: "Final Scada Backup",
-    expenseSettlement: "ExpenseSettlement",
-  },
+const FIELD_TYPES = {
+  CustomerDevDocuments: "CUSTOMER",
+  SIEVPLDevDocuments: "SIEVPL",
+  swDevDocumentsforFat: "SWFAT",
+  inspectionDocuments: "INSPECTION",
+  dispatchDocuments: "DISPATCH",
+  PostCommisionDocuments: "POSTCOMM",
 };
 
+const inputClass =
+  "border border-gray-300 p-3 rounded-md w-full placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300";
+
 const DocumentsSection = ({ Docs, setDocs }) => {
+  /* ------------------------------------------------------------------ */
+  /* 🔄 UPDATE FIELD (Support for normal & array-based dispatch section) */
+  /* ------------------------------------------------------------------ */
+  const updateField = (section, field, key, value, index = null) => {
+    setDocs((prev) => {
+      const updated = { ...prev };
+
+      // For dispatch array
+      if (Array.isArray(updated[section]) && index !== null) {
+        updated[section][index] = {
+          ...updated[section][index],
+          [field]: {
+            ...updated[section][index][field],
+            [key]: value,
+          },
+        };
+        return updated;
+      }
+
+      // Normal object sections
+      updated[section] = {
+        ...updated[section],
+        [field]: {
+          ...updated[section][field],
+          [key]: value,
+        },
+      };
+
+      return updated;
+    });
+  };
+
+  /* ------------------------- DOCUMENT PROGRESS ------------------------ */
+  const countValues = (obj) => {
+    let total = 0;
+    let filled = 0;
+
+    const scan = (item) => {
+      if (!item) return;
+
+      if (typeof item === "object" && item !== null && "value" in item) {
+        total++;
+        if (item.value) filled++;
+      }
+
+      if (Array.isArray(item)) item.forEach(scan);
+      else if (typeof item === "object") Object.values(item).forEach(scan);
+    };
+
+    scan(obj);
+    return { filled, total };
+  };
+
   const calculateProgress = () => {
-    const allFields = [
-      ...Object.values(Docs.internalDocuments),
-      ...Object.values(Docs.customerDocuments),
-      ...Object.values(Docs.dispatchDocuments),
-      ...Object.values(Docs.completionDocuments),
-    ];
-    const filled = allFields.filter(Boolean).length;
-    return Math.round((filled / allFields.length) * 100);
+    const { filled, total } = countValues(Docs);
+    return total ? Math.round((filled / total) * 100) : 0;
   };
 
-  const getSectionProgress = (section) => {
-    const fields = Object.values(Docs[section]);
-    const filled = fields.filter(Boolean).length;
-    return { filled, total: fields.length };
-  };
+  /* -------------------------- RADIO BUTTONS --------------------------- */
+  const renderRadios = (section, field, item, index = null) => {
+    const value = item?.value || "";
 
-  const handleChange = (section, field, value) => {
-    setDocs((prev) => ({
-      ...prev,
-      [section]: { ...prev[section], [field]: value },
-    }));
-  };
-
-  const renderRadioGroup = (section, field, label) => {
-    const value = Docs[section][field];
     return (
-      <div
-        key={`${section}-${field}`}
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white/60 p-3 sm:p-4 rounded-xl mb-3 border border-gray-200 transition-all duration-200 hover:shadow-md"
-      >
-        <label className="text-sm font-semibold text-gray-800 flex items-center gap-3 mb-2 sm:mb-0">
-          {value ? (
-            <CheckCircle className="w-5 h-5 text-emerald-500" />
-          ) : (
-            <div className="w-5 h-5 rounded-full border-2 border-gray-300" />
-          )}
-          {label}
-        </label>
-        <div className="flex flex-wrap gap-2 sm:gap-3 justify-start sm:justify-end">
-          {ENUMVAL.map((val) => (
+      <div className="flex space-x-2 rounded-full bg-gray-100 p-1 shadow-inner ring-1 ring-gray-300">
+        {ENUMVAL.map((val) => {
+          const isActive = value === val;
+          return (
             <label
               key={val}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-bold cursor-pointer transition-all duration-200 ${Docs[section][field] === val
-                ? val === "YES"
-                  ? "bg-emerald-500 text-white"
-                  : val === "NO"
-                    ? "bg-rose-500 text-white"
-                    : "bg-amber-500 text-white"
-                : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-100"
-                }`}
+              className={`flex-1 text-center cursor-pointer rounded-full py-2 px-4 font-semibold transition select-none
+                ${isActive
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-400/50"
+                  : "text-gray-700 hover:bg-blue-100 shadow-sm hover:scale-[1.05]"
+                }
+              `}
             >
               <input
                 type="radio"
-                name={`${section}-${field}`}
-                value={val}
-                checked={Docs[section][field] === val}
-                onChange={() => handleChange(section, field, val)}
                 className="sr-only"
+                name={`${section}-${field}-${index ?? ""}`}
+                checked={isActive}
+                onChange={() =>
+                  updateField(section, field, "value", val, index)
+                }
               />
               {val}
             </label>
-          ))}
-        </div>
+          );
+        })}
       </div>
     );
   };
 
-  const renderSection = (sectionKey, Label, icon, linearColors) => {
-    const { filled, total } = getSectionProgress(sectionKey);
-    const progress = total > 0 ? Math.round((filled / total) * 100) : 0;
+  /* -------------------------- RENDER SECTIONS -------------------------- */
+  const renderCustomerDev = (section, field, item) => (
+    <div className="space-y-4 ml-7">
+      {renderRadios(section, field, item)}
 
-    return (
-      <section className="mb-8 bg-white/70 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-md hover:shadow-lg transition-all duration-200">
-        <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
-          <div className="flex items-center gap-4">
-            <div
-              className={`p-3 rounded-xl bg-linear-to-br ${linearColors}`}
-            >
-              {icon}
-            </div>
-            <h3>{Label}</h3>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="text-lg font-bold text-blue-600">
-              {filled}/{total}
-            </div>
-            <div className="relative w-28 sm:w-32 h-3 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className={`h-full bg-linear-to-r ${linearColors}`}
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-        </div>
+      <input
+        type="date"
+        value={item.date || ""}
+        onChange={(e) => updateField(section, field, "date", e.target.value)}
+        className={inputClass}
+        placeholder="Select date"
+      />
 
-        <div className="space-y-2">
-          {Object.keys(Docs[sectionKey] || {}).map((field) =>
-            renderRadioGroup(
-              sectionKey,
-              field,
-              FIELD_LABELS?.[sectionKey]?.[field] || field
-            )
-          )}
-        </div>
-      </section>
-    );
+      {"name" in item && (
+        <input
+          type="text"
+          placeholder="Name"
+          value={item.name}
+          onChange={(e) => updateField(section, field, "name", e.target.value)}
+          className={inputClass}
+        />
+      )}
+    </div>
+  );
+
+  const renderSIEVPL = (section, field, item) => (
+    <div className="space-y-4 ml-7">
+      {renderRadios(section, field, item)}
+
+      <input
+        type="date"
+        value={item.date || ""}
+        onChange={(e) => updateField(section, field, "date", e.target.value)}
+        className={inputClass}
+        placeholder="Select date"
+      />
+
+      <input
+        type="text"
+        placeholder="Version"
+        value={item.version}
+        onChange={(e) => updateField(section, field, "version", e.target.value)}
+        className={inputClass}
+      />
+    </div>
+  );
+
+  const renderSwFat = (section, field, item) => (
+    <div className="space-y-4 ml-7">
+      {renderRadios(section, field, item)}
+
+      <input
+        type="date"
+        value={item.date || ""}
+        onChange={(e) => updateField(section, field, "date", e.target.value)}
+        className={inputClass}
+        placeholder="Select date"
+      />
+
+      <input
+        type="text"
+        placeholder="Version"
+        value={item.version}
+        onChange={(e) => updateField(section, field, "version", e.target.value)}
+        className={inputClass}
+      />
+    </div>
+  );
+
+  const renderInspection = (section, field, item) => (
+    <div className="space-y-4 ml-7">
+      {renderRadios(section, field, item)}
+
+      <input
+        type="date"
+        value={item.date || ""}
+        onChange={(e) => updateField(section, field, "date", e.target.value)}
+        className={inputClass}
+        placeholder="Select date"
+      />
+
+      <input
+        type="text"
+        placeholder="Submitted By"
+        value={item.submittedBy || ""}
+        onChange={(e) => updateField(section, field, "submittedBy", e.target.value)}
+        className={inputClass}
+      />
+    </div>
+  );
+
+  const renderDispatch = (section, index, field, item) => (
+    <div className="space-y-4 ml-7">
+      {renderRadios(section, field, item, index)}
+
+      <input
+        type="date"
+        value={item.date || ""}
+        onChange={(e) => updateField(section, field, "date", e.target.value, index)}
+        className={inputClass}
+        placeholder="Select date"
+      />
+    </div>
+  );
+
+  const renderPostComm = (section, field, item) => (
+    <div className="space-y-4 ml-7">
+      {renderRadios(section, field, item)}
+
+      <input
+        type="date"
+        value={item.date || ""}
+        onChange={(e) => updateField(section, field, "date", e.target.value)}
+        className={inputClass}
+        placeholder="Select date"
+      />
+
+      <input
+        type="text"
+        placeholder="Input Value"
+        value={item.inputVal}
+        onChange={(e) => updateField(section, field, "inputVal", e.target.value)}
+        className={inputClass}
+      />
+
+      <input
+        type="text"
+        placeholder="Submitted By"
+        value={item.submittedBy}
+        onChange={(e) => updateField(section, field, "submittedBy", e.target.value)}
+        className={inputClass}
+      />
+
+      <textarea
+        placeholder="Remarks"
+        value={item.remarks}
+        onChange={(e) => updateField(section, field, "remarks", e.target.value)}
+        className={`${inputClass} resize-y min-h-[80px]`}
+      />
+    </div>
+  );
+
+  /* -------------------------- FIELD ROUTER ---------------------------- */
+  const renderField = (section, field, item, index = null) => {
+    const type = FIELD_TYPES[section];
+
+    switch (type) {
+      case "CUSTOMER":
+        return renderCustomerDev(section, field, item);
+
+      case "SIEVPL":
+        return renderSIEVPL(section, field, item);
+
+      case "SWFAT":
+        return renderSwFat(section, field, item);
+
+      case "INSPECTION":
+        return renderInspection(section, field, item);
+
+      case "DISPATCH":
+        return renderDispatch(section, index, field, item);
+
+      case "POSTCOMM":
+        return renderPostComm(section, field, item);
+
+      default:
+        return null;
+    }
   };
 
+  /* -------------------------- SECTION WRAPPER -------------------------- */
+  const renderSection = (sectionKey, title, icon, color) => (
+    <div
+      className={`bg-${color} text-white rounded-2xl shadow-lg p-5 relative overflow-hidden`}
+    >
+      <h3 className="flex items-center gap-2 font-bold text-lg mb-3">
+        {icon}
+        {title}
+      </h3>
+
+      <div className="grid grid-cols-1 gap-4">
+        {Array.isArray(Docs[sectionKey])
+          ? Docs[sectionKey].map((phase, index) =>
+            Object.entries(phase).map(([field, item]) =>
+              field !== "phaseIndex" ? (
+                <div key={`${field}-${index}`}>
+                  <div className="font-semibold">{field}</div>
+                  {renderField(sectionKey, field, item, index)}
+                </div>
+              ) : null
+            )
+          )
+          : Object.entries(Docs[sectionKey]).map(([field, item]) => (
+            <div key={field}>
+              <div className="font-semibold">{field}</div>
+              {renderField(sectionKey, field, item)}
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+
+  /* ------------------------------- FINAL UI ---------------------------- */
   const progress = calculateProgress();
 
   return (
     <div className="w-full max-w-5xl mx-auto">
-      <div className="bg-linear-to-br from-purple-100 via-purple-100 to-pink-100 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
-        <div className="p-4 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left side: full height section */}
-          <div className="flex flex-col">
+      <div className="bg-white rounded-3xl shadow-xl border border-gray-200">
+        <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* LEFT */}
+          <div className="flex flex-col gap-6">
             {renderSection(
-              "internalDocuments",
-              "Doucements",
+              "CustomerDevDocuments",
+              "Customer Development Documents",
               <FileText className="w-6 h-6 text-white" />,
-              "from-blue-500 to-cyan-500"
+              "blue-500"
             )}
-          </div>
 
-          {/* Right side: two equal stacked cards */}
-          <div className="flex flex-col justify-between gap-6">
             {renderSection(
-              "customerDocuments",
-              "Doucements",
+              "SIEVPLDevDocuments",
+              "SIEVPL Development Documents",
               <Users className="w-6 h-6 text-white" />,
-              "from-purple-500 to-pink-500"
-            )}
-            {renderSection(
-              "dispatchDocuments",
-              "Doucements",
-              <Package className="w-6 h-6 text-white" />,
-              "from-amber-500 to-orange-500"
+              "purple-500"
             )}
           </div>
 
-          {/* Full-width third card below */}
+          {/* RIGHT */}
+          <div className="flex flex-col gap-6">
+            {renderSection(
+              "swDevDocumentsforFat",
+              "Software/FAT Documents",
+              <Package className="w-6 h-6 text-white" />,
+              "orange-500"
+            )}
+
+            {renderSection(
+              "inspectionDocuments",
+              "Inspection Documents",
+              <FileText className="w-5 h-5 text-white" />,
+              "green-500"
+            )}
+          </div>
+
+          {/* FULL WIDTH */}
           <div className="lg:col-span-2">
             {renderSection(
-              "completionDocuments",
-              "Doucements",
+              "PostCommisionDocuments",
+              "Post Commission Documents",
               <FileText className="w-5 h-5 text-white" />,
-              "from-green-400 to-green-500"
+              "emerald-500"
             )}
           </div>
         </div>
 
-        <footer className="bg-gray-50 p-4 sm:p-6 border-t border-gray-200 text-center sm:text-left">
-          <p className="text-sm">
-            {progress === 100 ? (
-              <span className="text-emerald-600 font-bold flex items-center justify-center sm:justify-start gap-2">
-                <CheckCircle className="w-5 h-5" />
-                All documents verified successfully!
-              </span>
-            ) : (
-              <span className="flex items-center justify-center sm:justify-start gap-2 text-gray-700">
-                <span className="font-semibold">
-                  {100 - progress}% remaining to complete
-                </span>
-              </span>
-            )}
-          </p>
+        <footer className="bg-gray-50 p-4 border-t border-gray-200 text-center">
+          {progress === 100 ? (
+            <span className="text-emerald-600 font-bold flex justify-center gap-2">
+              <CheckCircle className="w-5 h-5" />
+              All documents verified!
+            </span>
+          ) : (
+            <span className="text-gray-700 font-semibold">{100 - progress}% remaining</span>
+          )}
         </footer>
       </div>
     </div>

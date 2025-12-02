@@ -1,6 +1,8 @@
 import React from "react";
 
 export const ProjectDetailsCard = ({ project }) => {
+
+
   if (!project) return null;
 
   return (
@@ -416,8 +418,8 @@ export const ProjectDetailsCard = ({ project }) => {
             value={
               project?.momDate?.length > 0 && project?.momDate[0]
                 ? project.momDate
-                    .map((d) => new Date(d).toLocaleDateString())
-                    .join(", ")
+                  .map((d) => new Date(d).toLocaleDateString())
+                  .join(", ")
                 : "-"
             }
             fullWidth
@@ -447,91 +449,112 @@ export const ProjectDetailsCard = ({ project }) => {
         />
 
         <div className="space-y-6">
-          {/* Internal Documents */}
-          {project?.internalDocuments && (
+          {project?.CustomerDevDocuments && (
             <DocumentSection
-              title="Internal Documents"
-              documents={project.internalDocuments}
+              title="Customer Development Documents"
+              documents={project.CustomerDevDocuments}
               linearFrom="from-blue-500"
               linearTo="to-cyan-500"
             />
           )}
-
-          {/* Customer Documents */}
-          {project?.customerDocuments && (
+          {project?.SIEVPLDevDocuments && (
             <DocumentSection
-              title="Customer Documents"
-              documents={project.customerDocuments}
+              title="SIEVPL Development Documents"
+              documents={project.SIEVPLDevDocuments}
               linearFrom="from-purple-500"
               linearTo="to-pink-500"
             />
           )}
-
-          {/* Dispatch Documents */}
-          {project?.dispatchDocuments && (
+          {project?.swDevDocumentsforFat && (
             <DocumentSection
-              title="Dispatch Documents"
-              documents={project.dispatchDocuments}
+              title="Software Development for FAT"
+              documents={project.swDevDocumentsforFat}
               linearFrom="from-green-500"
               linearTo="to-emerald-500"
             />
           )}
-
-          {/* Completion Documents */}
-          {project?.completionDocuments && (
+          {project?.inspectionDocuments && (
             <DocumentSection
-              title="Completion Documents"
-              documents={project.completionDocuments}
+              title="Inspection Documents"
+              documents={project.inspectionDocuments}
               linearFrom="from-orange-500"
               linearTo="to-amber-500"
             />
           )}
+
+          {project?.dispatchDocuments && (
+            <DocumentSection
+              title="Dispatch Documents"
+              documents={project.dispatchDocuments}
+              linearFrom="from-teal-500"
+              linearTo="to-blue-500"
+            />
+          )}
+
+          {project?.PostCommisionDocuments && (
+            <DocumentSection
+              title="Post Commission Documents"
+              documents={project.PostCommisionDocuments}
+              linearFrom="from-red-500"
+              linearTo="to-yellow-500"
+            />
+          )}
+
         </div>
+
       </section>
     </>
   );
 };
 
 // Document Section Component
-const DocumentSection = ({ title, documents, linearFrom, linearTo }) => (
-  <div
-    className={`relative bg-linear-to-br ${linearFrom} ${linearTo} p-6 rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all duration-300`}
-  >
-    <div className="absolute top-0 right-0 w-40 h-40 bg-white/20 rounded-full blur-3xl transform translate-x-20 -translate-y-20 group-hover:scale-150 transition-transform duration-500"></div>
+const DocumentSection = ({ title, documents, linearFrom, linearTo }) => {
+  const extractStatus = (doc) => {
+    if (!doc) return "N/A";
 
-    <h4 className="relative text-base font-bold text-white mb-4 flex items-center gap-2">
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-        />
-      </svg>
-      {title}
-    </h4>
+    // Case 1: array → dispatchDocuments
+    if (Array.isArray(doc)) {
+      return doc.map((d) => d?.value || "N/A").join(", ");
+    }
 
-    <div className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-      {Object.entries(documents).map(([key, value]) => (
-        <DocumentBadge
-          key={key}
-          label={formatDocumentLabel(key)}
-          status={value}
-        />
-      ))}
+    // Case 2: object with { value }
+    if (typeof doc === "object" && "value" in doc) {
+      return doc.value || "N/A";
+    }
+
+    // Case 3: otherDocument (nested)
+    if (typeof doc === "object" && "otherDocument" in doc) {
+      return doc.otherDocument?.value || "N/A";
+    }
+
+    // Case 4: fallback
+    return String(doc ?? "N/A");
+  };
+
+  return (
+    <div className={`relative bg-linear-to-br ${linearFrom} ${linearTo} p-6 rounded-2xl shadow-xl`}>
+      <h4 className="relative text-base font-bold text-white mb-4 flex items-center gap-2">
+        {title}
+      </h4>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        {Object.entries(documents).map(([key, doc]) => (
+          <DocumentBadge
+            key={key}
+            label={formatDocumentLabel(key)}
+            status={extractStatus(doc)}
+          />
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // Document Badge Component
 const DocumentBadge = ({ label, status }) => {
+  const normalized = String(status ?? "").trim().toUpperCase();
   const getStatusColor = () => {
-    switch (status?.toUpperCase()) {
+    switch (normalized) {
       case "YES":
         return "bg-green-100 text-green-700 border-green-300";
       case "NO":
