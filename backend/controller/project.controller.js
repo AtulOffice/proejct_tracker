@@ -78,6 +78,10 @@ export const updateRecordsDocs = async (req, res) => {
       ...otherData
     } = req.body;
 
+    console.dir(req.body, { depth: null, colors: true });
+
+    return;
+
     if (!id) {
       return res.status(400).json({
         success: false,
@@ -598,8 +602,8 @@ export const updateRecords = async (req, res) => {
 };
 
 export const updateRecordsSession = async (req, res) => {
-  const session = await mongoose.startSession();  
-  session.startTransaction();                    
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
   try {
     const { id } = req.params;
@@ -618,7 +622,7 @@ export const updateRecordsSession = async (req, res) => {
     } = req.body;
 
     if (!id) {
-      await session.abortTransaction();          
+      await session.abortTransaction();
       session.endSession();
       return res
         .status(400)
@@ -783,7 +787,9 @@ export const updateRecordsSession = async (req, res) => {
 
     for (const eng of transformedEngineers) {
       try {
-        const engineer = await EngineerReocord.findById(eng.engineerId).session(session);
+        const engineer = await EngineerReocord.findById(eng.engineerId).session(
+          session
+        );
 
         if (!engineer) {
           notFoundEngineers.push(eng.engineerId);
@@ -845,11 +851,10 @@ export const updateRecordsSession = async (req, res) => {
           };
         }
 
-        await EngineerReocord.findByIdAndUpdate(
-          eng.engineerId,
-          updateOps,
-          { new: true, session }
-        );
+        await EngineerReocord.findByIdAndUpdate(eng.engineerId, updateOps, {
+          new: true,
+          session,
+        });
 
         updatedCount++;
       } catch (err) {
@@ -872,7 +877,7 @@ export const updateRecordsSession = async (req, res) => {
       details: { skippedEngineers, notFoundEngineers, failedEngineers },
     });
   } catch (e) {
-    await session.abortTransaction();  
+    await session.abortTransaction();
     session.endSession();
     return res.status(500).json({ success: false, message: e.message });
   }

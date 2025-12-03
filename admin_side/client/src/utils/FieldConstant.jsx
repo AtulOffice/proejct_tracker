@@ -318,7 +318,7 @@ export const docsVal = {
   ],
 
   PostCommisionDocuments: {
-    itr: {
+    finalMom: {
       value: "",
       date: null,
       inputVal: "",
@@ -363,6 +363,8 @@ export const docsVal = {
       remarks: "",
     },
   },
+  SIEVPLDevDocumentsRemarks: "",
+  CustomerDevDocumentsRemarks: ""
 };
 
 

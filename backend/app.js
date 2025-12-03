@@ -29,7 +29,7 @@ app.use(express.json({ limit: "110mb" }));
 const corsOptions = {
   origin: [
     `${process.env.FRONT_PORT}`
-    , `${process.env.ENG_PORT}`
+    , `${process.env.ENG_PORT}`,`http://localhost:5173`
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],

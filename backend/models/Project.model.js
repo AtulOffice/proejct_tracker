@@ -215,7 +215,7 @@ const projectSchema = new mongoose.Schema(
       },
     ],
     PostCommisionDocuments: {
-      itr: { type: documentFormetFourth },
+      finalMom: { type: documentFormetFourth },
       asBuiltDrawings: { type: documentFormetFourth },
       logicBackup: { type: documentFormetFourth },
       scadaBackup: { type: documentFormetFourth },
