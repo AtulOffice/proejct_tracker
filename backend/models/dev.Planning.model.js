@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
+
 
 const sectionSchema = new mongoose.Schema({
   startDate: { type: Date },
@@ -44,6 +46,9 @@ const DevPlanningSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+ 
+
+dateToJSONTransformer(DevPlanningSchema)
 
 const PlanningModel = new mongoose.model("ProjectDevPlans", DevPlanningSchema);
 export default PlanningModel;

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const TaskSchema = new mongoose.Schema(
   {
@@ -227,6 +228,8 @@ ProjectDevSchema.post("findOneAndUpdate", async function (doc) {
 //   next();
 // });
 
+
+dateToJSONTransformer(ProjectDevSchema)
 const ProjectDevModel = mongoose.model("ProjectDev", ProjectDevSchema);
 
 export default ProjectDevModel;

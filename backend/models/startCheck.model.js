@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const yesNoEnum = ["YES", "NO", ""];
 const ENUMVAL = ["YES", "NO", "N/A", ""];
@@ -86,6 +87,8 @@ const startchecklistsSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+dateToJSONTransformer(startchecklistsSchema)
 
 const StartChecklistsModel = mongoose.model(
   "StartChecklists",

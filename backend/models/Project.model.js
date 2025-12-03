@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const ENUMVAL = ["YES", "NO", "N/A", ""];
 
@@ -494,28 +495,7 @@ const projectSchema = new mongoose.Schema(
 
 projectSchema.index({ status: 1 });
 
+dateToJSONTransformer(projectSchema);
+
 const ProjectModel = mongoose.model("Project", projectSchema);
 export default ProjectModel;
-
-
-projectSchema.set("toJSON", {
-  transform: function (doc, ret) {
-  
-    function convertDates(obj) {
-      if (!obj) return;
-
-      Object.keys(obj).forEach((key) => {
-        const value = obj[key];
-        if (value instanceof Date) {
-          obj[key] = value.toISOString().split("T")[0];
-        }
-        else if (typeof value === "object") {
-          convertDates(value);
-        }
-      });
-    }
-
-    convertDates(ret);
-    return ret;
-  },
-});

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const resetOtpSchema = new mongoose.Schema(
   {
@@ -92,6 +93,8 @@ const engineerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+dateToJSONTransformer(engineerSchema)
 const EngineerReocord = mongoose.model("EngineerRecord", engineerSchema);
+
 
 export default EngineerReocord;

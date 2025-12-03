@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const WrkStatusSchema = new mongoose.Schema(
   {
@@ -41,26 +42,6 @@ const WrkStatusSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
     },
-    // StartChecklist: {
-    //   type: String,
-    //   enum: ["YES", "NO", "N/A"],
-    //   default: "N/A",
-    // },
-    // EndChecklist: {
-    //   type: String,
-    //   enum: ["YES", "NO", "N/A"],
-    //   default: "N/A",
-    // },
-    // BackupSubmission: {
-    //   type: String,
-    //   enum: ["YES", "NO", "N/A"],
-    //   default: "N/A",
-    // },
-    // ExpensSubmission: {
-    //   type: String,
-    //   enum: ["YES", "NO", "N/A"],
-    //   default: "N/A",
-    // },
     submittedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
@@ -70,6 +51,8 @@ const WrkStatusSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+dateToJSONTransformer(WrkStatusSchema)
 
 const workStatusModel = mongoose.model("WorkStatus", WrkStatusSchema);
 

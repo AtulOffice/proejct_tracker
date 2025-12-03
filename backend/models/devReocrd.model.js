@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const dailyTaskSchema = new mongoose.Schema({
   engineerId: { type: String, required: true },
@@ -22,9 +23,11 @@ const weeklyAssignmentSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
+dateToJSONTransformer(weeklyAssignmentSchema)
 const WeeklyAssignment = mongoose.model(
   "WeeklyAssignment",
   weeklyAssignmentSchema
 );
+
 
 export default WeeklyAssignment;

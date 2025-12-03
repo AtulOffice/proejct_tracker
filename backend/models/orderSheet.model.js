@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -172,6 +173,10 @@ const OrderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+dateToJSONTransformer(OrderSchema)
+
+
 const Order = mongoose.model("Order", OrderSchema);
 
 export default Order;
+

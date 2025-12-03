@@ -20,25 +20,8 @@ export default function UpdateOrderForm() {
       try {
         setLoading(true);
         const val = await fetchbyOrderbyId(id);
-
         if (val) {
-          const formattedData = {
-            ...val,
-            bookingDate: val.bookingDate
-              ? new Date(val.bookingDate).toISOString().split("T")[0]
-              : "",
-            orderDate: val.orderDate
-              ? new Date(val.orderDate).toISOString().split("T")[0]
-              : "",
-            deleveryDate: val.deleveryDate
-              ? new Date(val.deleveryDate).toISOString().split("T")[0]
-              : "",
-            actualDeleveryDate: val.actualDeleveryDate
-              ? new Date(val.actualDeleveryDate).toISOString().split("T")[0]
-              : "",
-          };
-
-          setFormData(formattedData);
+          setFormData((prev) => ({ ...prev, ...val }));
         } else {
           toast.error("Failed to fetch order data");
         }

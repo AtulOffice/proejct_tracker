@@ -32,39 +32,7 @@ const UpdateForm = () => {
           { withCredentials: true }
         );
         if (res?.data?.data) {
-          const dateFields = [
-            "actualStartDate",
-            "actualEndDate",
-            "visitDate",
-            "visitendDate",
-            "momDate",
-            "orderDate",
-            "startDate",
-            "deleveryDate",
-            "requestDate",
-            "createdAt",
-            "updatedAt",
-            "bookingDate",
-            "deleveryDate",
-            "actualDeleveryDate",
-          ];
-
-
           const formattedData = { ...res.data.data };
-
-          dateFields.forEach((field) => {
-            const value = formattedData[field];
-            if (value) {
-              const date = new Date(value);
-              if (!isNaN(date)) {
-                formattedData[field] = date.toISOString().split("T")[0];
-              } else {
-                formattedData[field] = "";
-              }
-            } else {
-              formattedData[field] = "";
-            }
-          });
           setFormData((prev) => ({ ...prev, ...formattedData }));
           setDocs((prev) => ({
             ...prev,
@@ -85,8 +53,6 @@ const UpdateForm = () => {
 
     if (id) fetchByid();
   }, [id]);
-
-  console.log(Docs)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -206,7 +172,6 @@ const UpdateForm = () => {
       return;
     } <InputFiled
       {...InputConst[17]}
-      isEditable={!!selectData?.deleveryDate}
       value={formData.deleveryDate}
       handleChange={handleChange}
     />
@@ -336,7 +301,6 @@ const UpdateForm = () => {
               />
               <SelectField
                 {...InputConst[27]}
-                // isEditable={!!selectData?.soType}
                 value={formData.soType}
                 handleChange={handleChange}
               />
@@ -530,6 +494,8 @@ const UpdateForm = () => {
             </div>
           </div>
 
+
+
           {/* 💰 Billing Information */}
           <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
             <h3 className="font-bold text-lg text-green-800 mb-4">
@@ -553,6 +519,11 @@ const UpdateForm = () => {
               />
             </div>
           </div>
+
+
+
+
+          
 
           {/* 📅 Timeline & Scheduling */}
           <div className="bg-indigo-50 p-6 rounded-lg border-2 border-blue-300 shadow-sm">
