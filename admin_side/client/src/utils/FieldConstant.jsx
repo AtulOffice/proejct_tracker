@@ -363,8 +363,8 @@ export const docsVal = {
       remarks: "",
     },
   },
-  SIEVPLDevDocumentsRemarks: "",
-  CustomerDevDocumentsRemarks: ""
+  SIEVPLDevDocumentsRemarks:"",
+  CustomerDevDocumentsRemarks:""
 };
 
 

@@ -78,14 +78,10 @@ export const updateRecordsDocs = async (req, res) => {
       ...otherData
     } = req.body;
 
-    console.dir(req.body, { depth: null, colors: true });
-
-    return;
-
-    if (!id) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
-        message: "ID is required",
+        message: "Invalid ID format",
       });
     }
 
@@ -112,7 +108,6 @@ export const updateRecordsDocs = async (req, res) => {
           target[key] = value;
         }
       });
-
       return target;
     };
 
@@ -173,13 +168,18 @@ export const updateRecordsDocs = async (req, res) => {
     if (typeof SIEVPLDevDocumentsRemarks === "string") {
       project.SIEVPLDevDocumentsRemarks = SIEVPLDevDocumentsRemarks;
     }
-    await project.save();
-
+    project.isProjectDocssave = true;
+    project.swphone = otherData?.phone;
+    project.swtechnicalEmail = otherData?.technicalEmail;
+    project.swname = otherData?.name;
+    
+    const dataval = await project.save();
     return res.status(200).json({
       success: true,
       message: "Documents updated successfully.",
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: error.message,

@@ -139,12 +139,14 @@ const InputForm = () => {
                 phone: "",
             });
             setDocs(docsVal);
+            setSelectData(null)
             setToggle((prev) => !prev);
             setToggleDev((prev) => !prev);
             navigate("/page", {
                 replace: true,
             });
         } catch (e) {
+            toast.error("error while save docs")
             console.log(e);
         } finally {
             setIsLoading(false);
@@ -302,11 +304,11 @@ const InputForm = () => {
                             </>
                         )}
 
-                        {/* <div className={`${selectData
+                        <div className={`${selectData
                             ? ""
                             : "opacity-50 cursor-not-allowed pointer-events-none"
-                            }`}>    */}
-                        <div>
+                            }`}>
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <InputFiled
                                     {...InputConst[46]}
@@ -333,11 +335,11 @@ const InputForm = () => {
                             </div>
                             <DocumentsSection Docs={Docs} setDocs={setDocs} /></div>
                     </div >
-                    {/* <div className={`${selectData
+                    <div className={`${selectData
                         ? ""
                         : "opacity-50 cursor-not-allowed pointer-events-none"
-                        }`}> */}
-                    <div>
+                        }`}>
+
                         <div className="flex justify-center mt-8">
                             <button
                                 type="submit"
@@ -349,8 +351,8 @@ const InputForm = () => {
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

@@ -49,6 +49,7 @@ const UpdateForm = () => {
             "actualDeleveryDate",
           ];
 
+
           const formattedData = { ...res.data.data };
 
           dateFields.forEach((field) => {
@@ -67,10 +68,14 @@ const UpdateForm = () => {
           setFormData((prev) => ({ ...prev, ...formattedData }));
           setDocs((prev) => ({
             ...prev,
+            CustomerDevDocuments: formattedData?.CustomerDevDocuments,
+            SIEVPLDevDocuments: formattedData?.SIEVPLDevDocuments,
+            swDevDocumentsforFat: formattedData?.swDevDocumentsforFat,
+            inspectionDocuments: formattedData?.inspectionDocuments,
             dispatchDocuments: formattedData?.dispatchDocuments,
-            customerDocuments: formattedData?.customerDocuments,
-            internalDocuments: formattedData?.internalDocuments,
-            completionDocuments: formattedData?.completionDocuments,
+            PostCommisionDocuments: formattedData?.PostCommisionDocuments,
+            SIEVPLDevDocumentsRemarks: formattedData?.SIEVPLDevDocumentsRemarks,
+            CustomerDevDocumentsRemarks: formattedData?.CustomerDevDocumentsRemarks
           }));
         }
       } catch (err) {
@@ -80,6 +85,8 @@ const UpdateForm = () => {
 
     if (id) fetchByid();
   }, [id]);
+
+  console.log(Docs)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

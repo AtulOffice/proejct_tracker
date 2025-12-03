@@ -210,7 +210,6 @@ const projectSchema = new mongoose.Schema(
           name: { type: String, default: "" },
           value: { type: String, enum: ENUMVAL, default: "N/A" },
           date: { type: Date, default: null },
-          version: { type: String, default: "1.0" },
         },
       },
     ],
@@ -497,3 +496,26 @@ projectSchema.index({ status: 1 });
 
 const ProjectModel = mongoose.model("Project", projectSchema);
 export default ProjectModel;
+
+
+projectSchema.set("toJSON", {
+  transform: function (doc, ret) {
+  
+    function convertDates(obj) {
+      if (!obj) return;
+
+      Object.keys(obj).forEach((key) => {
+        const value = obj[key];
+        if (value instanceof Date) {
+          obj[key] = value.toISOString().split("T")[0];
+        }
+        else if (typeof value === "object") {
+          convertDates(value);
+        }
+      });
+    }
+
+    convertDates(ret);
+    return ret;
+  },
+});

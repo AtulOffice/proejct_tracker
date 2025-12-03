@@ -570,8 +570,6 @@ const DocumentsSection = ({ Docs, setDocs }) => {
 
   const progress = calculateProgress();
 
-  console.log(progress)
-
   return (
     <div className="w-full max-w-5xl mx-auto">
       <div className="bg-white rounded-3xl shadow-xl border border-gray-200">
