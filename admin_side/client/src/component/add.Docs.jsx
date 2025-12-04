@@ -14,9 +14,10 @@ const InputForm = () => {
     const { toggle, setToggle, setToggleDev } = useAppContext();
     const [formData, setFormData] = useState({
         jobNumber: "",
-        name: "",
-        technicalEmail: "",
-        phone: "",
+        swname: "",
+        swtechnicalEmail: "",
+        swphone: "",
+        isMailSent: ""
     });
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState([]);
@@ -28,9 +29,9 @@ const InputForm = () => {
             setFormData((prev) => ({
                 ...prev,
                 jobNumber: selectData.jobNumber || "",
-                name: selectData?.OrderMongoId?.name || "",
-                technicalEmail: selectData.OrderMongoId?.technicalEmail || "",
-                phone: selectData.OrderMongoId?.phone || "",
+                swname: selectData?.OrderMongoId?.name || "",
+                swtechnicalEmail: selectData.OrderMongoId?.technicalEmail || "",
+                swphone: selectData.OrderMongoId?.phone || "",
             }));
             setDocs(docsVal)
         }
@@ -134,9 +135,10 @@ const InputForm = () => {
             toast.success("Data updated successfully");
             setFormData({
                 jobNumber: "",
-                name: "",
-                technicalEmail: "",
-                phone: "",
+                swname: "",
+                swtechnicalEmail: "",
+                swphone: "",
+                isMailSent: ""
             });
             setDocs(docsVal);
             setSelectData(null)
@@ -311,18 +313,18 @@ const InputForm = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                 <InputFiled
-                                    {...InputConst[46]}
-                                    value={formData.name}
+                                    {...InputConst[66]}
+                                    value={formData.swname}
                                     handleChange={handleChange}
                                 />
                                 <InputFiled
-                                    {...InputConst[41]}
-                                    value={formData.technicalEmail}
+                                    {...InputConst[67]}
+                                    value={formData.swtechnicalEmail}
                                     handleChange={handleChange}
                                 />
                                 <InputFiled
-                                    {...InputConst[48]}
-                                    value={formData.phone}
+                                    {...InputConst[68]}
+                                    value={formData.swphone}
                                     handleChange={handleChange}
                                 />
                                 <SelectField
@@ -330,8 +332,6 @@ const InputForm = () => {
                                     value={formData.isMailSent}
                                     handleChange={handleChange}
                                 />
-
-
                             </div>
                             <DocumentsSection Docs={Docs} setDocs={setDocs} /></div>
                     </div >

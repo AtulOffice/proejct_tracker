@@ -143,7 +143,7 @@ const FormField = ({
           <h3 className="font-bold text-lg  mb-4">
             💰 Scope Details Regarding -{formData.soType}
           </h3>
-          {/* SERVICE + SERVICE DAYS MENTION → SIDE BY SIDE */}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             {/* <SelectField
               {...InputConst[29]}
@@ -391,14 +391,12 @@ const FormField = ({
           </div>
         )}
 
-        {/* this is the expesns scope */}
         {
           ["DEV", "DEVCOM", "COMMISSIONING"].includes(formData.service) && <>
 
 
             {formData?.CommisinionPO === "YES" && <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
 
-              {/* Header Section */}
               <div className="flex items-center gap-2 mb-4">
                 <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
                 <h2 className="text-lg font-bold text-green-800">
@@ -406,7 +404,6 @@ const FormField = ({
                 </h2>
               </div>
 
-              {/* SelectField Section */}
               <div className="mb-6">
                 <SelectField
                   {...InputConst[62]}
@@ -417,14 +414,14 @@ const FormField = ({
               {
                 formData?.expenseScopeside === "YES" &&
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Company Side */}
+
                   <div className="bg-white/90 p-6 rounded-2xl border-2 border-blue-200 shadow-sm">
                     <h3 className="text-base font-bold text-blue-700 mb-4 flex items-center gap-2">
                       <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
                       SIEPL Scope
                     </h3>
                     <div className="space-y-3">
-                      {/* Travel */}
+                      
                       <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
                         <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
                           Travel

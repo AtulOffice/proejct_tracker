@@ -978,6 +978,33 @@ export const InputConst = [
     placeholder: "Enter the Linked Order Number",
     required: false,
   },
+  {
+    htmlFor: "swname",
+    title: "SW Name",
+    type: "text",
+    id: "swname",
+    name: "swname",
+    placeholder: "Enter software engineer name",
+    required: false,
+  },
+  {
+    htmlFor: "swtechnicalEmail",
+    title: "SW Technical Email",
+    type: "email",
+    id: "swtechnicalEmail",
+    name: "swtechnicalEmail",
+    placeholder: "Enter technical email",
+    required: false,
+  },
+  {
+    htmlFor: "swphone",
+    title: "SW Phone Number",
+    type: "text",
+    id: "swphone",
+    name: "swphone",
+    placeholder: "Enter phone number",
+    required: false,
+  },
 
 ];
 

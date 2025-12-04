@@ -20,6 +20,9 @@ const UpdateForm = () => {
   const { setToggle, setToggleDev } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
+    swname: "",
+    swtechnicalEmail: "",
+    swphone: "",
     status: "",
     service: "",
     priority: "",
@@ -1013,7 +1016,28 @@ const UpdateForm = () => {
             <h3 className="font-bold text-lg text-cyan-800 mb-4">
               🔧 Development & Technical
             </h3>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <InputFiled
+                {...InputConst[66]}
+                value={formData.swname}
+                handleChange={handleChange}
+              />
+              <InputFiled
+                {...InputConst[67]}
+                value={formData.swtechnicalEmail}
+                handleChange={handleChange}
+              />
+              <InputFiled
+                {...InputConst[68]}
+                value={formData.swphone}
+                handleChange={handleChange}
+              />
+              <SelectField
+                {...InputConst[42]}
+                value={formData.isMailSent}
+                handleChange={handleChange}
+              />
               <SelectField
                 {...InputConst[40]}
                 value={formData.Development}

@@ -98,6 +98,7 @@ export const updateRecordsDocs = async (req, res) => {
         project[key] = otherData[key];
       }
     });
+    
     const mergeNested = (target = {}, source) => {
       if (!source) return target;
 
@@ -169,9 +170,6 @@ export const updateRecordsDocs = async (req, res) => {
       project.SIEVPLDevDocumentsRemarks = SIEVPLDevDocumentsRemarks;
     }
     project.isProjectDocssave = true;
-    project.swphone = otherData?.phone;
-    project.swtechnicalEmail = otherData?.technicalEmail;
-    project.swname = otherData?.name;
 
     const dataval = await project.save();
     return res.status(200).json({
