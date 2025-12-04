@@ -2,10 +2,9 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 
 import { fetchbyOrderbyId, fetchbyProjectbyId } from "../utils/apiCall";
-import toast from "react-hot-toast";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdEngineering } from "react-icons/md";
 import { handlePrint } from "../utils/print";
 import EngineerForm from "./ProjectFormAction";
 import { useNavigate } from "react-router-dom";
@@ -35,7 +34,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
     };
   }, []);
 
-  const handlAssignedDev = (onEditFun, project) => {
+  const handlAssignedDev = (project) => {
     try {
       setSelectedProject(project)
       setPlanOpen(true)
@@ -50,7 +49,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
       const id = project?.mongoOrderId || project?._id || project?.id;
 
       if (!id) {
-        toast.error("Invalid project data — ID missing");
+        console.log("Invalid project data — ID missing");
         return;
       }
       let val;
@@ -184,26 +183,43 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                   {isEdit && (
                     <td className="px-6 py-4 text-center">
 
-                      {editType === "DEVLOPMENT" ? (
+                      {onEditFun === "DEVLOPMENT" ? (
                         <button
-                          onClick={() => handlAssignedDev(onEditFun, row)}
+                          onClick={() => handlAssignedDev(row)}
                           className={`flex items-center justify-center text-white p-2 rounded-full shadow-lg
-    transition-all duration-200
-    hover:scale-110 hover:-rotate-6
-    ring-2 ring-transparent focus:outline-none focus:ring-4
-    ${row?.isPlanRecord
+      transition-all duration-200 hover:scale-110 hover:-rotate-6
+      ring-2 ring-transparent focus:outline-none focus:ring-4
+      ${row?.isPlanRecord
                               ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:ring-emerald-300 focus:ring-emerald-400"
                               : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 hover:from-rose-600 hover:via-pink-500 hover:to-red-500 hover:ring-rose-300 focus:ring-rose-400"
                             }`}
-                          aria-label="Update"
                           type="button"
                         >
                           <LuNotepadText className="w-5 h-5 drop-shadow" />
                         </button>
-                      ) : (
+
+                      ) : onEditFun === "URGENT" ? (
+
                         <button
                           onClick={() => handleEditAction(onEditFun, row)}
-                          className="inline-flex items-center justify-center p-2.5 rounded-lg bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400 hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md transition-all duration-300 group"
+                          className="flex items-center justify-center text-white p-2 rounded-full shadow-lg
+      bg-linear-to-tr from-yellow-500 via-amber-400 to-orange-400
+      hover:scale-110 hover:-rotate-6 transition-all duration-200
+      hover:from-yellow-600 hover:via-amber-500 hover:to-orange-500
+      ring-2 ring-transparent focus:ring-amber-300"
+                        >
+                          <MdEngineering className="w-5 h-5 drop-shadow" />
+                        </button>
+
+                      ) : (
+
+                        <button
+                          onClick={() => handleEditAction(onEditFun, row)}
+                          className="inline-flex items-center justify-center p-2.5 rounded-lg
+      bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600
+      border border-emerald-200 hover:border-emerald-400
+      hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md
+      transition-all duration-300 group"
                         >
                           <MdEdit
                             size={18}
@@ -238,7 +254,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
               <span
                 onClick={
                   isEdit
-                    ? editType ? () => handlAssignedDev(onEditFun, project) : () => handleEditAction(onEditFun, project)
+                    ? onEditFun === "DEVLOPMENT" ? () => handlAssignedDev(project) : () => handleEditAction(onEditFun, project)
                     : undefined
                 }
                 className="inline-flex items-center px-2 py-1 border border-indigo-300 rounded-full font-semibold text-[11px] bg-indigo-100 text-indigo-700 shadow-sm"

@@ -14,24 +14,6 @@ import { mapFrontendToBackend } from "./frontToback";
 const ProjectTimelineForm = ({ open, onClose, project }) => {
   const { user } = useAppContext();
   const [collOpen, setCollOpen] = useState(false);
-  const [formdevData, _] = useState({
-    document: {
-      rows: documentRows(),
-    },
-    screen: {
-      rows: screenRows(),
-    },
-    logic: {
-      rows: logicRows(),
-    },
-    testing: {
-      rows: testingRows(),
-    },
-    project: {
-      rows: projectRows(),
-    },
-  });
-
   const { toggle, setToggle } = useAppContext()
 
   const [formData, setFormData] = useState({
@@ -146,7 +128,23 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formDevbackData = mapFrontendToBackend(formdevData, project?.jobNumber)
+      const formDevbackData = mapFrontendToBackend({
+        document: {
+          rows: documentRows(),
+        },
+        screen: {
+          rows: screenRows(),
+        },
+        logic: {
+          rows: logicRows(),
+        },
+        testing: {
+          rows: testingRows(),
+        },
+        project: {
+          rows: projectRows(),
+        },
+      }, project?.jobNumber)
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/planningDev/save`,
         {
@@ -217,8 +215,16 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
       </div>
     );
   };
-
-
+  const SERVICE_LABELS = {
+    DEV: "Development",
+    DEVCOM: "Development + Commissioning",
+    COMMISSIONING: "Commissioning",
+    AMC: "AMC",
+    SERVICE: "Service",
+    SEPERATE: "Separate",
+    "": "",
+    "N/A": "N/A",
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-br from-black/60 to-gray-900/40 backdrop-blur-sm p-4">
@@ -236,6 +242,8 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
             </p>
           )}
         </div>
+
+
 
         <div className="w-full mb-6">
           <button
@@ -265,22 +273,39 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Info label="Job Number" value={project.jobNumber} />
-                    <Info label="Entity Type" value={project.entityType} />
-                    <Info label="SO Type" value={project.soType} />
-                    <Info label="Booking Date" value={project.bookingDate ? new Date(project.bookingDate).toISOString().split("T")[0] : ""} />
-                    <Info label="Name" value={project.name} />
-                    <Info label="Email" value={project.email} />
-                    <Info label="Phone" value={project.phone} />
-                    <Info label="Order Value (Supply)" value={project.orderValueSupply} />
-                    <Info label="Order Value (Service)" value={project.orderValueService} />
-                    <Info label="Order Value (Total)" value={project.orderValueTotal} />
-                    <Info label="Net Order Value" value={project.netOrderValue} />
-                    <Info label="Client" value={project.client} />
-                    <Info label="End User" value={project.endUser} />
-                    <Info label="Location" value={project.location} />
-                    <Info label="Order Number" value={project.orderNumber} />
-                    <Info label="Priority" value={project.priority} />
-                    <Info label="Technical Email" value={project.technicalEmail} />
+                    <Info label="Entity Type" value={project?.OrderMongoId.entityType} />
+                    <Info label="SO Type" value={project?.OrderMongoId.soType} />
+                    <Info label="Booking Date" value={project?.OrderMongoId.bookingDate} />
+                    <Info label="Client" value={project?.OrderMongoId.client} />
+                    <Info label="End User" value={project?.OrderMongoId.endUser} />
+                    <Info label="Location" value={project?.OrderMongoId.site} />
+                    <Info label="Accournt manager Email" value={project?.OrderMongoId.concerningSalesManager} />
+                    <Info label="Technical Name" value={project?.OrderMongoId.name} />
+                    <Info label="Technical Email" value={project?.OrderMongoId.technicalEmail} />
+                    <Info label="Technical Phone" value={project?.OrderMongoId.phone} />
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="relative bg-linear-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-blue-200/30 to-cyan-200/30 rounded-bl-full blur-2xl"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-600 rounded-lg shadow-md">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-xl text-blue-900">
+                      Order Value
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Info label="Order Value (Supply)" value={project?.OrderMongoId.orderValueSupply} />
+                    <Info label="Order Value (Service)" value={project?.OrderMongoId.orderValueService} />
+                    <Info label="Order Value (Total)" value={project?.OrderMongoId.orderValueTotal} />
                   </div>
                 </div>
               </div>
@@ -299,15 +324,59 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Info label="PO Received" value={project.poReceived} />
-                    <Info label="Order Number" value={project.orderNumber} />
-                    <Info label="Order Date" value={project.orderDate ? new Date(project.orderDate).toISOString().split("T")[0] : ""} />
-                    <Info label="Delivery Date" value={project.deleveryDate ? new Date(project.deleveryDate).toISOString().split("T")[0] : ""} />
-                    <Info label="Actual Delivery Date" value={project.actualDeleveryDate ? new Date(project.actualDeleveryDate).toISOString().split("T")[0] : ""} />
-                    <Info label="Amendment Required" value={project.amndReqrd} />
+                    <Info label="PO Received" value={project?.OrderMongoId.poReceived} />
+                    <Info label="Order Number" value={project?.OrderMongoId.orderNumber} />
+                    <Info label="Order Date" value={project?.OrderMongoId.orderDate} />
+                    <Info label="Delivery Date" value={project?.OrderMongoId.deleveryDate} />
+                    <Info label="Actual Delivery Date" value={project?.OrderMongoId.actualDeleveryDate} />
+                    <Info label="Amendment Required" value={project?.OrderMongoId.amndReqrd} />
                   </div>
                 </div>
               </div>
+
+              <div className="relative bg-linear-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-blue-200/30 to-cyan-200/30 rounded-bl-full blur-2xl"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-600 rounded-lg shadow-md">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-xl text-blue-900">
+                      Service Details
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Info label="Service Type" value={SERVICE_LABELS[project?.service] || project?.service} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative bg-linear-to-br from-blue-50 to-cyan-50 p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-blue-200/30 to-cyan-200/30 rounded-bl-full blur-2xl"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-blue-600 rounded-lg shadow-md">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-bold text-xl text-blue-900">
+                      Development Scope
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Info label="PO Received" value={project?.OrderMongoId.poReceived} />
+                    <Info label="Order Number" value={project?.OrderMongoId.orderNumber} />
+                    <Info label="Order Date" value={project?.OrderMongoId.orderDate} />
+                    <Info label="Delivery Date" value={project?.OrderMongoId.deleveryDate} />
+                  </div>
+                </div>
+              </div>
+
             </div>
           )}
         </div>

@@ -121,7 +121,7 @@ const AdminDashboard = () => {
       val: "deleveryDate",
     },
     { head: "Visit", val: "visitDate" },
-    { head: "LOGIC/SCADA", val: "DevelopmentSetcion" },
+    { head: "LOGIC/SCADA", val: "Development" },
   ];
 
   const ProjectActionTab = [
@@ -272,7 +272,6 @@ const AdminDashboard = () => {
             fetchFun={fetfchProejctADev}
             isEdit={true}
             onEditFun="DEVLOPMENT"
-            editType="DEVLOPMENT"
             printTitle="DEVLOPMENT PROJECT LIST"
           />
         );
@@ -569,7 +568,7 @@ const AdminDashboard = () => {
                       PROJECT DEV STATUS
                     </div>
                   </li>
-                  <li>
+                  {/* <li>
                     <div
                       onClick={() => {
                         handleActiveBar("two");
@@ -581,11 +580,10 @@ const AdminDashboard = () => {
                       <GoProjectRoadmap className="mr-3" size={20} />
                       ALL
                     </div>
-                  </li>
+                  </li> */}
 
 
-
-                  <li>
+                  {/* <li>
                     <div
                       onClick={() => {
                         handleActiveBar("three");
@@ -703,7 +701,7 @@ const AdminDashboard = () => {
                       <RiCustomerServiceFill className="mr-3" size={20} />
                       SERVICES
                     </a>
-                  </li>
+                  </li> */}
                   <li>
                     <div
                       onClick={() => {
@@ -724,7 +722,7 @@ const AdminDashboard = () => {
 
               {(user?.role == "admin" || user?.role == "reception") && (
                 <>
-                  <li>
+                  {/* <li>
                     <a
                       onClick={() => {
                         handleActiveBar("eight");
@@ -736,7 +734,7 @@ const AdminDashboard = () => {
                       <MdCancel className="mr-3" size={20} />
                       CANCELLED
                     </a>
-                  </li>
+                  </li> */}
                   <li>
                     <a
                       onClick={() => {

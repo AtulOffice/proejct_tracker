@@ -332,9 +332,6 @@ const projectSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-    orderDate: {
-      type: Date,
-    },
     daysspendsite: {
       type: Number,
       default: 0,
@@ -398,10 +395,6 @@ const projectSchema = new mongoose.Schema(
     },
     expenseScope: {
       type: String,
-    },
-    deleveryDate: {
-      type: Date,
-      default: null,
     },
     ContactPersonName: {
       type: String,

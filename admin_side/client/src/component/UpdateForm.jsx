@@ -435,31 +435,573 @@ const UpdateForm = () => {
             </div>
           ))}
 
+          {/* service details */}
+          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
+            <h3 className="font-bold text-lg  mb-4">
+              💰 Scope Details Regarding -{formData?.soType || ""}
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {/* <SelectField
+                        {...InputConst[29]}
+                        handleChange={handleChange}
+                        value={formData.status}
+                      /> */}
+
+              <SelectField
+                {...InputConst[32]}
+                handleChange={handleChange}
+                value={formData.service}
+              />
+
+
+              {["DEV", "DEVCOM", "COMMISSIONING"].includes(formData.service) && <SelectField
+                {...InputConst[31]}
+                handleChange={handleChange}
+                value={formData.priority}
+              />}
+
+            </div>
+          </div>
+
+          {/* 🔧 Development & Technical */}
+          {
+            ["DEV", "DEVCOM"].includes(formData.service) && <div className="bg-indigo-50 p-6 rounded-lg border-2 border-cyan-300 shadow-sm">
+              <h3 className="font-bold text-lg text-cyan-800 mb-4">
+                🔧 Development & Technical
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <SelectField
+                  {...InputConst[40]}
+                  value={formData.Development}
+                  handleChange={handleChange}
+                />
+                {["BOTH", "LOGIC"].includes(formData.Development) && (
+                  <SelectField
+                    {...InputConst[59]}
+                    value={formData.LogicPlace}
+                    handleChange={handleChange}
+                  />
+                )}
+
+                {["BOTH", "SCADA"].includes(formData.Development) && (
+                  <SelectField
+                    {...InputConst[60]}
+                    value={formData.ScadaPlace}
+                    handleChange={handleChange}
+                  />
+                )}
+              </div>
+              {
+                ["BOTH", "LOGIC", "SCADA"].includes(formData.Development) &&
+                <div className="pt-5">
+                  <TextArea
+                    {...InputConst[4]}
+                    value={formData.devScope}
+                    handleChange={handleChange}
+                  />
+                </div>
+              }
+            </div>
+          }
+
+          {/* this is the commisioning scope */}
+
+          {
+            ["COMMISSIONING", "DEVCOM"].includes(formData.service) && <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
+
+              <h3 className="font-bold text-lg text-green-800 mb-4">
+                📝 Commissioning
+              </h3>
+
+              {/* Select PO */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <SelectField
+                  {...InputConst[61]}
+                  value={formData.CommisinionPO}
+                  handleChange={handleChange}
+                />
+
+                {
+                  formData?.CommisinionPO === "SEPERATE" && <InputFiled
+                    {...InputConst[65]}
+                    value={formData.LinkedOrderNumber}
+                    handleChange={handleChange}
+                  />
+                }
+              </div>
+
+              {/* Show service scope only if YES */}
+              {formData?.CommisinionPO === "YES" && (
+                <>
+                  <div className="mt-6">
+                    <h4 className="font-semibold text-green-700 mb-3">Commisioning Includes</h4>
+
+                    <div className="flex flex-wrap gap-4">
+
+                      {/* Supervision of Commissioning */}
+                      <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
+                        <input
+                          type="checkbox"
+                          name="Workcommission.commissioning"
+                          checked={formData?.Workcommission?.commissioning}
+                          onChange={handleChange}
+                          className="w-5 h-5 cursor-pointer"
+                        />
+                        <span className="text-gray-800 font-medium text-sm">
+                          Supervision of Commissioning
+                        </span>
+                      </label>
+
+                      {/* Erection */}
+                      <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
+                        <input
+                          type="checkbox"
+                          name="Workcommission.erection"
+                          checked={formData?.Workcommission?.erection}
+                          onChange={handleChange}
+                          className="w-5 h-5 cursor-pointer"
+                        />
+                        <span className="text-gray-800 font-medium text-sm">
+                          Erection
+                        </span>
+                      </label>
+
+                      {/* Instrumentation */}
+                      <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
+                        <input
+                          type="checkbox"
+                          name="Workcommission.instrumentation"
+                          checked={formData?.Workcommission?.instrumentation}
+                          onChange={handleChange}
+                          className="w-5 h-5 cursor-pointer"
+                        />
+                        <span className="text-gray-800 font-medium text-sm">
+                          Instrumentation
+                        </span>
+                      </label>
+
+                    </div>
+                  </div>
+                  <div className="pt-5">
+                    <TextArea
+                      {...InputConst[33]}
+                      handleChange={handleChange}
+                      value={formData.commScope}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          }
+
+          {/* lots and man days info */}
+          {(formData?.CommisinionPO === "YES") && (
+            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
+              <h3 className="font-bold text-lg  mb-4">
+                💰 Service days details
+              </h3>
+
+              <SelectField
+                {...InputConst[63]}
+                value={formData.serviceDaysMention}
+                handleChange={handleChange}
+              />
+              {formData?.serviceDaysMention === "YES" && <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    Service Days in Lots
+                  </label>
+
+                  <div className="relative flex items-center bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
+
+                    <div className="h-8 w-px bg-gray-200"></div>
+
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                        {/* Of Lots */}
+                        <div>
+                          <label className="text-xs text-gray-600 font-medium">Of Lots</label>
+                          <input
+                            type="number"
+                            name="SrvsdaysInLots.lots"
+                            value={formData.SrvsdaysInLots?.lots || ""}
+                            onChange={handleChange}
+                            required={true}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
+                            placeholder="0"
+                            min="0"
+                          />
+                        </div>
+
+                        {/* Of Days */}
+                        <div>
+                          <label className="text-xs text-gray-600 font-medium">Of Days</label>
+                          <input
+                            type="number"
+                            name="SrvsdaysInLots.value"
+                            value={formData.SrvsdaysInLots?.value || ""}
+                            onChange={handleChange}
+                            required={true}
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
+                            placeholder="0"
+                            min="0"
+                          />
+                        </div>
+
+                        {/* Unit Selector */}
+                        <div>
+                          <label className="text-xs text-gray-600 font-medium">Unit</label>
+                          <div className="relative">
+                            <select
+                              name="SrvsdaysInLots.unit"
+                              value={formData.SrvsdaysInLots?.unit || "DAYS"}
+                              onChange={handleChange}
+                              required={true}
+                              className="w-full appearance-none px-4 py-3 border-2 border-gray-200 rounded-xl outline-none cursor-pointer"
+                            >
+                              <option value="DAYS">Days</option>
+                              <option value="MAN-DAYS">Man-Days</option>
+                            </select>
+
+                            <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <InputFiled
+                    {...InputConst[64]}
+                    value={formData.servicedayrate}
+                    handleChange={handleChange}
+                  />
+                </div>
+              </div>}
+            </div>
+          )}
+
+          {
+            ["DEV", "DEVCOM", "COMMISSIONING"].includes(formData.service) && <>
+
+
+              {formData?.CommisinionPO === "YES" && <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
+
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                  <h2 className="text-lg font-bold text-green-800">
+                    📝 Expenses
+                  </h2>
+                </div>
+
+                <div className="mb-6">
+                  <SelectField
+                    {...InputConst[62]}
+                    value={formData.expenseScopeside}
+                    handleChange={handleChange}
+                  />
+                </div>
+                {
+                  formData?.expenseScopeside === "YES" &&
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div className="bg-white/90 p-6 rounded-2xl border-2 border-blue-200 shadow-sm">
+                      <h3 className="text-base font-bold text-blue-700 mb-4 flex items-center gap-2">
+                        <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
+                        SIEPL Scope
+                      </h3>
+                      <div className="space-y-3">
+
+                        <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
+                            Travel
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="companyExpense"
+                              value="travel"
+                              checked={formData.companyExpense?.includes('travel')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* Accommodation */}
+                        <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
+                            Accommodation
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="companyExpense"
+                              value="accommodation"
+                              checked={formData.companyExpense?.includes('accommodation')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* Food */}
+                        <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
+                            Food
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="companyExpense"
+                              value="food"
+                              checked={formData.companyExpense?.includes('food')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* Conveyance */}
+                        <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
+                            Conveyance
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="companyExpense"
+                              value="conveyance"
+                              checked={formData.companyExpense?.includes('conveyance')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* no expenses */}
+                        <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
+                            NO EXPENSES
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="companyExpense"
+                              value="no_expenses"
+                              checked={formData.companyExpense?.includes('no_expenses')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                      </div>
+                    </div>
+
+                    {/* Client Side */}
+                    <div className="bg-white/90 p-6 rounded-2xl border-2 border-green-200 shadow-sm">
+                      <h3 className="text-base font-bold text-green-700 mb-4 flex items-center gap-2">
+                        <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                        Cutomer Scope
+                      </h3>
+                      <div className="space-y-3">
+                        {/* Travel */}
+                        <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
+                            Travel
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="clientExpense"
+                              value="travel"
+                              checked={formData.clientExpense?.includes('travel')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* Accommodation */}
+                        <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
+                            Accommodation
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="clientExpense"
+                              value="accommodation"
+                              checked={formData.clientExpense?.includes('accommodation')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* Food */}
+                        <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
+                            Food
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="clientExpense"
+                              value="food"
+                              checked={formData.clientExpense?.includes('food')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* Conveyance */}
+                        <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
+                            Conveyance
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="clientExpense"
+                              value="conveyance"
+                              checked={formData.clientExpense?.includes('conveyance')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+
+                        {/* no expenses */}
+
+                        <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
+                          <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
+                            NO EXPENSES
+                          </span>
+                          <div className="relative">
+                            <input
+                              type="checkbox"
+                              name="clientExpense"
+                              value="no_expenses"
+                              checked={formData.clientExpense?.includes('no_expenses')}
+                              onChange={handleChange}
+                              className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
+                            />
+                            <svg
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                }
+              </div>}
+            </>
+          }
+
           <div className="bg-indigo-50 p-6 rounded-lg border-2 border-blue-300 shadow-sm">
             <h3 className="font-bold text-lg text-blue-800 mb-4">
               📅 Timeline & Scheduling
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputFiled
-                {...InputConst[21]}
-                isEditable={true}
-                value={formData.orderDate}
-                handleChange={handleChange}
-              />
-              {/* <InputFiled
-                     {...InputConst[1]}
-                     value={formData.duration}
-                     handleChange={handleChange}
-                   /> */}
-
-              <InputFiled
-                {...InputConst[17]}
-                required={false}
-                isEditable={true}
-                value={formData.deleveryDate}
-                handleChange={handleChange}
-              />
-
               <InputFiled
                 {...InputConst[16]}
                 required={false}
@@ -512,481 +1054,6 @@ const UpdateForm = () => {
             </div>
           </div>
 
-          {/* service details */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
-
-            <h3 className="font-bold text-lg text-green-800 mb-4">
-              💰 Service Details
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <SelectField
-                {...InputConst[32]}
-                handleChange={handleChange}
-                value={formData.service}
-              />
-
-              <SelectField
-                {...InputConst[63]}
-                value={formData.serviceDaysMention}
-                handleChange={handleChange}
-              />
-            </div>
-
-            {formData.serviceDaysMention === "YES" && <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-
-              <div className="space-y-2">
-
-                <label className="block text-sm font-semibold text-gray-700">
-                  Service Days in Lots
-                </label>
-
-                <div className="relative flex items-center bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
-
-                  <div className="h-8 w-px bg-gray-200"></div>
-
-                  <div className="space-y-2">
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                      {/* Of Lots */}
-                      <div>
-                        <label className="text-xs text-gray-600 font-medium">Of Lots</label>
-                        <input
-                          type="number"
-                          name="SrvsdaysInLots.lots"
-                          value={formData.SrvsdaysInLots?.lots || ""}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
-                          placeholder="0"
-                          min="0"
-                        />
-                      </div>
-
-                      {/* Of Days */}
-                      <div>
-                        <label className="text-xs text-gray-600 font-medium">Of Days</label>
-                        <input
-                          type="number"
-                          name="SrvsdaysInLots.value"
-                          value={formData.SrvsdaysInLots?.value || ""}
-                          onChange={handleChange}
-                          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none"
-                          placeholder="0"
-                          min="0"
-                        />
-                      </div>
-
-                      {/* Unit Selector */}
-                      <div>
-                        <label className="text-xs text-gray-600 font-medium">Unit</label>
-                        <div className="relative">
-                          <select
-                            name="SrvsdaysInLots.unit"
-                            value={formData.SrvsdaysInLots?.unit || "DAYS"}
-                            onChange={handleChange}
-                            className="w-full appearance-none px-4 py-3 border-2 border-gray-200 rounded-xl outline-none cursor-pointer"
-                          >
-                            <option value="DAYS">Days</option>
-                            <option value="MAN-DAYS">Man-Days</option>
-                          </select>
-
-                          <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                </div>
-
-                <InputFiled
-                  {...InputConst[64]}
-                  value={formData.servicedayrate}
-                  handleChange={handleChange}
-                />
-              </div>
-            </div>}
-
-          </div>
-
-          {formData.service === "COMMISSIONING"
-            &&
-            <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
-
-              <h3 className="font-bold text-lg text-green-800 mb-4">
-                📝 Commissioning
-              </h3>
-
-              {/* Select PO */}
-              <SelectField
-                {...InputConst[61]}
-                value={formData.CommisinionPO}
-                handleChange={handleChange}
-              />
-
-              {/* Show service scope only if YES */}
-              {formData?.CommisinionPO === "YES" && (
-                <div className="mt-6">
-                  <h4 className="font-semibold text-green-700 mb-3">Service Scope</h4>
-
-                  <div className="flex flex-wrap gap-4">
-
-                    {/* Supervision of Commissioning */}
-                    <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
-                      <input
-                        type="checkbox"
-                        name="Workcommission.commissioning"
-                        checked={formData?.Workcommission?.commissioning}
-                        onChange={handleChange}
-                        className="w-5 h-5 cursor-pointer"
-                      />
-                      <span className="text-gray-800 font-medium text-sm">
-                        Supervision of Commissioning
-                      </span>
-                    </label>
-
-                    {/* Erection */}
-                    <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
-                      <input
-                        type="checkbox"
-                        name="Workcommission.erection"
-                        checked={formData?.Workcommission?.erection}
-                        onChange={handleChange}
-                        className="w-5 h-5 cursor-pointer"
-                      />
-                      <span className="text-gray-800 font-medium text-sm">
-                        Erection
-                      </span>
-                    </label>
-
-                    {/* Instrumentation */}
-                    <label className="flex items-center gap-3 p-3 bg-white border rounded-lg cursor-pointer hover:shadow-sm transition">
-                      <input
-                        type="checkbox"
-                        name="Workcommission.instrumentation"
-                        checked={formData?.Workcommission?.instrumentation}
-                        onChange={handleChange}
-                        className="w-5 h-5 cursor-pointer"
-                      />
-                      <span className="text-gray-800 font-medium text-sm">
-                        Instrumentation
-                      </span>
-                    </label>
-
-                  </div>
-                </div>
-              )}
-
-            </div>}
-
-          {/* this is the expesns scope */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
-
-            {/* Header Section */}
-            <div className="flex items-center gap-2 mb-4">
-              <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
-              <h2 className="text-lg font-bold text-green-800">
-                📝 Expenses
-              </h2>
-            </div>
-
-            {/* SelectField Section */}
-            <div className="mb-6">
-              <SelectField
-                {...InputConst[62]}
-                value={formData.expenseScopeside}
-                handleChange={handleChange}
-              />
-            </div>
-            {
-              formData?.expenseScopeside === "YES" &&
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Company Side */}
-                <div className="bg-white/90 p-6 rounded-2xl border-2 border-blue-200 shadow-sm">
-                  <h3 className="text-base font-bold text-blue-700 mb-4 flex items-center gap-2">
-                    <span className="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                    Company Side
-                  </h3>
-                  <div className="space-y-3">
-                    {/* Travel */}
-                    <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
-                        Travel
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="companyExpense"
-                          value="travel"
-                          checked={formData.companyExpense?.includes('travel')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* Accommodation */}
-                    <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
-                        Accommodation
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="companyExpense"
-                          value="accommodation"
-                          checked={formData.companyExpense?.includes('accommodation')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* Food */}
-                    <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
-                        Food
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="companyExpense"
-                          value="food"
-                          checked={formData.companyExpense?.includes('food')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* Conveyance */}
-                    <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
-                        Conveyance
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="companyExpense"
-                          value="conveyance"
-                          checked={formData.companyExpense?.includes('conveyance')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-blue-500 checked:to-blue-600 checked:border-blue-600 hover:border-blue-400 focus:ring-2 focus:ring-blue-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* None */}
-                    <label className="group flex items-center justify-between p-3 bg-gray-50/80 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-gray-700 transition-colors">
-                        None
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="companyExpense"
-                          value="none"
-                          checked={formData.companyExpense?.includes('none')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-gray-500 checked:to-gray-600 checked:border-gray-600 hover:border-gray-400 focus:ring-2 focus:ring-gray-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Client Side */}
-                <div className="bg-white/90 p-6 rounded-2xl border-2 border-green-200 shadow-sm">
-                  <h3 className="text-base font-bold text-green-700 mb-4 flex items-center gap-2">
-                    <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
-                    Client Side
-                  </h3>
-                  <div className="space-y-3">
-                    {/* Travel */}
-                    <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
-                        Travel
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="clientExpense"
-                          value="travel"
-                          checked={formData.clientExpense?.includes('travel')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* Accommodation */}
-                    <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
-                        Accommodation
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="clientExpense"
-                          value="accommodation"
-                          checked={formData.clientExpense?.includes('accommodation')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* Food */}
-                    <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
-                        Food
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="clientExpense"
-                          value="food"
-                          checked={formData.clientExpense?.includes('food')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* Conveyance */}
-                    <label className="group flex items-center justify-between p-3 bg-green-50/50 border border-green-100 rounded-xl cursor-pointer hover:bg-green-100/60 hover:border-green-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-green-700 transition-colors">
-                        Conveyance
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="clientExpense"
-                          value="conveyance"
-                          checked={formData.clientExpense?.includes('conveyance')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-green-500 checked:to-green-600 checked:border-green-600 hover:border-green-400 focus:ring-2 focus:ring-green-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-
-                    {/* None */}
-                    <label className="group flex items-center justify-between p-3 bg-gray-50/80 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
-                      <span className="font-medium text-gray-800 text-sm group-hover:text-gray-700 transition-colors">
-                        None
-                      </span>
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          name="clientExpense"
-                          value="none"
-                          checked={formData.clientExpense?.includes('none')}
-                          onChange={handleChange}
-                          className="peer w-5 h-5 appearance-none rounded-md border-2 border-gray-300 bg-white cursor-pointer transition-all checked:bg-linear-to-br checked:from-gray-500 checked:to-gray-600 checked:border-gray-600 hover:border-gray-400 focus:ring-2 focus:ring-gray-200"
-                        />
-                        <svg
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-            }
-          </div>
 
           {/* 👷 Project Status & Engineer Assignment */}
           <div className="bg-indigo-50 p-6 rounded-lg border-2 border-orange-300 shadow-sm">
@@ -1014,7 +1081,7 @@ const UpdateForm = () => {
           {/* 🔧 Development & Technical */}
           <div className="bg-indigo-50 p-6 rounded-lg border-2 border-cyan-300 shadow-sm">
             <h3 className="font-bold text-lg text-cyan-800 mb-4">
-              🔧 Development & Technical
+              🔧 Development & Technical Track
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1033,32 +1100,6 @@ const UpdateForm = () => {
                 value={formData.swphone}
                 handleChange={handleChange}
               />
-              <SelectField
-                {...InputConst[42]}
-                value={formData.isMailSent}
-                handleChange={handleChange}
-              />
-              <SelectField
-                {...InputConst[40]}
-                value={formData.Development}
-                handleChange={handleChange}
-              />
-              {["BOTH", "LOGIC"].includes(formData.Development) && (
-                <SelectField
-                  {...InputConst[59]}
-                  value={formData.LogicPlace}
-                  handleChange={handleChange}
-                />
-              )}
-
-              {["BOTH", "SCADA"].includes(formData.Development) && (
-                <SelectField
-                  {...InputConst[60]}
-                  value={formData.ScadaPlace}
-                  handleChange={handleChange}
-                />
-              )}
-
               <SelectField
                 {...InputConst[42]}
                 value={formData.isMailSent}

@@ -98,7 +98,7 @@ export const updateRecordsDocs = async (req, res) => {
         project[key] = otherData[key];
       }
     });
-    
+
     const mergeNested = (target = {}, source) => {
       if (!source) return target;
 
@@ -1341,6 +1341,102 @@ export const UrgentProjectAction = async (req, res) => {
   const search = req.query.search || "";
 
   try {
+    const pipeline = [];
+    if (search) {
+      pipeline.push({
+        $match: {
+          jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
+        },
+      });
+    }
+    pipeline.push({
+      $lookup: {
+        from: "orders",
+        localField: "OrderMongoId",
+        foreignField: "_id",
+        as: "OrderMongoId",
+      },
+    });
+
+    pipeline.push({
+      $unwind: {
+        path: "$OrderMongoId",
+        preserveNullAndEmptyArrays: true,
+      },
+    });
+    pipeline.push({
+      $addFields: {
+        deliveryDateObj: "$OrderMongoId.deleveryDate",
+        visitDateObj: "$visitDate",
+      },
+    });
+
+    pipeline.push({
+      $addFields: {
+        compareDate: {
+          $ifNull: ["$visitDateObj", "$deliveryDateObj"],
+        },
+      },
+    });
+    const today = new Date();
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - 180);
+
+    const endDate = new Date(today);
+    endDate.setDate(today.getDate() + 30);
+    pipeline.push({
+      $match: {
+        status: { $ne: "completed" },
+        $or: [
+          { EngineerDetails: { $exists: false } },
+          { EngineerDetails: { $size: 0 } },
+        ],
+      },
+    });
+    pipeline.push({
+      $match: {
+        $or: [
+          { compareDate: { $gte: startDate, $lte: endDate } },
+          { visitDateObj: { $gte: startDate, $lte: endDate } },
+        ],
+      },
+    });
+
+    pipeline.push({
+      $sort: { compareDate: -1, updatedAt: -1, createdAt: -1 },
+    });
+
+    pipeline.push({
+      $project: {
+        _id: 1,
+        projectName: 1,
+        jobNumber: 1,
+        status: 1,
+        visitDate: 1,
+        Development: 1,
+        deleveryDate: "$OrderMongoId.deleveryDate",
+        OrderMongoId: "$OrderMongoId._id",
+      },
+    });
+
+    const data = await ProjectModel.aggregate(pipeline);
+
+    return res.json({
+      success: true,
+      message: "Data fetched successfully",
+      totalItems: data.length,
+      data,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
+export const UrgentProjectActionold = async (req, res) => {
+  const search = req.query.search || "";
+
+  try {
     const filter = {};
     if (search) {
       filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
@@ -1461,23 +1557,31 @@ export const allProjectsFetch = async (req, res) => {
       filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
     }
 
-    const data = await ProjectModel.find(filter, {
+    const projects = await ProjectModel.find(filter, {
       projectName: 1,
       status: 1,
       jobNumber: 1,
-      deleveryDate: 1,
       visitDate: 1,
-      engineerName: 1,
-      updatedAt: 1,
-      createdAt: 1,
       OrderMongoId: 1,
-      PlanDetails: 1,
-      DevelopmentDetials: 1,
-      isPlanRecord: 1,
-    }).sort({
-      updatedAt: -1,
-      createdAt: -1,
-    });
+    })
+      .populate({
+        path: "OrderMongoId",
+        select: "deleveryDate",
+      })
+      .sort({
+        updatedAt: -1,
+        createdAt: -1,
+      });
+
+    const data = projects.map((p) => ({
+      _id: p._id,
+      projectName: p.projectName,
+      jobNumber: p.jobNumber,
+      status: p.status,
+      visitDate: p.visitDate || null,
+      deleveryDate: p.OrderMongoId?.deleveryDate || null,
+      OrderMongoId: p.OrderMongoId?._id || null,
+    }));
 
     return res.json({
       success: true,
@@ -1502,84 +1606,53 @@ export const allProjectsFetchDev = async (req, res) => {
     if (search) {
       filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
     }
+
     const projectSelectFields = {
+      jobNumber: 1,
       projectName: 1,
       status: 1,
-      jobNumber: 1,
-      deleveryDate: 1,
       visitDate: 1,
-      engineerName: 1,
+      Development: 1,
       createdAt: 1,
       updatedAt: 1,
       OrderMongoId: 1,
-      DevelopmentSetcion: 1,
+      isPlanRecord: 1,
+      service: 1,
       Development: 1,
       LogicPlace: 1,
       ScadaPlace: 1,
       PlanDetails: 1,
-      DevelopmentDetials: 1,
-      isPlanRecord: 1,
-
-      entityType: 1,
-      soType: 1,
-      client: 1,
-      priority: 1,
-      service: 1,
-      technicalEmail: 1,
-      bookingDate: 1,
-      name: 1,
-      email: 1,
-      phone: 1,
-      endUser: 1,
-      orderNumber: 1,
-      orderDate: 1,
-      SrvsdaysInPo: 1,
-      SrvsdaysInLots: 1,
-      serviceDaysMention: 1,
-      manDaysRate: 1,
-      servicedayrate: 1,
-      serviceVal: 1,
-      startDate: 1,
-      endDate: 1,
-      description: 1,
-      location: 1,
-      duration: 1,
-      workScope: 1,
-      expenseScope: 1,
-      ContactPersonName: 1,
-      ContactPersonNumber: 1,
-      StartChecklisttId: 1,
-      workStatusRecords: 1,
-      EndChecklisttId: 1,
-      OrderSheet: 1,
-      requestDate: 1,
-      actualVisitDuration: 1,
-      orderValueSupply: 1,
-      orderValueService: 1,
-      orderValueTotal: 1,
-      netOrderValue: 1,
-      poReceived: 1,
-      actualDeleveryDate: 1,
-      amndReqrd: 1,
-      CommisinionPO: 1,
-      Docscommission: 1,
-      expenseScopeside: 1,
-      companyExpense: 1,
-      clientExpense: 1,
+      devScope: 1,
+      commScope: 1,
     };
 
-    const data = await ProjectModel.find(filter, projectSelectFields).sort({
-      updatedAt: -1,
-      createdAt: -1,
-    });
+    const projects = await ProjectModel.find(filter, projectSelectFields)
+      .populate({
+        path: "OrderMongoId",
+        select: `
+      -paymentAdvance
+      -paymentPercent1 -paymentType1 -paymentType1other -paymentAmount1 -payemntCGBG1 -paymentrecieved1
+      -paymentPercent2 -paymentType2 -paymentType2other -paymentAmount2 -payemntCGBG2 -paymentrecieved2
+      -paymentPercent3 -paymentType3 -paymentType3other -paymentAmount3 -payemntCGBG3 -paymentrecieved3
+      -retentionYesNo -retentionPercent -retentionAmount -retentionDocs -retentinoDocsOther 
+      -retentionType -retentionPeriod
+      -__v
+    `,
+      })
+      .sort({
+        updatedAt: -1,
+        createdAt: -1,
+      });
+
+    console.log(projects);
+
     return res.json({
       success: true,
       message: "Data fetched successfully",
-      totalItems: data.length,
-      data,
+      totalItems: projects.length,
+      data: projects,
     });
   } catch (err) {
-    console.error(err);
     return res.status(500).json({ success: false, error: "Server error" });
   }
 };

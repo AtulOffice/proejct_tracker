@@ -346,16 +346,17 @@ const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
               className="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:border-gray-500 focus:outline-none transition-colors bg-white"
             />
           </div>
-          <div>
+          <div className="cursor-not-allowed!">
             <label className="block text-sm font-medium text-gray-800 mb-2">
               Submitted By
             </label>
             <input
               type="text"
+              disabled={true}
               placeholder="Enter name"
               value={item.submittedBy || ""}
               onChange={(e) => updateField(section, field, "submittedBy", e.target.value)}
-              className="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:border-gray-500 focus:outline-none transition-colors bg-white placeholder-gray-400"
+              className="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:border-gray-500 focus:outline-none transition-colors bg-white placeholder-gray-400 cursor-not-allowed"
             />
           </div>
         </div>
@@ -478,9 +479,10 @@ const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
             <input
               type="text"
               placeholder="Enter name"
+              disabled={true}
               value={item.submittedBy || ""}
               onChange={(e) => updateField(section, field, "submittedBy", e.target.value)}
-              className="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:border-gray-500 focus:outline-none transition-colors bg-white placeholder-gray-400"
+              className="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:border-gray-500 focus:outline-none transition-colors bg-white placeholder-gray-400 cursor-not-allowed"
             />
           </div>
 

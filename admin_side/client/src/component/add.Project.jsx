@@ -35,10 +35,9 @@ const InputForm = () => {
         billStatus: selectData.billingStatus || "",
         bill: selectData.orderValueTotal || "",
         dueBill: selectData.orderValueTotal || "",
-        bookingDate: selectData.bookingDate,
-        name: selectData.name || "",
-        technicalEmail: selectData.technicalEmail || "",
-        phone: selectData.phone || "",
+        swname: selectData.name || "",
+        swtechnicalEmail: selectData.technicalEmail || "",
+        swphone: selectData.phone || "",
       }));
       setDocs(docsVal)
     }

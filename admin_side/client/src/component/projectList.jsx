@@ -6,7 +6,7 @@ import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import ProjectTableAll from "./projectListTable";
 
-const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editType }) => {
+const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
   const { toggle } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
@@ -71,7 +71,8 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editTy
   }
 
   return (
-    <div className="max-w-8xl h-full lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+
       <FilterCompo
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -84,10 +85,7 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editTy
         EngHandle={true}
       />
 
-      <div
-        layout="true"
-        className="w-full min-h-[56vh] h-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200"
-      >
+      <div className="flex-1 w-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200">
         {filteredProjects.length > 0 ? (
           <ProjectTableAll
             data={filteredProjects}
@@ -95,13 +93,14 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editTy
             isEdit={isEdit}
             onEditFun={onEditFun}
             printTitle={printTitle}
-            editType={editType}
           />
         ) : (
           <Notfound />
         )}
       </div>
+
     </div>
+
   );
 };
 

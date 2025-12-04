@@ -30,7 +30,7 @@ const FormField = ({
                   ["Job Number", selectData.jobNumber],
                   ["Entity Type", selectData.entityType],
                   ["SO Type", selectData.soType],
-                  ["Booking Date", formData.bookingDate],
+                  ["Booking Date", selectData.bookingDate],
                   ["Client Name", selectData.client],
                   ["End User", selectData.endUser],
                   ["Site Location", selectData.site],
@@ -421,7 +421,7 @@ const FormField = ({
                       SIEPL Scope
                     </h3>
                     <div className="space-y-3">
-                      
+
                       <label className="group flex items-center justify-between p-3 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100/60 hover:border-blue-300 hover:shadow-md transition-all duration-200">
                         <span className="font-medium text-gray-800 text-sm group-hover:text-blue-700 transition-colors">
                           Travel
