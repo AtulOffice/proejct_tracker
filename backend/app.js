@@ -28,8 +28,10 @@ app.use(express.json({ limit: "110mb" }));
 
 const corsOptions = {
   origin: [
-    `${process.env.FRONT_PORT}`
-    , `${process.env.ENG_PORT}`,`http://localhost:5173`
+    `${process.env.FRONT_PORT}`,
+    `${process.env.ENG_PORT}`,
+    `http://localhost:5173`,
+    `http://localhost:5174`,
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -68,6 +70,13 @@ app.use("/api/v1/imageUploader", ImageUploadRouter);
 app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/startCheck", StartRouter);
 app.use("/api/v1/endCheck", EndRouter);
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`,
+  });
+});
 
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });

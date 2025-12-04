@@ -1,82 +1,3 @@
-// export const formval = {
-//   projectName: "",
-//   Development: "",
-//   engineerName: "",
-//   entityType: "SI DELHI",
-//   finalMomnumber: "",
-//   actualStartDate: "",
-//   actualEndDate: "",
-//   soType: "PROJECT",
-//   client: "",
-//   jobNumber: "",
-//   bill: "",
-//   dueBill: "",
-//   billStatus: "N/A",
-//   visitDate: "",
-//   visitendDate: "",
-//   momDate: "",
-//   momsrNo: "",
-//   endUser: "",
-//   orderNumber: "",
-//   poReceived: "",
-//   daysspendsite: "",
-//   startDate: "",
-//   endDate: "",
-//   commScope: "",
-//   location: "",
-//   status: "",
-//   priority: "",
-//   duration: "",
-//   service: "",
-//   devScope: "",
-//   expenseScope: "",
-//   supplyStatus: "DISPATCHED",
-//   requestDate: "",
-//   StartChecklist: "N/A",
-//   EndChecklist: "N/A",
-//   actualVisitDuration: "",
-//   ContactPersonNumber: "",
-//   ContactPersonName: "",
-//   ExpensSubmission: "N/A",
-//   BackupSubmission: "N/A",
-//   technicalEmail: "",
-//   isMailSent: "NO",
-//   isDevlopmentApproved: "NO",
-//   DevelopmentSetcion: "",
-//   OrderMongoId: "",
-//   bookingDate: "",
-//   name: "",
-//   email: "",
-//   phone: "",
-//   orderValueSupply: "",
-//   orderValueService: "",
-//   orderValueTotal: "",
-//   netOrderValue: "",
-//   porecieved: "",
-//   orderDate: "",
-//   deleveryDate: "",
-//   actualDeleveryDate: "",
-//   amndReqrd: "",
-//   LogicPlace: "",
-//   ScadaPlace: "",
-//   expenseScopeside: "",
-//   serviceDaysMention: "",
-//   SrvsdaysInLots: {
-//     lots: 0,
-//     value: 0,
-//     unit: "DAYS"
-//   },
-//   servicedayrate: 0,
-//   companyExpense: [],
-//   clientExpense: [],
-//   Workcommission: {
-//     commissioning: false,
-//     erection: false,
-//     instrumentation: false,
-//   },
-//   CommisinionPO: "",
-//   LinkedOrderNumber: ""
-// };
 
 export const formval = {
   projectName: "",
@@ -214,35 +135,6 @@ export const fields = {
 
 }
 
-// export const docsVal = {
-//   internalDocuments: {
-//     panelGA: "",
-//     wiringDiagram: "",
-//     ioList: "",
-//     systemConfiguration: "",
-//     cableSchedule: "",
-//     logicSchedule: "",
-//     logicBackup: "",
-//     scada: "",
-//   },
-//   customerDocuments: {
-//     pAndIDs: "",
-//     controlPhilosophy: "",
-//     anyOther: "",
-//   },
-//   dispatchDocuments: {
-//     packingList: "",
-//     deliveryChallan: "",
-//     anyOther: "",
-//   },
-//   completionDocuments: {
-//     asBuiltDrawings: "",
-//     finalLogicBackup: "",
-//     finalScadaBackup: "",
-//     expenseSettlement: "",
-//   },
-// };
-
 export const docsVal = {
   CustomerDevDocuments: {
     pAndIDs: { value: "", date: null },
@@ -363,8 +255,9 @@ export const docsVal = {
       remarks: "",
     },
   },
-  SIEVPLDevDocumentsRemarks:"",
-  CustomerDevDocumentsRemarks:""
+  SIEVPLDevDocumentsRemarks: "",
+  CustomerDevDocumentsRemarks: "",
+  lotval: 1
 };
 
 

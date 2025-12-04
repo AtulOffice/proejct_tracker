@@ -172,7 +172,7 @@ export const updateRecordsDocs = async (req, res) => {
     project.swphone = otherData?.phone;
     project.swtechnicalEmail = otherData?.technicalEmail;
     project.swname = otherData?.name;
-    
+
     const dataval = await project.save();
     return res.status(200).json({
       success: true,
@@ -903,7 +903,22 @@ export const findrecord = async (req, res) => {
 export const findrecordbyId = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await ProjectModel.findById(id);
+    const data = await ProjectModel.findById(id).populate(
+      "OrderMongoId",
+      ` jobNumber entityType soType bookingDate client endUser site actualDeleveryDate
+    orderNumber orderDate deleveryDate name technicalEmail phone amndReqrd
+    orderValueSupply orderValueService orderValueTotal cancellation
+    paymentAdvance paymentPercent1 paymentType1 paymentType1other paymentAmount1
+    payemntCGBG1 paymentrecieved1 paymentPercent2 paymentType2 paymentType2other
+    paymentAmount2 payemntCGBG2 paymentrecieved2 paymentPercent3 paymentType3
+    paymentType3other paymentAmount3 payemntCGBG3 paymentrecieved3 poReceived
+    status creditDays dispatchStatus billPending billingStatus jobDescription remarks
+    concerningSalesManager ProjectDetails isSaveInProject retentionYesNo retentionPercent
+    retentionAmount retentionDocs retentinoDocsOther retentionType retentionPeriod
+    invoiceTerm invoicePercent mileStone invoicemileStoneOther createdBy updatedBy
+    createdAt updatedAt `
+    );
+
     return res.status(200).json({
       success: true,
       message: "data fetch successfully",

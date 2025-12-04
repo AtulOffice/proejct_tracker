@@ -19,9 +19,65 @@ const UpdateForm = () => {
   const location = useLocation();
   const { setToggle, setToggleDev } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState(formval);
+  const [formData, setFormData] = useState({
+    status: "",
+    service: "",
+    priority: "",
+    Development: "",
+    LogicPlace: "",
+    ScadaPlace: "",
+    devScope: "",
+    CommisinionPO: "",
+    LinkedOrderNumber: "",
+    Workcommission: {
+      commissioning: false,
+      erection: false,
+      instrumentation: false,
+    },
+    commScope: "",
+    serviceDaysMention: "",
+    SrvsdaysInLots: {
+      lots: 0,
+      value: 0,
+      unit: "DAYS"
+    },
+    servicedayrate: 0,
+    expenseScopeside: "",
+    companyExpense: [],
+    clientExpense: [],
+
+    engineerName: "",
+    finalMomnumber: "",
+    actualStartDate: "",
+    actualEndDate: "",
+    bill: "",
+    dueBill: "",
+    billStatus: "",
+    visitDate: "",
+    visitendDate: "",
+    momDate: "",
+    momsrNo: "",
+    daysspendsite: "",
+    startDate: "",
+    endDate: "",
+    duration: "",
+    expenseScope: "",
+    supplyStatus: "",
+    requestDate: "",
+    StartChecklist: "",
+    EndChecklist: "",
+    actualVisitDuration: "",
+    ContactPersonNumber: "",
+    ContactPersonName: "",
+    ExpensSubmission: "",
+    BackupSubmission: "",
+    isMailSent: "",
+    isDevlopmentApproved: "",
+    DevelopmentSetcion: "",
+  });
   const navigate = useNavigate();
   const [engineerData, setEngineerData] = useState([]);
+  const [orderDetails, setOrderDetails] = useState()
   const [Docs, setDocs] = useState(docsVal);
 
   useEffect(() => {
@@ -32,18 +88,20 @@ const UpdateForm = () => {
           { withCredentials: true }
         );
         if (res?.data?.data) {
-          const formattedData = { ...res.data.data };
-          setFormData((prev) => ({ ...prev, ...formattedData }));
+          const { OrderMongoId, ...otherData } = res.data.data;
+          setOrderDetails(OrderMongoId)
+          setFormData((prev) => ({ ...prev, ...otherData }));
           setDocs((prev) => ({
             ...prev,
-            CustomerDevDocuments: formattedData?.CustomerDevDocuments,
-            SIEVPLDevDocuments: formattedData?.SIEVPLDevDocuments,
-            swDevDocumentsforFat: formattedData?.swDevDocumentsforFat,
-            inspectionDocuments: formattedData?.inspectionDocuments,
-            dispatchDocuments: formattedData?.dispatchDocuments,
-            PostCommisionDocuments: formattedData?.PostCommisionDocuments,
-            SIEVPLDevDocumentsRemarks: formattedData?.SIEVPLDevDocumentsRemarks,
-            CustomerDevDocumentsRemarks: formattedData?.CustomerDevDocumentsRemarks
+            CustomerDevDocuments: otherData?.CustomerDevDocuments,
+            SIEVPLDevDocuments: otherData?.SIEVPLDevDocuments,
+            swDevDocumentsforFat: otherData?.swDevDocumentsforFat,
+            inspectionDocuments: otherData?.inspectionDocuments,
+            dispatchDocuments: otherData?.dispatchDocuments,
+            PostCommisionDocuments: otherData?.PostCommisionDocuments,
+            SIEVPLDevDocumentsRemarks: otherData?.SIEVPLDevDocumentsRemarks,
+            CustomerDevDocumentsRemarks: otherData?.CustomerDevDocumentsRemarks,
+            lotval: otherData?.lotval,
           }));
         }
       } catch (err) {
@@ -170,11 +228,7 @@ const UpdateForm = () => {
       }));
 
       return;
-    } <InputFiled
-      {...InputConst[17]}
-      value={formData.deleveryDate}
-      handleChange={handleChange}
-    />
+    }
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -277,255 +331,107 @@ const UpdateForm = () => {
     <div className="transition-all duration-300 pt-16 min-h-screen bg-linear-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-indigo-900 drop-shadow-md">
-          {formData?.projectName.toUpperCase()}
+          {orderDetails?.client.toUpperCase()}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
 
-          {/* 📋 Basic Project Information */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-300 shadow-sm">
-            <h3 className="font-bold text-lg text-indigo-800 mb-4">
-              📋 Basic Project Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputFiled
-                {...InputConst[7]}
-                isEditable={true}
-                value={formData.jobNumber}
-                handleChange={handleChange}
-              />
-              <SelectField
-                {...InputConst[28]}
-                value={formData.entityType}
-                isEditable={true}
-                handleChange={handleChange}
-              />
-              <SelectField
-                {...InputConst[27]}
-                value={formData.soType}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[45]}
-                isEditable={true}
-                value={formData.bookingDate}
-                handleChange={handleChange}
-              />
-
-              <InputFiled
-                {...InputConst[46]}
-                isEditable={true}
-                value={formData.name}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[47]}
-                isEditable={true}
-                value={formData.email}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[48]}
-                isEditable={true}
-                value={formData.phone}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[49]}
-                isEditable={true}
-                value={formData.orderValueSupply}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[50]}
-                isEditable={true}
-                value={formData.orderValueService}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[51]}
-                isEditable={true}
-                value={formData.orderValueTotal}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[52]}
-                isEditable={true}
-                value={formData.netOrderValue}
-                handleChange={handleChange}
-              />
-
-              <InputFiled
-                {...InputConst[5]}
-                isEditable={true}
-                value={formData.client}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[6]}
-                isEditable={true}
-                value={formData.endUser}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[22]}
-                isEditable={true}
-                value={formData.location}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[8]}
-                isEditable={true}
-                value={formData.orderNumber}
-                handleChange={handleChange}
-              />
-
-              <SelectField
-                {...InputConst[31]}
-                handleChange={handleChange}
-                value={formData.priority}
-              />
-
-              <InputFiled
-                {...InputConst[41]}
-                value={formData.technicalEmail}
-                handleChange={handleChange}
-              />
+          <div className="bg-linear-to-br from-indigo-50 to-indigo-100 p-5 rounded-xl border border-indigo-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="flex items-center mb-4 border-b border-indigo-200 pb-3">
+              <span className="text-2xl mr-2">📋</span>
+              <h3 className="font-bold text-lg text-indigo-900">Basic Order Information</h3>
             </div>
-          </div>
-          {/* order details */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-300 shadow-sm">
-            <h3 className="font-bold text-lg text-indigo-800 mb-4">
-              📋 Order value
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-              <InputFiled
-                {...InputConst[49]}
-                isEditable={true}
-                value={formData.orderValueSupply}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[50]}
-                isEditable={true}
-                value={formData.orderValueService}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[51]}
-                isEditable={true}
-                value={formData.orderValueTotal}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[52]}
-                isEditable={true}
-                value={formData.netOrderValue}
-                handleChange={handleChange}
-              />
-
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {[
+                ["Job Number", orderDetails?.jobNumber],
+                ["Entity Type", orderDetails?.entityType],
+                ["SO Type", orderDetails?.soType],
+                ["Booking Date", orderDetails?.bookingDate],
+                ["Client Name", orderDetails?.client],
+                ["End User", orderDetails?.endUser],
+                ["Site Location", orderDetails?.site],
+                ["SIEPL Acct. Mgr. Email ", orderDetails?.concerningSalesManager],
+                ["Client Tech Person Name", orderDetails?.name],
+                ["Client Tech Person Email", orderDetails?.technicalEmail],
+                ["Client Tech Person Ph", orderDetails?.phone],
+              ].map(([label, value], i) => (
+                <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-indigo-100 hover:border-indigo-300 transition-all">
+                  <p className="text-indigo-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+                  <p className="font-bold text-gray-900 text-base truncate">{value || "-"}</p>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* po details */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-indigo-300 shadow-sm">
-            <h3 className="font-bold text-lg text-indigo-800 mb-4">
-              📋 Po details
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-linear-to-br from-emerald-50 to-green-100 p-5 rounded-xl border border-emerald-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="flex items-center mb-4 border-b border-emerald-200 pb-3">
+              <span className="text-2xl mr-2">💰</span>
+              <h3 className="font-bold text-lg text-emerald-900">Order Value</h3>
+            </div>
 
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                ["Supply Value", orderDetails?.orderValueSupply],
+                ["Service Value", orderDetails?.orderValueService],
+              ].map(([label, value], i) => (
+                <div key={i} className="bg-white/70 backdrop-blur-sm p-4 rounded-lg border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:scale-105 transform">
+                  <p className="text-emerald-600 text-xs font-semibold uppercase tracking-wide mb-2">{label}</p>
+                  <p className="font-bold text-gray-900 text-xl">₹ {value || "0"}</p>
+                </div>
+              ))}
 
-              <SelectField
-                {...InputConst[57]}
-                isEditable={true}
-                value={formData.poReceived}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[53]}
-                isEditable={true}
-                value={formData.orderNumber}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[54]}
-                isEditable={true}
-                value={formData.orderDate}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[55]}
-                isEditable={true}
-                value={formData.deleveryDate}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[56]}
-                isEditable={true}
-                value={formData.actualDeleveryDate}
-                handleChange={handleChange}
-              />
-              <SelectField
-                {...InputConst[58]}
-                isEditable={true}
-                value={formData.amndReqrd}
-                handleChange={handleChange}
-              />
+              <div className="bg-linear-to-br from-emerald-100 to-emerald-200 p-4 rounded-lg border-2 border-emerald-400 shadow-md">
+                <p className="text-emerald-700 text-xs font-semibold uppercase tracking-wide mb-2">Total Value</p>
+                <p className="font-extrabold text-emerald-900 text-xl">
+                  ₹ {orderDetails?.orderValueTotal || "0"}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* 👥 Client & Contact Details */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-purple-300 shadow-sm">
-            <h3 className="font-bold text-lg text-purple-800 mb-4">
-              👥 Client & Contact Details
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-linear-to-br from-purple-50 to-purple-100 p-5 rounded-xl border border-purple-300 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="flex items-center mb-4 border-b border-purple-200 pb-3">
+              <span className="text-2xl mr-2">📦</span>
+              <h3 className="font-bold text-lg text-purple-900">PO Details</h3>
+            </div>
 
-              <InputFiled
-                {...InputConst[35]}
-                value={formData.ContactPersonName}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[36]}
-                value={formData.ContactPersonNumber}
-                handleChange={handleChange}
-              />
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">PO Received</p>
+                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${orderDetails?.poReceived === "Yes" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                  {orderDetails?.poReceived || "-"}
+                </span>
+              </div>
+
+              {[
+                ["Order Number", orderDetails?.orderNumber],
+                ["Order Date", orderDetails?.orderDate],
+                ["PO Delivery Date", orderDetails?.deleveryDate],
+              ].map(([label, value], i) => (
+                <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                  <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+                  <p className="font-bold text-gray-900 text-base">{value || "-"}</p>
+                </div>
+              ))}
+
+              <div className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+                <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">Amendment Reqrd</p>
+                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${orderDetails?.amndReqrd === "Yes" ? "bg-orange-100 text-orange-700" : "bg-gray-100 text-gray-700"}`}>
+                  {orderDetails?.amndReqrd || "-"}
+                </span>
+              </div>
             </div>
           </div>
 
-
-
-          {/* 💰 Billing Information */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-green-300 shadow-sm">
-            <h3 className="font-bold text-lg text-green-800 mb-4">
-              💰 Billing Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputFiled
-                {...InputConst[9]}
-                value={formData.bill}
-                handleChange={handleChange}
-              />
-              <InputFiled
-                {...InputConst[10]}
-                value={formData.dueBill}
-                handleChange={handleChange}
-              />
-              <SelectField
-                {...InputConst[25]}
-                value={formData.billStatus}
-                handleChange={handleChange}
-              />
+          {[["Target Delivery", orderDetails?.actualDeleveryDate],
+          ].map(([label, value], i) => (
+            <div key={i} className="bg-white/60 backdrop-blur-sm p-3 rounded-lg border border-purple-100 hover:border-purple-300 transition-all">
+              <p className="text-purple-600 text-xs font-semibold uppercase tracking-wide mb-1">{label}</p>
+              <p className="font-bold text-gray-900 text-base">{value || "-"}</p>
             </div>
-          </div>
+          ))}
 
-
-
-
-          
-
-          {/* 📅 Timeline & Scheduling */}
           <div className="bg-indigo-50 p-6 rounded-lg border-2 border-blue-300 shadow-sm">
             <h3 className="font-bold text-lg text-blue-800 mb-4">
               📅 Timeline & Scheduling
@@ -1221,9 +1127,7 @@ const UpdateForm = () => {
             </div>
           </div>
 
-
-          {/* 📎 Documents */}
-          <DocumentsSection Docs={Docs} setDocs={setDocs} />
+          <DocumentsSection Docs={Docs} setDocs={setDocs} isDisable={true} />
 
           <div className="flex justify-center mt-8">
             <button

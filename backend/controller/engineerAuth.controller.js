@@ -5,47 +5,7 @@ import crypto from "crypto";
 import EngineerReocord from "../models/engineers..model.js";
 import { sendMail } from "../utils/mailer.js";
 import { createAccessToken, createRefreshToken } from "../utils/utils.js";
-
-// export const addPasswordsToEngineers = async (req, res) => {
-//   try {
-//     const engineersWithoutPassword = await EngineerReocord.find({
-//       $or: [{ password: { $exists: false } }, { password: null }],
-//     });
-
-//     if (engineersWithoutPassword.length === 0) {
-//       return res.status(200).json({
-//         success: true,
-//         message: "All engineers already have passwords",
-//       });
-//     }
-
-//     for (const engineer of engineersWithoutPassword) {
-//       const plainPassword = "Default@123";
-//       const hashedPassword = await bcrypt.hash(plainPassword, 12);
-//       if (!engineer.email || engineer.email.trim() === "") {
-//         const cleanName = engineer.name
-//           ? engineer.name.replace(/\s+/g, "").toLowerCase().slice(0, 4)
-//           : "user";
-//         const uniqueSuffix = Math.floor(Math.random() * 10000);
-//         engineer.email = `${cleanName}${uniqueSuffix}@energyventures.co.in`;
-//       }
-//       engineer.password = hashedPassword;
-//       await engineer.save();
-
-//       console.log(`✅ Updated: ${engineer.name} | ${engineer.email}`);
-//     }
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "✅ Passwords (and missing emails) added successfully.",
-//     });
-//   } catch (err) {
-//     console.error("❌ Error updating passwords:", err);
-//     return res
-//       .status(500)
-//       .json({ success: false, message: "Server error", error: err.message });
-//   }
-// };
+import { otpHtml } from "../utils/html.js";
 
 export const loginEngineer = async (req, res) => {
   try {

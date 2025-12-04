@@ -74,7 +74,7 @@ const LoginPage = () => {
     try {
       setIsOtopLoading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/forgetuser`,
+        `${import.meta.env.VITE_API_URL}/engineerauth/forgetuser`,
         { email: generatePassword?.email },
         { withCredentials: true }
       );
@@ -97,7 +97,7 @@ const LoginPage = () => {
     try {
       setIsOtopLoading(true);
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/resetuser`,
+        `${import.meta.env.VITE_API_URL}/engineerauth/resetuser`,
         {
           email: generatePassword?.email,
           otp: otp ? otp.join("") : "",

@@ -77,9 +77,9 @@ ProjectRouter.get("/fetch", refreshTokenMiddleware, authenticate, findrecord);
 
 ProjectRouter.get(
   "/fetch/:id",
-  refreshTokenMiddleware,
-  authenticate,
-  authorizeRole("admin", "reception"),
+  // refreshTokenMiddleware,
+  // authenticate,
+  // authorizeRole("admin", "reception"),
   findrecordbyId
 );
 ProjectRouter.get(

@@ -13,7 +13,7 @@ const FIELD_TYPES = {
 };
 
 
-const DocumentsSection = ({ Docs, setDocs }) => {
+const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
   const createDispatchPhase = (i) => ({
     phaseIndex: i + 1,
     packingList: { value: "", date: null },
@@ -115,6 +115,7 @@ const DocumentsSection = ({ Docs, setDocs }) => {
     setDocs((prev) => ({
       ...prev,
       dispatchDocuments: updatedPhases,
+      lotval: c,
     }));
   };
 
@@ -615,13 +616,21 @@ const DocumentsSection = ({ Docs, setDocs }) => {
             <div className="relative">
               <select
                 onChange={(e) => handleLotsChange(e.target.value)}
-                className="w-full appearance-none border-2 border-gray-300 bg-white text-gray-800 rounded-lg px-4 py-3 pr-10 font-medium shadow-sm hover:border-gray-400 focus:border-gray-500 focus:ring-2 focus:ring-gray-200 focus:outline-none transition-all cursor-pointer"
+                value={Docs.lotval}
+                disabled={isDisable}
+                className={`w-full appearance-none border-2 rounded-lg px-4 py-3 pr-10 font-medium shadow-sm transition-all 
+    ${isDisable
+                    ? "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed opacity-60"
+                    : "bg-white text-gray-800 border-gray-300 hover:border-gray-400 focus:border-gray-500 focus:ring-2 focus:ring-gray-200 cursor-pointer"
+                  }`
+                }
               >
                 <option value="1">1 Lot</option>
                 <option value="2">2 Lots</option>
                 <option value="3">3 Lots</option>
                 <option value="4">4 Lots</option>
               </select>
+
 
               <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
                 <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

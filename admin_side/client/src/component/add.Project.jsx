@@ -22,11 +22,6 @@ const InputForm = () => {
   const [Docs, setDocs] = useState(docsVal);
   useEffect(() => {
     if (selectData) {
-      const formatDate = (date) => {
-        if (!date) return "";
-        return new Date(date).toISOString().split("T")[0];
-      };
-
       setFormData((prev) => ({
         ...prev,
         OrderMongoId: selectData._id,
@@ -40,7 +35,7 @@ const InputForm = () => {
         billStatus: selectData.billingStatus || "",
         bill: selectData.orderValueTotal || "",
         dueBill: selectData.orderValueTotal || "",
-        bookingDate: formatDate(selectData.bookingDate),
+        bookingDate: selectData.bookingDate,
         name: selectData.name || "",
         technicalEmail: selectData.technicalEmail || "",
         phone: selectData.phone || "",

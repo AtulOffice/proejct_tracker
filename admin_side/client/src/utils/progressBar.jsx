@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 export const ProgressBar = ({ formData }) => {
     return (
         < div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4" >

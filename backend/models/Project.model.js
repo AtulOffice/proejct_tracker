@@ -152,6 +152,10 @@ const projectSchema = new mongoose.Schema(
     SIEVPLDevDocumentsRemarks: {
       type: String,
     },
+    lotval: {
+      type: Number,
+      default: 1,
+    },
     CustomerDevDocuments: {
       pAndIDs: { type: documentFormetFirst },
       controlPhilosophy: { type: documentFormetFirst },
