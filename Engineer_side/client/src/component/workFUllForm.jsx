@@ -117,9 +117,9 @@ const EngineerWorkStatusFull = () => {
 
 
     return (
-        <div className="lg:ml-64 pt-20 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50/30 to-indigo-50 p-8">
+        <div className="lg:ml-64 pt-20 min-h-screen bg-linear-to-br from-indigo-50 via-purple-50/30 to-indigo-50 p-8">
 
-            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 px-10 py-6 shadow-md rounded-xl flex justify-between items-center mb-8">
+            <div className="bg-linear-to-r from-purple-600 via-pink-600 to-rose-600 px-10 py-6 shadow-md rounded-xl flex justify-between items-center mb-8">
                 <div className="flex items-center gap-3">
                     <div className="bg-white/20 p-2 rounded-lg">
                         <Briefcase className="w-6 h-6 text-white" />
@@ -290,7 +290,7 @@ const EngineerWorkStatusFull = () => {
                     <div className="flex justify-center">
                         <button
                             type="submit"
-                            className="px-12 py-3.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:scale-105 transition"
+                            className="px-12 py-3.5 bg-linear-to-r from-indigo-600 to-blue-600 text-white font-semibold rounded-lg shadow-lg hover:scale-105 transition"
                         >
                             Submit Work Status
                         </button>
