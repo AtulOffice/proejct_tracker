@@ -142,7 +142,7 @@ const AdminDashboard = () => {
       val: "deleveryDate",
     },
     { head: "Visit", val: "visitDate" },
-    { head: "Devlopment", val: "Development" },
+    { head: "DEV/COMM", val: "service" },
   ];
   const renderCard = () => {
     switch (activeCard) {

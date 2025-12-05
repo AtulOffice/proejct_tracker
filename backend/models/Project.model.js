@@ -240,17 +240,8 @@ const projectSchema = new mongoose.Schema(
     },
     service: {
       type: String,
-      enum: [
-        "DEV",
-        "DEVCOM",
-        "COMMISSIONING",
-        "N/A",
-        "AMC",
-        "SERVICE",
-        "SEPERATE",
-        "",
-      ],
-      default: "N/A",
+      enum: ["DEV", "DEVCOM", "COMMISSIONING", "SEPERATE", ""],
+      default: "",
     },
     LinkedOrderNumber: {
       type: String,

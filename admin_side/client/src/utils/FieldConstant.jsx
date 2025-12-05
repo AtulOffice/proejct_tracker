@@ -609,7 +609,6 @@ export const InputConst = [
       { value: "DEV", label: "DEV ONLY" },
       { value: "DEVCOM", label: "DEV+COMM" },
       { value: "COMMISSIONING", label: "COMM ONLY" },
-      { value: "N/A", label: "N/A" },
     ],
   },
   {

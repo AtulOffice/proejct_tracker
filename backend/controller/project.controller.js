@@ -1407,100 +1407,23 @@ export const UrgentProjectAction = async (req, res) => {
     });
 
     pipeline.push({
+      $match: {
+        service: { $in: ["DEV", "DEVCOM", "COMMISSIONING"] },
+      },
+    });
+
+    pipeline.push({
       $project: {
         _id: 1,
         projectName: 1,
         jobNumber: 1,
         status: 1,
         visitDate: 1,
-        Development: 1,
         deleveryDate: "$OrderMongoId.deleveryDate",
+        service: 1,
         OrderMongoId: "$OrderMongoId._id",
       },
     });
-
-    const data = await ProjectModel.aggregate(pipeline);
-
-    return res.json({
-      success: true,
-      message: "Data fetched successfully",
-      totalItems: data.length,
-      data,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ success: false, error: "Server error" });
-  }
-};
-
-export const UrgentProjectActionold = async (req, res) => {
-  const search = req.query.search || "";
-
-  try {
-    const filter = {};
-    if (search) {
-      filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
-    }
-
-    const pipeline = [];
-
-    if (Object.keys(filter).length > 0) {
-      pipeline.push({ $match: filter });
-    }
-
-    pipeline.push({
-      $addFields: {
-        deliveryDateObj: {
-          $dateFromString: {
-            dateString: "$deleveryDate",
-            format: "%Y-%m-%d",
-            onError: null,
-            onNull: null,
-          },
-        },
-        visitDateObj: {
-          $dateFromString: {
-            dateString: "$visitDate",
-            format: "%Y-%m-%d",
-            onError: null,
-            onNull: null,
-          },
-        },
-      },
-    });
-
-    pipeline.push({
-      $addFields: {
-        compareDate: {
-          $ifNull: ["$visitDateObj", "$deliveryDateObj"],
-        },
-      },
-    });
-    const today = new Date();
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - 180);
-    const endDate = new Date(today);
-    endDate.setDate(today.getDate() + 30);
-
-    pipeline.push({
-      $match: {
-        status: { $ne: "completed" },
-        $or: [
-          { EngineerDetails: { $exists: false } },
-          { EngineerDetails: { $size: 0 } },
-        ],
-      },
-    });
-
-    pipeline.push({
-      $match: {
-        $or: [
-          { compareDate: { $gte: startDate, $lte: endDate } },
-          { visitDateObj: { $gte: startDate, $lte: endDate } },
-        ],
-      },
-    });
-    pipeline.push({ $sort: { compareDate: -1, updatedAt: -1, createdAt: -1 } });
 
     const data = await ProjectModel.aggregate(pipeline);
 
