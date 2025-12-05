@@ -79,13 +79,13 @@ const ExcelDocsInput = ({ value, onChange }) => {
           setDragOver(true);
         }}
         onDragLeave={() => setDragOver(false)}
-        className={`bg-white/30 border ${
-          dragOver ? "border-blue-500" : "border-white/40"
-        } text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-white/70 resize-none`}
+        className={`bg-white/30 border ${dragOver ? "border-blue-500" : "border-black/40"
+          } text-gray-700 font-semibold text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500/70 resize-none`}
         placeholder="Enter site progress details or drop a .docx/.xlsx file"
         rows={16}
         maxLength={2500}
       />
+
     </div>
   );
 };

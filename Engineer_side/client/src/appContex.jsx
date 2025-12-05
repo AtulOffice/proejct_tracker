@@ -4,6 +4,7 @@ const Context = createContext();
 
 export const AppProvider = ({ children }) => {
   const [toggle, setToggle] = useState(false);
+  const [toggleEng, setToggleEng] = useState(false);
   const [toggleDev, setToggleDev] = useState(false);
   const [user, setUser] = useState();
   const [userLoading, setUserLoading] = useState(true);
@@ -18,6 +19,8 @@ export const AppProvider = ({ children }) => {
         setToggleDev,
         userLoading,
         setUserLoading,
+        toggleEng,
+        setToggleEng
       }}
     >
       {children}

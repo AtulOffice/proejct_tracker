@@ -23,7 +23,8 @@ import AssignmentPage from "./assingement.jsx";
 import EngineerWorkStatusFull from "./workFUllForm.jsx";
 
 const AdminDashboard = () => {
-  const { toggle, toggleDev, user } = useAppContext();
+  const { toggle, toggleDev, user, toggleEng,
+    setToggleEng } = useAppContext();
   const [overvew, setOverview] = useState();
   const [Assignments, setAssignments] = useState([])
 
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
     };
 
     if (user?._id) fetchData();
-  }, []);
+  }, [toggleEng]);
 
 
 
@@ -224,7 +225,7 @@ const AdminDashboard = () => {
                       }`}
                   >
                     <GoProjectRoadmap className="mr-3" size={20} />
-                    ALL
+                    ASSIGNED PROJ
                   </div>
                 </li>
 
@@ -238,7 +239,7 @@ const AdminDashboard = () => {
                       }`}
                   >
                     <GoProjectRoadmap className="mr-3" size={20} />
-                    MOM
+                    SUBMIT MOM
                   </div>
                 </li>
               </>

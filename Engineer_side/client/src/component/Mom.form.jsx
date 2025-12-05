@@ -25,12 +25,13 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
     momDocuments: [],
     assignmentDetails: null,
   }
-  const { user } = useAppContext()
+  const { user, setToggleEng } = useAppContext()
   const [data, setData] = useState()
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(null);
   const [formData, setFormData] = useState(formval);
 
+  console.log(data)
 
   useEffect(() => {
     if (!formData.jobNumber) {
@@ -58,13 +59,14 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
           ? new Date(selectedProject.endTime).toISOString().split("T")[0]
           : "",
         location: selectedProject.projectId?.location,
-        StartChecklist: selectedProject.projectId?.StartChecklist,
-        EndChecklist: selectedProject.projectId?.EndChecklist,
+        StartChecklist: selectedProject.projectId?.StartChecklist ?? "",
+        EndChecklist: selectedProject.projectId?.EndChecklist ?? "",
+
         workStatus: selectedProject.isFinalMom
-          ? "YES"
+          ? "DONE"
           : selectedProject.isMom
-            ? "NO"
-            : "N/A",
+            ? "PARTIAL DONE"
+            : "NOT COMPLETED",
       }));
     }
   }, [formData.jobNumber, data]);
@@ -129,6 +131,7 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
         toast.success("MOM saved successfully!");
         setFormData(formval);
         setActiveCard("two")
+        setToggleEng((prev) => !prev)
       } else {
         toast.error(response.data.message || "Failed to save MOM.");
       }
@@ -201,13 +204,21 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
   };
 
   const getStatusColor = (status) => {
-    const colors = {
-      Submitted: "bg-emerald-100 text-emerald-700 border-emerald-300",
-      Pending: "bg-amber-100 text-amber-700 border-amber-300",
-      "Not Applicable": "bg-gray-100 text-gray-600 border-gray-300",
-    };
-    return colors[status] || "bg-gray-50 text-gray-600 border-gray-300";
+    if (status === "" || status === "NO") {
+      return "bg-amber-100 text-amber-700 border-amber-300";
+    }
+
+    if (status === "YES") {
+      return "bg-emerald-100 text-emerald-700 border-emerald-300";
+    }
+
+    if (status === "N/A") {
+      return "bg-gray-100 text-gray-600 border-gray-300";
+    }
+
+    return "bg-gray-50 text-gray-600 border-gray-300";
   };
+
 
   return (
     <div className="lg:ml-64 pt-20 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50/30 to-indigo-50 p-8">
@@ -484,17 +495,31 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
                     disabled
                     onChange={(e) => handleChange(field, e.target.value)}
                     className={`w-full px-4 py-3 border-2 rounded-xl
-              focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 
-              transition-all duration-200 outline-none 
-              bg-gray-100 text-gray-700
-              cursor-not-allowed opacity-70
-              appearance-none  /* ✅ hides default arrow */
-              [&::-ms-expand]:hidden /* ✅ hides arrow in IE/Edge */
-              ${formData[field] ? getStatusColor(formData[field]) : 'bg-gray-50 border-gray-200'}`}
+    focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 
+    transition-all duration-200 outline-none 
+    bg-gray-100 text-gray-700
+    cursor-not-allowed opacity-70
+    appearance-none
+    [&::-ms-expand]:hidden
+    ${formData[field] ? getStatusColor(formData[field]) : 'bg-gray-50 border-gray-200'}
+  `}
                   >
-                    <option value="YES">✓ Submitted</option>
-                    <option value="NO">⏳ Pending</option>
-                    <option value="N/A">— Not Applicable</option>
+                    <option value="">Not Mentioned</option>
+
+                    {field !== "workStatus" && (
+                      <>
+                        <option value="YES">✓ Submitted</option>
+                        <option value="NO">⏳ Pending</option>
+                        <option value="N/A">Not Applicable</option>
+                      </>
+                    )}
+                    {field === "workStatus" && (
+                      <>
+                        <option value="DONE">✓ Done</option>
+                        <option value="PARTIAL DONE">⏳ Partially Done</option>
+                        <option value="NOT COMPLETED">❌ Not Completed</option>
+                      </>
+                    )}
                   </select>
 
 

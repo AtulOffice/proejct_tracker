@@ -1913,7 +1913,7 @@ export const getEngineerProjectsPaginated = async (req, res) => {
       { $match: { _id: new mongoose.Types.ObjectId(id) } },
       { $unwind: "$assignments" },
       // { $sort: { "assignments.assignedAt": -1 } },
-      { $sort: { "projectData.updatedAt": -1 } },
+
       {
         $lookup: {
           from: "projects",
@@ -1923,6 +1923,7 @@ export const getEngineerProjectsPaginated = async (req, res) => {
         },
       },
       { $unwind: { path: "$projectData", preserveNullAndEmptyArrays: true } },
+      { $sort: { "projectData.updatedAt": -1 } },
       {
         $project: {
           _id: "$projectData._id",

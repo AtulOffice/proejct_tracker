@@ -52,7 +52,7 @@ const WrkStatusSchema = new mongoose.Schema(
   }
 );
 
-dateToJSONTransformer(WrkStatusSchema)
+dateToJSONTransformer(WrkStatusSchema);
 
 const workStatusModel = mongoose.model("WorkStatus", WrkStatusSchema);
 
