@@ -63,7 +63,7 @@ const OrderDetailsPopup = ({ order, onClose }) => {
 
         <div className="overflow-y-auto p-5 sm:p-8 bg-linear-to-br from-gray-50 to-blue-50/30 scrollbar-modern">
           <OrderDetailsCard order={order} />
-          <ProjectDetailsCard project={order?.ProjectDetails} />
+          <ProjectDetailsCard project={{ ...order?.ProjectDetails, deleveryDate: order.deleveryDate }} />
         </div>
       </div>
     </div>

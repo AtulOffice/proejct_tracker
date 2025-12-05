@@ -9,9 +9,11 @@ import { InputConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField } from "./subField";
 import DocumentsSection from "../utils/addDevDocs";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const InputForm = () => {
     const { toggle, setToggle, setToggleDev } = useAppContext();
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         jobNumber: "",
         swname: "",

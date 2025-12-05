@@ -121,8 +121,8 @@ const projectSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
       enum: [
+        "",
         "upcoming",
         "pending",
         "completed",
@@ -131,11 +131,16 @@ const projectSchema = new mongoose.Schema(
         "closed",
         "no request",
       ],
+      default: "",
     },
     priority: {
       type: String,
       required: true,
       enum: ["low", "medium", "high", "critical"],
+    },
+    lotval: {
+      type: Number,
+      default: 1,
     },
     isDevlopmentApproved: {
       type: String,
@@ -152,10 +157,7 @@ const projectSchema = new mongoose.Schema(
     SIEVPLDevDocumentsRemarks: {
       type: String,
     },
-    lotval: {
-      type: Number,
-      default: 1,
-    },
+
     CustomerDevDocuments: {
       pAndIDs: { type: documentFormetFirst },
       controlPhilosophy: { type: documentFormetFirst },

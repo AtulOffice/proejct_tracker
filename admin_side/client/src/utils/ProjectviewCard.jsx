@@ -38,13 +38,12 @@ export const ProjectDetailsCard = ({ project }) => {
           <EnhancedInfoRow label="Client" value={project?.client} />
           <EnhancedInfoRow label="End User" value={project?.endUser} />
           <EnhancedInfoRow label="Location" value={project?.location} />
-          <EnhancedInfoRow label="Order Number" value={project?.orderNumber} />
           <EnhancedInfoRow label="Job Number" value={project?.jobNumber} />
           <EnhancedInfoRow label="Entity Type" value={project?.entityType} />
           <EnhancedInfoRow label="SO Type" value={project?.soType} />
           <EnhancedInfoRow
             label="Technical Email"
-            value={project?.technicalEmail}
+            value={project?.swtechnicalEmail}
           />
           <EnhancedInfoRow
             label="Contact Person"

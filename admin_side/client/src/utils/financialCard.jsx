@@ -140,7 +140,7 @@ export const OrderDetailsCard = ({ order }) => {
               />
             </svg>
           }
-          title="Client Information"
+          title="Basic Information"
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-white/70 backdrop-blur-sm p-6 rounded-2xl border border-gray-200/50 shadow-lg">
           <EnhancedInfoRow label="Client" value={order?.client} />

@@ -15,7 +15,6 @@ import {
 const ProjectDetailsPopup = ({ project, onClose }) => {
   if (!project) return null;
 
-  // Data sections for better organization
   const sections = [
     {
       title: "Project Overview",
@@ -73,20 +72,10 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
           label: "Order Date",
           value: project?.orderDate
             ? new Date(project.orderDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
-            : "Not provided",
-        },
-        {
-          label: "Delivery Date",
-          value: project?.deleveryDate
-            ? new Date(project.deleveryDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "Not provided",
         },
         {
@@ -97,20 +86,20 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
           label: "Project Start",
           value: project?.startDate
             ? new Date(project.startDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "-",
         },
         {
           label: "Project End",
           value: project?.endDate
             ? new Date(project.endDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "-",
         },
         {
@@ -146,50 +135,50 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
           label: "Request Date",
           value: project?.requestDate
             ? new Date(project.requestDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "-",
         },
         {
           label: "Visit Start",
           value: project?.visitDate
             ? new Date(project.visitDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "-",
         },
         {
           label: "Visit End",
           value: project?.visitendDate
             ? new Date(project.visitendDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "-",
         },
         {
           label: "Actual Start",
           value: project?.actualStartDate
             ? new Date(project.actualStartDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "-",
         },
         {
           label: "Actual End",
           value: project?.actualEndDate
             ? new Date(project.actualEndDate).toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
             : "-",
         },
         {
@@ -213,14 +202,14 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
           value:
             project?.momDate?.length > 0
               ? project.momDate
-                  .map((d) =>
-                    new Date(d).toLocaleDateString("en-IN", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })
-                  )
-                  .join(", ")
+                .map((d) =>
+                  new Date(d).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })
+                )
+                .join(", ")
               : "-",
           fullWidth: true,
         },
@@ -297,9 +286,8 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
             >
               {/* Section Header */}
               <div
-                className={`bg-linear-to-r ${
-                  colorMap[section.color]
-                } text-white px-4 py-3 flex items-center gap-2`}
+                className={`bg-linear-to-r ${colorMap[section.color]
+                  } text-white px-4 py-3 flex items-center gap-2`}
               >
                 {section.icon}
                 <h3 className="text-base sm:text-lg font-semibold">
@@ -314,9 +302,8 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
                   .map((field, fieldIdx) => (
                     <div
                       key={fieldIdx}
-                      className={`${
-                        field.fullWidth ? "sm:col-span-2" : ""
-                      } group`}
+                      className={`${field.fullWidth ? "sm:col-span-2" : ""
+                        } group`}
                     >
                       <div className="flex items-start gap-2">
                         {field.icon && (
@@ -328,11 +315,10 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
                           </p>
                           {field.isDevelopment ? (
                             <span
-                              className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full ${
-                                project?.Development
-                                  ? "bg-green-100 text-green-700 border border-green-200"
-                                  : "bg-red-100 text-red-700 border border-red-200"
-                              }`}
+                              className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full ${project?.Development
+                                ? "bg-green-100 text-green-700 border border-green-200"
+                                : "bg-red-100 text-red-700 border border-red-200"
+                                }`}
                             >
                               {project?.Development ? (
                                 <CheckCircle className="w-4 h-4 mr-1" />
@@ -347,15 +333,13 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
                             </span>
                           ) : (
                             <p
-                              className={`text-sm sm:text-base font-medium ${
-                                field.highlight
-                                  ? "text-orange-600"
-                                  : "text-gray-800"
-                              } ${
-                                field.fullWidth
+                              className={`text-sm sm:text-base font-medium ${field.highlight
+                                ? "text-orange-600"
+                                : "text-gray-800"
+                                } ${field.fullWidth
                                   ? "whitespace-normal"
                                   : "truncate group-hover:text-clip group-hover:whitespace-normal"
-                              } transition-all`}
+                                } transition-all`}
                             >
                               {field.value}
                             </p>
@@ -368,66 +352,7 @@ const ProjectDetailsPopup = ({ project, onClose }) => {
             </div>
           ))}
         </div>
-
-        {/* Footer */}
-        {/* <div className="bg-gray-50 border-t border-gray-200 p-4 flex justify-center gap-3">
-          <button
-            onClick={onClose}
-            className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-          >
-            Close
-          </button>
-        </div> */}
       </div>
-
-      {/* Custom Styles */}
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideUp {
-          from {
-            transform: translateY(20px);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.2s ease-out;
-        }
-
-        .animate-slideUp {
-          animation: slideUp 0.3s ease-out;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar {
-          width: 8px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-          background: #cbd5e0;
-          border-radius: 10px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-          background: #a0aec0;
-        }
-      `}</style>
     </div>
   );
 };
