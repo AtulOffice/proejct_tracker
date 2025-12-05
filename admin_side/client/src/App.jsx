@@ -8,6 +8,7 @@ import ProjectdevlopForm from "./component/add.devstatus.jsx";
 import { UserCall } from "./utils/apiCall.jsx";
 import OrderForm from "./component/OrderForm.jsx";
 import UpdateOrderForm from "./component/updateOrder.jsx";
+import ProjectTimelineForm from "./component/projctTimeLineForm.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useAppContext();
@@ -61,6 +62,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <UpdateForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/timelineform/:id"
+        element={
+          <ProtectedRoute>
+            <ProjectTimelineForm />
           </ProtectedRoute>
         }
       />

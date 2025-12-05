@@ -1518,6 +1518,74 @@ export const allProjectsFetch = async (req, res) => {
   }
 };
 
+export const ProjectsFetchDevById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("this is alled");
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Project ID is required",
+      });
+    }
+
+    const projectSelectFields = {
+      jobNumber: 1,
+      projectName: 1,
+      status: 1,
+      visitDate: 1,
+      Development: 1,
+      createdAt: 1,
+      updatedAt: 1,
+      OrderMongoId: 1,
+      isPlanRecord: 1,
+      service: 1,
+      LogicPlace: 1,
+      ScadaPlace: 1,
+      PlanDetails: 1,
+      devScope: 1,
+      commScope: 1,
+    };
+
+    const project = await ProjectModel.findById(
+      id,
+      projectSelectFields
+    ).populate({
+      path: "OrderMongoId",
+      select: `
+          -paymentAdvance
+          -paymentPercent1 -paymentType1 -paymentType1other -paymentAmount1 -payemntCGBG1 -paymentrecieved1
+          -paymentPercent2 -paymentType2 -paymentType2other -paymentAmount2 -payemntCGBG2 -paymentrecieved2
+          -paymentPercent3 -paymentType3 -paymentType3other -paymentAmount3 -payemntCGBG3 -paymentrecieved3
+          -retentionYesNo -retentionPercent -retentionAmount -retentionDocs -retentinoDocsOther
+          -retentionType -retentionPeriod
+          -__v
+        `,
+    });
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Project fetched successfully",
+      data: project,
+    });
+  } catch (err) {
+    console.error("Error fetching project by ID:", err);
+    return res.status(500).json({
+      success: false,
+      error: "Server error",
+      details: err.message,
+    });
+  }
+};
+
 export const allProjectsFetchDev = async (req, res) => {
   const search = req.query.search || "";
 
@@ -1566,9 +1634,6 @@ export const allProjectsFetchDev = async (req, res) => {
         updatedAt: -1,
         createdAt: -1,
       });
-
-    console.log(projects);
-
     return res.json({
       success: true,
       message: "Data fetched successfully",

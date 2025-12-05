@@ -12,6 +12,7 @@ import {
 import { mapFrontendToBackend } from "./frontToback";
 
 const ProjectTimelineForm = ({ open, onClose, project }) => {
+  console.log(project)
   const { user } = useAppContext();
   const [collOpen, setCollOpen] = useState(false);
   const { toggle, setToggle } = useAppContext()
@@ -202,6 +203,18 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
 
   if (!open) return null;
 
+  const SERVICE_LABELS = {
+    DEV: "Development",
+    DEVCOM: "Development + Commissioning",
+    COMMISSIONING: "Commissioning",
+    AMC: "AMC",
+    SERVICE: "Service",
+    SEPERATE: "Separate",
+    "": "",
+    "N/A": "N/A",
+  };
+
+
   const Info = ({ label, value }) => {
     return (
       <div className="group bg-white/70 backdrop-blur-sm p-4 rounded-lg border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all duration-200">
@@ -214,16 +227,6 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
         </dd>
       </div>
     );
-  };
-  const SERVICE_LABELS = {
-    DEV: "Development",
-    DEVCOM: "Development + Commissioning",
-    COMMISSIONING: "Commissioning",
-    AMC: "AMC",
-    SERVICE: "Service",
-    SEPERATE: "Separate",
-    "": "",
-    "N/A": "N/A",
   };
 
   return (

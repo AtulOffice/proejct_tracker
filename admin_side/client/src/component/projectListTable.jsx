@@ -36,6 +36,9 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
   const handlAssignedDev = (project) => {
     try {
+      //  this is handle assigned
+      navigate(`/timelineform/${project?._id}`)
+      return;
       setSelectedProject(project)
       setPlanOpen(true)
       console.log("this called as the hendle Assigned")

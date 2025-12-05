@@ -21,6 +21,7 @@ import {
   RecordsformaveNew,
   getAllProjectsnew,
   updateRecordsDocs,
+  ProjectsFetchDevById,
 } from "../controller/project.controller.js";
 import {
   authenticate,
@@ -180,4 +181,12 @@ ProjectRouter.get(
   authenticate,
   authorizeRole("admin", "reception"),
   allProjectsFetchDev
+);
+
+ProjectRouter.get(
+  "/ProjectsfetchdevbyId/:id",
+  refreshTokenMiddleware,
+  authenticate,
+  authorizeRole("admin", "reception"),
+  ProjectsFetchDevById
 );
