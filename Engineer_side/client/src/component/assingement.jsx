@@ -93,7 +93,14 @@ const AssignmentPage = ({ assignments }) => {
                         filteredProjects.map((project, idx) => (
                             <div
                                 key={project._id || idx}
-                                className="group relative backdrop-blur-lg bg-white/50 rounded-2xl p-6 shadow-xl border border-white/30 hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 ease-out hover:bg-white/70 animate-fade-in"
+                                className={`group relative backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/30 
+        hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 ease-out animate-fade-in 
+      ${project.isFinalMom
+                                        ? "bg-green-300 hover:bg-green-200 border-green-300"
+                                        : "bg-white/50 hover:bg-white/70"
+                                    }
+`
+                                }
                                 style={{ animationDelay: `${idx * 100}ms` }}
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-400/30 to-pink-400/30 rounded-bl-full rounded-tr-2xl -z-10"></div>
@@ -140,15 +147,6 @@ const AssignmentPage = ({ assignments }) => {
                                                 )}
                                             </div>
                                         </div>
-                                    )}
-
-
-                                    {project.isFinalMom && (
-                                        <span className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full shadow-lg hover:shadow-green-500/50 hover:scale-110 transition-all duration-300 group flex-shrink-0">
-                                            <svg className="w-6 h-6 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                            </svg>
-                                        </span>
                                     )}
                                 </div>
 
