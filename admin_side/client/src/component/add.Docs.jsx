@@ -135,15 +135,6 @@ const InputForm = () => {
                 { withCredentials: true }
             );
             toast.success("Data updated successfully");
-            setFormData({
-                jobNumber: "",
-                swname: "",
-                swtechnicalEmail: "",
-                swphone: "",
-                isMailSent: ""
-            });
-            setDocs(docsVal);
-            setSelectData(null)
             setToggle((prev) => !prev);
             setToggleDev((prev) => !prev);
             navigate("/page", {
@@ -154,6 +145,15 @@ const InputForm = () => {
             console.log(e);
         } finally {
             setIsLoading(false);
+            setFormData({
+                jobNumber: "",
+                swname: "",
+                swtechnicalEmail: "",
+                swphone: "",
+                isMailSent: ""
+            });
+            setDocs(docsVal);
+            setSelectData(null)
         }
     };
 
