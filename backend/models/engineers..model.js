@@ -93,8 +93,7 @@ const engineerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-dateToJSONTransformer(engineerSchema)
+dateToJSONTransformer(engineerSchema);
 const EngineerReocord = mongoose.model("EngineerRecord", engineerSchema);
-
 
 export default EngineerReocord;

@@ -195,15 +195,14 @@ const InputForm = () => {
         Docs: Docs,
       });
       setToggleDev((prev) => !prev);
-      setFormData(formval);
-      setDocs(docsVal);
-
       setToggle((prev) => !prev);
     } catch (e) {
       console.log(e);
     } finally {
+      setDocs(docsVal);
       setIsLoading(false);
       setSelectData(null)
+      setFormData(formval);
     }
   };
 
