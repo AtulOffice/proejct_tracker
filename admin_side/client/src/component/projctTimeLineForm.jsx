@@ -612,7 +612,7 @@ const ProjectTimelineForm1 = () => {
                             </div> */}
 
                             {/* For each phase */}
-                            {["documents", "logic", "scada", "testing"].map((phase) => {
+                            {["documents", "logic", "scada", "testing"].map((phase, phaseIndex) => {
                                 const sections = block[phase] || [];
 
                                 return (
@@ -652,7 +652,6 @@ const ProjectTimelineForm1 = () => {
                                                             <span>Remove</span>
                                                         </button>
                                                     )}
-
                                                 </div>
 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -782,9 +781,28 @@ const ProjectTimelineForm1 = () => {
                                                 </div>
                                             </div>
                                         ))}
+
+
+                                        {phaseIndex < 3 && (
+                                            <div className="flex items-center justify-center gap-3 my-8">
+                                                <div className="flex-1 h-1.5 bg-gray-600 rounded-full"></div>
+                                                <div className="flex gap-2">
+                                                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                                                    <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
+                                                    <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                                                </div>
+                                                <div className="flex-1 h-1.5 bg-gray-600 rounded-full"></div>
+                                            </div>
+                                        )}
+
+
+
+
+
                                     </div>
                                 );
                             })}
+
                         </div>
                     ))}
 
