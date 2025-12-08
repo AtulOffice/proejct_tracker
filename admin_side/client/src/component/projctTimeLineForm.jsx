@@ -202,14 +202,16 @@ const ProjectTimelineForm = () => {
     const removePlanningBlock = (index) => {
         setFormData((prev) => {
             const plans = prev.plans.filter((_, i) => i !== index);
-            return { ...prev, plans: plans.length > 0 ? plans : [
-                {
-                    documents: { ...emptySection },
-                    logic: { ...emptySection },
-                    scada: { ...emptySection },
-                    testing: { ...emptySection },
-                }
-            ] };
+            return {
+                ...prev, plans: plans.length > 0 ? plans : [
+                    {
+                        documents: { ...emptySection },
+                        logic: { ...emptySection },
+                        scada: { ...emptySection },
+                        testing: { ...emptySection },
+                    }
+                ]
+            };
         });
     };
 
