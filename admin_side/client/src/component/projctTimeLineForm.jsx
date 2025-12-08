@@ -12,34 +12,31 @@ import {
 } from "../utils/dev.context";
 import { mapFrontendToBackend } from "../utils/frontToback";
 
-const ProjectTimelineForm = () => {
+const ProjectTimelineForm1 = () => {
     const { id } = useParams();
     const { user } = useAppContext();
     const [collOpen, setCollOpen] = useState(false);
     const [project, setProject] = useState();
     const [loading, setLoading] = useState();
     const { toggle, setToggle } = useAppContext();
+    const [documentEngineers, setDocumentEngineers] = useState([]);
+
     const navigate = useNavigate();
 
-    // Helper empty section
     const emptySection = { startDate: "", endDate: "", planDetails: "", engineers: [] };
-
-    // Start with one planning block by default (Option A)
     const [formData, setFormData] = useState({
         plans: [
             {
-                documents: { ...emptySection },
-                logic: { ...emptySection },
-                scada: { ...emptySection },
-                testing: { ...emptySection },
+                documents: [{ ...emptySection }],
+                logic: [{ ...emptySection }],
+                scada: [{ ...emptySection }],
+                testing: [{ ...emptySection }],
             },
         ],
     });
 
     const [name, setName] = useState("");
     const [engineersList, setEngineersList] = useState([]);
-
-    // Fetch project basic data
     useEffect(() => {
         const fetchProject = async () => {
             try {
@@ -60,7 +57,53 @@ const ProjectTimelineForm = () => {
         fetchProject();
     }, [id]);
 
-    // Fetch planning data when project.PlanDetails changes (and when toggle changes)
+
+    useEffect(() => {
+        if (!formData || !formData.plans) return;
+
+        let combined = new Set();
+
+        formData.plans.forEach((block) => {
+            ["logic", "scada", "testing"].forEach((phase) => {
+                block[phase]?.forEach((sec) => {
+                    sec.engineers?.forEach((eng) => combined.add(eng));
+                });
+            });
+        });
+
+        const finalEngineers = Array.from(combined);
+        const alreadyMatching = formData.plans.every((block) =>
+            block.documents.every(
+                (sec) => JSON.stringify(sec.engineers) === JSON.stringify(finalEngineers)
+            )
+        );
+
+        if (alreadyMatching) return;
+
+        setFormData((prev) => {
+            const updatedPlans = prev.plans.map((block) => ({
+                ...block,
+                documents: block.documents.map((sec) => ({
+                    ...sec,
+                    engineers: finalEngineers,
+                })),
+            }));
+
+            return { ...prev, plans: updatedPlans };
+        });
+    }, [
+        JSON.stringify(
+            formData.plans.map((block) => ({
+                logic: block.logic,
+                scada: block.scada,
+                testing: block.testing,
+            }))
+        )
+    ]);
+
+
+
+
     useEffect(() => {
         if (!project?.PlanDetails) return;
 
@@ -75,84 +118,55 @@ const ProjectTimelineForm = () => {
                     setName(defaultData.updatedBy.username);
                 }
 
-                // If backend already has "plans" array (new schema), use it
                 if (Array.isArray(defaultData.plans) && defaultData.plans.length > 0) {
                     const formattedPlans = defaultData.plans.map((block) => {
                         const fmt = (v) => (v ? new Date(v).toISOString().split("T")[0] : "");
+
                         return {
-                            documents: {
-                                startDate: fmt(block.documents?.startDate),
-                                endDate: fmt(block.documents?.endDate),
-                                planDetails: block.documents?.planDetails || "",
-                                engineers: block.documents?.engineers || [],
-                            },
-                            logic: {
-                                startDate: fmt(block.logic?.startDate),
-                                endDate: fmt(block.logic?.endDate),
-                                planDetails: block.logic?.planDetails || "",
-                                engineers: block.logic?.engineers || [],
-                            },
-                            scada: {
-                                startDate: fmt(block.scada?.startDate),
-                                endDate: fmt(block.scada?.endDate),
-                                planDetails: block.scada?.planDetails || "",
-                                engineers: block.scada?.engineers || [],
-                            },
-                            testing: {
-                                startDate: fmt(block.testing?.startDate),
-                                endDate: fmt(block.testing?.endDate),
-                                planDetails: block.testing?.planDetails || "",
-                                engineers: block.testing?.engineers || [],
-                            },
+                            documents: (block.documents || []).length > 0
+                                ? (block.documents || []).map(sec => ({
+                                    startDate: fmt(sec.startDate),
+                                    endDate: fmt(sec.endDate),
+                                    planDetails: sec.planDetails || "",
+                                    engineers: sec.engineers || [],
+                                }))
+                                : [{ ...emptySection }],
+                            logic: (block.logic || []).length > 0
+                                ? (block.logic || []).map(sec => ({
+                                    startDate: fmt(sec.startDate),
+                                    endDate: fmt(sec.endDate),
+                                    planDetails: sec.planDetails || "",
+                                    engineers: sec.engineers || [],
+                                }))
+                                : [{ ...emptySection }],
+                            scada: (block.scada || []).length > 0
+                                ? (block.scada || []).map(sec => ({
+                                    startDate: fmt(sec.startDate),
+                                    endDate: fmt(sec.endDate),
+                                    planDetails: sec.planDetails || "",
+                                    engineers: sec.engineers || [],
+                                }))
+                                : [{ ...emptySection }],
+                            testing: (block.testing || []).length > 0
+                                ? (block.testing || []).map(sec => ({
+                                    startDate: fmt(sec.startDate),
+                                    endDate: fmt(sec.endDate),
+                                    planDetails: sec.planDetails || "",
+                                    engineers: sec.engineers || [],
+                                }))
+                                : [{ ...emptySection }],
                         };
                     });
 
                     setFormData({ plans: formattedPlans });
-                    return;
-                }
-
-                // Backward-compatibility: if old schema had top-level scada/logic/etc (single block)
-                const singleBlockKeys = ["documents", "logic", "scada", "testing"];
-                const hasSingleStructure = singleBlockKeys.some((k) => defaultData[k] !== undefined);
-
-                if (hasSingleStructure) {
-                    const fmt = (v) => (v ? new Date(v).toISOString().split("T")[0] : "");
-                    const block = {
-                        documents: {
-                            startDate: fmt(defaultData.documents?.startDate),
-                            endDate: fmt(defaultData.documents?.endDate),
-                            planDetails: defaultData.documents?.planDetails || "",
-                            engineers: defaultData.documents?.engineers || [],
-                        },
-                        logic: {
-                            startDate: fmt(defaultData.logic?.startDate),
-                            endDate: fmt(defaultData.logic?.endDate),
-                            planDetails: defaultData.logic?.planDetails || "",
-                            engineers: defaultData.logic?.engineers || [],
-                        },
-                        scada: {
-                            startDate: fmt(defaultData.scada?.startDate),
-                            endDate: fmt(defaultData.scada?.endDate),
-                            planDetails: defaultData.scada?.planDetails || "",
-                            engineers: defaultData.scada?.engineers || [],
-                        },
-                        testing: {
-                            startDate: fmt(defaultData.testing?.startDate),
-                            endDate: fmt(defaultData.testing?.endDate),
-                            planDetails: defaultData.testing?.planDetails || "",
-                            engineers: defaultData.testing?.engineers || [],
-                        },
-                    };
-                    setFormData({ plans: [block] });
                 } else {
-                    // No relevant planning data
                     setFormData({
                         plans: [
                             {
-                                documents: { ...emptySection },
-                                logic: { ...emptySection },
-                                scada: { ...emptySection },
-                                testing: { ...emptySection },
+                                documents: [{ ...emptySection }],
+                                logic: [{ ...emptySection }],
+                                scada: [{ ...emptySection }],
+                                testing: [{ ...emptySection }],
                             },
                         ],
                     });
@@ -165,7 +179,6 @@ const ProjectTimelineForm = () => {
         fetchPlanningData(project.PlanDetails);
     }, [project?.PlanDetails, toggle]);
 
-    // Fetch engineers list
     useEffect(() => {
         const fetchEngineerData = async () => {
             try {
@@ -182,88 +195,120 @@ const ProjectTimelineForm = () => {
         fetchEngineerData();
     }, [toggle]);
 
-    // Add a new planning block (top button)
     const addPlanningBlock = () => {
         setFormData((prev) => ({
             ...prev,
             plans: [
                 ...prev.plans,
                 {
-                    documents: { ...emptySection },
-                    logic: { ...emptySection },
-                    scada: { ...emptySection },
-                    testing: { ...emptySection },
+                    documents: [{ ...emptySection }],
+                    logic: [{ ...emptySection }],
+                    scada: [{ ...emptySection }],
+                    testing: [{ ...emptySection }],
                 },
             ],
         }));
     };
 
-    // Remove a planning block by index
     const removePlanningBlock = (index) => {
         setFormData((prev) => {
             const plans = prev.plans.filter((_, i) => i !== index);
             return {
-                ...prev, plans: plans.length > 0 ? plans : [
+                ...prev,
+                plans: plans.length > 0 ? plans : [
                     {
-                        documents: { ...emptySection },
-                        logic: { ...emptySection },
-                        scada: { ...emptySection },
-                        testing: { ...emptySection },
+                        documents: [{ ...emptySection }],
+                        logic: [{ ...emptySection }],
+                        scada: [{ ...emptySection }],
+                        testing: [{ ...emptySection }],
                     }
                 ]
             };
         });
     };
 
-    // Update any field: blockIndex -> phase -> field
-    const handleChange = (blockIndex, phase, field, value) => {
+    const addSectionToPhase = (blockIndex, phase) => {
         setFormData((prev) => {
             const plans = prev.plans.map((p, i) => {
                 if (i !== blockIndex) return p;
                 return {
                     ...p,
-                    [phase]: {
-                        ...p[phase],
-                        [field]: value,
-                    },
+                    [phase]: [...p[phase], { ...emptySection }],
                 };
             });
             return { ...prev, plans };
         });
     };
 
-    // Toggle engineer selection for a specific block + phase
-    const handleEngineerToggle = (blockIndex, phase, engineerId) => {
+    const removeSectionFromPhase = (blockIndex, phase, sectionIndex) => {
         setFormData((prev) => {
             const plans = prev.plans.map((p, i) => {
                 if (i !== blockIndex) return p;
-                const currentEngineers = p[phase].engineers || [];
-                const isSelected = currentEngineers.includes(engineerId);
+                const newSections = p[phase].filter((_, si) => si !== sectionIndex);
                 return {
                     ...p,
-                    [phase]: {
-                        ...p[phase],
-                        engineers: isSelected
-                            ? currentEngineers.filter((id) => id !== engineerId)
-                            : [...currentEngineers, engineerId],
-                    },
+                    [phase]: newSections.length > 0 ? newSections : [{ ...emptySection }],
                 };
             });
             return { ...prev, plans };
         });
     };
 
-    // Remove engineer from a specific block + phase
-    const removeEngineer = (blockIndex, phase, engineerId) => {
+    const handleChange = (blockIndex, phase, sectionIndex, field, value) => {
         setFormData((prev) => {
             const plans = prev.plans.map((p, i) => {
                 if (i !== blockIndex) return p;
                 return {
                     ...p,
-                    [phase]: {
-                        ...p[phase],
-                        engineers: (p[phase].engineers || []).filter((id) => id !== engineerId),
-                    },
+                    [phase]: p[phase].map((sec, si) => {
+                        if (si !== sectionIndex) return sec;
+                        return {
+                            ...sec,
+                            [field]: value,
+                        };
+                    }),
+                };
+            });
+            return { ...prev, plans };
+        });
+    };
+
+    const handleEngineerToggle = (blockIndex, phase, sectionIndex, engineerId) => {
+        setFormData((prev) => {
+            const plans = prev.plans.map((p, i) => {
+                if (i !== blockIndex) return p;
+                return {
+                    ...p,
+                    [phase]: p[phase].map((sec, si) => {
+                        if (si !== sectionIndex) return sec;
+                        const currentEngineers = sec.engineers || [];
+                        const isSelected = currentEngineers.includes(engineerId);
+                        return {
+                            ...sec,
+                            engineers: isSelected
+                                ? currentEngineers.filter((id) => id !== engineerId)
+                                : [...currentEngineers, engineerId],
+                        };
+                    }),
+                };
+            });
+            return { ...prev, plans };
+        });
+    };
+
+    const removeEngineer = (blockIndex, phase, sectionIndex, engineerId) => {
+        setFormData((prev) => {
+            const plans = prev.plans.map((p, i) => {
+                if (i !== blockIndex) return p;
+                return {
+                    ...p,
+                    [phase]: p[phase].map((sec, si) => {
+                        if (si !== sectionIndex) return sec;
+                        return {
+                            ...sec,
+                            engineers: (sec.engineers || []).filter((id) => id !== engineerId),
+                        };
+                    }),
                 };
             });
             return { ...prev, plans };
@@ -279,86 +324,46 @@ const ProjectTimelineForm = () => {
         return name.slice(0, 10);
     };
 
-    // Sync documents.engineers for each block as union of logic/scada/testing engineers of that same block
-    useEffect(() => {
-        setFormData((prev) => {
-            const plans = prev.plans.map((p) => {
-                const combinedEngineers = Array.from(
-                    new Set([...(p.logic.engineers || []), ...(p.scada.engineers || []), ...(p.testing.engineers || [])])
-                );
-                return {
-                    ...p,
-                    documents: {
-                        ...p.documents,
-                        engineers: combinedEngineers,
-                    },
-                };
-            });
-            return { ...prev, plans };
-        });
-        // We intentionally watch the whole nested arrays by stringifying - simpler and safe enough here
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        // small trick: depend on formData JSON so this runs when nested engineers change
-        JSON.stringify(formData.plans.map(p => ({
-            logic: p.logic.engineers,
-            scada: p.scada.engineers,
-            testing: p.testing.engineers
-        })))
-    ]);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // create the devback data same as before
             const formDevbackData = mapFrontendToBackend(
                 {
-                    document: {
-                        rows: documentRows(),
-                    },
-                    screen: {
-                        rows: screenRows(),
-                    },
-                    logic: {
-                        rows: logicRows(),
-                    },
-                    testing: {
-                        rows: testingRows(),
-                    },
-                    project: {
-                        rows: projectRows(),
-                    },
+                    document: { rows: documentRows() },
+                    screen: { rows: screenRows() },
+                    logic: { rows: logicRows() },
+                    testing: { rows: testingRows() },
+                    project: { rows: projectRows() },
                 },
                 project?.jobNumber
             );
 
-            // Prepare payload: backend expects `plans` array
             const payload = {
                 plans: formData.plans.map((block) => ({
-                    documents: {
-                        startDate: block.documents.startDate || null,
-                        endDate: block.documents.endDate || null,
-                        planDetails: block.documents.planDetails || "",
-                        engineers: block.documents.engineers || [],
-                    },
-                    logic: {
-                        startDate: block.logic.startDate || null,
-                        endDate: block.logic.endDate || null,
-                        planDetails: block.logic.planDetails || "",
-                        engineers: block.logic.engineers || [],
-                    },
-                    scada: {
-                        startDate: block.scada.startDate || null,
-                        endDate: block.scada.endDate || null,
-                        planDetails: block.scada.planDetails || "",
-                        engineers: block.scada.engineers || [],
-                    },
-                    testing: {
-                        startDate: block.testing.startDate || null,
-                        endDate: block.testing.endDate || null,
-                        planDetails: block.testing.planDetails || "",
-                        engineers: block.testing.engineers || [],
-                    },
+                    documents: block.documents.map(sec => ({
+                        startDate: sec.startDate || null,
+                        endDate: sec.endDate || null,
+                        planDetails: sec.planDetails || "",
+                        engineers: sec.engineers || [],
+                    })),
+                    logic: block.logic.map(sec => ({
+                        startDate: sec.startDate || null,
+                        endDate: sec.endDate || null,
+                        planDetails: sec.planDetails || "",
+                        engineers: sec.engineers || [],
+                    })),
+                    scada: block.scada.map(sec => ({
+                        startDate: sec.startDate || null,
+                        endDate: sec.endDate || null,
+                        planDetails: sec.planDetails || "",
+                        engineers: sec.engineers || [],
+                    })),
+                    testing: block.testing.map(sec => ({
+                        startDate: sec.startDate || null,
+                        endDate: sec.endDate || null,
+                        planDetails: sec.planDetails || "",
+                        engineers: sec.engineers || [],
+                    })),
                 })),
                 formDevbackData,
                 projectId: project?._id,
@@ -374,14 +379,13 @@ const ProjectTimelineForm = () => {
             toast.success(res.data?.message || "Plan saved successfully");
             navigate("/page");
 
-            // reset to single empty block
             setFormData({
                 plans: [
                     {
-                        documents: { ...emptySection },
-                        logic: { ...emptySection },
-                        scada: { ...emptySection },
-                        testing: { ...emptySection },
+                        documents: [{ ...emptySection }],
+                        logic: [{ ...emptySection }],
+                        scada: [{ ...emptySection }],
+                        testing: [{ ...emptySection }],
                     },
                 ],
             });
@@ -425,9 +429,8 @@ const ProjectTimelineForm = () => {
     };
 
     return (
-        <div className="w-full min-h-screen bg-gray-100 py-10 px-4">
-            <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto border border-gray-200 
-    scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 transition-all duration-300">
+        <div className="italic w-full min-h-screen bg-gray-100 py-10 px-4">
+            <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto border border-gray-200">
                 <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold text-gray-800 drop-shadow-sm">
                         PROJECT TIMELINE
@@ -442,13 +445,14 @@ const ProjectTimelineForm = () => {
                     )}
                 </div>
 
+                {/* Project Info Collapsible */}
                 <div className="w-full mb-6">
                     <button
                         onClick={() => setCollOpen(!collOpen)}
-                        className="w-full bg-gray-300 p-3 rounded-lg flex justify-between items-center"
+                        className="w-full bg-gray-300 p-3 rounded-lg flex justify-between items-center hover:bg-gray-400 transition"
                     >
                         <span className="text-lg font-medium">
-                            {collOpen ? "Hide" : "Show"} Order
+                            {collOpen ? "Hide" : "Show"} Order Details
                         </span>
                         <span className="text-xl">{collOpen ? "▲" : "▼"}</span>
                     </button>
@@ -578,284 +582,216 @@ const ProjectTimelineForm = () => {
                     )}
                 </div>
 
-                {/* ADD PLANNING BLOCK BUTTON (Top) */}
-                <div className="mb-6 flex items-center justify-between gap-3">
+                {/* ADD PLANNING BLOCK BUTTON */}
+                {/* <div className="mb-6 flex items-center justify-between gap-3">
                     <button
                         type="button"
                         onClick={addPlanningBlock}
-                        className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition"
+                        className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition font-medium shadow-md hover:shadow-lg"
                     >
                         + Add Planning Block
                     </button>
-                    <div className="text-sm text-gray-500">Blocks: {formData.plans.length}</div>
-                </div>
+                    <div className="text-sm text-gray-500 font-medium">Total Plannings: {formData.plans.length}</div>
+                </div> */}
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Render each planning block sequentially */}
+                <form onSubmit={handleSubmit} className="space-y-8">
                     {formData.plans.map((block, blockIndex) => (
-                        <div key={blockIndex} className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-lg font-semibold">Planning Block {blockIndex + 1}</h2>
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={() => removePlanningBlock(blockIndex)}
-                                        className="px-3 py-1 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition"
-                                    >
-                                        Remove Block
-                                    </button>
-                                </div>
-                            </div>
+                        <div key={blockIndex} className="space-y-6 border-2 border-green-400 rounded-xl p-6 bg-green-50/30">
+                            {/* <div className="flex items-center justify-between p-5 mb-4 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 transition-colors">
+                                <h2 className="text-lg font-semibold text-green-800 flex items-center gap-2">
+                                    <span className="text-2xl">📋</span>
+                                    Planning Section {blockIndex + 1}
+                                </h2>
+                                <button
+                                    type="button"
+                                    onClick={() => removePlanningBlock(blockIndex)}
+                                    className="px-4 py-2 rounded-lg border-2 border-red-400 text-red-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200 font-medium"
+                                >
+                                    Remove Block
+                                </button>
+                            </div> */}
 
-                            {/* For each phase inside the block */}
+                            {/* For each phase */}
                             {["documents", "logic", "scada", "testing"].map((phase) => {
-                                const key = phase.toLowerCase();
-                                const phaseData = formData.plans[blockIndex][key];
+                                const sections = block[phase] || [];
 
                                 return (
-                                    <div
-                                        key={`${blockIndex}-${phase}`}
-                                        className="p-5 bg-linear-to-br from-gray-50 to-gray-100/50 rounded-2xl shadow-sm border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300"
-                                    >
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-4 capitalize flex items-center gap-2">
-                                            <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-                                            {phase} Phase
-                                        </h3>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                                    Start Date *
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    required={true}
-                                                    value={phaseData.startDate}
-                                                    onChange={(e) =>
-                                                        handleChange(blockIndex, key, "startDate", e.target.value)
-                                                    }
-                                                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
-                                                />
-                                            </div>
-
-                                            <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                                    End Date
-                                                </label>
-                                                <input
-                                                    type="date"
-                                                    value={phaseData.endDate}
-                                                    onChange={(e) =>
-                                                        handleChange(blockIndex, key, "endDate", e.target.value)
-                                                    }
-                                                    className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
-                                                />
-                                            </div>
+                                    <div key={`${blockIndex}-${phase}`} className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="font-bold text-lg text-white capitalize flex items-center gap-2 px-4 py-3 bg-green-600 rounded-md shadow-md">
+                                                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                                                {phase} Phase
+                                            </h3>
+                                            <button
+                                                type="button"
+                                                onClick={() => addSectionToPhase(blockIndex, phase)}
+                                                className="px-3 py-1 text-sm rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition font-medium shadow-sm hover:shadow-md"
+                                            >
+                                                + Add Section
+                                            </button>
                                         </div>
 
-                                        {phase !== "documents" && (
-                                            <div className="mt-5">
-                                                <label className="block text-sm font-medium text-gray-700 mb-3  items-center gap-2">
-                                                    <svg
-                                                        className="w-5 h-5 text-teal-500"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                                                        />
-                                                    </svg>
-                                                    Select Engineers
-                                                </label>
+                                        {sections.map((section, sectionIndex) => (
+                                            <div
+                                                key={sectionIndex}
+                                                className="p-5 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300"
+                                            >
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h4 className="font-medium text-gray-700">
+                                                        Section {sectionIndex + 1}
+                                                    </h4>
+                                                    {sections.length > 1 && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => removeSectionFromPhase(blockIndex, phase, sectionIndex)}
+                                                            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200 font-medium border border-red-200 hover:border-red-500 shadow-sm hover:shadow-md"
+                                                        >
+                                                            <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                            <span>Remove</span>
+                                                        </button>
+                                                    )}
 
-                                                {phaseData.engineers?.length > 0 && (
-                                                    <div className="mb-3 flex flex-wrap gap-2">
-                                                        {phaseData.engineers.map((engId) => {
-                                                            const fullName = getEngineerName(engId);
-                                                            const shortName = truncateName(fullName);
-                                                            return (
-                                                                <span
-                                                                    key={engId}
-                                                                    title={fullName}
-                                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-linear-to-r from-teal-100 to-cyan-100 text-teal-800 text-sm rounded-full shadow-sm hover:shadow-md transition-all duration-200 group cursor-pointer border border-teal-200"
-                                                                >
-                                                                    <svg
-                                                                        className="w-4 h-4"
-                                                                        fill="currentColor"
-                                                                        viewBox="0 0 20 20"
-                                                                    >
-                                                                        <path
-                                                                            fillRule="evenodd"
-                                                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                                            clipRule="evenodd"
-                                                                        />
-                                                                    </svg>
-                                                                    <span className="font-medium">{shortName}</span>
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => removeEngineer(blockIndex, key, engId)}
-                                                                        className="ml-1 hover:bg-teal-200 rounded-full p-0.5 transition-colors"
-                                                                    >
-                                                                        <svg
-                                                                            className="w-4 h-4"
-                                                                            fill="none"
-                                                                            stroke="currentColor"
-                                                                            viewBox="0 0 24 24"
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                                            Start Date *
+                                                        </label>
+                                                        <input
+                                                            type="date"
+                                                            required={true}
+                                                            value={section.startDate}
+                                                            onChange={(e) =>
+                                                                handleChange(blockIndex, phase, sectionIndex, "startDate", e.target.value)
+                                                            }
+                                                            className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                                            End Date
+                                                        </label>
+                                                        <input
+                                                            type="date"
+                                                            value={section.endDate}
+                                                            onChange={(e) =>
+                                                                handleChange(blockIndex, phase, sectionIndex, "endDate", e.target.value)
+                                                            }
+                                                            className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                {phase !== "documents" && (
+                                                    <div className="mt-5">
+                                                        <label className="flex text-sm font-medium text-gray-700 mb-3 items-center gap-2">
+                                                            <svg className="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                            </svg>
+                                                            Select Engineers
+                                                        </label>
+
+                                                        {section.engineers?.length > 0 && (
+                                                            <div className="mb-3 flex flex-wrap gap-2">
+                                                                {section.engineers.map((engId) => {
+                                                                    const fullName = getEngineerName(engId);
+                                                                    const shortName = truncateName(fullName);
+                                                                    return (
+                                                                        <span
+                                                                            key={engId}
+                                                                            title={fullName}
+                                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-100 text-teal-800 text-sm rounded-full shadow-sm hover:shadow-md transition-all duration-200 border border-teal-200"
                                                                         >
-                                                                            <path
-                                                                                strokeLinecap="round"
-                                                                                strokeLinejoin="round"
-                                                                                strokeWidth={2}
-                                                                                d="M6 18L18 6M6 6l12 12"
-                                                                            />
-                                                                        </svg>
-                                                                    </button>
-                                                                </span>
-                                                            );
-                                                        })}
+                                                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                                                            </svg>
+                                                                            <span className="font-medium">{shortName}</span>
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => removeEngineer(blockIndex, phase, sectionIndex, engId)}
+                                                                                className="ml-1 hover:bg-teal-200 rounded-full p-0.5 transition-colors"
+                                                                            >
+                                                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                                                </svg>
+                                                                            </button>
+                                                                        </span>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        )}
+
+                                                        <div className="max-h-48 overflow-y-auto border-2 border-gray-200 rounded-xl p-3 bg-white shadow-inner scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                                                            {engineersList.length === 0 ? (
+                                                                <div className="text-center py-8">
+                                                                    <svg className="w-12 h-12 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                                    </svg>
+                                                                    <p className="text-gray-400 text-sm">No engineers available</p>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                                    {engineersList.map((engineer) => {
+                                                                        const isChecked = section.engineers?.includes(engineer._id);
+                                                                        const fullName = engineer.username || engineer.name || engineer.email;
+                                                                        const shortName = truncateName(fullName);
+                                                                        return (
+                                                                            <label
+                                                                                key={engineer._id}
+                                                                                title={fullName}
+                                                                                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer border-2 transition-all duration-200 ${isChecked
+                                                                                    ? "bg-teal-50 border-teal-300 shadow-sm"
+                                                                                    : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
+                                                                                    }`}
+                                                                            >
+                                                                                <input
+                                                                                    type="checkbox"
+                                                                                    checked={isChecked}
+                                                                                    onChange={() =>
+                                                                                        handleEngineerToggle(blockIndex, phase, sectionIndex, engineer._id)
+                                                                                    }
+                                                                                    className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                                                                                />
+                                                                                <span className="text-sm text-gray-700">{shortName}</span>
+                                                                            </label>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 )}
 
-                                                {/* Engineer List with Styled Checkboxes */}
-                                                <div className="max-h-48 overflow-y-auto border-2 border-gray-200 rounded-xl p-3 bg-white shadow-inner">
-                                                    {engineersList.length === 0 ? (
-                                                        <div className="text-center py-8">
-                                                            <svg
-                                                                className="w-12 h-12 text-gray-300 mx-auto mb-2"
-                                                                fill="none"
-                                                                stroke="currentColor"
-                                                                viewBox="0 0 24 24"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    strokeWidth={2}
-                                                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                                                                />
-                                                            </svg>
-                                                            <p className="text-sm text-gray-400">
-                                                                No engineers available
-                                                            </p>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                                            {engineersList.map((engineer) => {
-                                                                const isChecked = phaseData.engineers?.includes(
-                                                                    engineer._id
-                                                                );
-                                                                const fullName =
-                                                                    engineer.username ||
-                                                                    engineer.name ||
-                                                                    engineer.email;
-                                                                const shortName = truncateName(fullName);
-                                                                return (
-                                                                    <label
-                                                                        key={engineer._id}
-                                                                        title={fullName}
-                                                                        className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 border-2 ${isChecked
-                                                                            ? "bg-teal-50 border-teal-300 shadow-sm"
-                                                                            : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
-                                                                            }`}
-                                                                    >
-                                                                        <div className="relative shrink-0">
-                                                                            <input
-                                                                                type="checkbox"
-                                                                                checked={isChecked}
-                                                                                onChange={() =>
-                                                                                    handleEngineerToggle(blockIndex, key, engineer._id)
-                                                                                }
-                                                                                className="peer sr-only"
-                                                                            />
-                                                                            <div
-                                                                                className={`w-5 h-5 border-2 rounded-md flex items-center justify-center transition-all duration-200 ${isChecked
-                                                                                    ? "bg-teal-400 border-teal-400"
-                                                                                    : "bg-white border-gray-300"
-                                                                                    }`}
-                                                                            >
-                                                                                {isChecked && (
-                                                                                    <svg
-                                                                                        className="w-3.5 h-3.5 text-white"
-                                                                                        fill="none"
-                                                                                        stroke="currentColor"
-                                                                                        viewBox="0 0 24 24"
-                                                                                    >
-                                                                                        <path
-                                                                                            strokeLinecap="round"
-                                                                                            strokeLinejoin="round"
-                                                                                            strokeWidth={3}
-                                                                                            d="M5 13l4 4L19 7"
-                                                                                        />
-                                                                                    </svg>
-                                                                                )}
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                                                                            <div
-                                                                                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isChecked ? "bg-teal-100" : "bg-gray-100"
-                                                                                    }`}
-                                                                            >
-                                                                                <svg
-                                                                                    className={`w-5 h-5 ${isChecked
-                                                                                        ? "text-teal-600"
-                                                                                        : "text-gray-500"
-                                                                                        }`}
-                                                                                    fill="currentColor"
-                                                                                    viewBox="0 0 20 20"
-                                                                                >
-                                                                                    <path
-                                                                                        fillRule="evenodd"
-                                                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                                                        clipRule="evenodd"
-                                                                                    />
-                                                                                </svg>
-                                                                            </div>
-                                                                            <span
-                                                                                className={`text-sm font-medium ${isChecked
-                                                                                    ? "text-teal-700"
-                                                                                    : "text-gray-700"
-                                                                                    }`}
-                                                                            >
-                                                                                {shortName}
-                                                                            </span>
-                                                                        </div>
-                                                                    </label>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    )}
+                                                <div className="mt-4">
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                                        Planning Notes
+                                                    </label>
+                                                    <textarea
+                                                        rows={3}
+                                                        placeholder={`Add notes for this ${phase} section...`}
+                                                        value={section.planDetails}
+                                                        onChange={(e) =>
+                                                            handleChange(blockIndex, phase, sectionIndex, "planDetails", e.target.value)
+                                                        }
+                                                        className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
+                                                    />
                                                 </div>
                                             </div>
-                                        )}
-
-                                        {/* Planning Details */}
-                                        <div className="mt-4">
-                                            <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                                Planning Notes
-                                            </label>
-                                            <textarea
-                                                rows={3}
-                                                placeholder={`Add important notes for ${phase} phase...`}
-                                                value={phaseData.planDetails}
-                                                onChange={(e) =>
-                                                    handleChange(blockIndex, key, "planDetails", e.target.value)
-                                                }
-                                                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all"
-                                            />
-                                        </div>
+                                        ))}
                                     </div>
                                 );
                             })}
                         </div>
                     ))}
 
-                    <div className="flex justify-center">
+                    <div className="flex justify-center pt-4">
                         <button
                             type="submit"
-                            className="px-6 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 hover:shadow-xl transition-all font-medium"
+                            className="px-8 py-3 bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-semibold text-lg hover:shadow-xl transform hover:scale-105"
                         >
                             Save Timeline
                         </button>
@@ -866,4 +802,4 @@ const ProjectTimelineForm = () => {
     );
 };
 
-export default ProjectTimelineForm;
+export default ProjectTimelineForm1;

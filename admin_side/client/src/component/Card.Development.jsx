@@ -202,13 +202,13 @@ const CardStatus = ({
 
   return (
     <div>
-      {open && (
+      {/* {open && (
         <ProjectTimelineForm
           project={project}
           open={open}
           onClose={() => setOpen(false)}
         />
-      )}
+      )} */}
       {deleteFlag && (
         <PopupConfirmation
           setCancelflag={setDeleteflag}
@@ -237,7 +237,7 @@ const CardStatus = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.4 }}
-        className="group relative rounded-xl bg-linear-to-br from-indigo-400 via-purple-400 to-pink-300 border border-transparent hover:border-purple-300 shadow-lg hover:shadow-2xl transition-all duration-300"
+        className="group relative rounded-xl bg-linear-to-br from-emerald-300 via-green-300 to-cyan-300 border border-transparent hover:border-emerald-400 shadow-lg hover:shadow-2xl transition-all duration-300"
       >
         <div className="p-6">
           <div className="flex items-center justify-between w-full">
@@ -269,7 +269,7 @@ text-white p-2 rounded-full shadow-lg
 transition-all duration-200
 hover:scale-110 hover:-rotate-6
 ring-2 ring-transparent hover:ring-emerald-300
-focus:outline-none focus:ring-4 focus:ring-emerald-400
+focus:outline-none focus:ring-4 focus:ring-emerald-400 mb-2
 "
                 aria-label="Update"
                 type="button"
@@ -278,7 +278,7 @@ focus:outline-none focus:ring-4 focus:ring-emerald-400
               </button>
             </div>
 
-            <div onClick={() => setOpen(true)} className="relative group ">
+            {/* <div onClick={() => setOpen(true)} className="relative group ">
               <button
                 className="
 flex items-center justify-center
@@ -295,7 +295,7 @@ focus:outline-none focus:ring-4 focus:ring-emerald-400
               >
                 <LuNotepadText className="w-5 h-5 drop-shadow" />
               </button>
-            </div>
+            </div> */}
 
             {deleteButton && userRole && (
               <div
@@ -308,7 +308,7 @@ text-white p-2 rounded-full shadow-lg
 transition-all duration-200
 hover:scale-110 hover:rotate-6
 ring-2 ring-transparent hover:ring-red-300
-focus:outline-none focus:ring-4 focus:ring-red-400
+focus:outline-none focus:ring-4 focus:ring-red-400 mb-2
 "
                 aria-label="Delete"
                 type="button"

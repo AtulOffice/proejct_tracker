@@ -61,13 +61,12 @@ const ProjectdevlopForm = () => {
         const frontendData = mapBackendToFrontend(backendData?.data);
         backendData?.data && setFormData(frontendData);
         backendData?.data?.PlanDetails &&
-          setPlans(backendData?.data?.PlanDetails);
-        toast.success("Data fetched successfully!");
+          setPlans(backendData?.data?.PlanDetails?.plans[0]);
+        toast.success("Development Data fetched successfully!");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
   const handleSubmit = async (e) => {
@@ -134,15 +133,13 @@ const ProjectdevlopForm = () => {
                 <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
                   <div>
                     <span className="font-semibold">Start:</span>{" "}
-                    {plans?.documents?.startDate
-                      ? new Date(plans.documents.startDate).toLocaleDateString()
-                      : "—"}
+                    {plans?.documents[0]?.startDate
+                      || "—"}
                   </div>
                   <div>
                     <span className="font-semibold">End:</span>{" "}
-                    {plans?.documents?.endDate
-                      ? new Date(plans.documents.endDate).toLocaleDateString()
-                      : "—"}
+                    {plans?.documents[0]?.endDate
+                      || "—"}
                   </div>
                 </div>
               </div>
@@ -302,15 +299,13 @@ const ProjectdevlopForm = () => {
               <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
                 <div>
                   <span className="font-semibold">Start:</span>{" "}
-                  {plans?.scada?.startDate
-                    ? new Date(plans?.scada?.startDate).toLocaleDateString()
-                    : "—"}
+                  {plans?.scada[0]?.startDate
+                    || "—"}
                 </div>
                 <div>
                   <span className="font-semibold">End:</span>{" "}
-                  {plans?.scada?.endDate
-                    ? new Date(plans.scada.endDate).toLocaleDateString()
-                    : "—"}
+                  {plans?.scada[0]?.endDate
+                    || "—"}
                 </div>
               </div>
             </div>
@@ -434,15 +429,13 @@ const ProjectdevlopForm = () => {
                 <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
                   <div>
                     <span className="font-semibold">Start:</span>{" "}
-                    {plans?.logic?.startDate
-                      ? new Date(plans.logic.startDate).toLocaleDateString()
-                      : "—"}
+                    {plans?.logic[0]?.startDate
+                      || "—"}
                   </div>
                   <div>
                     <span className="font-semibold">End:</span>{" "}
-                    {plans?.logic?.endDate
-                      ? new Date(plans.logic.endDate).toLocaleDateString()
-                      : "—"}
+                    {plans?.logic[0]?.endDate
+                      || "—"}
                   </div>
                 </div>
               </div>
@@ -572,15 +565,14 @@ const ProjectdevlopForm = () => {
                 <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 text-white text-sm">
                   <div>
                     <span className="font-semibold">Start:</span>{" "}
-                    {plans?.testing?.startDate
-                      ? new Date(plans.testing.startDate).toLocaleDateString()
-                      : "—"}
+                    {plans?.testing[0]?.startDate
+                      || "—"}
                   </div>
                   <div>
                     <span className="font-semibold">End:</span>{" "}
-                    {plans?.testing?.endDate
-                      ? new Date(plans.testing.endDate).toLocaleDateString()
-                      : "—"}
+                    {plans?.testing[0]
+                    ?.endDate
+                      || "—"}
                   </div>
                 </div>
               </div>

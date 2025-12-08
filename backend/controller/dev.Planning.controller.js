@@ -6,7 +6,138 @@ import EngineerReocord from "../models/engineers..model.js";
 
 export const PlanningSave = async (req, res) => {
   try {
-    const { useId, projectId, formDevbackData, ...restData } = req.body;
+    const { userId, projectId, formDevbackData, ...restData } = req.body;
+    // console.dir(req.body, { depth: null, colors: true });
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Project ID",
+      });
+    }
+
+    const project = await ProjectModel.findById(projectId);
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+    const firstPlanBlock = restData?.plans?.[0] || {};
+    const firstDocStartDate = firstPlanBlock?.documents?.[0]?.startDate || null;
+
+    let projectDev =
+      (project.DevelopmentDetials &&
+        (await ProjectDevModel.findByIdAndUpdate(
+          project.DevelopmentDetials,
+          {
+            jobNumber: project.jobNumber,
+            startDate: firstDocStartDate,
+          },
+          { new: true }
+        ))) ||
+      (await ProjectDevModel.create({
+        ...formDevbackData,
+        jobNumber: project.jobNumber,
+        startDate: firstDocStartDate,
+      }));
+
+    const planData = {
+      ...restData,
+      DevelopmentDetials: projectDev._id,
+      updatedBy: userId,
+    };
+
+    let planning =
+      project.PlanDetails && (await PlanningModel.findById(project.PlanDetails))
+        ? await PlanningModel.findByIdAndUpdate(project.PlanDetails, planData, {
+            new: true,
+          })
+        : await PlanningModel.create({
+            ...planData,
+            projectName: project.projectName,
+            ProjectDetails: project._id,
+            DevelopmentDetials: projectDev._id,
+            jobNumber: project.jobNumber,
+            devScope: project.Development,
+            createdBy: userId,
+          });
+
+    await ProjectModel.findByIdAndUpdate(project._id, {
+      PlanDetails: planning._id,
+      DevelopmentDetials: projectDev._id,
+      isPlanRecord: true,
+    });
+
+    await ProjectDevModel.findByIdAndUpdate(projectDev._id, {
+      PlanDetails: planning._id,
+    });
+
+    const planBlock = planning?.plans?.[0] || {};
+    const sectionNames = ["documents", "logic", "scada", "testing"];
+
+    const engineersBySection = {};
+
+    sectionNames.forEach((section) => {
+      const items = Array.isArray(planBlock[section]) ? planBlock[section] : [];
+
+      const engineers = [...new Set(items.flatMap((i) => i.engineers || []))];
+
+      const dates = items.map((i) => ({
+        startDate: i.startDate || null,
+        endDate: i.endDate || null,
+      }));
+
+      engineersBySection[section] = { engineers, dates };
+    });
+
+    const allEngineers = [
+      ...new Set(
+        sectionNames.flatMap((sec) => engineersBySection[sec].engineers)
+      ),
+    ];
+
+    await Promise.all(
+      allEngineers.map(async (engineerId) => {
+        const engineer = await EngineerReocord.findById(engineerId);
+        if (!engineer) return;
+
+        for (const section of sectionNames) {
+          const { engineers, dates } = engineersBySection[section];
+
+          if (!engineers.includes(engineerId)) continue;
+
+          engineer.developmentProjectList[section] =
+            engineer.developmentProjectList[section] || [];
+
+          engineer.developmentProjectList[section].push({
+            project: project._id,
+            dates,
+          });
+        }
+
+        await engineer.save();
+      })
+    );
+    return res.status(200).json({
+      success: true,
+      message: project.PlanDetails
+        ? "Project planning saved successfully"
+        : "Project planning created successfully",
+      data: planning,
+    });
+  } catch (error) {
+    console.error("❌ Error saving project planning:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong while saving planning",
+      error: error.message,
+    });
+  }
+};
+
+export const PlanningSaveOld = async (req, res) => {
+  try {
+    const { userId, projectId, formDevbackData, ...restData } = req.body;
     if (!mongoose.Types.ObjectId.isValid(projectId)) {
       return res
         .status(400)
@@ -38,7 +169,7 @@ export const PlanningSave = async (req, res) => {
     const planData = {
       ...restData,
       DevelopmentDetials: projectDev._id,
-      updatedBy: useId,
+      updatedBy: userId,
     };
 
     let planning =
@@ -53,7 +184,7 @@ export const PlanningSave = async (req, res) => {
             DevelopmentDetials: projectDev._id,
             jobNumber: project.jobNumber,
             devScope: project.Development,
-            createdBy: useId,
+            createdBy: userId,
           });
     await ProjectModel.findByIdAndUpdate(project._id, {
       PlanDetails: planning._id,

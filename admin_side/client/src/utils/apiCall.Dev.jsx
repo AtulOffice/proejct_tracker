@@ -4,8 +4,7 @@ import toast from "react-hot-toast";
 export const fetchProjectsDev = async ({ page, search }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/projectDev/paginationdev?page=${page}&limit=6&search=${search}`,
       { withCredentials: true }
     );
@@ -23,8 +22,7 @@ export const fetchProjectsDevprogress = async ({
 }) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/projectDev/paginationdevprog?page=${page}&limit=6&search=${search}&statusprog=${statusFilter}`,
       { withCredentials: true }
     );
@@ -55,8 +53,7 @@ export const statusSave = async ({ data }) => {
 export const getStatus = async (Jobnumber) => {
   try {
     const res = await axios.get(
-      `${
-        import.meta.env.VITE_API_URL
+      `${import.meta.env.VITE_API_URL
       }/projectDev/fetchbyjobnumber/${Jobnumber}`,
       { withCredentials: true }
     );

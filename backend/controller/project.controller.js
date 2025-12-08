@@ -1521,7 +1521,6 @@ export const allProjectsFetch = async (req, res) => {
 export const ProjectsFetchDevById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("this is alled");
 
     if (!id) {
       return res.status(400).json({

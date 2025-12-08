@@ -214,22 +214,7 @@ ProjectDevSchema.post("findOneAndUpdate", async function (doc) {
   }
 });
 
-// ProjectDevSchema.pre("findOneAndUpdate", async function (next) {
-//   const update = this.getUpdate();
-//   const docToUpdate = await this.model.findOne(this.getQuery());
-
-//   if (docToUpdate) {
-//     const updatedDoc = {
-//       ...docToUpdate.toObject(),
-//       ...(update.$set || {}),
-//     };
-//     this.set({ summary: calculateSummary(updatedDoc) });
-//   }
-//   next();
-// });
-
-
-dateToJSONTransformer(ProjectDevSchema)
+dateToJSONTransformer(ProjectDevSchema);
 const ProjectDevModel = mongoose.model("ProjectDev", ProjectDevSchema);
 
 export default ProjectDevModel;

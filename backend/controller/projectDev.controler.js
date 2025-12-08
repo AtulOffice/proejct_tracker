@@ -120,7 +120,7 @@ export const ProjectStatusfetchbyJobId = async (req, res) => {
       jobNumber,
     }).populate({
       path: "PlanDetails",
-      select: "scada logic testing documents",
+      select: "plans",
     });
     if (!projectStatus) {
       return res

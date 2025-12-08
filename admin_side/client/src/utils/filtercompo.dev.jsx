@@ -24,10 +24,9 @@ const FilterCompodev = ({
         <div className="relative w-full lg:w-1/2 group mb-4 lg:mb-0">
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
             <svg
-              className="w-5 h-5 text-indigo-500 group-focus-within:text-indigo-600 transition-colors"
+              className="w-5 h-5 text-gray-500 transition-colors"
               fill="currentColor"
               viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
             >
               <path
                 fillRule="evenodd"
@@ -38,13 +37,17 @@ const FilterCompodev = ({
           </div>
           <input
             type="text"
-            className="bg-white border-2 border-gray-200 text-gray-900 text-md rounded-xl focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 block w-full pl-12 p-3.5 transition-all shadow-sm"
+            className="bg-white border-2 border-gray-200 text-gray-900 text-md rounded-xl 
+        focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 
+        block w-full pl-12 p-3.5 transition-all shadow-sm"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+
         <div className="flex w-full lg:w-auto justify-between lg:justify-start gap-4">
+          {/* Refresh Button - white bg */}
           <button
             onClick={async (e) => {
               e.stopPropagation();
@@ -57,7 +60,9 @@ const FilterCompodev = ({
                 refreshIcon.classList.remove("animate-spin");
               }, 1000);
             }}
-            className="p-2 rounded-lg bg-linear-to-r from-pink-500 via-purple-500 to-indigo-500 hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 text-white transition-all duration-200 flex items-center justify-center shadow-sm shrink-0"
+            className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-700 
+        transition-all duration-200 flex items-center justify-center 
+        shadow-sm border border-gray-200"
             title="Refresh tasks"
           >
             <svg
@@ -76,18 +81,18 @@ const FilterCompodev = ({
               />
             </svg>
           </button>
+
+          {/* Filter Button - white bg */}
           <div ref={filterRef} className="relative w-auto lg:w-auto">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="w-full lg:w-auto text-white bg-linear-to-r from-green-400 via-blue-500 to-indigo-600 hover:from-green-500 hover:via-blue-600 hover:to-indigo-700 focus:ring-4 focus:ring-indigo-300 font-medium rounded-xl text-md px-6 py-3.5 text-center inline-flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-all shrink-0"
+              className="w-full lg:w-auto text-gray-700 bg-white border border-gray-200
+          hover:bg-gray-100 focus:ring-4 focus:ring-indigo-300 font-medium 
+          rounded-xl text-md px-6 py-3.5 flex items-center justify-center 
+          shadow-sm transition-all"
               type="button"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
@@ -95,21 +100,12 @@ const FilterCompodev = ({
                 ></path>
               </svg>
               {mapTime[statusFilter] || "STATUS"}
-              <svg
-                className="w-4 h-4 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
+
+            {/* Dropdown */}
             <AnimatePresence>
               {isFilterOpen && (
                 <motion.div
@@ -117,38 +113,33 @@ const FilterCompodev = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100 dark:bg-gray-400"
+                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl border border-gray-100"
                 >
-                  <ul className="p-4 space-y-2 text-sm text-gray-700 dark:text-gray-200">
-                    {["ALL", "RUNNING", "PENDING", "COMPLETED"].map(
-                      (filter) => (
-                        <li key={filter}>
-                          <div className="flex p-2 rounded-lg hover:bg-indigo-50 dark:hover:bg-gray-700 transition-colors">
-                            <input
-                              type="radio"
-                              id={`filter-${filter}`}
-                              name="statusFilter"
-                              value={filter}
-                              checked={statusFilter === filter}
-                              onChange={() => {
-                                setIsFilterOpen(false);
-                                setStatusFilter(filter);
-                              }}
-                              className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-700"
-                            />
-                            <label
-                              htmlFor={`filter-${filter}`}
-                              className="ml-2 w-full text-md font-medium text-gray-900 dark:text-gray-300"
-                            >
-                              {filter === "ALL" && "All"}
-                              {filter === "RUNNING" && "RUNNING"}
-                              {filter === "PENDING" && "PENDING"}
-                              {filter === "COMPLETED" && "COMPLETED"}
-                            </label>
-                          </div>
-                        </li>
-                      )
-                    )}
+                  <ul className="p-4 space-y-2 text-sm text-gray-700">
+                    {["ALL", "RUNNING", "PENDING", "COMPLETED"].map((filter) => (
+                      <li key={filter}>
+                        <div className="flex p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                          <input
+                            type="radio"
+                            id={`filter-${filter}`}
+                            name="statusFilter"
+                            value={filter}
+                            checked={statusFilter === filter}
+                            onChange={() => {
+                              setIsFilterOpen(false);
+                              setStatusFilter(filter);
+                            }}
+                            className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-600"
+                          />
+                          <label
+                            htmlFor={`filter-${filter}`}
+                            className="ml-2 text-md font-medium text-gray-900"
+                          >
+                            {filter}
+                          </label>
+                        </div>
+                      </li>
+                    ))}
                   </ul>
                 </motion.div>
               )}
@@ -158,12 +149,13 @@ const FilterCompodev = ({
       </div>
 
       <div className="mb-6 flex items-center">
-        <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-3 py-1 rounded-full mr-2">
+        <span className="bg-gray-200 text-gray-800 text-xs font-medium px-3 py-1 rounded-full mr-2">
           {filteredProjects.length}
         </span>
         <p className="text-gray-600">projects found</p>
       </div>
     </>
+
   );
 };
 
