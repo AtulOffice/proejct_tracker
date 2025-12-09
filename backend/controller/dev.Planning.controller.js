@@ -80,6 +80,7 @@ export const PlanningSave = async (req, res) => {
 
       phasesBySection[section] = items.map((phase, index) => ({
         phaseIndex: index,
+         sectionName: phase.sectionName || "",
         startDate: phase.startDate ? new Date(phase.startDate) : null,
         endDate: phase.endDate ? new Date(phase.endDate) : null,
         engineers: Array.isArray(phase.engineers)
@@ -107,6 +108,7 @@ export const PlanningSave = async (req, res) => {
             .filter((phase) => phase.engineers.includes(engineerId))
             .map((phase) => ({
               phaseIndex: phase.phaseIndex,
+              sectionName: phase.sectionName || "",
               startDate: phase.startDate,
               endDate: phase.endDate,
               engineers: phase.engineers,

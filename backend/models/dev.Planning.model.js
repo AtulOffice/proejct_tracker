@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const sectionSchema = new mongoose.Schema(
-  {
+  { sectionName:{
+    type:String,default:""
+  },
     startDate: { type: Date, default: null },
     endDate: { type: Date, default: null },
     planDetails: { type: String, default: "" },

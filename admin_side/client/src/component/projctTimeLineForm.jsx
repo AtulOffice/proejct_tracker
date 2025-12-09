@@ -19,11 +19,9 @@ const ProjectTimelineForm1 = () => {
     const [project, setProject] = useState();
     const [loading, setLoading] = useState();
     const { toggle, setToggle } = useAppContext();
-    const [documentEngineers, setDocumentEngineers] = useState([]);
-
     const navigate = useNavigate();
 
-    const emptySection = { startDate: "", endDate: "", planDetails: "", engineers: [] };
+    const emptySection = { sectionName: "", startDate: "", endDate: "", planDetails: "", engineers: [] };
     const [formData, setFormData] = useState({
         plans: [
             {
@@ -125,6 +123,7 @@ const ProjectTimelineForm1 = () => {
                         return {
                             documents: (block.documents || []).length > 0
                                 ? (block.documents || []).map(sec => ({
+                                    sectionName: sec.sectionName || "",
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -133,6 +132,7 @@ const ProjectTimelineForm1 = () => {
                                 : [{ ...emptySection }],
                             logic: (block.logic || []).length > 0
                                 ? (block.logic || []).map(sec => ({
+                                    sectionName: sec.sectionName || "",
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -141,6 +141,7 @@ const ProjectTimelineForm1 = () => {
                                 : [{ ...emptySection }],
                             scada: (block.scada || []).length > 0
                                 ? (block.scada || []).map(sec => ({
+                                    sectionName: sec.sectionName || "",
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -149,6 +150,7 @@ const ProjectTimelineForm1 = () => {
                                 : [{ ...emptySection }],
                             testing: (block.testing || []).length > 0
                                 ? (block.testing || []).map(sec => ({
+                                    sectionName: sec.sectionName || "",
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -341,24 +343,28 @@ const ProjectTimelineForm1 = () => {
             const payload = {
                 plans: formData.plans.map((block) => ({
                     documents: block.documents.map(sec => ({
+                        sectionName: sec.sectionName || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
                         engineers: sec.engineers || [],
                     })),
                     logic: block.logic.map(sec => ({
+                        sectionName: sec.sectionName || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
                         engineers: sec.engineers || [],
                     })),
                     scada: block.scada.map(sec => ({
+                        sectionName: sec.sectionName || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
                         engineers: sec.engineers || [],
                     })),
                     testing: block.testing.map(sec => ({
+                        sectionName: sec.sectionName || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
@@ -637,9 +643,40 @@ const ProjectTimelineForm1 = () => {
                                                 className="p-5 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300"
                                             >
                                                 <div className="flex justify-between items-center mb-4">
-                                                    <h4 className="font-medium text-gray-700">
+                                                    {/* <h4 className="font-medium text-gray-700">
                                                         Section {sectionIndex + 1}
-                                                    </h4>
+                                                    </h4> */}
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Enter Section Name"
+                                                        value={section.sectionName}
+                                                        onChange={(e) =>
+                                                            handleChange(
+                                                                blockIndex,
+                                                                phase,
+                                                                sectionIndex,
+                                                                "sectionName",
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-1/3
+    px-4 py-2
+    rounded-xl
+    border border-slate-300
+    bg-white/80
+    shadow-sm
+    focus:outline-none
+    focus:ring-2 focus:ring-blue-500/60
+    focus:border-blue-500
+    placeholder:text-slate-400
+    text-slate-800
+    transition
+    duration-200
+    ease-out
+  "
+                                                    />
+
+
                                                     {sections.length > 1 && (
                                                         <button
                                                             type="button"
@@ -766,8 +803,11 @@ const ProjectTimelineForm1 = () => {
                                                 )}
 
                                                 <div className="mt-4">
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                                    {/* <label className="block text-sm font-medium text-gray-700 mb-1.5">
                                                         Planning Notes
+                                                    </label> */}
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                                        {phase.charAt(0).toUpperCase() + phase.slice(1)} Notes
                                                     </label>
                                                     <textarea
                                                         rows={3}
