@@ -63,29 +63,61 @@ const engineerSchema = new mongoose.Schema(
       documents: [
         {
           project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
-          startDate: Date,
-          endDate: Date,
+          phases: [
+            {
+              phaseIndex: Number,
+              startDate: Date,
+              endDate: Date,
+              engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+            },
+          ],
         },
       ],
       logic: [
         {
           project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
-          startDate: Date,
-          endDate: Date,
+          phases: [
+            {
+              phaseIndex: Number,
+              startDate: Date,
+              endDate: Date,
+              engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+            },
+          ],
         },
       ],
       scada: [
         {
           project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
-          startDate: Date,
-          endDate: Date,
+          phases: [
+            {
+              phaseIndex: Number,
+              startDate: Date,
+              endDate: Date,
+              engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+            },
+          ],
         },
       ],
       testing: [
         {
           project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
-          startDate: Date,
-          endDate: Date,
+          phases: [
+            {
+              phaseIndex: Number,
+              startDate: Date,
+              endDate: Date,
+              engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+            },
+          ],
         },
       ],
     },

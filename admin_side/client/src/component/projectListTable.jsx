@@ -41,7 +41,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
       return;
       setSelectedProject(project)
       setPlanOpen(true)
-      console.log("this called as the hendle Assigned")
     } catch (e) {
       console.log("some error occured", e)
     }

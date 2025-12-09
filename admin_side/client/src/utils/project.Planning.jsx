@@ -639,7 +639,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
               type="submit"
               className="px-6 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 hover:shadow-xl transition-all font-medium"
             >
-              Save Timeline
+              create software development plan
             </button>
           </div>
         </form>

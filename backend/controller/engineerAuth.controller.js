@@ -125,7 +125,6 @@ export const forgotEngineer = async (req, res) => {
     };
 
     await engineer.save();
-
     await sendMail({
       to: email,
       subject: "Engineer Password Reset OTP",

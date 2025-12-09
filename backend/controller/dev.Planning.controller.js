@@ -7,7 +7,6 @@ import EngineerReocord from "../models/engineers..model.js";
 export const PlanningSave = async (req, res) => {
   try {
     const { userId, projectId, formDevbackData, ...restData } = req.body;
-    // console.dir(req.body, { depth: null, colors: true });
     if (!mongoose.Types.ObjectId.isValid(projectId)) {
       return res.status(400).json({
         success: false,
@@ -74,25 +73,25 @@ export const PlanningSave = async (req, res) => {
 
     const planBlock = planning?.plans?.[0] || {};
     const sectionNames = ["documents", "logic", "scada", "testing"];
-
-    const engineersBySection = {};
+    const phasesBySection = {};
 
     sectionNames.forEach((section) => {
       const items = Array.isArray(planBlock[section]) ? planBlock[section] : [];
 
-      const engineers = [...new Set(items.flatMap((i) => i.engineers || []))];
-
-      const dates = items.map((i) => ({
-        startDate: i.startDate || null,
-        endDate: i.endDate || null,
+      phasesBySection[section] = items.map((phase, index) => ({
+        phaseIndex: index,
+        startDate: phase.startDate ? new Date(phase.startDate) : null,
+        endDate: phase.endDate ? new Date(phase.endDate) : null,
+        engineers: Array.isArray(phase.engineers)
+          ? phase.engineers.map((e) => e.toString())
+          : [],
       }));
-
-      engineersBySection[section] = { engineers, dates };
     });
-
     const allEngineers = [
       ...new Set(
-        sectionNames.flatMap((sec) => engineersBySection[sec].engineers)
+        sectionNames.flatMap((section) =>
+          phasesBySection[section].flatMap((phase) => phase.engineers)
+        )
       ),
     ];
 
@@ -102,22 +101,39 @@ export const PlanningSave = async (req, res) => {
         if (!engineer) return;
 
         for (const section of sectionNames) {
-          const { engineers, dates } = engineersBySection[section];
+          const sectionPhases = phasesBySection[section];
 
-          if (!engineers.includes(engineerId)) continue;
+          const engineerPhases = sectionPhases
+            .filter((phase) => phase.engineers.includes(engineerId))
+            .map((phase) => ({
+              phaseIndex: phase.phaseIndex,
+              startDate: phase.startDate,
+              endDate: phase.endDate,
+              engineers: phase.engineers,
+            }));
+
+          if (engineerPhases.length === 0) continue;
 
           engineer.developmentProjectList[section] =
             engineer.developmentProjectList[section] || [];
 
-          engineer.developmentProjectList[section].push({
-            project: project._id,
-            dates,
-          });
-        }
+          const existingEntry = engineer.developmentProjectList[section].find(
+            (entry) => entry.project.toString() === project._id.toString()
+          );
 
+          if (existingEntry) {
+            existingEntry.phases = engineerPhases;
+          } else {
+            engineer.developmentProjectList[section].push({
+              project: project._id,
+              phases: engineerPhases,
+            });
+          }
+        }
         await engineer.save();
       })
     );
+
     return res.status(200).json({
       success: true,
       message: project.PlanDetails
