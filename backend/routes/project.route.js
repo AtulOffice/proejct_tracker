@@ -119,8 +119,8 @@ ProjectRouter.get(
 );
 ProjectRouter.get(
   "/Engineerpagination/:id",
-  refreshTokenMiddleware,
-  authenticate,
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
   getEngineerProjectsPaginated
 );
 ProjectRouter.get(
