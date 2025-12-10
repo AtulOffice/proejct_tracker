@@ -49,17 +49,17 @@ export const PlanningSave = async (req, res) => {
     let planning =
       project.PlanDetails && (await PlanningModel.findById(project.PlanDetails))
         ? await PlanningModel.findByIdAndUpdate(project.PlanDetails, planData, {
-            new: true,
-          })
+          new: true,
+        })
         : await PlanningModel.create({
-            ...planData,
-            projectName: project.projectName,
-            ProjectDetails: project._id,
-            DevelopmentDetials: projectDev._id,
-            jobNumber: project.jobNumber,
-            devScope: project.Development,
-            createdBy: userId,
-          });
+          ...planData,
+          projectName: project.projectName,
+          ProjectDetails: project._id,
+          DevelopmentDetials: projectDev._id,
+          jobNumber: project.jobNumber,
+          devScope: project.Development,
+          createdBy: userId,
+        });
 
     await ProjectModel.findByIdAndUpdate(project._id, {
       PlanDetails: planning._id,
@@ -80,7 +80,8 @@ export const PlanningSave = async (req, res) => {
 
       phasesBySection[section] = items.map((phase, index) => ({
         phaseIndex: index,
-         sectionName: phase.sectionName || "",
+        totalPhases: items.length,
+        sectionName: phase.sectionName || "",
         startDate: phase.startDate ? new Date(phase.startDate) : null,
         endDate: phase.endDate ? new Date(phase.endDate) : null,
         engineers: Array.isArray(phase.engineers)
@@ -107,7 +108,9 @@ export const PlanningSave = async (req, res) => {
           const engineerPhases = sectionPhases
             .filter((phase) => phase.engineers.includes(engineerId))
             .map((phase) => ({
+
               phaseIndex: phase.phaseIndex,
+              totalPhases: phase.totalPhases,
               sectionName: phase.sectionName || "",
               startDate: phase.startDate,
               endDate: phase.endDate,
@@ -193,17 +196,17 @@ export const PlanningSaveOld = async (req, res) => {
     let planning =
       project.PlanDetails && (await PlanningModel.findById(project.PlanDetails))
         ? await PlanningModel.findByIdAndUpdate(project.PlanDetails, planData, {
-            new: true,
-          })
+          new: true,
+        })
         : await PlanningModel.create({
-            ...planData,
-            projectName: project.projectName,
-            ProjectDetails: project._id,
-            DevelopmentDetials: projectDev._id,
-            jobNumber: project.jobNumber,
-            devScope: project.Development,
-            createdBy: userId,
-          });
+          ...planData,
+          projectName: project.projectName,
+          ProjectDetails: project._id,
+          DevelopmentDetials: projectDev._id,
+          jobNumber: project.jobNumber,
+          devScope: project.Development,
+          createdBy: userId,
+        });
     await ProjectModel.findByIdAndUpdate(project._id, {
       PlanDetails: planning._id,
       DevelopmentDetials: projectDev._id,

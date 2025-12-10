@@ -66,9 +66,10 @@ const engineerSchema = new mongoose.Schema(
           phases: [
             {
               phaseIndex: Number,
-              sectionName:{
-    type:String,default:""
-  },
+              totalPhases: Number,
+              sectionName: {
+                type: String, default: ""
+              },
               startDate: Date,
               endDate: Date,
               engineers: [
@@ -84,9 +85,10 @@ const engineerSchema = new mongoose.Schema(
           phases: [
             {
               phaseIndex: Number,
-              sectionName:{
-    type:String,default:""
-  },
+              totalPhases: Number,
+              sectionName: {
+                type: String, default: ""
+              },
               startDate: Date,
               endDate: Date,
               engineers: [
@@ -102,9 +104,10 @@ const engineerSchema = new mongoose.Schema(
           phases: [
             {
               phaseIndex: Number,
-              sectionName:{
-    type:String,default:""
-  },
+              totalPhases: Number,
+              sectionName: {
+                type: String, default: ""
+              },
               startDate: Date,
               endDate: Date,
               engineers: [
@@ -120,9 +123,10 @@ const engineerSchema = new mongoose.Schema(
           phases: [
             {
               phaseIndex: Number,
-              sectionName:{
-    type:String,default:""
-  },
+              totalPhases: Number,
+              sectionName: {
+                type: String, default: ""
+              },
               startDate: Date,
               endDate: Date,
               engineers: [
