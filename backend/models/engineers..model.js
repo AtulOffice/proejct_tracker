@@ -70,9 +70,14 @@ const engineerSchema = new mongoose.Schema(
               sectionName: {
                 type: String, default: ""
               },
+              sectionStartDate: Date,
+              sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
               engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+              peerEngineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
             },
@@ -89,9 +94,14 @@ const engineerSchema = new mongoose.Schema(
               sectionName: {
                 type: String, default: ""
               },
+              sectionStartDate: Date,
+              sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
               engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+              peerEngineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
             },
@@ -108,9 +118,14 @@ const engineerSchema = new mongoose.Schema(
               sectionName: {
                 type: String, default: ""
               },
+              sectionStartDate: Date,
+              sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
               engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+              peerEngineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
             },
@@ -127,9 +142,14 @@ const engineerSchema = new mongoose.Schema(
               sectionName: {
                 type: String, default: ""
               },
+              sectionStartDate: Date,
+              sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
               engineers: [
+                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+              ],
+              peerEngineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
             },

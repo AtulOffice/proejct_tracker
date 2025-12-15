@@ -77,7 +77,7 @@ export const ProjectCatogary = ({
     status,
     urgentMode,
     workStatus,
-    devStatus,
+    devStatus
   ]);
 
   useEffect(() => {

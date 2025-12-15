@@ -8,8 +8,8 @@ import {
   workStatusPegination,
   WrkStatusSave,
 } from "../controller/WrkSts.controller.js";
-import { authenticate } from "../middlware/authaticate.js";
-import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
+import { authenticate, authenticateEngineer } from "../middlware/authaticate.js";
+import { refreshTokenEngineerMiddleware, refreshTokenMiddleware } from "../middlware/refreshToken.js";
 
 export const WorkstsRouter = express.Router();
 
@@ -47,7 +47,7 @@ WorkstsRouter.get(
 
 WorkstsRouter.get(
   "/paginationeng/:engineerId",
-  refreshTokenMiddleware,
-  authenticate,
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
   workStatusPaginationByEngineer
 );

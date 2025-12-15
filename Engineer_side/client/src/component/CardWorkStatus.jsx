@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { MdDeleteOutline } from "react-icons/md";
 import PopupConfirmation from "./PopuP.Page";
 import axios from "axios";
@@ -48,7 +47,7 @@ const CardWorkStatus = ({ project, indx }) => {
 
   return (
     <div
-      onClick={(e) => setDetails((prev) => !prev)}
+      onClick={() => setDetails((prev) => !prev)}
       className="cursor-pointer"
     >
       {details && (

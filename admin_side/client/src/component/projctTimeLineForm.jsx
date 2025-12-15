@@ -21,7 +21,9 @@ const ProjectTimelineForm1 = () => {
     const { toggle, setToggle } = useAppContext();
     const navigate = useNavigate();
 
-    const emptySection = { sectionName: "", startDate: "", endDate: "", planDetails: "", engineers: [] };
+    const emptySection = {
+        sectionName: "", sectionStartDate: "", sectionEndDate: "", startDate: "", endDate: "", planDetails: "", engineers: []
+    };
     const [formData, setFormData] = useState({
         plans: [
             {
@@ -124,6 +126,8 @@ const ProjectTimelineForm1 = () => {
                             documents: (block.documents || []).length > 0
                                 ? (block.documents || []).map(sec => ({
                                     sectionName: sec.sectionName || "",
+                                    sectionStartDate: fmt(sec.sectionStartDate),
+                                    sectionEndDate: fmt(sec.sectionEndDate),
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -133,6 +137,8 @@ const ProjectTimelineForm1 = () => {
                             logic: (block.logic || []).length > 0
                                 ? (block.logic || []).map(sec => ({
                                     sectionName: sec.sectionName || "",
+                                    sectionStartDate: fmt(sec.sectionStartDate),
+                                    sectionEndDate: fmt(sec.sectionEndDate),
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -142,6 +148,8 @@ const ProjectTimelineForm1 = () => {
                             scada: (block.scada || []).length > 0
                                 ? (block.scada || []).map(sec => ({
                                     sectionName: sec.sectionName || "",
+                                    sectionStartDate: fmt(sec.sectionStartDate),
+                                    sectionEndDate: fmt(sec.sectionEndDate),
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -151,6 +159,8 @@ const ProjectTimelineForm1 = () => {
                             testing: (block.testing || []).length > 0
                                 ? (block.testing || []).map(sec => ({
                                     sectionName: sec.sectionName || "",
+                                    sectionStartDate: fmt(sec.sectionStartDate),
+                                    sectionEndDate: fmt(sec.sectionEndDate),
                                     startDate: fmt(sec.startDate),
                                     endDate: fmt(sec.endDate),
                                     planDetails: sec.planDetails || "",
@@ -229,33 +239,6 @@ const ProjectTimelineForm1 = () => {
         });
     };
 
-    const addSectionToPhase = (blockIndex, phase) => {
-        setFormData((prev) => {
-            const plans = prev.plans.map((p, i) => {
-                if (i !== blockIndex) return p;
-                return {
-                    ...p,
-                    [phase]: [...p[phase], { ...emptySection }],
-                };
-            });
-            return { ...prev, plans };
-        });
-    };
-
-    const removeSectionFromPhase = (blockIndex, phase, sectionIndex) => {
-        setFormData((prev) => {
-            const plans = prev.plans.map((p, i) => {
-                if (i !== blockIndex) return p;
-                const newSections = p[phase].filter((_, si) => si !== sectionIndex);
-                return {
-                    ...p,
-                    [phase]: newSections.length > 0 ? newSections : [{ ...emptySection }],
-                };
-            });
-            return { ...prev, plans };
-        });
-    };
-
     const handleChange = (blockIndex, phase, sectionIndex, field, value) => {
         setFormData((prev) => {
             const plans = prev.plans.map((p, i) => {
@@ -274,6 +257,33 @@ const ProjectTimelineForm1 = () => {
             return { ...prev, plans };
         });
     };
+
+
+    const handleCommonSectionChange = (blockIndex, field, value) => {
+        setFormData((prev) => {
+            const plans = prev.plans.map((block, i) => {
+                if (i !== blockIndex) return block;
+
+                const updatePhase = (phase) =>
+                    block[phase].map((sec, idx) =>
+                        idx === 0
+                            ? { ...sec, [field]: value }
+                            : sec
+                    );
+
+                return {
+                    ...block,
+                    documents: updatePhase("documents"),
+                    logic: updatePhase("logic"),
+                    scada: updatePhase("scada"),
+                    testing: updatePhase("testing"),
+                };
+            });
+
+            return { ...prev, plans };
+        });
+    };
+
 
     const handleEngineerToggle = (blockIndex, phase, sectionIndex, engineerId) => {
         setFormData((prev) => {
@@ -339,11 +349,12 @@ const ProjectTimelineForm1 = () => {
                 },
                 project?.jobNumber
             );
-
             const payload = {
                 plans: formData.plans.map((block) => ({
                     documents: block.documents.map(sec => ({
                         sectionName: sec.sectionName || "",
+                        sectionStartDate: sec.sectionStartDate || "",
+                        sectionEndDate: sec.sectionEndDate || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
@@ -351,6 +362,8 @@ const ProjectTimelineForm1 = () => {
                     })),
                     logic: block.logic.map(sec => ({
                         sectionName: sec.sectionName || "",
+                        sectionStartDate: sec.sectionStartDate || "",
+                        sectionEndDate: sec.sectionEndDate || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
@@ -358,6 +371,8 @@ const ProjectTimelineForm1 = () => {
                     })),
                     scada: block.scada.map(sec => ({
                         sectionName: sec.sectionName || "",
+                        sectionStartDate: sec.sectionStartDate || "",
+                        sectionEndDate: sec.sectionEndDate || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
@@ -365,6 +380,8 @@ const ProjectTimelineForm1 = () => {
                     })),
                     testing: block.testing.map(sec => ({
                         sectionName: sec.sectionName || "",
+                        sectionStartDate: sec.sectionStartDate || "",
+                        sectionEndDate: sec.sectionEndDate || "",
                         startDate: sec.startDate || null,
                         endDate: sec.endDate || null,
                         planDetails: sec.planDetails || "",
@@ -433,6 +450,184 @@ const ProjectTimelineForm1 = () => {
             </div>
         );
     };
+
+    const getPhasePosition = (phaseStart, phaseEnd, sectionStart, sectionEnd) => {
+        if (!phaseStart || !phaseEnd || !sectionStart || !sectionEnd) {
+            return { left: "0%", width: "0%" };
+        }
+
+        const sStart = new Date(sectionStart);
+        const sEnd = new Date(sectionEnd);
+        const pStart = new Date(phaseStart);
+        const pEnd = new Date(phaseEnd);
+
+        const total = sEnd - sStart;
+
+        let left = ((pStart - sStart) / total) * 100;
+        let width = ((pEnd - pStart) / total) * 100;
+
+        left = Math.max(0, Math.min(left, 100));
+        width = Math.max(0, Math.min(width, 100 - left));
+
+        return { left: `${left}%`, width: `${width}%` };
+    };
+
+    const EngineerSelector = ({
+        phase,
+        blockIndex,
+        block,
+        engineersList,
+        handleEngineerToggle,
+        removeEngineer,
+        getEngineerName
+    }) => {
+        const sec = block[phase][0];
+        const [search, setSearch] = useState("");
+
+        const filteredEngineers =
+            search.trim() === ""
+                ? []
+                : engineersList.filter((eng) => {
+                    const name = eng.username || eng.name || eng.email || "";
+                    return name.toLowerCase().includes(search.toLowerCase());
+                });
+
+        return (
+            <div className="p-6 bg-linear-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-2xl shadow-sm mb-6 transition-all duration-300 hover:shadow-md">
+
+                {/* Header with Icon */}
+                <div className="flex items-center gap-2 mb-4">
+                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <svg className="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h4 className="font-bold text-lg text-gray-800">
+                        {phase.toUpperCase()} <span className="text-green-700">Engineers</span>
+                    </h4>
+                    {sec.engineers.length > 0 && (
+                        <span className="ml-auto px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full">
+                            {sec.engineers.length} Selected
+                        </span>
+                    )}
+                </div>
+
+                {/* Search Box with Icon */}
+                <div className="relative mb-4">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search engineers by name..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 shadow-sm hover:border-gray-400"
+                    />
+                    {search && (
+                        <button
+                            onClick={() => setSearch("")}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    )}
+                </div>
+
+                {/* Search Results Dropdown */}
+                {search.trim() !== "" && (
+                    <div className="mb-4 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg">
+                        {filteredEngineers.length === 0 ? (
+                            <div className="p-4 text-center text-gray-500 text-sm">
+                                <svg className="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                No engineers found
+                            </div>
+                        ) : (
+                            <div className="divide-y divide-gray-100">
+                                {filteredEngineers.map((eng) => {
+                                    const name = eng.username || eng.name || eng.email;
+                                    const checked = sec.engineers.includes(eng._id);
+
+                                    return (
+                                        <label
+                                            key={eng._id}
+                                            className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-150 hover:bg-gray-50 ${checked ? "bg-green-50" : ""
+                                                }`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={checked}
+                                                onChange={() =>
+                                                    handleEngineerToggle(
+                                                        blockIndex,
+                                                        phase,
+                                                        0,
+                                                        eng._id
+                                                    )
+                                                }
+                                                className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
+                                            />
+                                            <span className={`flex-1 text-sm ${checked ? "text-green-800 font-medium" : "text-gray-700"}`}>
+                                                {name}
+                                            </span>
+                                            {checked && (
+                                                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                </svg>
+                                            )}
+                                        </label>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Selected Engineers Tags */}
+                {sec.engineers.length > 0 && (
+                    <div>
+                        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
+                            Selected Engineers
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                            {sec.engineers.map((eid) => (
+                                <span
+                                    key={eid}
+                                    className="group px-4 py-2 rounded-full bg-linear-to-r from-green-100 to-green-50 border border-green-200 text-green-800 text-sm font-medium flex items-center gap-2 transition-all duration-200 hover:shadow-md hover:scale-105"
+                                >
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                    </svg>
+                                    {getEngineerName(eid)}
+                                    <button
+                                        type="button"
+                                        onClick={() => removeEngineer(blockIndex, phase, 0, eid)}
+                                        className="ml-1 w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition-colors duration-150 group-hover:scale-110"
+                                        aria-label="Remove engineer"
+                                    >
+                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+
+
+
+
 
     return (
         <div className="italic w-full min-h-screen bg-gray-100 py-10 px-4">
@@ -574,12 +769,10 @@ const ProjectTimelineForm1 = () => {
                                             Development Scope
                                         </h3>
                                     </div>
-
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <Info label="PO Received" value={project?.OrderMongoId.poReceived} />
-                                        <Info label="Order Number" value={project?.OrderMongoId.orderNumber} />
-                                        <Info label="Order Date" value={project?.OrderMongoId.orderDate} />
-                                        <Info label="Delivery Date" value={project?.OrderMongoId.deleveryDate} />
+                                        <Info label="Scada/Logic" value={project?.Development} />
+                                        <Info label="Logic development Place" value={project?.LogicPlace} />
+                                        <Info label="Scada devvelopment Place" value={project?.ScadaPlace} />
                                     </div>
                                 </div>
                             </div>
@@ -589,7 +782,7 @@ const ProjectTimelineForm1 = () => {
                 </div>
 
                 {/* ADD PLANNING BLOCK BUTTON */}
-                {/* <div className="mb-6 flex items-center justify-between gap-3">
+                <div className="mb-6 flex items-center justify-between gap-3">
                     <button
                         type="button"
                         onClick={addPlanningBlock}
@@ -598,263 +791,336 @@ const ProjectTimelineForm1 = () => {
                         + Add Planning Block
                     </button>
                     <div className="text-sm text-gray-500 font-medium">Total Plannings: {formData.plans.length}</div>
-                </div> */}
+                </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-10 max-w-7xl mx-auto">
                     {formData.plans.map((block, blockIndex) => (
-                        <div key={blockIndex} className="space-y-6 border-2 border-green-400 rounded-xl p-6 bg-green-50/30">
-                            {/* <div className="flex items-center justify-between p-5 mb-4 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 transition-colors">
-                                <h2 className="text-lg font-semibold text-green-800 flex items-center gap-2">
-                                    <span className="text-2xl">📋</span>
-                                    Planning Section {blockIndex + 1}
-                                </h2>
-                                <button
-                                    type="button"
-                                    onClick={() => removePlanningBlock(blockIndex)}
-                                    className="px-4 py-2 rounded-lg border-2 border-red-400 text-red-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200 font-medium"
-                                >
-                                    Remove Block
-                                </button>
-                            </div> */}
+                        <div
+                            key={blockIndex}
+                            className="relative space-y-6 border-2 border-green-300 rounded-2xl p-8 bg-linear-to-br from-green-50/50 via-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300"
+                        >
+                            {/* Decorative corner accent */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-green-400/10 to-transparent rounded-bl-full"></div>
 
-                            {/* For each phase */}
-                            {["documents", "logic", "scada", "testing"].map((phase, phaseIndex) => {
-                                const sections = block[phase] || [];
+                            {/* Block Header */}
 
-                                return (
-                                    <div key={`${blockIndex}-${phase}`} className="space-y-4">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="font-bold text-lg text-white capitalize flex items-center gap-2 px-4 py-3 bg-green-600 rounded-md shadow-md">
-                                                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                                                {phase} Phase
-                                            </h3>
-                                            <button
-                                                type="button"
-                                                onClick={() => addSectionToPhase(blockIndex, phase)}
-                                                className="px-3 py-1 text-sm rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition font-medium shadow-sm hover:shadow-md"
-                                            >
-                                                + Add Section
-                                            </button>
+                            <div className="flex items-center justify-between p-6 mb-6 bg-linear-to-r from-green-50 to-emerald-50 rounded-xl border-l-4 border-green-500 shadow-md hover:shadow-lg transition-all duration-200">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 bg-linear-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                                        <span className="text-2xl">📋</span>
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-bold text-gray-800">
+                                            Planning Section {blockIndex + 1}
+                                        </h2>
+                                    </div>
+                                </div>
+                                {blockIndex !== 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => removePlanningBlock(blockIndex)}
+                                        className="group px-5 py-2.5 rounded-xl bg-white border-2 border-red-300 text-red-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-200 font-semibold shadow-md hover:shadow-lg flex items-center gap-2"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        <span>Remove Block</span>
+                                    </button>
+                                )}
+                            </div>
+
+
+                            {/* Main Content Panel */}
+                            <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+
+                                {/* Section Details Card */}
+                                <div className="mb-8 p-6 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        <h3 className="font-bold text-lg text-gray-800">Section Information</h3>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                        {/* Section Name */}
+                                        <div className="space-y-2">
+                                            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                                                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                                </svg>
+                                                Section Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={block.documents[0].sectionName || ""}
+                                                onChange={(e) =>
+                                                    handleCommonSectionChange(
+                                                        blockIndex,
+                                                        "sectionName",
+                                                        e.target.value
+                                                    )
+                                                }
+                                                placeholder="e.g., Phase 1 Development"
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:border-gray-400"
+                                            />
                                         </div>
 
-                                        {sections.map((section, sectionIndex) => (
-                                            <div
-                                                key={sectionIndex}
-                                                className="p-5 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-300"
-                                            >
-                                                <div className="flex justify-between items-center mb-4">
-                                                    {/* <h4 className="font-medium text-gray-700">
-                                                        Section {sectionIndex + 1}
-                                                    </h4> */}
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Enter Section Name"
-                                                        value={section.sectionName}
-                                                        onChange={(e) =>
-                                                            handleChange(
-                                                                blockIndex,
-                                                                phase,
-                                                                sectionIndex,
-                                                                "sectionName",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className="w-1/3
-    px-4 py-2
-    rounded-xl
-    border border-slate-300
-    bg-white/80
-    shadow-sm
-    focus:outline-none
-    focus:ring-2 focus:ring-blue-500/60
-    focus:border-blue-500
-    placeholder:text-slate-400
-    text-slate-800
-    transition
-    duration-200
-    ease-out
-  "
-                                                    />
+                                        {/* Section Start Date */}
+                                        <div className="space-y-2">
+                                            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                                                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                Start Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                value={block.documents[0].sectionStartDate || ""}
+                                                onChange={(e) =>
+                                                    handleCommonSectionChange(
+                                                        blockIndex,
+                                                        "sectionStartDate",
+                                                        e.target.value
+                                                    )
+                                                }
 
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:border-gray-400"
+                                            />
+                                        </div>
 
-                                                    {sections.length > 1 && (
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => removeSectionFromPhase(blockIndex, phase, sectionIndex)}
-                                                            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-200 font-medium border border-red-200 hover:border-red-500 shadow-sm hover:shadow-md"
-                                                        >
-                                                            <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                            </svg>
-                                                            <span>Remove</span>
-                                                        </button>
-                                                    )}
-                                                </div>
+                                        {/* Section End Date */}
+                                        <div className="space-y-2">
+                                            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                                                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                                </svg>
+                                                End Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                value={block.documents[0].sectionEndDate || ""}
+                                                onChange={(e) =>
+                                                    handleCommonSectionChange(
+                                                        blockIndex,
+                                                        "sectionEndDate",
+                                                        e.target.value
+                                                    )
+                                                }
 
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                                            Start Date *
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            required={true}
-                                                            value={section.startDate}
-                                                            onChange={(e) =>
-                                                                handleChange(blockIndex, phase, sectionIndex, "startDate", e.target.value)
-                                                            }
-                                                            className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                                                        />
-                                                    </div>
-
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                                            End Date
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            value={section.endDate}
-                                                            onChange={(e) =>
-                                                                handleChange(blockIndex, phase, sectionIndex, "endDate", e.target.value)
-                                                            }
-                                                            className="w-full p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                {phase !== "documents" && (
-                                                    <div className="mt-5">
-                                                        <label className="flex text-sm font-medium text-gray-700 mb-3 items-center gap-2">
-                                                            <svg className="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                                            </svg>
-                                                            Select Engineers
-                                                        </label>
-
-                                                        {section.engineers?.length > 0 && (
-                                                            <div className="mb-3 flex flex-wrap gap-2">
-                                                                {section.engineers.map((engId) => {
-                                                                    const fullName = getEngineerName(engId);
-                                                                    const shortName = truncateName(fullName);
-                                                                    return (
-                                                                        <span
-                                                                            key={engId}
-                                                                            title={fullName}
-                                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-100 text-teal-800 text-sm rounded-full shadow-sm hover:shadow-md transition-all duration-200 border border-teal-200"
-                                                                        >
-                                                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                                                                            </svg>
-                                                                            <span className="font-medium">{shortName}</span>
-                                                                            <button
-                                                                                type="button"
-                                                                                onClick={() => removeEngineer(blockIndex, phase, sectionIndex, engId)}
-                                                                                className="ml-1 hover:bg-teal-200 rounded-full p-0.5 transition-colors"
-                                                                            >
-                                                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                                                </svg>
-                                                                            </button>
-                                                                        </span>
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                        )}
-
-                                                        <div className="max-h-48 overflow-y-auto border-2 border-gray-200 rounded-xl p-3 bg-white shadow-inner scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                                                            {engineersList.length === 0 ? (
-                                                                <div className="text-center py-8">
-                                                                    <svg className="w-12 h-12 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                                                    </svg>
-                                                                    <p className="text-gray-400 text-sm">No engineers available</p>
-                                                                </div>
-                                                            ) : (
-                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                                                    {engineersList.map((engineer) => {
-                                                                        const isChecked = section.engineers?.includes(engineer._id);
-                                                                        const fullName = engineer.username || engineer.name || engineer.email;
-                                                                        const shortName = truncateName(fullName);
-                                                                        return (
-                                                                            <label
-                                                                                key={engineer._id}
-                                                                                title={fullName}
-                                                                                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer border-2 transition-all duration-200 ${isChecked
-                                                                                    ? "bg-teal-50 border-teal-300 shadow-sm"
-                                                                                    : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-200"
-                                                                                    }`}
-                                                                            >
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    checked={isChecked}
-                                                                                    onChange={() =>
-                                                                                        handleEngineerToggle(blockIndex, phase, sectionIndex, engineer._id)
-                                                                                    }
-                                                                                    className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
-                                                                                />
-                                                                                <span className="text-sm text-gray-700">{shortName}</span>
-                                                                            </label>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                <div className="mt-4">
-                                                    {/* <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                                        Planning Notes
-                                                    </label> */}
-                                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                                        {phase.charAt(0).toUpperCase() + phase.slice(1)} Notes
-                                                    </label>
-                                                    <textarea
-                                                        rows={3}
-                                                        placeholder={`Add notes for this ${phase} section...`}
-                                                        value={section.planDetails}
-                                                        onChange={(e) =>
-                                                            handleChange(blockIndex, phase, sectionIndex, "planDetails", e.target.value)
-                                                        }
-                                                        className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
-                                                    />
-                                                </div>
-                                            </div>
-                                        ))}
-
-
-                                        {phaseIndex < 3 && (
-                                            <div className="flex items-center justify-center gap-3 my-8">
-                                                <div className="flex-1 h-1.5 bg-gray-600 rounded-full"></div>
-                                                <div className="flex gap-2">
-                                                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                                                    <div className="w-3 h-3 rounded-full bg-indigo-500"></div>
-                                                    <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-                                                </div>
-                                                <div className="flex-1 h-1.5 bg-gray-600 rounded-full"></div>
-                                            </div>
-                                        )}
-
-
-
-
-
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:border-gray-400"
+                                            />
+                                        </div>
                                     </div>
-                                );
-                            })}
+                                </div>
 
+
+                                {/* Phase Timeline Table */}
+                                <div className="mb-8">
+                                    <div className="flex items-center gap-2 mb-5">
+                                        <div className="w-10 h-10 bg-linear-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <h3 className="font-bold text-xl text-gray-800">Phase Timeline</h3>
+                                    </div>
+
+                                    {/* Table Container with better styling */}
+                                    <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                                        {/* Table Header */}
+                                        <div className="grid grid-cols-5 gap-4 p-4 bg-linear-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
+                                            <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">Phase</div>
+                                            <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">Start Date</div>
+                                            <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">End Date</div>
+                                            <div className="col-span-2 font-bold text-sm text-gray-700 uppercase tracking-wide">Progress</div>
+                                        </div>
+
+                                        {/* Table Rows */}
+                                        <div className="divide-y divide-gray-100">
+                                            {["documents", "scada", "logic", "testing"].map((phase, idx) => {
+                                                const sec = block[phase][0];
+                                                const phaseIcons = {
+                                                    documents: "📄",
+                                                    scada: "⚡",
+                                                    logic: "🧠",
+                                                    testing: "🔬"
+                                                };
+
+                                                const phaseColors = {
+                                                    documents: "bg-blue-50 border-blue-200",
+                                                    scada: "bg-amber-50 border-amber-200",
+                                                    logic: "bg-purple-50 border-purple-200",
+                                                    testing: "bg-green-50 border-green-200"
+                                                };
+
+                                                return (
+                                                    <div
+                                                        key={phase}
+                                                        className={`grid grid-cols-5 gap-4 p-4 items-center hover:bg-gray-50 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                                                            }`}
+                                                    >
+                                                        {/* Phase Name */}
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xl">{phaseIcons[phase]}</span>
+                                                            <span className="font-semibold text-gray-800 capitalize">
+                                                                {phase}
+                                                            </span>
+                                                        </div>
+
+                                                        {/* Start Date */}
+                                                        <input
+                                                            type="date"
+                                                            value={sec.startDate}
+                                                            onChange={(e) =>
+                                                                handleChange(blockIndex, phase, 0, "startDate", e.target.value)
+                                                            }
+                                                            className="p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm shadow-sm hover:border-gray-400"
+                                                        />
+
+                                                        {/* End Date */}
+                                                        <input
+                                                            type="date"
+                                                            value={sec.endDate}
+                                                            onChange={(e) =>
+                                                                handleChange(blockIndex, phase, 0, "endDate", e.target.value)
+                                                            }
+                                                            className="p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm shadow-sm hover:border-gray-400"
+                                                        />
+
+                                                        {/* Progress Bar */}
+                                                        <div className="col-span-2 flex flex-col gap-1">
+
+                                                            {/* DATE LABELS */}
+                                                            <div className="flex justify-between text-xs text-gray-600">
+                                                                <span>{block.documents[0].sectionStartDate || "Start"}</span>
+                                                                <span>{block.documents[0].sectionEndDate || "End"}</span>
+                                                            </div>
+
+                                                            {/* MAIN MASTER TIMELINE BAR */}
+                                                            <div className="relative h-4 bg-gray-300 rounded-full overflow-hidden shadow-inner">
+
+                                                                {/* FILLED MAIN BAR (SECTION PROGRESS BASED ON TODAY) */}
+                                                                <div
+                                                                    className="absolute h-full w-full bg-green-500/40 rounded-full"
+                                                                ></div>
+
+                                                                {/* FLOATING PHASE BAR */}
+                                                                {(() => {
+                                                                    const { left, width } = getPhasePosition(
+                                                                        sec.startDate,
+                                                                        sec.endDate,
+                                                                        block.documents[0].sectionStartDate,
+                                                                        block.documents[0].sectionEndDate
+                                                                    );
+                                                                    return (
+                                                                        <div
+                                                                            className="absolute h-full bg-indigo-500 rounded-full opacity-90"
+                                                                            style={{ left, width }}
+                                                                        ></div>
+                                                                    );
+                                                                })()}
+
+                                                            </div>
+
+                                                            {/* FLOAT LABEL */}
+                                                            <div className="text-[10px] text-gray-700 text-center font-medium">
+                                                                {sec.startDate || "Start"} → {sec.endDate || "End"}
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Engineer Selectors */}
+                                <div className="space-y-6 mb-8">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <div className="w-10 h-10 bg-linear-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                        </div>
+                                        <h3 className="font-bold text-xl text-gray-800">Team Assignments</h3>
+                                    </div>
+
+                                    <EngineerSelector
+                                        phase="scada"
+                                        blockIndex={blockIndex}
+                                        block={block}
+                                        engineersList={engineersList}
+                                        handleEngineerToggle={handleEngineerToggle}
+                                        removeEngineer={removeEngineer}
+                                        getEngineerName={getEngineerName}
+                                    />
+
+                                    <EngineerSelector
+                                        phase="logic"
+                                        blockIndex={blockIndex}
+                                        block={block}
+                                        engineersList={engineersList}
+                                        handleEngineerToggle={handleEngineerToggle}
+                                        removeEngineer={removeEngineer}
+                                        getEngineerName={getEngineerName}
+                                    />
+
+                                    <EngineerSelector
+                                        phase="testing"
+                                        blockIndex={blockIndex}
+                                        block={block}
+                                        engineersList={engineersList}
+                                        handleEngineerToggle={handleEngineerToggle}
+                                        removeEngineer={removeEngineer}
+                                        getEngineerName={getEngineerName}
+                                    />
+                                </div>
+
+                                {/* Notes Section */}
+                                <div className="p-6 bg-linear-to-r from-amber-50 to-yellow-50 rounded-xl border border-amber-200">
+                                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
+                                        <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Section Notes
+                                    </label>
+                                    <textarea
+                                        value={block.documents[0].planDetails || ""}
+                                        onChange={(e) =>
+                                            handleCommonSectionChange(blockIndex, "planDetails", e.target.value)
+                                        }
+                                        placeholder="Add detailed notes, comments, or important information about this planning section..."
+                                        className="w-full p-4 border border-amber-300 rounded-xl h-32 resize-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all shadow-sm hover:border-amber-400 bg-white"
+                                    ></textarea>
+                                </div>
+                            </div>
                         </div>
                     ))}
 
-                    <div className="flex justify-center pt-4">
+                    {/* Submit Button */}
+                    <div className="flex justify-center pt-8 pb-4">
                         <button
                             type="submit"
-                            className="px-8 py-3 bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-semibold text-lg hover:shadow-xl transform hover:scale-105"
+                            className="group relative px-12 py-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 font-bold text-lg overflow-hidden transform hover:scale-105 active:scale-95"
                         >
-                            create software development plan
+                            <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div className="relative flex items-center gap-3">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Create Software Development Plan</span>
+                                <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </div>
                         </button>
                     </div>
                 </form>
+
             </div>
         </div>
     );

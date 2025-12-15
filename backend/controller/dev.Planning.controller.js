@@ -60,7 +60,6 @@ export const PlanningSave = async (req, res) => {
           devScope: project.Development,
           createdBy: userId,
         });
-
     await ProjectModel.findByIdAndUpdate(project._id, {
       PlanDetails: planning._id,
       DevelopmentDetials: projectDev._id,
@@ -70,29 +69,54 @@ export const PlanningSave = async (req, res) => {
     await ProjectDevModel.findByIdAndUpdate(projectDev._id, {
       PlanDetails: planning._id,
     });
-
-    const planBlock = planning?.plans?.[0] || {};
     const sectionNames = ["documents", "logic", "scada", "testing"];
-    const phasesBySection = {};
+    const phasesBySection = {
+      documents: [],
+      logic: [],
+      scada: [],
+      testing: [],
+    };
+    const allPlans = Array.isArray(planning?.plans) ? planning.plans : [];
+    const totalPlans = allPlans.length;
+    allPlans.forEach((planBlock, planIndex) => {
+      sectionNames.forEach((section) => {
+        const items = Array.isArray(planBlock[section]) ? planBlock[section] : [];
+        items.forEach((phase) => {
+          phasesBySection[section].push({
+            phaseIndex: planIndex,
+            totalPhases: totalPlans,
+            sectionName: phase.sectionName || "",
+            sectionStartDate: phase.sectionStartDate
+              ? new Date(phase.sectionStartDate)
+              : null,
+            sectionEndDate: phase.sectionEndDate
+              ? new Date(phase.sectionEndDate)
+              : null,
+            startDate: phase.startDate ? new Date(phase.startDate) : null,
+            endDate: phase.endDate ? new Date(phase.endDate) : null,
+            phaseEngineers: Array.isArray(phase.engineers)
+              ? phase.engineers.map((e) => e.toString())
+              : [],
+            peerEngineers: [],
+          });
+        });
+      });
+    });
 
     sectionNames.forEach((section) => {
-      const items = Array.isArray(planBlock[section]) ? planBlock[section] : [];
-
-      phasesBySection[section] = items.map((phase, index) => ({
-        phaseIndex: index,
-        totalPhases: items.length,
-        sectionName: phase.sectionName || "",
-        startDate: phase.startDate ? new Date(phase.startDate) : null,
-        endDate: phase.endDate ? new Date(phase.endDate) : null,
-        engineers: Array.isArray(phase.engineers)
-          ? phase.engineers.map((e) => e.toString())
-          : [],
-      }));
+      phasesBySection[section].forEach((phase) => {
+        const peers = sectionNames.flatMap((otherSection) =>
+          phasesBySection[otherSection]
+            .filter((p) => p.phaseIndex === phase.phaseIndex)
+            .flatMap((p) => p.phaseEngineers)
+        );
+        phase.peerEngineers = [...new Set(peers)];
+      });
     });
     const allEngineers = [
       ...new Set(
         sectionNames.flatMap((section) =>
-          phasesBySection[section].flatMap((phase) => phase.engineers)
+          phasesBySection[section].flatMap((p) => p.phaseEngineers)
         )
       ),
     ];
@@ -106,15 +130,17 @@ export const PlanningSave = async (req, res) => {
           const sectionPhases = phasesBySection[section];
 
           const engineerPhases = sectionPhases
-            .filter((phase) => phase.engineers.includes(engineerId))
+            .filter((phase) => phase.phaseEngineers.includes(engineerId))
             .map((phase) => ({
-
               phaseIndex: phase.phaseIndex,
               totalPhases: phase.totalPhases,
-              sectionName: phase.sectionName || "",
+              sectionName: phase.sectionName,
+              sectionStartDate: phase.sectionStartDate,
+              sectionEndDate: phase.sectionEndDate,
               startDate: phase.startDate,
               endDate: phase.endDate,
-              engineers: phase.engineers,
+              engineers: phase.phaseEngineers,
+              peerEngineers: phase.peerEngineers
             }));
 
           if (engineerPhases.length === 0) continue;
@@ -122,9 +148,10 @@ export const PlanningSave = async (req, res) => {
           engineer.developmentProjectList[section] =
             engineer.developmentProjectList[section] || [];
 
-          const existingEntry = engineer.developmentProjectList[section].find(
-            (entry) => entry.project.toString() === project._id.toString()
-          );
+          const existingEntry =
+            engineer.developmentProjectList[section].find(
+              (entry) => entry.project.toString() === project._id.toString()
+            );
 
           if (existingEntry) {
             existingEntry.phases = engineerPhases;
@@ -138,7 +165,7 @@ export const PlanningSave = async (req, res) => {
         await engineer.save();
       })
     );
-
+    
     return res.status(200).json({
       success: true,
       message: project.PlanDetails
