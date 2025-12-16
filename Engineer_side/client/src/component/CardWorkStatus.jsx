@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
+import { motion } from "framer-motion";
 import PopupConfirmation from "./PopuP.Page";
 import axios from "axios";
 import toast from "react-hot-toast";
