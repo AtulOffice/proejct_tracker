@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -479,108 +479,127 @@ const ProjectTimelineForm1 = () => {
         engineersList,
         handleEngineerToggle,
         removeEngineer,
-        getEngineerName
+        getEngineerName,
     }) => {
-        const sec = block[phase][0];
-        const [search, setSearch] = useState("");
+        const sec = block?.[phase]?.[0] || { engineers: [] };
 
-        const filteredEngineers =
-            search.trim() === ""
-                ? []
-                : engineersList.filter((eng) => {
-                    const name = eng.username || eng.name || eng.email || "";
-                    return name.toLowerCase().includes(search.toLowerCase());
-                });
+        const [search, setSearch] = useState("");
+        const [open, setOpen] = useState(false);
+
+        const wrapperRef = useRef(null);
+
+        useEffect(() => {
+            const handleClickOutside = (e) => {
+                if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+                    setOpen(false);
+                }
+            };
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => document.removeEventListener("mousedown", handleClickOutside);
+        }, []);
+
+        const normalizedSearch = search.trim().toLowerCase();
+
+        const filteredEngineers = engineersList.filter((eng) => {
+            if (!normalizedSearch) return true;
+
+            const text = [eng.username, eng.name, eng.email]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return text.includes(normalizedSearch);
+        });
 
         return (
-            <div className="p-6 bg-linear-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-2xl shadow-sm mb-6 transition-all duration-300 hover:shadow-md">
-
-                {/* Header with Icon */}
+            <div
+                ref={wrapperRef}
+                className="p-6 bg-linear-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-2xl shadow-sm mb-6"
+            >
                 <div className="flex items-center gap-2 mb-4">
                     <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <svg
+                            className="w-5 h-5 text-green-700"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
                         </svg>
                     </div>
+
                     <h4 className="font-bold text-lg text-gray-800">
                         {phase.toUpperCase()} <span className="text-green-700">Engineers</span>
                     </h4>
+
                     {sec.engineers.length > 0 && (
                         <span className="ml-auto px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full">
                             {sec.engineers.length} Selected
                         </span>
                     )}
                 </div>
-
-                {/* Search Box with Icon */}
                 <div className="relative mb-4">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </div>
                     <input
                         type="text"
-                        placeholder="Search engineers by name..."
+                        name="engineer-search"
+                        autoComplete="new-password"
+                        spellCheck={false}
+                        placeholder="Search engineers..."
                         value={search}
+                        onFocus={() => setOpen(true)}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 shadow-sm hover:border-gray-400"
+                        className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl"
                     />
+
                     {search && (
                         <button
+                            type="button"
                             onClick={() => setSearch("")}
-                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            ✕
                         </button>
                     )}
                 </div>
-
-                {/* Search Results Dropdown */}
-                {search.trim() !== "" && (
+                {open && (
                     <div className="mb-4 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg">
                         {filteredEngineers.length === 0 ? (
                             <div className="p-4 text-center text-gray-500 text-sm">
-                                <svg className="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
                                 No engineers found
                             </div>
                         ) : (
                             <div className="divide-y divide-gray-100">
                                 {filteredEngineers.map((eng) => {
-                                    const name = eng.username || eng.name || eng.email;
+                                    const name = eng.username || eng.name || eng.email || "Unknown";
                                     const checked = sec.engineers.includes(eng._id);
 
                                     return (
                                         <label
                                             key={eng._id}
-                                            className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-150 hover:bg-gray-50 ${checked ? "bg-green-50" : ""
-                                                }`}
+                                            className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition
+                      ${checked ? "bg-green-50" : "hover:bg-gray-50"}`}
                                         >
                                             <input
                                                 type="checkbox"
                                                 checked={checked}
                                                 onChange={() =>
-                                                    handleEngineerToggle(
-                                                        blockIndex,
-                                                        phase,
-                                                        0,
-                                                        eng._id
-                                                    )
+                                                    handleEngineerToggle(blockIndex, phase, 0, eng._id)
                                                 }
-                                                className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
+                                                className="w-4 h-4 text-green-600 rounded"
                                             />
-                                            <span className={`flex-1 text-sm ${checked ? "text-green-800 font-medium" : "text-gray-700"}`}>
+                                            <span
+                                                className={`flex-1 text-sm ${checked
+                                                    ? "text-green-800 font-medium"
+                                                    : "text-gray-700"
+                                                    }`}
+                                            >
                                                 {name}
                                             </span>
-                                            {checked && (
-                                                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                                </svg>
-                                            )}
                                         </label>
                                     );
                                 })}
@@ -588,32 +607,29 @@ const ProjectTimelineForm1 = () => {
                         )}
                     </div>
                 )}
-
-                {/* Selected Engineers Tags */}
                 {sec.engineers.length > 0 && (
                     <div>
-                        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">
+                        <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
                             Selected Engineers
                         </p>
+
                         <div className="flex flex-wrap gap-2">
                             {sec.engineers.map((eid) => (
                                 <span
                                     key={eid}
-                                    className="group px-4 py-2 rounded-full bg-linear-to-r from-green-100 to-green-50 border border-green-200 text-green-800 text-sm font-medium flex items-center gap-2 transition-all duration-200 hover:shadow-md hover:scale-105"
+                                    className="px-4 py-2 rounded-full bg-green-100 border border-green-200
+                           text-green-800 text-sm font-medium flex items-center gap-2"
                                 >
-                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                                    </svg>
                                     {getEngineerName(eid)}
                                     <button
                                         type="button"
-                                        onClick={() => removeEngineer(blockIndex, phase, 0, eid)}
-                                        className="ml-1 w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition-colors duration-150 group-hover:scale-110"
-                                        aria-label="Remove engineer"
+                                        onClick={() =>
+                                            removeEngineer(blockIndex, phase, 0, eid)
+                                        }
+                                        className="w-5 h-5 flex items-center justify-center rounded-full
+                             bg-red-100 text-red-600 hover:bg-red-200"
                                     >
-                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                        ✕
                                     </button>
                                 </span>
                             ))}
@@ -623,11 +639,6 @@ const ProjectTimelineForm1 = () => {
             </div>
         );
     };
-
-
-
-
-
 
     return (
         <div className="italic w-full min-h-screen bg-gray-100 py-10 px-4">

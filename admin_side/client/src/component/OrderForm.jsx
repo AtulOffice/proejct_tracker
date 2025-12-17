@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { AlertCircle, Save, Loader } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -10,6 +10,8 @@ export default function OrderForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [touched, setTouched] = useState({});
   const [debounceJobnumber, setdebounceJobNumber] = useState("");
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const handelJob = setTimeout(() => {
@@ -316,6 +318,118 @@ export default function OrderForm() {
     }
   };
 
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/market/getall`)
+        setEmployees(response?.data?.data);
+      } catch (err) {
+        console.log(err)
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmployees();
+  }, []);
+
+  const SingleEngineerSelect = ({
+    label,
+    engineersList,
+    value,
+    onChange,
+    required = false,
+    getEngineerLabel,
+  }) => {
+    const [search, setSearch] = useState("");
+    const [open, setOpen] = useState(false);
+    const wrapperRef = useRef(null);
+
+    useEffect(() => {
+      const handleOutside = (e) => {
+        if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+          setOpen(false);
+          setSearch("");
+        }
+      };
+      document.addEventListener("mousedown", handleOutside);
+      return () => document.removeEventListener("mousedown", handleOutside);
+    }, []);
+    const selectedEngineer = engineersList.find(
+      (eng) => eng._id === value
+    );
+    const normalizedSearch = search.trim().toLowerCase();
+
+    const filteredEngineers = engineersList.filter((eng) => {
+      if (!normalizedSearch) return true;
+      return [eng.username, eng.name, eng.email]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedSearch);
+    });
+    const inputValue = open
+      ? search
+      : selectedEngineer
+        ? getEngineerLabel(selectedEngineer)
+        : "";
+
+    return (
+      <div ref={wrapperRef} className="relative mb-6">
+        <label className="block mb-2 font-semibold text-gray-700">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+        <input
+          type="text"
+          autoComplete="new-password"
+          spellCheck={false}
+          placeholder="Select sales Name.."
+          value={inputValue}
+          onFocus={() => {
+            setOpen(true);
+            setSearch("");
+          }}
+          onChange={(e) => {
+            setOpen(true);
+            setSearch(e.target.value);
+          }}
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white
+                   focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        />
+        {open && (
+          <div
+            onMouseDown={(e) => e.stopPropagation()}
+            className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto"
+          >
+            {filteredEngineers.length === 0 ? (
+              <div className="p-4 text-center text-gray-500 text-sm">
+                No engineers found
+              </div>
+            ) : (
+              filteredEngineers.map((eng) => (
+                <div
+                  key={eng._id}
+                  onClick={() => {
+                    onChange(eng._id);
+                    setOpen(false);
+                    setSearch("");
+                  }}
+                  className={`px-4 py-3 cursor-pointer transition truncate font-bold
+                  ${eng._id === value
+                      ? "bg-green-100 text-green-800 font-medium"
+                      : "hover:bg-gray-50"
+                    }`}
+                >
+                  {getEngineerLabel(eng)}
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderInput = (
     name,
     label,
@@ -325,6 +439,15 @@ export default function OrderForm() {
     options = {}
   ) => {
     const hasError = touched[name] && errors[name];
+
+    const formatNumber = (value) => {
+      if (value === "" || value === null) return "";
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const unformatNumber = (value) => {
+      return value.replace(/,/g, "");
+    };
 
     return (
       <div>
@@ -371,31 +494,57 @@ export default function OrderForm() {
           />
         ) : (
           <input
-            type={type}
+            type={type === "number" ? "text" : type}
             name={name}
-            value={formData[name]}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            onWheel={(e) => {
+            value={
+              type === "number"
+                ? formatNumber(formData[name])
+                : formData[name]
+            }
+            inputMode={type === "number" ? "numeric" : undefined}
+            onChange={(e) => {
               if (type === "number") {
-                e.target.blur();
+                const rawValue = unformatNumber(e.target.value);
+                if (!/^\d*$/.test(rawValue)) return;
+
+                const numericValue =
+                  rawValue === "" ? "" : Number(rawValue);
+
+                if (
+                  options.min != null &&
+                  numericValue !== "" &&
+                  numericValue < options.min
+                )
+                  return;
+
+                if (
+                  options.max != null &&
+                  numericValue !== "" &&
+                  numericValue > options.max
+                )
+                  return;
+
+                handleChange({
+                  target: {
+                    name,
+                    value: numericValue,
+                  },
+                });
+              } else {
+                handleChange(e);
               }
             }}
+            onBlur={handleBlur}
             placeholder={placeholder}
-            onKeyDown={(e) => {
-              if (type === "number" && e.key === "-") e.preventDefault();
-            }}
-            min={options.min ?? 0}
-            max={options.max}
-            step={options.step}
             readOnly={options.readOnly}
             className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${hasError
-              ? "border-red-500 bg-red-50"
-              : options.readOnly
-                ? "border-purple-200 bg-linear-to-br from-gray-100 to-purple-50 cursor-not-allowed text-gray-600"
-                : "border-purple-200 bg-linear-to-br from-pink-50 to-purple-50 hover:border-purple-300"
+                ? "border-red-500 bg-red-50"
+                : options.readOnly
+                  ? "border-purple-200 bg-linear-to-br from-gray-100 to-purple-50 cursor-not-allowed text-gray-600"
+                  : "border-purple-200 bg-linear-to-br from-pink-50 to-purple-50 hover:border-purple-300"
               }`}
           />
+
         )}
         {hasError && (
           <p className="mt-2 text-sm text-red-600! flex items-center gap-1 font-semibold">
@@ -453,13 +602,28 @@ export default function OrderForm() {
                 false
               )}
               {renderInput("site", "Site Location", "text", "Enter site")}
-              {renderInput(
+
+              {/* {renderInput(
                 "concerningSalesManager",
                 "SIEPL Acct. Mgr. Email",
                 "email",
                 "Enter sales manager Email",
                 true
-              )}
+              )} */}
+
+              <SingleEngineerSelect
+                label="SIEPL Acct. Mgr. Email"
+                engineersList={employees || []}
+                value={formData.concerningSalesManager}
+                onChange={(id) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    concerningSalesManager: id,
+                  }))
+                }
+                getEngineerLabel={(eng) => eng.name}
+              />
+
               {renderInput(
                 "name",
                 "Client Technical Person Name",

@@ -18,6 +18,7 @@ import { OrderRouter } from "./routes/Order.route.js";
 import { ImageUploadRouter } from "./routes/image.router.js";
 import { StartRouter } from "./routes/startCheckList.routes.js";
 import { EndRouter } from "./routes/endCheckList.routes.js";
+import { MarketRouter } from "./routes/marketing.route.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -70,6 +71,7 @@ app.use("/api/v1/imageUploader", ImageUploadRouter);
 app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/startCheck", StartRouter);
 app.use("/api/v1/endCheck", EndRouter);
+app.use("/api/v1/market", MarketRouter)
 
 app.use((req, res) => {
   res.status(404).json({

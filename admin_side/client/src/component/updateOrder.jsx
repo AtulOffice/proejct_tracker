@@ -600,6 +600,7 @@ export default function UpdateOrderForm() {
               </div>
             )}
 
+
             {["2", "3"].includes(formData.paymentAdvance) && (
               <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
                 <h3 className="font-bold text-lg text-cyan-800 mb-4">💳 Advance Terms 2</h3>
@@ -616,6 +617,7 @@ export default function UpdateOrderForm() {
                 </div>
               </div>
             )}
+
             {formData.paymentAdvance === "3" && (
               <div className="bg-white p-6 rounded-lg mb-6 border-2 border-cyan-300 shadow-sm">
                 <h3 className="font-bold text-lg text-cyan-800 mb-4">💳 Advance Terms 3</h3>
@@ -792,7 +794,7 @@ export default function UpdateOrderForm() {
               ) : (
                 <>
                   <Save size={18} />
-                  Create Order
+                  Update Order
                 </>
               )}
             </button>

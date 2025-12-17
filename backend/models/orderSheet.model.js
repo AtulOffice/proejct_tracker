@@ -139,7 +139,12 @@ const OrderSchema = new mongoose.Schema(
 
     jobDescription: { type: String, trim: true },
     remarks: { type: String, trim: true },
-    concerningSalesManager: { type: String, trim: true },
+    // concerningSalesManager: { type: String, trim: true },
+    concerningSalesManager: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MarketingMemberRecord",
+      default: null
+    },
     ProjectDetails: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",

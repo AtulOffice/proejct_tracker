@@ -101,9 +101,6 @@ const ProjectTimelineForm1 = () => {
         )
     ]);
 
-
-
-
     useEffect(() => {
         if (!project?.PlanDetails) return;
 
