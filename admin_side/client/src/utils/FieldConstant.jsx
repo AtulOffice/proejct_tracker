@@ -123,7 +123,7 @@ export const fields = {
   billingStatus: "",
   jobDescription: "",
   remarks: "",
-  concerningSalesManager: "",
+  concerningSalesManager: null,
   poReceived: "",
   invoiceTerm: "",
   invoicePercent: 0,

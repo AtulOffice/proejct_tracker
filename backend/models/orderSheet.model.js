@@ -169,6 +169,7 @@ const OrderSchema = new mongoose.Schema(
     retentionPeriod: { type: Number, default: 0 },
     invoiceTerm: { type: String, enum: ["PI", "SI", "N/A", ""], default: "" },
     invoicePercent: { type: Number, default: 0 },
+    invoiceAmount: { type: Number, default: 0 },
     mileStone: { type: String, trim: true },
     invoicemileStoneOther: { type: String, trim: true },
 

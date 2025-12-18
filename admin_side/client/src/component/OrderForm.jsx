@@ -7,6 +7,7 @@ import { fields } from "../utils/FieldConstant";
 export default function OrderForm() {
   const [formData, setFormData] = useState(fields);
   const [errors, setErrors] = useState({});
+  const [messages, setMessages] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [touched, setTouched] = useState({});
   const [debounceJobnumber, setdebounceJobNumber] = useState("");
@@ -50,6 +51,46 @@ export default function OrderForm() {
       }
     }
   }, [debounceJobnumber]);
+
+
+
+  useEffect(() => {
+    const msgs = {};
+    if (
+      touched.orderDate &&
+      touched.bookingDate &&
+      formData.bookingDate &&
+      formData.orderDate
+    ) {
+      if (new Date(formData.orderDate) < new Date(formData.bookingDate)) {
+        msgs.orderDate =
+          "Order Date cannot be before Booking Date";
+      }
+    }
+
+    if (
+      touched.deleveryDate &&
+      touched.orderDate &&
+      formData.orderDate &&
+      formData.deleveryDate
+    ) {
+      if (new Date(formData.deleveryDate) < new Date(formData.orderDate)) {
+        msgs.deleveryDate =
+          "Delivery Date cannot be before Order Date";
+      }
+    }
+    setMessages(msgs);
+  }, [
+    formData.bookingDate,
+    formData.orderDate,
+    formData.deleveryDate,
+    touched.orderDate,
+    touched.bookingDate,
+    touched.deleveryDate,
+  ]);
+
+
+  console.log(messages)
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -116,7 +157,6 @@ export default function OrderForm() {
 
   const validate = () => {
     const newErrors = {};
-
     const isEmpty = (val) =>
       val === undefined || val === null || String(val).trim() === "";
     const toNumber = (val) => {
@@ -275,6 +315,7 @@ export default function OrderForm() {
   };
 
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setTouched(
@@ -326,7 +367,7 @@ export default function OrderForm() {
       } catch (err) {
         console.log(err)
       } finally {
-        setLoading(false);
+        setLoading(true);
       }
     };
 
@@ -439,6 +480,8 @@ export default function OrderForm() {
     options = {}
   ) => {
     const hasError = touched[name] && errors[name];
+    const hasWarning = touched[name] && messages?.[name] && !errors?.[name];
+
 
     const formatNumber = (value) => {
       if (value === "" || value === null) return "";
@@ -460,10 +503,15 @@ export default function OrderForm() {
             value={formData[name]}
             onChange={handleChange}
             onBlur={handleBlur}
-            className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${hasError
-              ? "border-red-500 bg-red-50"
-              : "border-purple-200 bg-linear-to-br from-blue-50 to-purple-50 hover:border-purple-300"
-              }`}
+            className={`w-full px-4 py-2.5 border-2 rounded-lg transition-all duration-200 font-medium
+  ${hasError
+                ? "border-red-500 bg-red-50"
+                : hasWarning
+                  ? "border-yellow-400 bg-yellow-50"
+                  : "border-purple-200 bg-linear-to-br from-pink-50 to-purple-50 hover:border-purple-300"
+              }
+`}
+
           >
             <option value="">
               {options.placeholder || "Select an option"}
@@ -538,10 +586,10 @@ export default function OrderForm() {
             placeholder={placeholder}
             readOnly={options.readOnly}
             className={`w-full px-4 py-2.5 border-2 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-pink-500 transition-all duration-200 font-medium ${hasError
-                ? "border-red-500 bg-red-50"
-                : options.readOnly
-                  ? "border-purple-200 bg-linear-to-br from-gray-100 to-purple-50 cursor-not-allowed text-gray-600"
-                  : "border-purple-200 bg-linear-to-br from-pink-50 to-purple-50 hover:border-purple-300"
+              ? "border-red-500 bg-red-50"
+              : options.readOnly
+                ? "border-purple-200 bg-linear-to-br from-gray-100 to-purple-50 cursor-not-allowed text-gray-600"
+                : "border-purple-200 bg-linear-to-br from-pink-50 to-purple-50 hover:border-purple-300"
               }`}
           />
 
@@ -551,6 +599,16 @@ export default function OrderForm() {
             <AlertCircle size={14} /> {errors[name]}
           </p>
         )}
+        {!hasError && hasWarning && (
+          <div className="mt-3 p-4 bg-linear-to-r from-orange-500 to-red-500 border-l-4 border-red-700 rounded-lg shadow-lg">
+            <p className="text-sm text-white flex items-center gap-2 font-bold drop-shadow-sm">
+              <span className="text-xl animate-bounce">⚠️</span>
+              <span>{messages[name]}</span>
+            </p>
+          </div>
+        )}
+
+
       </div>
     );
   };
@@ -726,7 +784,7 @@ export default function OrderForm() {
               )}
 
 
-              {renderInput("actualDeleveryDate", "Target Delevery Date", "date")}
+              {renderInput("actualDeleveryDate", "Target Delivery Date", "date")}
 
 
             </div>
@@ -860,7 +918,7 @@ export default function OrderForm() {
                   "select",
                   "",
                   true,
-                  { choices: ["INSP CLRNCE", "DISPATCH", "DELEVERY", "OTHER"] }
+                  { choices: ["INSP CLRNCE", "DISPATCH", "DELIVERY", "OTHER"] }
                 )}
                 {formData.mileStone === "OTHER" &&
                   renderInput("invoicemileStoneOther", "Other MileStone", "text", "Enter specific MileStone", true)
