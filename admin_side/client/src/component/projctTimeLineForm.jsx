@@ -110,7 +110,8 @@ const ProjectTimelineForm1 = () => {
         const fetchPlanningData = async (planId) => {
             try {
                 const res = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/planningDev/fetchbyid/${planId}`
+                    `${import.meta.env.VITE_API_URL}/planningDev/fetchbyid/${planId}`, { withCredentials: true }
+
                 );
                 const defaultData = res.data?.data || {};
 
@@ -195,7 +196,7 @@ const ProjectTimelineForm1 = () => {
         const fetchEngineerData = async () => {
             try {
                 const res = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/engineer/getAllEngineers`
+                    `${import.meta.env.VITE_API_URL}/engineer/getAllEngineers`, { withCredentials: true }
                 );
                 setEngineersList(res.data?.engineers || res.data?.data || []);
             } catch (err) {
