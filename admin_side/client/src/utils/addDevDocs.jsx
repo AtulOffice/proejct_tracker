@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { CheckCircle, FileText, Package, Users } from "lucide-react";
+import { getAllEngineers } from "./apiCall";
+import toast from "react-hot-toast";
 
 const ENUMVAL = ["YES", "NO", "N/A"];
 
@@ -14,6 +16,8 @@ const FIELD_TYPES = {
 
 
 const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
+  const [engineersList, setEngineersList] = useState([]);
+
   const createDispatchPhase = (i) => ({
     phaseIndex: i + 1,
     packingList: { value: "", date: null },
@@ -26,6 +30,118 @@ const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
       version: "",
     },
   });
+
+  useEffect(() => {
+    const fetchEngineerData = async () => {
+      try {
+        const res = await getAllEngineers()
+        setEngineersList(res?.data || []);
+      } catch (err) {
+        console.error("Error fetching engineer data:", err);
+        toast.error("Failed to load engineers");
+      }
+    };
+    fetchEngineerData();
+  }, []);
+
+
+  const SingleEngineerSelect = ({
+    label,
+    engineersList,
+    value,
+    onChange,
+    required = false,
+    getEngineerLabel,
+  }) => {
+    const [search, setSearch] = useState("");
+    const [open, setOpen] = useState(false);
+    const wrapperRef = useRef(null);
+
+    useEffect(() => {
+      const handleOutside = (e) => {
+        if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+          setOpen(false);
+          setSearch("");
+        }
+      };
+      document.addEventListener("mousedown", handleOutside);
+      return () => document.removeEventListener("mousedown", handleOutside);
+    }, []);
+    const selectedEngineer = engineersList.find(
+      (eng) => eng._id === value
+    );
+    const normalizedSearch = search.trim().toLowerCase();
+
+    const filteredEngineers = engineersList.filter((eng) => {
+      if (!normalizedSearch) return true;
+      return [eng.username, eng.name, eng.email]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedSearch);
+    });
+    const inputValue = open
+      ? search
+      : selectedEngineer
+        ? getEngineerLabel(selectedEngineer)
+        : "";
+
+    return (
+      <div ref={wrapperRef} className="relative mb-6">
+        <label className="block mb-2 font-semibold text-gray-700">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+        <input
+          type="text"
+          autoComplete="new-password"
+          spellCheck={false}
+          placeholder="Select sales Name.."
+          value={inputValue}
+          onFocus={() => {
+            setOpen(true);
+            setSearch("");
+          }}
+          onChange={(e) => {
+            setOpen(true);
+            setSearch(e.target.value);
+          }}
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-white
+                     focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        />
+        {open && (
+          <div
+            onMouseDown={(e) => e.stopPropagation()}
+            className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto"
+          >
+            {filteredEngineers.length === 0 ? (
+              <div className="p-4 text-center text-gray-500 text-sm">
+                No engineers found
+              </div>
+            ) : (
+              filteredEngineers.map((eng) => (
+                <div
+                  key={eng._id}
+                  onClick={() => {
+                    onChange(eng._id);
+                    setOpen(false);
+                    setSearch("");
+                  }}
+                  className={`px-4 py-3 cursor-pointer transition truncate font-bold
+                    ${eng._id === value
+                      ? "bg-green-100 text-green-800 font-medium"
+                      : "hover:bg-gray-50"
+                    }`}
+                >
+                  {getEngineerLabel(eng)}
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
 
   const updateField = (section, field, key, value, index = null) => {
     setDocs((prev) => {
@@ -347,7 +463,7 @@ const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
             />
           </div>
           <div className="cursor-not-allowed!">
-            <label className="block text-sm font-medium text-gray-800 mb-2">
+            {/* <label className="block text-sm font-medium text-gray-800 mb-2">
               Submitted By
             </label>
             <input
@@ -357,6 +473,15 @@ const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
               value={item.submittedBy || ""}
               onChange={(e) => updateField(section, field, "submittedBy", e.target.value)}
               className="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:border-gray-500 focus:outline-none transition-colors bg-white placeholder-gray-400 cursor-not-allowed"
+            /> */}
+            <SingleEngineerSelect
+              label="Submitted By"
+              engineersList={engineersList || []}
+              value={item.submittedBy}
+              onChange={(id) =>
+                updateField(section, field, "submittedBy", id)
+              }
+              getEngineerLabel={(eng) => eng.name}
             />
           </div>
         </div>
@@ -473,16 +598,25 @@ const DocumentsSection = ({ Docs, setDocs, isDisable = false }) => {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-800 mb-2">
+            {/* <label className="block text-sm font-medium text-gray-800 mb-2">
               Submitted By
             </label>
             <input
               type="text"
-              placeholder="Enter name"
               disabled={true}
+              placeholder="Enter name"
               value={item.submittedBy || ""}
               onChange={(e) => updateField(section, field, "submittedBy", e.target.value)}
               className="w-full px-4 py-3 text-gray-800 border-2 border-gray-300 rounded-lg focus:border-gray-500 focus:outline-none transition-colors bg-white placeholder-gray-400 cursor-not-allowed"
+            /> */}
+            <SingleEngineerSelect
+              label="Submitted By"
+              engineersList={engineersList || []}
+              value={item.submittedBy}
+              onChange={(id) =>
+                updateField(section, field, "submittedBy", id)
+              }
+              getEngineerLabel={(eng) => eng.name}
             />
           </div>
 

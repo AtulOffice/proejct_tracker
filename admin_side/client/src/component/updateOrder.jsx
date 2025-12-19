@@ -41,21 +41,20 @@ export default function UpdateOrderForm() {
   useEffect(() => {
     const msgs = {};
 
-    // ORDER vs BOOKING DATE
     if (
-      touched.orderDate &&
-      touched.bookingDate &&
+      (touched.bookingDate ||
+        touched.orderDate) &&
       formData.bookingDate &&
       formData.orderDate &&
       new Date(formData.orderDate) < new Date(formData.bookingDate)
     ) {
       msgs.orderDate = "Order Date cannot be before Booking Date";
+      msgs.bookingDate = "Booking Date is after Order Date";
     }
 
-    // DELIVERY vs ORDER DATE
     if (
-      touched.deleveryDate &&
-      touched.orderDate &&
+      (touched.orderDate ||
+        touched.deleveryDate) &&
       formData.orderDate &&
       formData.deleveryDate &&
       new Date(formData.deleveryDate) < new Date(formData.orderDate)
@@ -72,6 +71,7 @@ export default function UpdateOrderForm() {
     touched.orderDate,
     touched.deleveryDate,
   ]);
+
 
 
   useEffect(() => {
@@ -567,6 +567,14 @@ export default function UpdateOrderForm() {
           <p className="mt-2 text-sm text-red-600! flex items-center gap-1 font-semibold">
             <AlertCircle size={14} /> {errors[name]}
           </p>
+        )}
+        {messages[name] && (
+          <div className="mt-3 p-4 bg-linear-to-r from-orange-500 to-red-500 border-l-4 border-red-700 rounded-lg shadow-lg">
+            <p className="text-sm text-white flex items-center gap-2 font-bold drop-shadow-sm">
+              <span className="text-xl animate-bounce">⚠️</span>
+              <span>{messages[name]}</span>
+            </p>
+          </div>
         )}
       </div>
     );
