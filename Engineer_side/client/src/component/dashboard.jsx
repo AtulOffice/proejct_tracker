@@ -198,51 +198,108 @@ const AdminDashboard = () => {
           </div>
           <nav className="flex-1 px-4 py-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
             <ul className="space-y-2">
-              <>
-                <li>
-                  <div
-                    onClick={() => {
-                      handleActiveBar("zero");
-                      setSidebarOpen(false);
-                    }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                  >
-                    <RiDashboardLine
-                      className="mr-3 text-indigo-500"
-                      size={20}
-                    />
-                    DASHBOARD
-                  </div>
-                </li>
-                <li>
-                  <div
-                    onClick={() => {
-                      handleActiveBar("two");
-                      setSidebarOpen(false);
-                    }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                  >
-                    <GoProjectRoadmap className="mr-3" size={20} />
-                    ASSIGNED PROJ
-                  </div>
-                </li>
 
-                <li>
-                  <div
-                    onClick={() => {
-                      handleActiveBar("three");
-                      setSidebarOpen(false);
-                    }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                  >
-                    <GoProjectRoadmap className="mr-3" size={20} />
-                    SUBMIT MOM
-                  </div>
-                </li>
-              </>
+              <li>
+                <div
+                  onClick={() => {
+                    handleActiveBar("zero");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <RiDashboardLine
+                    className="mr-3 text-indigo-500"
+                    size={20}
+                  />
+                  DASHBOARD
+                </div>
+              </li>
+              <li>
+                <div
+                  onClick={() => {
+                    handleActiveBar("two");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  ASSIGNED PROJ
+                </div>
+              </li>
+
+              <li>
+                <div
+                  onClick={() => {
+                    handleActiveBar("three");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  SUBMIT MOM
+                </div>
+              </li>
+
+              <li>
+                <div
+                  onClick={() => {
+                    handleActiveBar("three");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  DOC REL PROEJCTS
+                </div>
+              </li>
+
+              <li>
+                <div
+                  onClick={() => {
+                    handleActiveBar("three");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  PROJECT INCLUDE LOGIC
+                </div>
+              </li>
+
+              <li>
+                <div
+                  onClick={() => {
+                    handleActiveBar("three");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  PROJECT INCLUDE SCADA
+                </div>
+              </li>
+
+
+              <li>
+                <div
+                  onClick={() => {
+                    handleActiveBar("three");
+                    setSidebarOpen(false);
+                  }}
+                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
+                    }`}
+                >
+                  <GoProjectRoadmap className="mr-3" size={20} />
+                  PROJECT INCLUDE TESTING
+                </div>
+              </li>
+
               <li>
                 <div
                   onClick={() => {

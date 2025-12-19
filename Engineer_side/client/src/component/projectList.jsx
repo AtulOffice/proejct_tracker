@@ -44,6 +44,7 @@ const ProjectList = () => {
           setData(val);
         }
         try {
+          console.log("Fetching paginated data without search term");
         } catch (error) {
           console.error("Failed to fetch paginated data", error);
         }

@@ -702,7 +702,7 @@ const AdminDashboard = () => {
                       SERVICES
                     </a>
                   </li> */}
-                  <li>
+                  {/* <li>
                     <div
                       onClick={() => {
                         handleActiveBar("fifteen");
@@ -716,7 +716,7 @@ const AdminDashboard = () => {
                       <GoProjectRoadmap className="mr-3" size={20} />
                       PROJECTS UNDER DEVLOPMENT
                     </div>
-                  </li>
+                  </li> */}
                 </>
               )}
 
