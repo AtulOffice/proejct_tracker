@@ -254,12 +254,76 @@ focus:outline-none focus:ring-4 focus:ring-blue-400"
               >
                 {project[tableVal[0]?.val]}
               </div>
-              <span
-                className="inline-flex items-center px-2 py-1 border border-indigo-300 rounded-full font-semibold text-[11px] bg-indigo-100 text-indigo-700 shadow-sm"
-                title={project.status}
-              >
-                {project.status}
-              </span>
+              {isEdit && (
+                <div className="flex items-center justify-end gap-3">
+                  {/* START */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openAction("start", project);
+                    }}
+                    className="
+        flex items-center justify-center
+        bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
+        hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
+        text-white p-2 rounded-full shadow-lg
+        transition-all duration-200
+        hover:scale-110 hover:-rotate-6
+        ring-2 ring-transparent hover:ring-blue-300
+        focus:outline-none focus:ring-4 focus:ring-blue-400
+      "
+                    aria-label="Start"
+                    type="button"
+                  >
+                    <FaPlay className="w-5 h-5 drop-shadow" />
+                  </button>
+
+                  {/* WORK */}
+                  {/* <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openAction("work", project);
+                    }}
+                    className="
+        flex items-center justify-center
+        bg-gradient-to-tr from-red-500 via-pink-500 to-yellow-500
+        hover:from-red-600 hover:via-pink-600 hover:to-yellow-600
+        text-white p-2 rounded-full shadow-lg
+        transition-all duration-200
+        hover:scale-110 hover:rotate-6
+        ring-2 ring-transparent hover:ring-red-300
+        focus:outline-none focus:ring-4 focus:ring-red-400
+      "
+                    aria-label="Work"
+                    type="button"
+                  >
+                    <FaTools className="w-5 h-5 drop-shadow" />
+                  </button> */}
+
+                  {/* END */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openAction("end", project);
+                    }}
+                    className="
+        flex items-center justify-center
+        bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
+        hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
+        text-white p-2 rounded-full shadow-lg
+        transition-all duration-200
+        hover:scale-110 hover:-rotate-6
+        ring-2 ring-transparent hover:ring-blue-300
+        focus:outline-none focus:ring-4 focus:ring-blue-400
+      "
+                    aria-label="End"
+                    type="button"
+                  >
+                    <FaStop className="w-5 h-5 drop-shadow" />
+                  </button>
+                </div>
+              )}
+
             </div>
 
             <div className="space-y-2 text-sm text-blue-800">
