@@ -157,7 +157,7 @@ const OrderSchema = new mongoose.Schema(
     retentionAmount: { type: Number, default: 0 },
     retentionDocs: {
       type: String,
-      enum: ["CG", "BG", "N/A", ""],
+      enum: ["CG", "BG", "N/A", "OTHER", ""],
       default: "",
     },
     retentinoDocsOther: { type: String, trim: true },
