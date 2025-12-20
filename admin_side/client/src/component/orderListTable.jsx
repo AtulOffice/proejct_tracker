@@ -133,17 +133,31 @@ const OrderTableAll = ({ data }) => {
         {data.map((order, indx) => (
           <div
             key={indx}
+            onClick={() => { hadleOpenPopup(order?._id) }}
             className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center justify-between mb-3">
               <div className="text-sm font-semibold text-gray-900 truncate max-w-[70%]">
                 {order.client}
               </div>
-              <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                {order.jobNumber}
-              </span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleUpdate(order._id);
+                }}
+                className="p-2 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100"
+                title="Edit order"
+              >
+                <MdEdit size={16} />
+              </button>
             </div>
             <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-500">Job Number:</span>
+                <span className="text-gray-900 font-medium">
+                  {order.jobNumber}
+                </span>
+              </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">Booking Date:</span>
                 <span className="text-gray-900 font-medium">

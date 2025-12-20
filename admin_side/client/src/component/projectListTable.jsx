@@ -252,17 +252,71 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
               >
                 {project[tableVal[0]?.val]}
               </div>
-              <span
-                onClick={
-                  isEdit
-                    ? onEditFun === "DEVLOPMENT" ? () => handlAssignedDev(project) : () => handleEditAction(onEditFun, project)
-                    : undefined
-                }
-                className="inline-flex items-center px-2 py-1 border border-indigo-300 rounded-full font-semibold text-[11px] bg-indigo-100 text-indigo-700 shadow-sm"
-                title={project.status}
-              >
-                {project.status}
-              </span>
+
+
+              {isEdit && (
+                <>
+                  {onEditFun === "DEVLOPMENT" ? (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlAssignedDev(project);
+                      }}
+                      type="button"
+                      className={`flex items-center justify-center text-white p-2 rounded-full shadow-lg
+          transition-all duration-200 hover:scale-110 hover:-rotate-6
+          ring-2 ring-transparent focus:outline-none focus:ring-4
+          ${project?.isPlanRecord
+                          ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500 hover:ring-emerald-300 focus:ring-emerald-400"
+                          : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 hover:from-rose-600 hover:via-pink-500 hover:to-red-500 hover:ring-rose-300 focus:ring-rose-400"
+                        }`}
+                      title="Assign Development"
+                    >
+                      <LuNotepadText className="w-5 h-5 drop-shadow" />
+                    </button>
+
+                  ) : onEditFun === "URGENT" ? (
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditAction(onEditFun, project);
+                      }}
+                      className="flex items-center justify-center text-white p-2 rounded-full shadow-lg
+          bg-linear-to-tr from-yellow-500 via-amber-400 to-orange-400
+          hover:scale-110 hover:-rotate-6 transition-all duration-200
+          hover:from-yellow-600 hover:via-amber-500 hover:to-orange-500
+          ring-2 ring-transparent focus:ring-amber-300"
+                      title="Urgent Edit"
+                    >
+                      <MdEngineering className="w-5 h-5 drop-shadow" />
+                    </button>
+
+                  ) : (
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditAction(onEditFun, project);
+                      }}
+                      className="inline-flex items-center justify-center p-2.5 rounded-lg
+          bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600
+          border border-emerald-200 hover:border-emerald-400
+          hover:from-emerald-100 hover:to-teal-100 shadow-sm hover:shadow-md
+          transition-all duration-300 group"
+                      title="Edit"
+                    >
+                      <MdEdit
+                        size={18}
+                        className="group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300"
+                      />
+                    </button>
+                  )}
+                </>
+              )}
+
+
+
             </div>
 
             <div className="space-y-2 text-sm text-blue-800">
@@ -296,23 +350,27 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           </p>
         </div>
       </div>
-      {open && (
-        <EngineerForm
-          setOpen={setOpen}
-          formRef={formRef}
-          selectedProject={selectedProject}
-        />
-      )}
+      {
+        open && (
+          <EngineerForm
+            setOpen={setOpen}
+            formRef={formRef}
+            selectedProject={selectedProject}
+          />
+        )
+      }
 
 
-      {planopen && (
-        <ProjectTimelineForm
-          project={selectedProject}
-          open={planopen}
-          onClose={() => setOpen(setPlanOpen)}
-        />
-      )}
-    </div>
+      {
+        planopen && (
+          <ProjectTimelineForm
+            project={selectedProject}
+            open={planopen}
+            onClose={() => setOpen(setPlanOpen)}
+          />
+        )
+      }
+    </div >
   );
 };
 
