@@ -90,8 +90,6 @@ export default function OrderForm() {
   ]);
 
 
-  console.log(messages)
-
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     const newValue =
@@ -183,15 +181,15 @@ export default function OrderForm() {
       if (!emailRegex.test(email)) newErrors.technicalEmail = "Enter a valid email";
     }
 
-    if (formData.bookingDate && formData.orderDate) {
-      if (new Date(formData.orderDate) < new Date(formData.bookingDate))
-        newErrors.orderDate = "Order Date cannot be before Booking Date";
-    }
+    // if (formData.bookingDate && formData.orderDate) {
+    //   if (new Date(formData.orderDate) < new Date(formData.bookingDate))
+    //     newErrors.orderDate = "Order Date cannot be before Booking Date";
+    // }
 
-    if (formData.orderDate && formData.deleveryDate) {
-      if (new Date(formData.deleveryDate) < new Date(formData.orderDate))
-        newErrors.deleveryDate = "Delivery Date cannot be before Order Date";
-    }
+    // if (formData.orderDate && formData.deleveryDate) {
+    //   if (new Date(formData.deleveryDate) < new Date(formData.orderDate))
+    //     newErrors.deleveryDate = "Delivery Date cannot be before Order Date";
+    // }
 
     if (isEmpty(formData.bookingDate)) newErrors.bookingDate = "Booking Date is required";
     if (isEmpty(formData.poReceived)) newErrors.poReceived = "PO Received is required";
@@ -303,14 +301,13 @@ export default function OrderForm() {
       else if (rPercent < 0 || rPercent > 100) newErrors.retentionPercent = "Retention percent must be between 0 and 100";
     }
 
-    if (!isEmpty(formData.concerningSalesManager)) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.concerningSalesManager)) {
-        newErrors.concerningSalesManager = "Enter valid email";
-      }
-    }
+    // if (!isEmpty(formData.concerningSalesManager)) {
+    //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //   if (!emailRegex.test(formData.concerningSalesManager)) {
+    //     newErrors.concerningSalesManager = "Enter valid email";
+    //   }
+    // }
     setErrors(newErrors);
-    console.log("Validation Errors:", newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
