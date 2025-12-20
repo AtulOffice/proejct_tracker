@@ -2230,6 +2230,8 @@ export const getEngineerProjects = async (req, res) => {
           technicalEmail: "$projectData.technicalEmail",
           ContactPersonName: "$projectData.ContactPersonName",
           visitDate: "$projectData.visitDate",
+          createdAt: "$projectData.createdAt",
+          updatedAt: "$projectData.updatedAt",
         },
       },
     ];
