@@ -213,8 +213,8 @@ export const Recordsformave = async (req, res) => {
           const endTime = eng.endTime
             ? new Date(eng.endTime)
             : new Date(
-                assignedAt.getTime() + durationDays * 24 * 60 * 60 * 1000
-              );
+              assignedAt.getTime() + durationDays * 24 * 60 * 60 * 1000
+            );
 
           map.set(eng.engineerId, {
             engineerId: eng.engineerId,
@@ -505,8 +505,8 @@ export const updateRecords = async (req, res) => {
 
         const engToprojObjectId =
           existingAssignment &&
-          (existingAssignment.isMom === true ||
-            existingAssignment.isFinalMom === true)
+            (existingAssignment.isMom === true ||
+              existingAssignment.isFinalMom === true)
             ? eng.projToengObjectId
             : existingAssignment?.engToprojObjectId || eng.projToengObjectId;
 
@@ -805,8 +805,8 @@ export const updateRecordsSession = async (req, res) => {
 
         const engToprojObjectId =
           existingAssignment &&
-          (existingAssignment.isMom === true ||
-            existingAssignment.isFinalMom === true)
+            (existingAssignment.isMom === true ||
+              existingAssignment.isFinalMom === true)
             ? eng.projToengObjectId
             : existingAssignment?.engToprojObjectId || eng.projToengObjectId;
 
@@ -1964,6 +1964,13 @@ export const getEngineerProjectsPaginated = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Engineer ID",
+      });
+    }
+
     const engineer = await EngineerReocord.findById(id).select(
       "name email active"
     );
@@ -2052,6 +2059,194 @@ export const getEngineerProjectsPaginated = async (req, res) => {
   } catch (error) {
     console.error("❌ Error fetching engineer projects:", error);
     res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
+// export const getEngineerProjects = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const engineer = await EngineerReocord.findById(id).select(
+//       "name email active"
+//     );
+//     if (!engineer) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Engineer not found",
+//       });
+//     }
+//     const pipeline = [
+//       { $match: { _id: new mongoose.Types.ObjectId(id) } },
+//       { $unwind: "$assignments" },
+
+//       {
+//         $lookup: {
+//           from: "projects",
+//           localField: "assignments.projectId",
+//           foreignField: "_id",
+//           as: "projectData",
+//         },
+//       },
+//       { $unwind: { path: "$projectData", preserveNullAndEmptyArrays: true } },
+
+//       { $sort: { "projectData.updatedAt": -1 } },
+
+//       {
+//         $project: {
+//           _id: "$projectData._id",
+//           projectName: {
+//             $ifNull: ["$projectData.projectName", "$assignments.projectName"],
+//           },
+//           jobNumber: {
+//             $ifNull: ["$projectData.jobNumber", "$assignments.jobNumber"],
+//           },
+//           engineerName: "$projectData.engineerName",
+//           entityType: "$projectData.entityType",
+//           soType: "$projectData.soType",
+//           startChecklist: "$projectData.StartChecklist",
+//           endChecklist: "$projectData.EndChecklist",
+//           endUser: "$projectData.endUser",
+//           client: "$projectData.client",
+//           Development: "$projectData.Development",
+//           location: "$projectData.location",
+//           expenseScope: "$projectData.expenseScope",
+//           workScope: "$projectData.workScope",
+//           assignedAt: "$assignments.assignedAt",
+//           endTime: "$assignments.endTime",
+//           durationDays: "$assignments.durationDays",
+//           orderNumber: "$projectData.orderNumber",
+//           orderDate: "$projectData.orderDate",
+//           ContactPersonNumber: "$projectData.ContactPersonNumber",
+//           technicalEmail: "$projectData.technicalEmail",
+//           ContactPersonName: "$projectData.ContactPersonName",
+//           visitDate: "$projectData.visitDate",
+//         },
+//       },
+//     ];
+
+//     const assignments = await EngineerReocord.aggregate(pipeline);
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Engineer assignments fetched successfully",
+//       engineer: {
+//         _id: engineer._id,
+//         name: engineer.name,
+//         email: engineer.email,
+//         active: engineer.active,
+//         totalAssignments: assignments.length,
+//       },
+//       assignments,
+//     });
+//   } catch (error) {
+//     console.error("❌ Error fetching engineer projects:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//       error: error.message,
+//     });
+//   }
+// };
+
+
+export const getEngineerProjects = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { search } = req.query;
+
+    const engineer = await EngineerReocord.findById(id).select(
+      "name email active"
+    );
+
+    if (!engineer) {
+      return res.status(404).json({
+        success: false,
+        message: "Engineer not found",
+      });
+    }
+    const searchFilter = search
+      ? {
+        $or: [
+          { "projectData.projectName": { $regex: search, $options: "i" } },
+          { "projectData.jobNumber": { $regex: search, $options: "i" } },
+          { "projectData.client": { $regex: search, $options: "i" } },
+          { "projectData.endUser": { $regex: search, $options: "i" } },
+          { "projectData.orderNumber": { $regex: search, $options: "i" } },
+        ],
+      }
+      : {};
+
+    const pipeline = [
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $unwind: "$assignments" },
+
+      {
+        $lookup: {
+          from: "projects",
+          localField: "assignments.projectId",
+          foreignField: "_id",
+          as: "projectData",
+        },
+      },
+      { $unwind: { path: "$projectData", preserveNullAndEmptyArrays: true } },
+      ...(search ? [{ $match: searchFilter }] : []),
+
+      { $sort: { "projectData.updatedAt": -1 } },
+
+      {
+        $project: {
+          _id: "$projectData._id",
+          projectName: {
+            $ifNull: ["$projectData.projectName", "$assignments.projectName"],
+          },
+          jobNumber: {
+            $ifNull: ["$projectData.jobNumber", "$assignments.jobNumber"],
+          },
+          engineerName: "$projectData.engineerName",
+          entityType: "$projectData.entityType",
+          soType: "$projectData.soType",
+          startChecklist: "$projectData.StartChecklist",
+          endChecklist: "$projectData.EndChecklist",
+          endUser: "$projectData.endUser",
+          client: "$projectData.client",
+          Development: "$projectData.Development",
+          location: "$projectData.location",
+          expenseScope: "$projectData.expenseScope",
+          workScope: "$projectData.workScope",
+          assignedAt: "$assignments.assignedAt",
+          endTime: "$assignments.endTime",
+          durationDays: "$assignments.durationDays",
+          orderNumber: "$projectData.orderNumber",
+          orderDate: "$projectData.orderDate",
+          ContactPersonNumber: "$projectData.ContactPersonNumber",
+          technicalEmail: "$projectData.technicalEmail",
+          ContactPersonName: "$projectData.ContactPersonName",
+          visitDate: "$projectData.visitDate",
+        },
+      },
+    ];
+
+    const assignments = await EngineerReocord.aggregate(pipeline);
+
+    return res.status(200).json({
+      success: true,
+      message: "Engineer projects fetched successfully",
+      engineer: {
+        _id: engineer._id,
+        name: engineer.name,
+        email: engineer.email,
+        active: engineer.active,
+        totalAssignments: assignments.length,
+      },
+      assignments,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching engineer projects:", error);
+    return res.status(500).json({
       success: false,
       message: "Server error",
       error: error.message,

@@ -13,7 +13,7 @@ import ZeroCard from "./overview.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchEngineerOveriew, logout } from "../utils/apiCall";
+import { fetchEngineerOveriew, fetchProjectslist, logout } from "../utils/apiCall";
 import { useRef } from "react";
 import ProjectList from "./projectList";
 import { ProjectCatogary } from "./ProjectCatogary.jsx";
@@ -77,6 +77,27 @@ const AdminDashboard = () => {
       toast.error("error while logout");
     }
   };
+
+
+  const ProjectActionTab = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "Status",
+      val: "status",
+    },
+    {
+      head: "Delivery",
+      val: "deleveryDate",
+    },
+    { head: "Visit", val: "visitDate" },
+  ];
   const renderCard = () => {
     switch (activeCard) {
       case "zero":
@@ -84,7 +105,17 @@ const AdminDashboard = () => {
       case "one":
         return <OneCard />;
       case "two":
-        return <ProjectCatogary key={"all"} all={true} title="ALL" />;
+        return (<ProjectList
+          key={"ALL"}
+          tableVal={ProjectActionTab}
+          fetchFun={fetchProjectslist}
+          isEdit={true}
+          onEditFun="ALL"
+          editType="ALLPROJECT"
+          printTitle="ALL PROEJCT"
+        />
+        );
+
       case "three":
         return <EngineerMom setActiveCard={setActiveCard} />;
       case "four":

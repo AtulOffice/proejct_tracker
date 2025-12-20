@@ -4,11 +4,10 @@ import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
-import { fetfchProejctAll } from "../utils/apiCall";
 import ProjectTableAll from "./projectListTable";
 
-const ProjectList = () => {
-  const { toggle } = useAppContext();
+const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editType }) => {
+  const { toggle, user } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -27,8 +26,9 @@ const ProjectList = () => {
     const getProjects = async () => {
       if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
         try {
-          const val = await fetfchProejctAll({
+          const val = await fetchFun({
             search: debounceSearchTerm,
+            id: user?._id,
           });
           if (val) {
             setData(val);
@@ -37,16 +37,12 @@ const ProjectList = () => {
           console.error("Failed to fetch by jobNumber", error);
         }
       } else {
-        const val = await fetfchProejctAll({
+        const val = await fetchFun({
           search: "",
+          id: user?._id,
         });
         if (val) {
           setData(val);
-        }
-        try {
-          console.log("Fetching paginated data without search term");
-        } catch (error) {
-          console.error("Failed to fetch paginated data", error);
         }
       }
     };
@@ -73,7 +69,8 @@ const ProjectList = () => {
   }
 
   return (
-    <div className="max-w-8xl h-full lg:ml-60 px-6 py-20 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+
       <FilterCompo
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -86,17 +83,23 @@ const ProjectList = () => {
         EngHandle={true}
       />
 
-      <div
-        layout="true"
-        className="w-full min-h-[56vh] h-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200"
-      >
+      <div className="flex-1 w-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200">
         {filteredProjects.length > 0 ? (
-          <ProjectTableAll data={filteredProjects} />
+          <ProjectTableAll
+            data={filteredProjects}
+            tableVal={tableVal}
+            isEdit={isEdit}
+            onEditFun={onEditFun}
+            printTitle={printTitle}
+            editType={editType}
+          />
         ) : (
           <Notfound />
         )}
       </div>
+
     </div>
+
   );
 };
 

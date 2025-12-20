@@ -33,6 +33,19 @@ export const fetchProjects = async ({ page, search, id }) => {
   }
 };
 
+export const fetchProjectslist = async ({ search, id }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL
+      }/EngineerProjectlist/${id}?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data?.assignments;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
 
 
 export const fetfchProejctAll = async ({ search }) => {
@@ -192,6 +205,19 @@ export const fetchbyProjectbyId = async (id) => {
   try {
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/fetch/${id}`,
+      { withCredentials: true }
+    );
+    return response.data.data;
+  } catch (e) {
+    console.log(e.message);
+    throw e;
+  }
+};
+
+export const fetchbyOrderbyId = async (id) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/order/fetchbyid/${id}`,
       { withCredentials: true }
     );
     return response.data.data;

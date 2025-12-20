@@ -22,6 +22,7 @@ import {
   getAllProjectsnew,
   updateRecordsDocs,
   ProjectsFetchDevById,
+  getEngineerProjects,
 } from "../controller/project.controller.js";
 import {
   authenticate,
@@ -123,6 +124,14 @@ ProjectRouter.get(
   authenticateEngineer,
   getEngineerProjectsPaginated
 );
+
+ProjectRouter.get(
+  "/EngineerProjectlist/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getEngineerProjects
+);
+
 ProjectRouter.get(
   "/latestProjectpagination",
   refreshTokenMiddleware,
