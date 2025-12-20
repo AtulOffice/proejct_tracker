@@ -182,26 +182,26 @@ export const updateOrder = async (req, res) => {
     }
 
     const { bookingDate, orderDate, deleveryDate } = data;
-    if (
-      bookingDate &&
-      orderDate &&
-      new Date(orderDate) < new Date(bookingDate)
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Order Date cannot be before Booking Date",
-      });
-    }
-    if (
-      orderDate &&
-      deleveryDate &&
-      new Date(deleveryDate) < new Date(orderDate)
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Delivery Date cannot be before Order Date",
-      });
-    }
+    // if (
+    //   bookingDate &&
+    //   orderDate &&
+    //   new Date(orderDate) < new Date(bookingDate)
+    // ) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Order Date cannot be before Booking Date",
+    //   });
+    // }
+    // if (
+    //   orderDate &&
+    //   deleveryDate &&
+    //   new Date(deleveryDate) < new Date(orderDate)
+    // ) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Delivery Date cannot be before Order Date",
+    //   });
+    // }
 
     const order = await Order.findByIdAndUpdate(_id, data, { new: true });
     if (!order) {
