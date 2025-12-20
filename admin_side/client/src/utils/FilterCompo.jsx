@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAppContext } from "../appContex";
 
 const FilterCompo = ({
   searchTerm,
@@ -12,6 +13,9 @@ const FilterCompo = ({
   filterRef,
   EngHandle = false,
 }) => {
+
+  const { setToggle } = useAppContext();
+
   const mapTime = {
     all: "All TIME",
     today: "TODAY",

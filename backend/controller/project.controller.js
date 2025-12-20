@@ -1486,6 +1486,8 @@ export const allProjectsFetch = async (req, res) => {
       jobNumber: 1,
       visitDate: 1,
       OrderMongoId: 1,
+      createdAt: 1,
+      updatedAt: 1,
     })
       .populate({
         path: "OrderMongoId",
@@ -1502,6 +1504,8 @@ export const allProjectsFetch = async (req, res) => {
       jobNumber: p.jobNumber,
       status: p.status,
       visitDate: p.visitDate || null,
+      createdAt: p.createdAt,
+      updatedAt: p.updatedAt,
       deleveryDate: p.OrderMongoId?.deleveryDate || null,
       OrderMongoId: p.OrderMongoId?._id || null,
     }));

@@ -43,10 +43,6 @@ const OrderList = () => {
         if (val) {
           setData(val?.orders);
         }
-        try {
-        } catch (error) {
-          console.error("Failed to fetch paginated data", error);
-        }
       }
     };
     getOrders();

@@ -42,10 +42,6 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
         if (val) {
           setData(val);
         }
-        try {
-        } catch (error) {
-          console.error("Failed to fetch paginated data", error);
-        }
       }
     };
     getProjects();
