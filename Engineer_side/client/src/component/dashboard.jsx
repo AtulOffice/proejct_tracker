@@ -291,7 +291,7 @@ const AdminDashboard = () => {
                   SUBMIT MOM
                 </div>
               </li>
-              {import.meta.env.VITE_CHECK.includes("DEVELOPMENT") && (
+              {import.meta.env.VITE_CHECK === "DEVELOPMENT" && (
 
                 <>
                   <li>
