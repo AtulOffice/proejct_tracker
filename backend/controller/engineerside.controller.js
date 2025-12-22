@@ -274,7 +274,7 @@ export const getAllDocumentsDevelopmentData = async (req, res) => {
         email: 1,
       }
     )
-      .populate("developmentProjectList.documents.project", "projectName jobNumber")
+      .populate("developmentProjectList.documents.project", "projectName jobNumber CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
       .populate(
         "developmentProjectList.documents.phases.engineers",
         "name email"
