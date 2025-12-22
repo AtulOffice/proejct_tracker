@@ -21,6 +21,9 @@ import EngineerMom from "./Mom.form.jsx";
 import axios from "axios";
 import AssignmentPage from "./assingement.jsx";
 import EngineerWorkStatusFull from "./workFUllForm.jsx";
+import LogicDevelopmentExecution from "./EngineerLogic.jsx";
+import TestingDevelopmentExecution from "./EngineerTesting.jsx";
+import ScadaDevelopmentExecution from "./EngineerScada.jsx";
 
 const AdminDashboard = () => {
   const { toggle, toggleDev, user, toggleEng,
@@ -122,12 +125,27 @@ const AdminDashboard = () => {
         return <AssignmentPage assignments={Assignments} />;
       case "five":
         return <EngineerWorkStatusFull />;
-      case "nine":
+      case "six":
         return (
           <ProjectCatogary
             key={"work status"}
             workStatus={true}
             title="WORK STATUS"
+          />
+        );
+      case "eight":
+        return (
+          <LogicDevelopmentExecution
+          />
+        );
+      case "nine":
+        return (
+          <ScadaDevelopmentExecution
+          />
+        );
+      case "ten":
+        return (
+          <TestingDevelopmentExecution
           />
         );
       case "fifteen":
@@ -273,63 +291,66 @@ const AdminDashboard = () => {
                   SUBMIT MOM
                 </div>
               </li>
+              {import.meta.env.VITE_CHECK.includes("DEVELOPMENT") && (
 
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("three");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  DOC REL PROEJCTS
-                </div>
-              </li>
+                <>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("seven");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      DOC REL PROEJCTS
+                    </div>
+                  </li>
 
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("three");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  PROJECT INCLUDE LOGIC
-                </div>
-              </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("eight");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      PROJECT INCLUDE LOGIC
+                    </div>
+                  </li>
 
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("three");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  PROJECT INCLUDE SCADA
-                </div>
-              </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("nine");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      PROJECT INCLUDE SCADA
+                    </div>
+                  </li>
 
 
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("three");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  PROJECT INCLUDE TESTING
-                </div>
-              </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        handleActiveBar("ten");
+                        setSidebarOpen(false);
+                      }}
+                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
+                        }`}
+                    >
+                      <GoProjectRoadmap className="mr-3" size={20} />
+                      PROJECT INCLUDE TESTING
+                    </div>
+                  </li></>
+              )}
 
               <li>
                 <div
@@ -361,10 +382,10 @@ const AdminDashboard = () => {
                 <li>
                   <a
                     onClick={() => {
-                      handleActiveBar("nine");
+                      handleActiveBar("six");
                       setSidebarOpen(false);
                     }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
+                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
                       }`}
                   >
                     <RiProgress2Line className="mr-3" size={20} />
