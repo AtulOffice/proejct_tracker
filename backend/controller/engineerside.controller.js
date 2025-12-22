@@ -262,3 +262,103 @@ export const saveMomForEngineer = async (req, res) => {
     });
   }
 };
+
+
+export const getAllDocumentsDevelopmentData = async (req, res) => {
+  try {
+    const data = await EngineerReocord.findById(
+      req.user?._id,
+      {
+        "developmentProjectList.documents": 1,
+        name: 1,
+        email: 1,
+      }
+    )
+      .populate("developmentProjectList.documents.project", "projectName jobNumber")
+      .populate(
+        "developmentProjectList.documents.phases.engineers",
+        "name email"
+      )
+      .populate(
+        "developmentProjectList.documents.phases.peerEngineers",
+        "name email"
+      );
+
+    res.status(200).json({ success: true, message: "Documents retrieved successfully", data: data?.developmentProjectList.documents });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+export const getLogicDevelopmentData = async (req, res) => {
+  try {
+    const engineer = await EngineerReocord.findById(
+      req.user?._id,
+      { "developmentProjectList.logic": 1 }
+    )
+      .populate("developmentProjectList.logic.project", "projectName jobNumber")
+      .populate("developmentProjectList.logic.phases.engineers", "name email")
+      .populate("developmentProjectList.logic.phases.peerEngineers", "name email");
+
+    if (!engineer) {
+      return res.status(404).json({ success: false, message: "Engineer not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Logic retrieved successfully",
+      data: engineer.developmentProjectList?.logic || [],
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+export const getScadaDevelopmentData = async (req, res) => {
+  try {
+    const engineer = await EngineerReocord.findById(
+      req.user?._id,
+      { "developmentProjectList.scada": 1 }
+    )
+      .populate("developmentProjectList.scada.project", "projectName jobNumber")
+      .populate("developmentProjectList.scada.phases.engineers", "name email")
+      .populate("developmentProjectList.scada.phases.peerEngineers", "name email");
+
+    if (!engineer) {
+      return res.status(404).json({ success: false, message: "Engineer not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Scada retrieved successfully",
+      data: engineer.developmentProjectList?.scada || [],
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
+export const getTestingDevelopmentData = async (req, res) => {
+  try {
+    const engineer = await EngineerReocord.findById(
+      req.user?._id,
+      { "developmentProjectList.testing": 1 }
+    )
+      .populate("developmentProjectList.testing.project", "projectName jobNumber")
+      .populate("developmentProjectList.testing.phases.engineers", "name email")
+      .populate("developmentProjectList.testing.phases.peerEngineers", "name email");
+
+    if (!engineer) {
+      return res.status(404).json({ success: false, message: "Engineer not found" });
+    }
+
+    res.status(200).json({
+      success: true, message: "Testing retrieved successfully",
+      data: engineer.developmentProjectList?.testing || [],
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

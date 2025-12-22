@@ -10,8 +10,14 @@ import { otpHtml } from "../utils/html.js";
 export const loginEngineer = async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and Password are required",
+      });
+    }
     const engineer = await EngineerReocord.findOne({ email }).select(
-      "+password -createdAt -updatedAt -developmentProjectList -assignments"
+      "+password -createdAt -updatedAt -developmentProjectList -assignments -workStatusRecords"
     );
     if (!engineer) {
       return res

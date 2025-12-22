@@ -1,8 +1,12 @@
 import express from "express";
 import {
+  getAllDocumentsDevelopmentData,
   getAllProjectsEngineers,
   getAllProjectsEngineersshow,
   getAllProjectsEngineerswork,
+  getLogicDevelopmentData,
+  getScadaDevelopmentData,
+  getTestingDevelopmentData,
   saveMomForEngineer,
 } from "../controller/engineerside.controller.js";
 import { authenticateEngineer } from "../middlware/authaticate.js";
@@ -36,3 +40,27 @@ EngineerRouterside.post(
   authenticateEngineer,
   saveMomForEngineer
 );
+
+EngineerRouterside.get("/getAllDocs",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getAllDocumentsDevelopmentData)
+
+
+EngineerRouterside.get("/getAllLogic",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getLogicDevelopmentData)
+
+
+
+EngineerRouterside.get("/getAllScada",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getScadaDevelopmentData)
+
+
+EngineerRouterside.get("/getAlltesting",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getTestingDevelopmentData)
