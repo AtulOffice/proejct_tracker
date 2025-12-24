@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import WeeklyAssignmentViewer from "./WeeklyAssignmentViewer";
-import { fetchWeeklyAssmentbyId } from "../utils/apiCall";
+import { fetchWeeklyAssmentbyId } from "../../utils/apiCall";
 
 const WeeklyTableAll = ({ data }) => {
   const [open, setOpen] = useState(false);

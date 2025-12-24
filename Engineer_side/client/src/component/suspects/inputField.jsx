@@ -1,7 +1,7 @@
 import React from "react";
-import { InputConst } from "../utils/FieldConstant";
-import { InputFiled, SelectField, TextArea } from "./subField";
-import { EngineerAssignment } from "./engineerInpt";
+import { InputConst } from "./FieldConstant";
+import { InputFiled, SelectField, TextArea } from "../subField";
+import { EngineerAssignment } from "../engineerInpt";
 
 const FormField = ({ formData, handleChange, setEngineerData }) => {
   return (
