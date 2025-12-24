@@ -5,6 +5,9 @@ import TaskDisplay from "./component/dashboard.jsx";
 import { AppProvider, useAppContext } from "./appContex";
 import ProjectdevlopForm from "./component/add.devstatus.jsx";
 import { UserCall } from "./utils/apiCall.jsx";
+import TestingDevelopmentExecution from "./component/EngineerTesting.jsx";
+import ScadaDevelopmentExecution from "./component/EngineerScada.jsx";
+import LogicDevelopmentExecution from "./component/EngineerLogic.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useAppContext();
@@ -47,6 +50,33 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <TaskDisplay />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/plan/LOGIC/:id"
+        element={
+          <ProtectedRoute>
+            <LogicDevelopmentExecution />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/plan/SCADA/:id"
+        element={
+          <ProtectedRoute>
+            <ScadaDevelopmentExecution />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/plan/TESTING/:id"
+        element={
+          <ProtectedRoute>
+            <TestingDevelopmentExecution />
           </ProtectedRoute>
         }
       />

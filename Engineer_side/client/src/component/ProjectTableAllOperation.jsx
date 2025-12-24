@@ -94,18 +94,15 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                 />
             )}
             {work && activeExecution === "LOGIC" && (
-                // <LogicDevelopmentExecution onClose={() => setWork(false)} project={selectedProject} />
-                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} />
+                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} setSelectedProject={setSelectedProject} activeExecution={activeExecution} />
             )}
 
             {work && activeExecution === "SCADA" && (
-                // <ScadaDevelopmentExecution onClose={() => setWork(false)} project={selectedProject} />
-                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} />
-            )}
+                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} setSelectedProject={setSelectedProject} activeExecution={activeExecution} />
+            )},
 
             {work && activeExecution === "TESTING" && (
-                // <TestingDevelopmentExecution onClose={() => setWork(false)} project={selectedProject} />
-                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} />
+                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} setSelectedProject={setSelectedProject} activeExecution={activeExecution} />
             )}
 
 

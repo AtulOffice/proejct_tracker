@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function SectionDetailsModal({ project, onClose }) {
+export default function SectionDetailsModal({ project, onClose, activeExecution, setSelectedProject }) {
     const modalRef = useRef(null);
     const sections = project?.phases;
 
-    // Close on ESC key
     useEffect(() => {
         const handleEscape = (e) => {
             if (e.key === "Escape") onClose?.();
@@ -13,7 +13,6 @@ export default function SectionDetailsModal({ project, onClose }) {
         return () => document.removeEventListener("keydown", handleEscape);
     }, [onClose]);
 
-    // Close on outside click
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -42,13 +41,22 @@ export default function SectionDetailsModal({ project, onClose }) {
         return diffDays;
     };
 
+    const navigate = useNavigate()
+
+    const handlePlanSectionRoute = (sectionId) => {
+
+        navigate(`/plan/${activeExecution}/${sectionId}`);
+        onClose?.();
+        setSelectedProject(null);
+
+    }
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900/90 via-black/80 to-slate-900/90 backdrop-blur-xl p-4 overflow-hidden animate-in fade-in duration-300">
             <div
                 ref={modalRef}
                 className="relative w-[95vw] h-[95vh] overflow-hidden rounded-3xl border-2 border-white/20 bg-white shadow-2xl shadow-black/40 animate-in zoom-in-95 duration-300"
             >
-                {/* Close Button */}
                 <button
                     onClick={onClose}
                     className="group absolute top-4 right-4 z-50 w-10 h-10 bg-white/90 backdrop-blur-xl hover:bg-white border-2 border-gray-200 rounded-xl shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center text-gray-700 hover:text-gray-900 hover:rotate-90"
@@ -63,15 +71,12 @@ export default function SectionDetailsModal({ project, onClose }) {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-
-                {/* Header */}
                 <div className="relative pt-4 pb-2 px-4 text-center border-b border-gray-200/40 bg-white/90 sticky top-0 z-40">
                     <h2 className="text-sm font-bold tracking-wide text-gray-800">
                         📦 SECTION DETAILS
                     </h2>
                 </div>
 
-                {/* Scrollable Content */}
                 <div className="h-[calc(95vh-60px)] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500/80 scrollbar-track-gray-100 scrollbar-thumb-rounded-full px-6 py-6 space-y-6">
                     {sections?.map((section, index) => (
                         <div
@@ -94,8 +99,9 @@ export default function SectionDetailsModal({ project, onClose }) {
                                     </div>
                                 </div>
 
-                                {/* Completion Badge */}
+
                                 <div className="flex items-center gap-3">
+
                                     <div className="text-right">
                                         <p className="text-xs font-bold uppercase tracking-wider text-gray-600">
                                             Completion
@@ -104,16 +110,10 @@ export default function SectionDetailsModal({ project, onClose }) {
                                             {section.CompletionPercentage}%
                                         </p>
                                     </div>
+
                                     <div className="relative w-16 h-16">
                                         <svg className="w-16 h-16 transform -rotate-90">
-                                            <circle
-                                                cx="32"
-                                                cy="32"
-                                                r="28"
-                                                stroke="#e5e7eb"
-                                                strokeWidth="5"
-                                                fill="none"
-                                            />
+                                            <circle cx="32" cy="32" r="28" stroke="#e5e7eb" strokeWidth="5" fill="none" />
                                             <circle
                                                 cx="32"
                                                 cy="32"
@@ -126,15 +126,17 @@ export default function SectionDetailsModal({ project, onClose }) {
                                                 strokeLinecap="round"
                                                 className="transition-all duration-1000"
                                             />
-                                            <defs>
-                                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                    <stop offset="0%" stopColor="#10b981" />
-                                                    <stop offset="100%" stopColor="#0d9488" />
-                                                </linearGradient>
-                                            </defs>
                                         </svg>
                                     </div>
+
+                                    <button
+                                        onClick={() => handlePlanSectionRoute(section?._id)}
+                                        className="ml-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold shadow-lg hover:shadow-indigo-500/40 hover:scale-105 transition-all"
+                                    >
+                                        Action
+                                    </button>
                                 </div>
+
                             </div>
 
                             {/* Date Information */}
@@ -175,7 +177,7 @@ export default function SectionDetailsModal({ project, onClose }) {
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        Planning Timeline
+                                        Phase Timeline
                                     </h4>
                                     <div className="space-y-2">
                                         <div className="flex items-center justify-between">
@@ -242,7 +244,7 @@ export default function SectionDetailsModal({ project, onClose }) {
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                         </svg>
-                                        Peer Engineers ({section.peerEngineers?.length || 0})
+                                        All Engineers ({section.peerEngineers?.length || 0})
                                     </h4>
                                     <div className="max-h-[180px] overflow-y-auto scrollbar-thin scrollbar-thumb-violet-400/80 scrollbar-track-violet-100/50 scrollbar-thumb-rounded-full pr-2 space-y-2">
                                         {section.peerEngineers?.length > 0 ? (
