@@ -47,7 +47,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
   const hadleOpenPopup = async (project) => {
     try {
-      const id = project?.mongoOrderId || project?._id || project?.id;
+      const id = project?.OrderMongoId || project?._id || project?.id;
 
       if (!id) {
         console.log("Invalid project data — ID missing");

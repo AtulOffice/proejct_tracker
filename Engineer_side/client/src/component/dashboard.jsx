@@ -13,9 +13,10 @@ import ZeroCard from "./overview.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchEngineerOveriew, fetchProjectslist, logout } from "../utils/apiCall";
+import { fetchEngineerOveriew, fetchProjectslist, fetfchProejctLOGIC, fetfchProejctSCADA, fetfchProejctDOCS, fetfchProejctTESTING, logout } from "../utils/apiCall";
 import { useRef } from "react";
 import ProjectList from "./projectList";
+import ProjectListOperation from "./ProjectListOperation.jsx";
 import { ProjectCatogary } from "./ProjectCatogary.jsx";
 import EngineerMom from "./Mom.form.jsx";
 import axios from "axios";
@@ -92,14 +93,13 @@ const AdminDashboard = () => {
       val: "jobNumber",
     },
     {
-      head: "Status",
-      val: "status",
+      head: "DEV STATUS",
+      val: "service",
     },
     {
-      head: "Delivery",
-      val: "deleveryDate",
+      head: "visitDate",
+      val: "visitDate",
     },
-    { head: "Visit", val: "visitDate" },
   ];
   const renderCard = () => {
     switch (activeCard) {
@@ -121,6 +121,7 @@ const AdminDashboard = () => {
 
       case "three":
         return <EngineerMom setActiveCard={setActiveCard} />;
+
       case "four":
         return <AssignmentPage assignments={Assignments} />;
       case "five":
@@ -135,17 +136,36 @@ const AdminDashboard = () => {
         );
       case "eight":
         return (
-          <LogicDevelopmentExecution
+          <ProjectListOperation
+            key={"LOGIC"}
+            tableVal={ProjectActionTab}
+            fetchFun={fetfchProejctLOGIC}
+            isEdit={true}
+            onEditFun="LOGIC"
+            printTitle="LOGIC PROEJCT"
           />
+
         );
       case "nine":
         return (
-          <ScadaDevelopmentExecution
+          <ProjectListOperation
+            key={"SCADA"}
+            tableVal={ProjectActionTab}
+            fetchFun={fetfchProejctSCADA}
+            isEdit={true}
+            onEditFun="SCADA"
+            printTitle="SCADA PROEJCT"
           />
         );
       case "ten":
         return (
-          <TestingDevelopmentExecution
+          <ProjectListOperation
+            key={"TESTING"}
+            tableVal={ProjectActionTab}
+            fetchFun={fetfchProejctTESTING}
+            isEdit={true}
+            onEditFun="TESTING"
+            printTitle="TESTING PROEJCT"
           />
         );
       case "fifteen":
@@ -297,20 +317,6 @@ const AdminDashboard = () => {
                   <li>
                     <div
                       onClick={() => {
-                        handleActiveBar("seven");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      DOC REL PROEJCTS
-                    </div>
-                  </li>
-
-                  <li>
-                    <div
-                      onClick={() => {
                         handleActiveBar("eight");
                         setSidebarOpen(false);
                       }}
@@ -335,8 +341,6 @@ const AdminDashboard = () => {
                       PROJECT INCLUDE SCADA
                     </div>
                   </li>
-
-
                   <li>
                     <div
                       onClick={() => {

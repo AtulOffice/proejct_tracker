@@ -74,6 +74,12 @@ const engineerSchema = new mongoose.Schema(
               sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
+              CompletionPercentage: {
+                type: Number,
+                min: 0,
+                max: 100,
+                default: 0,
+              },
               engineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
@@ -94,10 +100,22 @@ const engineerSchema = new mongoose.Schema(
               sectionName: {
                 type: String, default: ""
               },
+              CompletionPercentage: {
+                type: Number,
+                min: 0,
+                max: 100,
+                default: 0,
+              },
               sectionStartDate: Date,
               sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
+              CompletionPercentage: {
+                type: Number,
+                min: 0,
+                max: 100,
+                default: 0,
+              },
               engineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
@@ -122,6 +140,12 @@ const engineerSchema = new mongoose.Schema(
               sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
+              CompletionPercentage: {
+                type: Number,
+                min: 0,
+                max: 100,
+                default: 0,
+              },
               engineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
@@ -144,6 +168,12 @@ const engineerSchema = new mongoose.Schema(
               },
               sectionStartDate: Date,
               sectionEndDate: Date,
+              CompletionPercentage: {
+                type: Number,
+                min: 0,
+                max: 100,
+                default: 0,
+              },
               startDate: Date,
               endDate: Date,
               engineers: [

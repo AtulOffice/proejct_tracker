@@ -274,7 +274,7 @@ export const getAllDocumentsDevelopmentData = async (req, res) => {
         email: 1,
       }
     )
-      .populate("developmentProjectList.documents.project", "projectName jobNumber CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
+      .populate("developmentProjectList.documents.project", "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
       .populate(
         "developmentProjectList.documents.phases.engineers",
         "name email"
@@ -297,7 +297,7 @@ export const getLogicDevelopmentData = async (req, res) => {
       req.user?._id,
       { "developmentProjectList.logic": 1 }
     )
-      .populate("developmentProjectList.logic.project", "projectName jobNumber")
+      .populate("developmentProjectList.logic.project", "projectName jobNumber service visitDate location OrderMongoId  CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
       .populate("developmentProjectList.logic.phases.engineers", "name email")
       .populate("developmentProjectList.logic.phases.peerEngineers", "name email");
 
@@ -321,7 +321,7 @@ export const getScadaDevelopmentData = async (req, res) => {
       req.user?._id,
       { "developmentProjectList.scada": 1 }
     )
-      .populate("developmentProjectList.scada.project", "projectName jobNumber")
+      .populate("developmentProjectList.scada.project", "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
       .populate("developmentProjectList.scada.phases.engineers", "name email")
       .populate("developmentProjectList.scada.phases.peerEngineers", "name email");
 
@@ -346,7 +346,7 @@ export const getTestingDevelopmentData = async (req, res) => {
       req.user?._id,
       { "developmentProjectList.testing": 1 }
     )
-      .populate("developmentProjectList.testing.project", "projectName jobNumber")
+      .populate("developmentProjectList.testing.project", "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
       .populate("developmentProjectList.testing.phases.engineers", "name email")
       .populate("developmentProjectList.testing.phases.peerEngineers", "name email");
 

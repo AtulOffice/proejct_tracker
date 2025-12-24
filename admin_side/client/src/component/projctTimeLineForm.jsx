@@ -19,6 +19,7 @@ const ProjectTimelineForm1 = () => {
     const [project, setProject] = useState();
     const [loading, setLoading] = useState();
     const { toggle, setToggle } = useAppContext();
+    const [isPlan, setIsPlan] = useState(false)
     const navigate = useNavigate();
 
     const emptySection = {
@@ -111,9 +112,9 @@ const ProjectTimelineForm1 = () => {
             try {
                 const res = await axios.get(
                     `${import.meta.env.VITE_API_URL}/planningDev/fetchbyid/${planId}`, { withCredentials: true }
-
                 );
                 const defaultData = res.data?.data || {};
+                if (defaultData && defaultData.plans) setIsPlan(true);
 
                 if (defaultData?.updatedBy?.username) {
                     setName(defaultData.updatedBy.username);
@@ -185,6 +186,7 @@ const ProjectTimelineForm1 = () => {
                     });
                 }
             } catch (err) {
+                setIsPlan(false)
                 console.error("Error fetching planning data:", err);
             }
         };
@@ -337,8 +339,72 @@ const ProjectTimelineForm1 = () => {
         return name.slice(0, 10);
     };
 
+
+    const validateForm = () => {
+        for (let b = 0; b < formData.plans.length; b++) {
+            const block = formData.plans[b];
+            const section = block.documents[0];
+
+            if (!section.sectionName.trim()) {
+                toast.error(`Section name is required (SECTION- ${b + 1})`);
+                return false;
+            }
+
+            if (!section.sectionStartDate || !section.sectionEndDate) {
+                toast.error(`Section start & end dates are required (SECTION- ${b + 1})`);
+                return false;
+            }
+
+            if (new Date(section.sectionEndDate) < new Date(section.sectionStartDate)) {
+                toast.error(`Section end date cannot be before start date (SECTION- ${b + 1})`);
+                return false;
+            }
+
+            for (const phase of ["documents", "scada", "logic", "testing"]) {
+                const sec = block[phase][0];
+
+                if (!sec.startDate || !sec.endDate) {
+                    toast.error(
+                        `${phase.toUpperCase()} start & end dates are required (SECTION- ${b + 1})`
+                    );
+                    return false;
+                }
+
+                if (new Date(sec.endDate) < new Date(sec.startDate)) {
+                    toast.error(
+                        `${phase.toUpperCase()} end date cannot be before start date (SECTION- ${b + 1})`
+                    );
+                    return false;
+                }
+
+                if (
+                    new Date(sec.startDate) < new Date(section.sectionStartDate) ||
+                    new Date(sec.endDate) > new Date(section.sectionEndDate)
+                ) {
+                    toast.error(
+                        `${phase.toUpperCase()} dates must be inside section dates (SECTION- ${b + 1})`
+                    );
+                    return false;
+                }
+                if (
+                    phase !== "documents" &&
+                    (!sec.engineers || sec.engineers.length === 0)
+                ) {
+                    toast.error(
+                        `Select at least one engineer for ${phase.toUpperCase()} (SECTION- ${b + 1})`
+                    );
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateForm()) return;
+
         try {
             const formDevbackData = mapFrontendToBackend(
                 {
@@ -1124,7 +1190,8 @@ const ProjectTimelineForm1 = () => {
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>Create Software Development Plan</span>
+
+                                <span>{isPlan ? "Update" : "Create"} Software Development Plan</span>
                                 <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                 </svg>

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import PopupConfirmation from "./PopuP.Page";
 import { useNavigate } from "react-router-dom";
 import { FaPlay, FaStop, FaTools } from "react-icons/fa";
-import { deleteProject, updateProject } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import { useAppContext } from "../appContex";
 import StartChecklistForm from "./startcheckList";
@@ -23,18 +22,6 @@ const CardAll = ({ project, indx }) => {
   const navigate = useNavigate();
   const { setToggle } = useAppContext();
 
-  const handleDelete = async (id, jobNumber) => {
-    setIsdisabled(true);
-    try {
-      await deleteProject(id, jobNumber);
-      setDeleteflag(false);
-      setToggle((prev) => !prev);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsdisabled(false);
-    }
-  };
 
   const handleUpdate = (id) => {
     setIsdisabled(true);
@@ -48,13 +35,7 @@ const CardAll = ({ project, indx }) => {
     }
   };
 
-  const handleDevelop = async (project) => {
-    try {
-      await updateProject(project, navigate);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
 
   return (
     <div>
@@ -88,7 +69,7 @@ const CardAll = ({ project, indx }) => {
       {deleteFlag && (
         <PopupConfirmation
           setCancelflag={setDeleteflag}
-          handleConfirm={() => handleDelete(project._id, project.jobNumber)}
+          // handleConfirm={() => handleDelete(project._id, project.jobNumber)}
           isDisabled={isDisabled}
           title="Are you sure?"
           message={`Do you really want to delete JobId ${project.jobNumber} ? This action cannot be undone.`}

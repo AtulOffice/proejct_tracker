@@ -14,7 +14,6 @@ export const fetchEngineerOveriew = async (id) => {
   }
 };
 
-
 export const fetchProjects = async ({ page, search, id }) => {
   try {
     const res = await axios.get(
@@ -47,14 +46,52 @@ export const fetchProjectslist = async ({ search, id }) => {
   }
 };
 
-
-export const fetfchProejctAll = async ({ search }) => {
+export const fetfchProejctDOCS = async ({ search }) => {
   try {
     const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/allProjectsfetch?search=${search}`,
+      `${import.meta.env.VITE_API_URL}/engineerside/getAlldocs?search=${search}`,
       { withCredentials: true }
     );
-    return res.data.data;
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
+export const fetfchProejctLOGIC = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/getAllLogic?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
+export const fetfchProejctSCADA = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/getAllScada?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
+export const fetfchProejctTESTING = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/getAlltesting?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data;
   } catch (err) {
     console.error("Failed to fetch projects:", err);
     throw err;
@@ -114,18 +151,6 @@ export const EditAllEngineers = async (id, data) => {
   }
 };
 
-export const deleteEngineer = async (id) => {
-  try {
-    const res = await axios.delete(
-      `${import.meta.env.VITE_API_URL}/engineer/deleteEngineer/${id}`,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error("error while deleting data", err);
-    throw err;
-  }
-};
 
 export const login = async ({ email, password, navigate, setUser }) => {
   if (!email || !password) {
@@ -240,97 +265,6 @@ export const UserCall = async () => {
       console.log(e.response.data);
     }
     throw e;
-  }
-};
-
-export const addProject = async ({ formData, engineerData }) => {
-  try {
-    await axios.post(
-      `${import.meta.env.VITE_API_URL}/save`,
-      {
-        ...formData,
-        momDate: formData.momDate ? [formData.momDate] : [],
-        engineerName: engineerData
-          ? [...new Set(engineerData.map((eng) => eng.engineerName?.trim()))]
-          : [],
-        momsrNo: formData.momsrNo
-          ? formData.momsrNo.split(",").map((item) => item.trim())
-          : [],
-        projectName: formData.client,
-        startDate: formData?.requestDate ?? null,
-        endDate: formData?.deleveryDate ?? null,
-        // engineerData: engineerData.map((eng) => ({
-        //   ...eng,
-        //   assignedAt: formData.visitDate,
-        //   endTime: formData.visitendDate,
-        // })),
-        engineerData,
-      },
-      { withCredentials: true }
-    );
-    toast.success("Data saved successfully");
-  } catch (e) {
-    if (e.response) {
-      toast.error(e.response?.data?.message);
-    }
-    toast.error("something went wrong");
-    console.log(e);
-    throw e;
-  }
-};
-
-export const deleteProject = async (id, jobNumber) => {
-  try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/delete/${id}`, {
-      withCredentials: true,
-    });
-    toast.success(`JobId ${jobNumber} deleted successfully`);
-  } catch (e) {
-    if (e.response) {
-      toast.error(e.response?.data?.message);
-    }
-    toast.error("something went wrong");
-    console.log(e);
-    throw e;
-  }
-};
-
-export const updateProject = async (project, navigate) => {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.jobNumber
-      }`,
-      { withCredentials: true }
-    );
-    if (res?.data?.exists) {
-      toast.error("Project development status already exists");
-    } else {
-      navigate(`/develop/${project.jobNumber}`, {
-        state: { fromButton: true },
-      });
-    }
-  } catch (error) {
-    console.error("Error checking project existence:", error);
-    toast.error("Failed to fetch project data");
-    throw error;
-  }
-};
-
-export const saveWeeklyAssment = async ({
-  weekStart,
-  engineers,
-  tasksByDate,
-}) => {
-  try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_API_URL}/devrecord/save`,
-      { weekStart, engineers, tasksByDate },
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error("error while saving", err);
-    throw err;
   }
 };
 
