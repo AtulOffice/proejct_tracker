@@ -3,14 +3,10 @@ import { fetchbyOrderbyId, fetchbyProjectbyId } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
 import { handlePrint } from "../utils/print";
-import { FaPlay, FaStop, FaTools } from "react-icons/fa";
+import { FaTools } from "react-icons/fa";
 import { IoDocumentsOutline } from "react-icons/io5";
-import EndChecklistForm from "./endCheklist";
-import EngineerWorkStatus from "./add.work";
 import DocSRecordChecklist from "./DocSRecordChecklist";
-import LogicDevelopmentExecution from "./EngineerLogic";
-import ScadaDevelopmentExecution from "./EngineerScada";
-import TestingDevelopmentExecution from "./EngineerTesting";
+import { GiProgression } from "react-icons/gi";
 import SectionDetailsModal from "./DevelopMentSection";
 
 const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
@@ -135,7 +131,9 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                     </th>
                                 ))}
                                 {isEdit && (
-                                    <>
+                                    <>  <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
+                                        PROGRESS
+                                    </th>
                                         <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                                             DOCS
                                         </th>
@@ -184,6 +182,25 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                     {isEdit && (
                                         <>
                                             <td
+                                                className="px-6 py-4 text-center">
+                                                <button
+                                                    className="
+                                flex items-center justify-center
+                                                    bg-gradient-to-tr from-green-500 via-emerald-500 to-lime-500
+                                                    hover:from-green-600 hover:via-emerald-600 hover:to-lime-600
+                                                    text-white p-2 rounded-full shadow-lg
+                                                    transition-all duration-200
+                                                    hover:scale-110 hover:-rotate-6
+                                                    ring-2 ring-transparent hover:ring-green-300
+                                                    focus:outline-none focus:ring-4 focus:ring-green-400
+                                                    "
+                                                    aria-label="Update"
+                                                    type="button"
+                                                >
+                                                    <GiProgression className="w-5 h-5 drop-shadow" />
+                                                </button>
+                                            </td>
+                                            <td
                                                 onClick={() => openAction("start", row)}
                                                 className="px-6 py-4 text-center">
                                                 <button
@@ -202,7 +219,6 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                                 >
                                                     <IoDocumentsOutline className="w-5 h-5 drop-shadow" />
                                                 </button>
-
                                             </td>
                                             <td onClick={() => handleRoutePlan(onEditFun, row)}
                                                 className="px-6 py-4 text-center">

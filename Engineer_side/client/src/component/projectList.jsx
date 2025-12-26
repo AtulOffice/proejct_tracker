@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../../appContex";
-import Notfound from "../../utils/Notfound";
-import LoadingSkeltionAll from "../../utils/LoaderAllPorject";
-import { filterProjectsUtils } from "../../utils/filterUtils";
-import FilterCompo from "../../utils/FilterCompo";
-import ProjectTableAll from "../projectListTable";
+import { useAppContext } from "../appContex";
+import Notfound from "../utils/Notfound";
+import LoadingSkeltionAll from "../utils/LoaderAllPorject";
+import { filterProjectsUtils } from "../utils/filterUtils";
+import FilterCompo from "../utils/FilterCompo";
+import ProjectTableAll from "./projectListTable";
 
 const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editType }) => {
   const { toggle, user } = useAppContext();
