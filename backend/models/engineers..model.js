@@ -90,42 +90,42 @@ const engineerSchema = new mongoose.Schema(
           ],
         },
       ],
-      logic: [
-        {
-          project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
-          phases: [
-            {
-              phaseIndex: Number,
-              totalPhases: Number,
-              sectionName: {
-                type: String, default: ""
+        logic: [
+          {
+            project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+            phases: [
+              {
+                phaseIndex: Number,
+                totalPhases: Number,
+                sectionName: {
+                  type: String, default: ""
+                },
+                CompletionPercentage: {
+                  type: Number,
+                  min: 0,
+                  max: 100,
+                  default: 0,
+                },
+                sectionStartDate: Date,
+                sectionEndDate: Date,
+                startDate: Date,
+                endDate: Date,
+                CompletionPercentage: {
+                  type: Number,
+                  min: 0,
+                  max: 100,
+                  default: 0,
+                },
+                engineers: [
+                  { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+                ],
+                peerEngineers: [
+                  { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
+                ],
               },
-              CompletionPercentage: {
-                type: Number,
-                min: 0,
-                max: 100,
-                default: 0,
-              },
-              sectionStartDate: Date,
-              sectionEndDate: Date,
-              startDate: Date,
-              endDate: Date,
-              CompletionPercentage: {
-                type: Number,
-                min: 0,
-                max: 100,
-                default: 0,
-              },
-              engineers: [
-                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
-              ],
-              peerEngineers: [
-                { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
-              ],
-            },
-          ],
-        },
-      ],
+            ],
+          },
+        ],
       scada: [
         {
           project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },

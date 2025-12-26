@@ -5,8 +5,11 @@ import {
   getAllProjectsEngineersshow,
   getAllProjectsEngineerswork,
   getLogicDevelopmentData,
+  getLogicPhaseById,
   getScadaDevelopmentData,
+  getScadaPhaseById,
   getTestingDevelopmentData,
+  getTestingPhaseById,
   saveMomForEngineer,
 } from "../controller/engineerside.controller.js";
 import { authenticateEngineer } from "../middlware/authaticate.js";
@@ -64,3 +67,19 @@ EngineerRouterside.get("/getAlltesting",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getTestingDevelopmentData)
+
+EngineerRouterside.get("/getlogicpahase/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getLogicPhaseById)
+
+EngineerRouterside.get("/getscadapahase/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getScadaPhaseById)
+
+
+EngineerRouterside.get("/gettestingpahase/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getTestingPhaseById)
