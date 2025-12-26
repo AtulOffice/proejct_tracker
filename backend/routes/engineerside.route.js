@@ -97,22 +97,22 @@ EngineerRouterside.get("/section/:sectionId",
   authenticateEngineer,
   getProgressBySection);
 
-EngineerRouterside.get("/project/:projectId",
+EngineerRouterside.get("/projectforSectionReport/:projectId",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getProgressByProject);
 
-EngineerRouterside.get("/:id",
+EngineerRouterside.get("/progress/:id",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getProgressById);
 
-EngineerRouterside.put("/:id",
+EngineerRouterside.put("/updateProgress/:id",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   updateProgressReport);
 
-EngineerRouterside.delete("/:id",
+EngineerRouterside.delete("/deleteProgress/:id",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   deleteProgressReport);

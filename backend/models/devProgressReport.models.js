@@ -6,12 +6,15 @@ const EngineerProgressReportSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Project",
             required: true,
-            index: true,
         },
-        sectionId: {
+        phaseId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             index: true,
+        },
+        SectionId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
         },
 
         submittedBy: {

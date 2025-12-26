@@ -1,11 +1,33 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { fetchPhaseLogic } from "../utils/apiCall";
+import { useNavigate, useParams } from "react-router-dom";
+import { createProgressReport, fetchPhaseLogic } from "../utils/apiCall";
+import { useAppContext } from "../appContex";
+import toast from "react-hot-toast";
 
 export default function LogicDevelopmentExecution() {
   const { id } = useParams()
+  const navigate = useNavigate();
+  const { user } = useAppContext();
   const [logicPhaseData, setLogicPhaseData] = React.useState(null);
+  const logicval = {
+    phaseId: "",
+    SectionId: "",
+    projectId: "",
+    submittedBy: "",
+    targetStartDate: "",
+    targetEndDate: "",
 
+    actualStartDate: "",
+    actualEndDate: "",
+
+    reportDate: new Date().toISOString().split("T")[0],
+
+    actualProgressDay: 0,
+    actualCompletionPercent: 0,
+
+    remarks: "",
+  }
+  const [formData, setFormData] = React.useState(logicval);
   React.useEffect(() => {
     const PhaseLogic = async () => {
       const response = await fetchPhaseLogic({ id })
@@ -13,6 +35,20 @@ export default function LogicDevelopmentExecution() {
     }
     PhaseLogic()
   }, [])
+
+  React.useEffect(() => {
+    if (!logicPhaseData) return;
+
+    setFormData((prev) => ({
+      ...prev,
+      projectId: logicPhaseData.project?._id || "",
+      phaseId: logicPhaseData.phase?._id || "",
+      targetStartDate: logicPhaseData.phase?.startDate || "",
+      targetEndDate: logicPhaseData.phase?.endDate || "",
+      submittedBy: user?._id || "",
+      SectionId: logicPhaseData?.SectionId || "",
+    }));
+  }, [logicPhaseData]);
 
   const formatDate = (
     date,
@@ -42,7 +78,84 @@ export default function LogicDevelopmentExecution() {
     return diffDays >= 0 ? diffDays : fallback;
   }
 
-  console.log(logicPhaseData);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "actualCompletionPercent") {
+      if (value === "") {
+        setFormData((prev) => ({
+          ...prev,
+          actualCompletionPercent: "",
+          actualEndDate: "",
+        }));
+        return;
+      }
+      let num = parseInt(value, 10);
+      if (isNaN(num)) return;
+      num = Math.max(0, Math.min(100, num));
+      setFormData((prev) => ({
+        ...prev,
+        actualCompletionPercent: num,
+        actualEndDate:
+          num === 100
+            ? new Date().toISOString().split("T")[0]
+            : "",
+      }));
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+
+
+
+  const validateForm = () => {
+    if (!formData.projectId) return "Project is required";
+    if (!formData.phaseId) return "phase is required";
+    if (!formData.SectionId) return "Section is required";
+    if (!formData.actualStartDate) return "Actual start date is required";
+    if (formData.actualCompletionPercent < 0 || formData.actualCompletionPercent > 100)
+      return "Completion % must be between 0 and 100";
+    return null;
+  };
+
+  const calculateProgressDays = (startDate) => {
+    if (!startDate) return 0;
+    const start = new Date(startDate);
+    const today = new Date();
+    const diff = Math.ceil(
+      (today - start) / (1000 * 60 * 60 * 24)
+    );
+    return diff > 0 ? diff : 0;
+  };
+
+  const handleSubmit = async () => {
+    const error = validateForm();
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    try {
+      const payload = {
+        ...formData,
+        actualProgressDay: calculateProgressDays(formData.actualStartDate)
+      };
+
+      const response = await createProgressReport(payload);
+      toast.success("Progress submitted successfully");
+      setFormData(logicval);
+      navigate("/")
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to submit progress");
+    }
+  };
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100 py-8 px-4">
@@ -102,7 +215,7 @@ export default function LogicDevelopmentExecution() {
                       </div>
                       <div className="flex-1">
                         <p className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                          Dev. Scope
+                          DevScope Note
                         </p>
                         <p className="text-sm text-gray-700 leading-relaxed">
                           {logicPhaseData?.project?.devScope || "—"}
@@ -250,6 +363,7 @@ export default function LogicDevelopmentExecution() {
             </div>
 
             {/* Actual Dates */}
+            {/* Actual Dates */}
             <div className="grid grid-cols-3 gap-6 items-end">
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
@@ -257,9 +371,19 @@ export default function LogicDevelopmentExecution() {
                 </label>
                 <input
                   type="date"
+                  name="actualStartDate"
+                  value={formData.actualStartDate}
+                  onChange={(e) => {
+                    handleChange(e);
+                    setFormData((prev) => ({
+                      ...prev,
+                      actualProgressDay: calculateProgressDays(e.target.value),
+                    }));
+                  }}
                   className="w-full rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 transition-all"
                 />
               </div>
+
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
                   Actual End Date
@@ -267,8 +391,14 @@ export default function LogicDevelopmentExecution() {
                 <input
                   className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-600 shadow-sm"
                   disabled
+                  value={
+                    formData.actualCompletionPercent === 100
+                      ? new Date().toISOString().split("T")[0]
+                      : ""
+                  }
                 />
               </div>
+
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
                   # of days
@@ -276,6 +406,7 @@ export default function LogicDevelopmentExecution() {
                 <input
                   className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-center text-sm font-semibold text-gray-600 shadow-sm"
                   disabled
+                  value={formData.actualProgressDay}
                 />
               </div>
             </div>
@@ -289,9 +420,10 @@ export default function LogicDevelopmentExecution() {
                 <input
                   className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm"
                   disabled
-                  value={new Date().toLocaleDateString('en-IN')}
+                  value={new Date().toLocaleDateString("en-IN")}
                 />
               </div>
+
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
                   Actual Progress Day
@@ -299,15 +431,24 @@ export default function LogicDevelopmentExecution() {
                 <input
                   className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm"
                   disabled
+                  value={formData.actualProgressDay}
                 />
               </div>
+
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
                   Actual Completion %
                 </label>
                 <input
+                  type="number"
+                  name="actualCompletionPercent"
+                  min={0}
+                  max={100}
+                  value={formData.actualCompletionPercent}
+                  onChange={handleChange}
+                  onWheel={(e) => e.target.blur()}
                   className="w-full rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-900 placeholder:text-amber-500 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 transition-all"
-                  placeholder="e.g. 45%"
+                  placeholder="e.g. 45"
                 />
               </div>
             </div>
@@ -319,6 +460,9 @@ export default function LogicDevelopmentExecution() {
               </label>
               <textarea
                 rows={4}
+                name="remarks"
+                value={formData.remarks}
+                onChange={handleChange}
                 className="w-full rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 placeholder:text-amber-500 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 transition-all resize-none"
                 placeholder="Add important notes, risks or dependencies related to this section."
               />
@@ -328,6 +472,7 @@ export default function LogicDevelopmentExecution() {
             <div className="flex justify-center pt-6 border-t-2 border-gray-200">
               <button
                 type="button"
+                onClick={handleSubmit}
                 className="group relative px-10 py-5 text-white font-black text-base uppercase tracking-wider rounded-2xl bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 shadow-2xl hover:shadow-indigo-500/50 hover:scale-105 active:scale-95 transition-all duration-300 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -349,6 +494,7 @@ export default function LogicDevelopmentExecution() {
                 </span>
               </button>
             </div>
+
           </div>
         </div>
       </div>

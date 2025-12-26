@@ -131,7 +131,7 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                     </th>
                                 ))}
                                 {isEdit && (
-                                    <>  <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
+                                    <><th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                                         PROGRESS
                                     </th>
                                         <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 import EngineerProgressReport from "../models/devProgressReport.models.js";
+import EngineerReocord from "../models/engineers..model.js";
 
 export const validateProgressBody = (body) => {
     const errors = [];
@@ -11,8 +12,8 @@ export const validateProgressBody = (body) => {
         errors.push("Invalid or missing projectId");
     }
 
-    if (!isObjectId(body.sectionId)) {
-        errors.push("Invalid or missing sectionId");
+    if (!isObjectId(body.phaseId)) {
+        errors.push("Invalid or missing phaseId");
     }
 
     if (!body.targetStartDate || isNaN(new Date(body.targetStartDate))) {
@@ -60,22 +61,42 @@ export const validateProgressBody = (body) => {
 export const createProgressReport = async (req, res) => {
     try {
         const errors = validateProgressBody(req.body);
-
         if (errors.length > 0) {
             return res.status(400).json({
                 success: false,
                 errors,
             });
         }
-
         const report = await EngineerProgressReport.create({
             ...req.body,
             submittedBy: req.user._id,
         });
-
+        const phaseId = req.body.phaseId;
+        const completion = req.body.actualCompletionPercent;
+        if (phaseId && completion !== undefined) {
+            const phaseObjectId = new mongoose.Types.ObjectId(phaseId);
+            await EngineerReocord.updateOne(
+                { _id: req.user._id },
+                {
+                    $set: {
+                        "developmentProjectList.documents.$[].phases.$[phase].CompletionPercentage":
+                            completion,
+                        "developmentProjectList.logic.$[].phases.$[phase].CompletionPercentage":
+                            completion,
+                        "developmentProjectList.scada.$[].phases.$[phase].CompletionPercentage":
+                            completion,
+                        "developmentProjectList.testing.$[].phases.$[phase].CompletionPercentage":
+                            completion,
+                    },
+                },
+                {
+                    arrayFilters: [{ "phase._id": phaseObjectId }],
+                }
+            );
+        }
         return res.status(201).json({
             success: true,
-            message: "Progress report created successfully",
+            message: "Progress report created and phase updated successfully",
             data: report,
         });
     } catch (err) {
@@ -89,17 +110,17 @@ export const createProgressReport = async (req, res) => {
 
 export const getProgressBySection = async (req, res) => {
     try {
-        const { sectionId } = req.params;
+        const { phaseId } = req.params;
 
-        if (!mongoose.Types.ObjectId.isValid(sectionId)) {
+        if (!mongoose.Types.ObjectId.isValid(phaseId)) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid sectionId",
+                message: "Invalid phaseId",
             });
         }
 
         const reports = await EngineerProgressReport
-            .find({ sectionId })
+            .find({ phaseId })
             .sort({ createdAt: 1 });
 
         return res.status(200).json({

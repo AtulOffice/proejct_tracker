@@ -140,6 +140,87 @@ export const fetchPhaseTesting = async ({ id }) => {
 };
 
 
+// save the progress report
+
+
+export const createProgressReport = async (payload) => {
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/engineerside/progresssSave/`,
+      payload,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to create progress report:", err);
+    throw err;
+  }
+};
+export const fetchProgressBySection = async ({ sectionId }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/section/${sectionId}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch section progress:", err);
+    throw err;
+  }
+};
+export const fetchProgressByProject = async ({ projectId }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/projectforSectionReport/${projectId}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch project progress:", err);
+    throw err;
+  }
+};
+export const fetchProgressById = async ({ id }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/progress/${id}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch progress report:", err);
+    throw err;
+  }
+};
+export const updateProgressReport = async ({ id, payload }) => {
+  try {
+    const res = await axios.put(
+      `${import.meta.env.VITE_API_URL}/engineerside/updateProgress/${id}`,
+      payload,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to update progress report:", err);
+    throw err;
+  }
+};
+export const deleteProgressReport = async ({ id }) => {
+  try {
+    const res = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/engineerside/deleteProgress/${id}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to delete progress report:", err);
+    throw err;
+  }
+};
+
+
+
+
 export const getavailableEngineers = async () => {
   try {
     const res = await axios.get(

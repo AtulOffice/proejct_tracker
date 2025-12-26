@@ -470,6 +470,7 @@ export const getLogicPhaseById = async (req, res) => {
       {
         $project: {
           _id: 0,
+          SectionId: "$developmentProjectList.logic._id",
           phase: "$developmentProjectList.logic.phases",
           project: { $arrayElemAt: ["$project", 0] },
           engineers: 1,
@@ -549,6 +550,8 @@ export const getScadaPhaseById = async (req, res) => {
                 projectName: 1,
                 jobNumber: 1,
                 client: 1,
+                devScope: 1,
+                service: 1
               },
             },
           ],
@@ -611,6 +614,7 @@ export const getScadaPhaseById = async (req, res) => {
       {
         $project: {
           _id: 0,
+          SectionId: "$developmentProjectList.scada._id",
           phase: "$developmentProjectList.scada.phases",
           project: { $arrayElemAt: ["$project", 0] },
           engineers: 1,
@@ -691,6 +695,8 @@ export const getTestingPhaseById = async (req, res) => {
                 projectName: 1,
                 jobNumber: 1,
                 client: 1,
+                devScope: 1,
+                service: 1
               },
             },
           ],
@@ -753,6 +759,7 @@ export const getTestingPhaseById = async (req, res) => {
       {
         $project: {
           _id: 0,
+          SectionId: "$developmentProjectList.testing._id",
           phase: "$developmentProjectList.testing.phases",
           project: { $arrayElemAt: ["$project", 0] },
           engineers: 1,

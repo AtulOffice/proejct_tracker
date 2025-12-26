@@ -83,7 +83,7 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
                             key={section._id || index}
                             className="group/section relative rounded-3xl border-2 border-indigo-200/60 bg-gradient-to-br from-white via-indigo-50/30 to-purple-50/20 p-6 shadow-2xl hover:shadow-indigo-500/30 transition-all duration-500 hover:-translate-y-1"
                         >
-                            {/* Section Header */}
+
                             <div className="flex items-center justify-between mb-6 pb-4 border-b-2 border-indigo-200/50">
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 bg-gradient-to-br from-indigo-400 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl text-white font-black text-lg">
@@ -113,7 +113,26 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
 
                                     <div className="relative w-16 h-16">
                                         <svg className="w-16 h-16 transform -rotate-90">
-                                            <circle cx="32" cy="32" r="28" stroke="#e5e7eb" strokeWidth="5" fill="none" />
+
+                                            {/* Gradient definition */}
+                                            <defs>
+                                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stopColor="#6366f1" />
+                                                    <stop offset="100%" stopColor="#8b5cf6" />
+                                                </linearGradient>
+                                            </defs>
+
+                                            {/* Background circle */}
+                                            <circle
+                                                cx="32"
+                                                cy="32"
+                                                r="28"
+                                                stroke="#e5e7eb"
+                                                strokeWidth="5"
+                                                fill="none"
+                                            />
+
+                                            {/* Progress circle */}
                                             <circle
                                                 cx="32"
                                                 cy="32"
@@ -121,13 +140,16 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
                                                 stroke="url(#gradient)"
                                                 strokeWidth="5"
                                                 fill="none"
-                                                strokeDasharray={`${2 * Math.PI * 28}`}
-                                                strokeDashoffset={`${2 * Math.PI * 28 * (1 - section.CompletionPercentage / 100)}`}
+                                                strokeDasharray={2 * Math.PI * 28}
+                                                strokeDashoffset={
+                                                    2 * Math.PI * 28 * (1 - section.CompletionPercentage / 100)
+                                                }
                                                 strokeLinecap="round"
                                                 className="transition-all duration-1000"
                                             />
                                         </svg>
                                     </div>
+
 
                                     <button
                                         onClick={() => handlePlanSectionRoute(section?._id)}

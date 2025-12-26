@@ -83,6 +83,21 @@ const AdminDashboard = () => {
   };
 
 
+  const ProjectActionTaball = [
+    {
+      head: "Project Name",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "visitDate",
+      val: "visitDate",
+    },
+  ];
+
   const ProjectActionTab = [
     {
       head: "Project Name",
@@ -101,6 +116,8 @@ const AdminDashboard = () => {
       val: "",
     },
   ];
+
+
   const renderCard = () => {
     switch (activeCard) {
       case "zero":
@@ -110,7 +127,7 @@ const AdminDashboard = () => {
       case "two":
         return (<ProjectList
           key={"ALL"}
-          tableVal={ProjectActionTab}
+          tableVal={ProjectActionTaball}
           fetchFun={fetchProjectslist}
           isEdit={true}
           onEditFun="ALL"
