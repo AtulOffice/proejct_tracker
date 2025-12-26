@@ -98,6 +98,47 @@ export const fetfchProejctTESTING = async ({ search }) => {
   }
 };
 
+// phase details fetching
+
+export const fetchPhaseLogic = async ({ id }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/getlogicphase/${id}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
+export const fetchPhaseScada = async ({ id }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/getscadaphase/${id}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
+export const fetchPhaseTesting = async ({ id }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/gettestingphase/${id}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
 
 export const getavailableEngineers = async () => {
   try {

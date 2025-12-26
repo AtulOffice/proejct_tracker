@@ -14,6 +14,7 @@ import {
 } from "../controller/engineerside.controller.js";
 import { authenticateEngineer } from "../middlware/authaticate.js";
 import { refreshTokenEngineerMiddleware } from "../middlware/refreshToken.js";
+import { createProgressReport, deleteProgressReport, getProgressById, getProgressByProject, getProgressBySection, updateProgressReport } from "../controller/engineerSideProgress.controller.js";
 
 export const EngineerRouterside = express.Router();
 
@@ -68,18 +69,50 @@ EngineerRouterside.get("/getAlltesting",
   authenticateEngineer,
   getTestingDevelopmentData)
 
-EngineerRouterside.get("/getlogicpahase/:id",
+EngineerRouterside.get("/getlogicphase/:id",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getLogicPhaseById)
 
-EngineerRouterside.get("/getscadapahase/:id",
+EngineerRouterside.get("/getscadaphase/:id",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getScadaPhaseById)
 
 
-EngineerRouterside.get("/gettestingpahase/:id",
+EngineerRouterside.get("/gettestingphase/:id",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getTestingPhaseById)
+
+// progress report routes
+
+EngineerRouterside.post("/progresssSave",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  createProgressReport);
+
+EngineerRouterside.get("/section/:sectionId",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getProgressBySection);
+
+EngineerRouterside.get("/project/:projectId",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getProgressByProject);
+
+EngineerRouterside.get("/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getProgressById);
+
+EngineerRouterside.put("/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  updateProgressReport);
+
+EngineerRouterside.delete("/:id",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  deleteProgressReport);

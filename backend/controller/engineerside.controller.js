@@ -406,6 +406,8 @@ export const getLogicPhaseById = async (req, res) => {
                 projectName: 1,
                 jobNumber: 1,
                 client: 1,
+                devScope: 1,
+                service: 1
               },
             },
           ],
