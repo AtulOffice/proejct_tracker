@@ -328,50 +328,47 @@ const AdminDashboard = () => {
                   SUBMIT MOM
                 </div>
               </li>
-              {import.meta.env.VITE_CHECK === "DEVELOPMENT" && (
+              <>
+                <li>
+                  <div
+                    onClick={() => {
+                      handleActiveBar("eight");
+                      setSidebarOpen(false);
+                    }}
+                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
+                  >
+                    <GoProjectRoadmap className="mr-3" size={20} />
+                    PROJECT INCLUDE LOGIC
+                  </div>
+                </li>
 
-                <>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("eight");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      PROJECT INCLUDE LOGIC
-                    </div>
-                  </li>
-
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("nine");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      PROJECT INCLUDE SCADA
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("ten");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      PROJECT INCLUDE TESTING
-                    </div>
-                  </li></>
-              )}
+                <li>
+                  <div
+                    onClick={() => {
+                      handleActiveBar("nine");
+                      setSidebarOpen(false);
+                    }}
+                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
+                  >
+                    <GoProjectRoadmap className="mr-3" size={20} />
+                    PROJECT INCLUDE SCADA
+                  </div>
+                </li>
+                <li>
+                  <div
+                    onClick={() => {
+                      handleActiveBar("ten");
+                      setSidebarOpen(false);
+                    }}
+                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
+                      }`}
+                  >
+                    <GoProjectRoadmap className="mr-3" size={20} />
+                    PROJECT INCLUDE TESTING
+                  </div>
+                </li></>
 
               <li>
                 <div

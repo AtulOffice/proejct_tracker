@@ -33,6 +33,12 @@ const DevPlanningSchema = new mongoose.Schema(
       ref: "Project",
     },
 
+    allEngineers: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Engineer",
+      default: [],
+    },
+
     projectName: {
       type: String,
       trim: true,

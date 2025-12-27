@@ -115,8 +115,6 @@ export const PlanningSave = async (req, res) => {
       });
     });
 
-
-    // 🔥 Find engineers who already have this project
     const previouslyAssignedEngineers = await EngineerReocord.find(
       {
         $or: sectionNames.map((sec) => ({
@@ -133,6 +131,8 @@ export const PlanningSave = async (req, res) => {
         )
       ),
     ];
+    planning.allEngineers = allEngineers;
+    await planning.save();
 
     const engineerIdsToProcess = [
       ...new Set([
