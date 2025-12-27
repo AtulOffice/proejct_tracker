@@ -2259,3 +2259,112 @@ export const getEngineerProjects = async (req, res) => {
     });
   }
 };
+
+export const getAdminProjectProgressByPlanning = async (req, res) => {
+  try {
+    const { planningId } = req.params;
+    if (!planningId) {
+      return res.status(400).json({
+        success: false,
+        message: "planningId is required",
+      });
+    }
+
+    const plan = await PlanningModel.findById(planningId)
+      .populate("allEngineers", "name email empId")
+      .lean();
+
+    if (!plan) {
+      return res.status(404).json({
+        success: false,
+        message: "Planning not found",
+      });
+    }
+
+    const projectId = plan.ProjectDetails;
+
+    // 2️⃣ Fetch ALL progress reports for this project
+    const reports = await EngineerProgressReport.find({
+      projectId,
+    })
+      .populate("submittedBy", "name email empId")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // 3️⃣ Normalize ALL sections from plan (ALL TYPES)
+    const allSections = [];
+    const blocks = plan.plans || [];
+
+    const TYPES = ["documents", "logic", "scada", "testing"];
+
+    TYPES.forEach((type) => {
+      blocks.forEach((block) => {
+        (block[type] || []).forEach((section, index) => {
+          allSections.push({
+            type,
+            sectionIndex: index,
+            sectionName: section.sectionName || "",
+            startDate: section.startDate || null,
+            endDate: section.endDate || null,
+            engineers: section.engineers || [],
+          });
+        });
+      });
+    });
+    const sectionResults = allSections.map((section) => {
+      const engineerMap = {};
+      reports.forEach((r) => {
+        if (!r.submittedBy) return;
+
+        const engId = r.submittedBy._id.toString();
+        if (
+          !engineerMap[engId] ||
+          new Date(r.createdAt) >
+          new Date(engineerMap[engId].lastUpdated)
+        ) {
+          engineerMap[engId] = {
+            engineer: r.submittedBy,
+            latestProgress: r.actualCompletionPercent,
+            lastUpdated: r.createdAt,
+          };
+        }
+      });
+
+      const engineers = Object.values(engineerMap);
+
+      const avgProgress =
+        engineers.reduce((sum, e) => sum + e.latestProgress, 0) /
+        (engineers.length || 1);
+
+      return {
+        type: section.type,
+        sectionName: section.sectionName,
+        startDate: section.startDate,
+        endDate: section.endDate,
+        averageProgress: Math.round(avgProgress),
+        engineers,
+      };
+    });
+    const overallProgress =
+      sectionResults.reduce(
+        (sum, s) => sum + s.averageProgress,
+        0
+      ) / (sectionResults.length || 1);
+    return res.status(200).json({
+      success: true,
+      planningId,
+      projectId,
+      projectName: plan.projectName,
+      jobNumber: plan.jobNumber,
+      overallProgress: Math.round(overallProgress),
+      sections: sectionResults,
+    });
+  } catch (error) {
+    console.error("Admin project progress error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
