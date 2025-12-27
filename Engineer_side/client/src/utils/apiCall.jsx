@@ -218,7 +218,20 @@ export const deleteProgressReport = async ({ id }) => {
   }
 };
 
+// find the section progressData
 
+export const fetchProgressByforEngineer = async ({ projectId, type }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/engineerside/getProgreforshowbyproject/${projectId}?sectiontype=${type}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch progress report:", err);
+    throw err;
+  }
+};
 
 
 export const getavailableEngineers = async () => {

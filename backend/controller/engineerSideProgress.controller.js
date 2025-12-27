@@ -56,8 +56,6 @@ export const validateProgressBody = (body) => {
     return errors;
 };
 
-
-
 export const createProgressReport = async (req, res) => {
     try {
         const errors = validateProgressBody(req.body);
@@ -270,6 +268,218 @@ export const deleteProgressReport = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Failed to delete progress report",
+        });
+    }
+};
+
+export const getEngineerProgressByType = async (req, res) => {
+    try {
+        const { sectiontype } = req.params;
+        const engineerId = req.user._id;
+        const type = sectiontype?.toLowerCase()
+        const allowedTypes = ["documents", "logic", "scada", "testing"];
+        if (!type || !allowedTypes.includes(type)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid development type",
+            });
+        }
+        const engineer = await EngineerReocord.findById(engineerId).lean();
+        if (!engineer) {
+            return res.status(404).json({
+                success: false,
+                message: "Engineer not found",
+            });
+        }
+
+
+        const sections = engineer.developmentProjectList?.[type];
+
+        if (!sections || sections.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: `No ${type} sections found for this engineer`,
+            });
+        }
+        const reports = await EngineerProgressReport.find({
+            submittedBy: engineerId,
+        })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        if (!reports.length) {
+            return res.status(404).json({
+                success: false,
+                message: "No progress reports found",
+            });
+        }
+
+
+        const result = [];
+
+        for (const report of reports) {
+            const section = sections.find(
+                (sec) => sec._id.toString() === report.SectionId?.toString()
+            );
+            if (!section) continue;
+            const phase = section.phases.find(
+                (ph) => ph._id.toString() === report.phaseId?.toString()
+            );
+            if (!phase) continue;
+
+            result.push({
+                progressId: report._id,
+                projectId: section.project,
+                type,
+                sectionId: section._id,
+                phaseId: phase._id,
+                sectionName: phase.sectionName,
+                phaseIndex: phase.phaseIndex,
+                totalPhases: phase.totalPhases,
+
+                sectionStartDate: phase.sectionStartDate,
+                sectionEndDate: phase.sectionEndDate,
+                phasestartDate: phase.startDate,
+                phaseendDate: phase.endDate,
+                actualCompletionPercent: report.actualCompletionPercent,
+                actualProgressDay: report.actualProgressDay,
+                remarks: report.remarks,
+                reportDate: report.reportDate,
+                createdAt: report.createdAt,
+            });
+        }
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: `No matching progress found for ${type}`,
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            count: result.length,
+            data: result,
+        });
+    } catch (error) {
+        console.error("Error fetching engineer progress:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+export const getEngineerProgressByTypeandProject = async (req, res) => {
+    try {
+        const { sectiontype } = req.query;
+        const { projectId } = req.params;
+        const engineerId = req.user._id;
+        const type = sectiontype?.toLowerCase();
+        const allowedTypes = ["documents", "logic", "scada", "testing"];
+        if (!type || !allowedTypes.includes(type)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid development type",
+            });
+        }
+        if (!projectId) {
+            return res.status(400).json({
+                success: false,
+                message: "projectId is required",
+            });
+        }
+
+        const engineer = await EngineerReocord.findById(engineerId).lean();
+        if (!engineer) {
+            return res.status(404).json({
+                success: false,
+                message: "Engineer not found",
+            });
+        }
+
+        const sections = (engineer.developmentProjectList?.[type] || [])
+            .filter(sec => sec.project?.toString() === projectId.toString());
+
+        if (!sections.length) {
+            return res.status(404).json({
+                success: false,
+                message: `No ${type} sections found for this project`,
+            });
+        }
+
+        const sectionIds = sections.map(sec => sec._id);
+        const reports = await EngineerProgressReport.find({
+            submittedBy: engineerId,
+            projectId: projectId,
+            SectionId: { $in: sectionIds },
+        })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        if (!reports.length) {
+            return res.status(404).json({
+                success: false,
+                message: "No progress reports found for this project",
+            });
+        }
+        const result = [];
+
+        for (const report of reports) {
+            const section = sections.find(
+                sec => sec._id.toString() === report.SectionId.toString()
+            );
+            if (!section) continue;
+
+            const phase = section.phases.find(
+                ph => ph._id.toString() === report.phaseId.toString()
+            );
+            if (!phase) continue;
+
+            result.push({
+                progressId: report._id,
+                projectId: section.project,
+                type,
+
+                sectionId: section._id,
+                phaseId: phase._id,
+
+                sectionName: phase.sectionName,
+                phaseIndex: phase.phaseIndex,
+                totalPhases: phase.totalPhases,
+
+                sectionStartDate: phase.sectionStartDate,
+                sectionEndDate: phase.sectionEndDate,
+
+                phaseStartDate: phase.startDate,
+                phaseEndDate: phase.endDate,
+
+                actualCompletionPercent: report.actualCompletionPercent,
+                actualProgressDay: report.actualProgressDay,
+                remarks: report.remarks,
+
+                reportDate: report.reportDate,
+                createdAt: report.createdAt,
+            });
+        }
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: `No matching progress found for ${type} in this project`,
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            count: result.length,
+            data: result,
+        });
+    } catch (error) {
+        console.error("Error fetching engineer progress:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
         });
     }
 };

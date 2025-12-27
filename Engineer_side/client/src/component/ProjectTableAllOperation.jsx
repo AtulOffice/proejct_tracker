@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { fetchbyOrderbyId, fetchbyProjectbyId } from "../utils/apiCall";
+import { fetchbyOrderbyId, fetchbyProjectbyId, fetchProgressByforEngineer } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
 import { handlePrint } from "../utils/print";
 import { FaTools } from "react-icons/fa";
 import { IoDocumentsOutline } from "react-icons/io5";
 import DocSRecordChecklist from "./DocSRecordChecklist";
+import ProgressShowed from "./ProgressShowed";
 import { GiProgression } from "react-icons/gi";
 import SectionDetailsModal from "./DevelopMentSection";
+import toast from "react-hot-toast";
 
 const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
     const printRef = useRef();
@@ -18,6 +20,9 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
     const [start, setStart] = useState(false);
     const [end, setEnd] = useState(false);
     const [work, setWork] = useState(false);
+    const [progress, setPorgress] = useState(false)
+    const [progressData, setProgressData] = useState()
+
 
 
     const hadleOpenPopup = async (project) => {
@@ -79,8 +84,27 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
 
     }
 
+    const handleShowProgress = async (entry) => {
+        try {
+            const data = await fetchProgressByforEngineer({
+                projectId: entry?.project?._id,
+                type: onEditFun,
+            });
+            setProgressData(data);
+            setPorgress(true);
+        } catch (e) {
+            toast.error(e.response.data.message || "some error occured");
+            setPorgress(false);
+        }
+    };
+
+
     return (
         <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+
+            {progress && progressData && (
+                <ProgressShowed project={selectedProject} onClose={() => setPorgress(false)} progressData={progressData} />
+            )}
 
             {start && (
                 <DocSRecordChecklist
@@ -184,6 +208,7 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                             <td
                                                 className="px-6 py-4 text-center">
                                                 <button
+                                                    onClick={() => handleShowProgress(row)}
                                                     className="
                                 flex items-center justify-center
                                                     bg-gradient-to-tr from-green-500 via-emerald-500 to-lime-500

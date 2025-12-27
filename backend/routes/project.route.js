@@ -54,7 +54,7 @@ ProjectRouter.post(
 ProjectRouter.get(
   "/getProjectOverview",
   refreshTokenMiddleware,
-  // authenticate,
+  authenticate,
   // authorizeRole("admin", "reception"),
   getProjectOverview
 );
@@ -79,8 +79,8 @@ ProjectRouter.get("/fetch", refreshTokenMiddleware, authenticate, findrecord);
 
 ProjectRouter.get(
   "/fetch/:id",
-  // refreshTokenMiddleware,
-  // authenticate,
+  refreshTokenMiddleware,
+  authenticate,
   // authorizeRole("admin", "reception"),
   findrecordbyId
 );
@@ -100,8 +100,8 @@ ProjectRouter.put(
 );
 ProjectRouter.put(
   "/updateDocs/:id",
-  // refreshTokenMiddleware,
-  // authenticate,
+  refreshTokenMiddleware,
+  authenticate,
   // authorizeRole("admin", "reception"),
   updateRecordsDocs
 );

@@ -14,7 +14,7 @@ import {
 } from "../controller/engineerside.controller.js";
 import { authenticateEngineer } from "../middlware/authaticate.js";
 import { refreshTokenEngineerMiddleware } from "../middlware/refreshToken.js";
-import { createProgressReport, deleteProgressReport, getProgressById, getProgressByProject, getProgressBySection, updateProgressReport } from "../controller/engineerSideProgress.controller.js";
+import { createProgressReport, deleteProgressReport, getEngineerProgressByType, getEngineerProgressByTypeandProject, getProgressById, getProgressByProject, getProgressBySection, updateProgressReport } from "../controller/engineerSideProgress.controller.js";
 
 export const EngineerRouterside = express.Router();
 
@@ -116,3 +116,16 @@ EngineerRouterside.delete("/deleteProgress/:id",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   deleteProgressReport);
+
+
+// showing section wise progress Report
+
+EngineerRouterside.get("/getProgreforshow/:sectiontype",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getEngineerProgressByType);
+
+EngineerRouterside.get("/getProgreforshowbyproject/:projectId",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getEngineerProgressByTypeandProject);

@@ -15,7 +15,7 @@ import { DevRecordRouter } from "./routes/devlopment.Record.router.js";
 import { PlannigRouter } from "./routes/dev.Planning.route.js";
 import { engineerAuthRouter } from "./routes/engineer.auth.route.js";
 import { OrderRouter } from "./routes/Order.route.js";
-import { ImageUploadRouter } from "./routes/image.router.js";
+import { ImageUploadRouter } from "./routes/image.route.js";
 import { StartRouter } from "./routes/startCheckList.routes.js";
 import { EndRouter } from "./routes/endCheckList.routes.js";
 import { MarketRouter } from "./routes/marketing.route.js";
@@ -53,7 +53,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get("/hello", (req, res) => {
-  // res.send("hello i am server of form submission");
   return res
     .status(200)
     .json({ success: true, message: "hello i am server of form submission" });

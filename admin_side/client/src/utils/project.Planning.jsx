@@ -12,7 +12,6 @@ import {
 import { mapFrontendToBackend } from "./frontToback";
 
 const ProjectTimelineForm = ({ open, onClose, project }) => {
-  console.log(project)
   const { user } = useAppContext();
   const [collOpen, setCollOpen] = useState(false);
   const { toggle, setToggle } = useAppContext()
