@@ -23,6 +23,7 @@ import {
   updateRecordsDocs,
   ProjectsFetchDevById,
   getEngineerProjects,
+  getAdminProjectProgressByPlanning,
 } from "../controller/project.controller.js";
 import {
   authenticate,
@@ -199,3 +200,12 @@ ProjectRouter.get(
   authorizeRole("admin", "reception"),
   ProjectsFetchDevById
 );
+
+ProjectRouter.get(
+  "/getAdminProjectProgressByPlanning/:planningId",
+  // refreshTokenMiddleware,
+  // authenticate,
+  // authorizeRole("admin", "reception"),
+  getAdminProjectProgressByPlanning
+);
+

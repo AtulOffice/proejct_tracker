@@ -35,7 +35,7 @@ const DevPlanningSchema = new mongoose.Schema(
 
     allEngineers: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "Engineer",
+      ref: "EngineerRecord",
       default: [],
     },
 
