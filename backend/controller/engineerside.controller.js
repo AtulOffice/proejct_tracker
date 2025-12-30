@@ -5,6 +5,7 @@ import {
   uploadImageToGlobalServer,
 } from "../utils/imageUtils.js";
 import ProjectModel from "../models/Project.model.js";
+import EngineerProgressReport from "../models/devProgressReport.models.js";
 
 export const getAllProjectsEngineers = async (req, res) => {
   try {
@@ -432,9 +433,13 @@ export const getLogicPhaseById = async (req, res) => {
         message: "engineerId and phaseId are required",
       });
     }
-
     const engineerObjectId = new mongoose.Types.ObjectId(engineerId);
     const phaseObjectId = new mongoose.Types.ObjectId(phaseId);
+
+    const LastphaseProgress = await EngineerProgressReport
+      .findOne({ phaseId: phaseObjectId })
+      .sort({ createdAt: -1 })
+      .select("actualCompletionPercent createdAt reportDate actualStartDate");
 
     const result = await EngineerReocord.aggregate([
       { $match: { _id: engineerObjectId } },
@@ -545,6 +550,7 @@ export const getLogicPhaseById = async (req, res) => {
     const isEngineerAllowed =
       data.phase.engineers?.some((id) => id.equals(engineerObjectId)) ||
       data.phase.peerEngineers?.some((id) => id.equals(engineerObjectId));
+    data.LastphaseProgress = LastphaseProgress
 
     if (!isEngineerAllowed) {
       return res.status(403).json({
@@ -555,7 +561,7 @@ export const getLogicPhaseById = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data,
+      data
     });
   } catch (error) {
     console.error("Populate logic phase error:", error);
@@ -579,6 +585,11 @@ export const getScadaPhaseById = async (req, res) => {
     }
     const engineerObjectId = new mongoose.Types.ObjectId(engineerId);
     const phaseObjectId = new mongoose.Types.ObjectId(phaseId);
+
+    const LastphaseProgress = await EngineerProgressReport
+      .findOne({ phaseId: phaseObjectId })
+      .sort({ createdAt: -1 })
+      .select("actualCompletionPercent createdAt reportDate actualStartDate");
 
     const result = await EngineerReocord.aggregate([
       { $match: { _id: engineerObjectId } },
@@ -689,6 +700,7 @@ export const getScadaPhaseById = async (req, res) => {
     const isEngineerAllowed =
       data.phase.engineers?.some((id) => id.equals(engineerObjectId)) ||
       data.phase.peerEngineers?.some((id) => id.equals(engineerObjectId));
+    data.LastphaseProgress = LastphaseProgress
 
     if (!isEngineerAllowed) {
       return res.status(403).json({
@@ -724,6 +736,11 @@ export const getTestingPhaseById = async (req, res) => {
 
     const engineerObjectId = new mongoose.Types.ObjectId(engineerId);
     const phaseObjectId = new mongoose.Types.ObjectId(phaseId);
+
+    const LastphaseProgress = await EngineerProgressReport
+      .findOne({ phaseId: phaseObjectId })
+      .sort({ createdAt: -1 })
+      .select("actualCompletionPercent createdAt reportDate actualStartDate");
 
     const result = await EngineerReocord.aggregate([
       { $match: { _id: engineerObjectId } },
@@ -834,6 +851,7 @@ export const getTestingPhaseById = async (req, res) => {
     const isEngineerAllowed =
       data.phase.engineers?.some((id) => id.equals(engineerObjectId)) ||
       data.phase.peerEngineers?.some((id) => id.equals(engineerObjectId));
+    data.LastphaseProgress = LastphaseProgress
 
     if (!isEngineerAllowed) {
       return res.status(403).json({
@@ -844,7 +862,7 @@ export const getTestingPhaseById = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data,
+      data
     });
   } catch (error) {
     console.error("Populate testing phase error:", error);

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { createProgressReport, fetchPhaseScada } from "../utils/apiCall";
 import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
+import { formatDateDDMMYY } from "../../../../admin_side/client/src/utils/timeFormatter";
 
 export default function LogicDevelopmentExecution() {
     const { id } = useParams()
@@ -36,6 +37,21 @@ export default function LogicDevelopmentExecution() {
         PhaseLogic()
     }, [])
 
+    const toInputDate = (date) => {
+        if (!date) return "";
+        return new Date(date).toISOString().split("T")[0];
+    };
+
+    const calculateProgressDays = (startDate) => {
+        if (!startDate) return 0;
+        const start = new Date(startDate);
+        const today = new Date();
+        const diff = Math.ceil(
+            (today - start) / (1000 * 60 * 60 * 24)
+        );
+        return diff > 0 ? diff : 0;
+    };
+
     React.useEffect(() => {
         if (!scadaPhaseData) return;
 
@@ -47,6 +63,8 @@ export default function LogicDevelopmentExecution() {
             targetEndDate: scadaPhaseData.phase?.endDate || "",
             submittedBy: user?._id || "",
             SectionId: scadaPhaseData?.SectionId || "",
+            actualStartDate: toInputDate(scadaPhaseData?.LastphaseProgress?.actualStartDate),
+            actualProgressDay: calculateProgressDays(scadaPhaseData?.LastphaseProgress?.actualStartDate)
         }));
     }, [scadaPhaseData]);
 
@@ -119,17 +137,13 @@ export default function LogicDevelopmentExecution() {
         if (!formData.actualStartDate) return "Actual start date is required";
         if (formData.actualCompletionPercent < 0 || formData.actualCompletionPercent > 100)
             return "Completion % must be between 0 and 100";
+        if (
+            formData.actualCompletionPercent <
+            (scadaPhaseData?.phase?.CompletionPercentage ?? 0)
+        ) {
+            return `Completion percentage must be greater than or equal to the previous value (${scadaPhaseData?.phase?.CompletionPercentage}%).`;
+        }
         return null;
-    };
-
-    const calculateProgressDays = (startDate) => {
-        if (!startDate) return 0;
-        const start = new Date(startDate);
-        const today = new Date();
-        const diff = Math.ceil(
-            (today - start) / (1000 * 60 * 60 * 24)
-        );
-        return diff > 0 ? diff : 0;
     };
 
     const handleSubmit = async () => {
@@ -172,13 +186,78 @@ export default function LogicDevelopmentExecution() {
                             </div>
 
                             <span className="flex-shrink-0 rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 to-emerald-100 px-5 py-2 text-xs font-bold uppercase tracking-wider text-emerald-700 shadow-lg">
-                                In Progress
+                                {scadaPhaseData?.phase.CompletionPercentage} %
                             </span>
                         </div>
                     </div>
 
                     {/* Content */}
                     <div className="p-8 space-y-8">
+                        <div className="space-y-6">
+                            {/* Target Dates */}
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-[2px] hover:shadow-2xl hover:shadow-rose-500/50 transition-all duration-300">
+                                    <div className="relative rounded-2xl bg-white p-5 h-full">
+                                        <div className="absolute top-0 left-0 w-16 h-16 bg-rose-200 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
+                                        <div className="relative z-10">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <svg className="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                <p className="text-xs font-bold uppercase tracking-wider text-rose-600">
+                                                    Target Start
+                                                </p>
+                                            </div>
+                                            <p className="text-xl font-extrabold text-gray-900 group-hover:text-rose-600 transition-colors">
+
+                                                {formatDateDDMMYY(scadaPhaseData?.phase?.startDate)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-[2px] hover:shadow-2xl hover:shadow-rose-500/50 transition-all duration-300">
+                                    <div className="relative rounded-2xl bg-white p-5 h-full">
+                                        <div className="absolute top-0 left-0 w-16 h-16 bg-rose-200 rounded-full blur-2xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
+                                        <div className="relative z-10">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <svg className="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <p className="text-xs font-bold uppercase tracking-wider text-rose-600">
+                                                    Target End
+                                                </p>
+                                            </div>
+                                            <p className="text-xl font-extrabold text-gray-900 group-hover:text-rose-600 transition-colors">
+                                                {formatDateDDMMYY(scadaPhaseData?.phase?.endDate)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-[2px] hover:shadow-2xl hover:shadow-emerald-500/50 transition-all duration-300">
+                                    <div className="relative rounded-2xl bg-white p-5 h-full">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 to-teal-100 opacity-50"></div>
+                                        <div className="relative z-10 text-center">
+                                            <div className="flex items-center justify-center gap-2 mb-2">
+                                                <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                                                    Duration
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center justify-center">
+                                                <span className="text-4xl font-black bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+                                                    {calculateDurationInDays(scadaPhaseData?.phase?.startDate, scadaPhaseData?.phase?.endDate)}
+                                                </span>
+                                                <span className="ml-1 text-sm font-bold text-emerald-600">days</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
                         {/* Target Progress */}
                         <div className="p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
@@ -219,6 +298,7 @@ export default function LogicDevelopmentExecution() {
                                     type="date"
                                     name="actualStartDate"
                                     value={formData.actualStartDate}
+                                    disabled={!!scadaPhaseData?.LastphaseProgress?.actualStartDate}
                                     onChange={(e) => {
                                         handleChange(e);
                                         setFormData((prev) => ({
@@ -226,7 +306,11 @@ export default function LogicDevelopmentExecution() {
                                             actualProgressDay: calculateProgressDays(e.target.value),
                                         }));
                                     }}
-                                    className="w-full rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 transition-all"
+                                    className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
+                                    ${scadaPhaseData?.LastphaseProgress?.actualStartDate
+                                            ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                                            : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                                        }`}
                                 />
                             </div>
 
@@ -267,17 +351,6 @@ export default function LogicDevelopmentExecution() {
                                     className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm"
                                     disabled
                                     value={new Date().toLocaleDateString("en-IN")}
-                                />
-                            </div>
-
-                            <div>
-                                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
-                                    Actual Progress Day
-                                </label>
-                                <input
-                                    className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm"
-                                    disabled
-                                    value={formData.actualProgressDay}
                                 />
                             </div>
 

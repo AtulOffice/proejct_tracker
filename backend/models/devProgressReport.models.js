@@ -71,7 +71,8 @@ const EngineerProgressReportSchema = new mongoose.Schema(
     }
 );
 
-export default mongoose.model(
+const EngineerProgressReport = mongoose.model(
     "EngineerProgressReport",
     EngineerProgressReportSchema
 );
+export default EngineerProgressReport;

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { createProgressReport, fetchPhaseTesting } from "../utils/apiCall";
 import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
+import { formatDateDDMMYY } from "../../../../admin_side/client/src/utils/timeFormatter";
 
 export default function TestingDevelopmentExecution() {
     const { id } = useParams()
@@ -36,6 +37,21 @@ export default function TestingDevelopmentExecution() {
         PhaseLogic()
     }, [])
 
+    const toInputDate = (date) => {
+        if (!date) return "";
+        return new Date(date).toISOString().split("T")[0];
+    };
+
+    const calculateProgressDays = (startDate) => {
+        if (!startDate) return 0;
+        const start = new Date(startDate);
+        const today = new Date();
+        const diff = Math.ceil(
+            (today - start) / (1000 * 60 * 60 * 24)
+        );
+        return diff > 0 ? diff : 0;
+    };
+
     React.useEffect(() => {
         if (!testingPhaseData) return;
 
@@ -47,6 +63,8 @@ export default function TestingDevelopmentExecution() {
             targetEndDate: testingPhaseData.phase?.endDate || "",
             submittedBy: user?._id || "",
             SectionId: testingPhaseData?.SectionId || "",
+            actualStartDate: toInputDate(testingPhaseData?.LastphaseProgress?.actualStartDate),
+            actualProgressDay: calculateProgressDays(testingPhaseData?.LastphaseProgress?.actualStartDate)
         }));
     }, [testingPhaseData]);
 
@@ -119,18 +137,16 @@ export default function TestingDevelopmentExecution() {
         if (!formData.actualStartDate) return "Actual start date is required";
         if (formData.actualCompletionPercent < 0 || formData.actualCompletionPercent > 100)
             return "Completion % must be between 0 and 100";
+        if (
+            formData.actualCompletionPercent <
+            (testingPhaseData?.phase?.CompletionPercentage ?? 0)
+        ) {
+            return `Completion percentage must be greater than or equal to the previous value (${testingPhaseData?.phase?.CompletionPercentage}%).`;
+        }
         return null;
     };
 
-    const calculateProgressDays = (startDate) => {
-        if (!startDate) return 0;
-        const start = new Date(startDate);
-        const today = new Date();
-        const diff = Math.ceil(
-            (today - start) / (1000 * 60 * 60 * 24)
-        );
-        return diff > 0 ? diff : 0;
-    };
+
 
     const handleSubmit = async () => {
         const error = validateForm();
@@ -179,7 +195,7 @@ export default function TestingDevelopmentExecution() {
                             </div>
 
                             <span className="flex-shrink-0 rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 to-emerald-100 px-5 py-2 text-xs font-bold uppercase tracking-wider text-emerald-700 shadow-lg">
-                                In Progress
+                                {testingPhaseData?.phase.CompletionPercentage} %
                             </span>
                         </div>
                     </div>
@@ -205,7 +221,7 @@ export default function TestingDevelopmentExecution() {
                                             </div>
                                             <p className="text-xl font-extrabold text-gray-900 group-hover:text-rose-600 transition-colors">
 
-                                                {formatDate(testingPhaseData?.phase?.startDate)}
+                                                {formatDateDDMMYY(testingPhaseData?.phase?.startDate)}
                                             </p>
                                         </div>
                                     </div>
@@ -224,7 +240,7 @@ export default function TestingDevelopmentExecution() {
                                                 </p>
                                             </div>
                                             <p className="text-xl font-extrabold text-gray-900 group-hover:text-rose-600 transition-colors">
-                                                {formatDate(testingPhaseData?.phase?.endDate)}
+                                                {formatDateDDMMYY(testingPhaseData?.phase?.endDate)}
                                             </p>
                                         </div>
                                     </div>
@@ -347,16 +363,6 @@ export default function TestingDevelopmentExecution() {
                                 />
                             </div>
 
-                            <div>
-                                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
-                                    Actual Progress Day
-                                </label>
-                                <input
-                                    className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm"
-                                    disabled
-                                    value={formData.actualProgressDay}
-                                />
-                            </div>
 
                             <div>
                                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
