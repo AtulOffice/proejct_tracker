@@ -3,7 +3,7 @@ import { fetchbyOrderbyId, fetchbyProjectbyId, fetchProgressByforEngineer } from
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
 import { handlePrint } from "../utils/print";
-import { FaTools } from "react-icons/fa";
+import { FaEye, FaTools } from "react-icons/fa";
 import { IoDocumentsOutline } from "react-icons/io5";
 import DocSRecordChecklist from "./DocSRecordChecklist";
 import ProgressShowed from "./ProgressShowed";
@@ -155,11 +155,12 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                     </th>
                                 ))}
                                 {isEdit && (
-                                    <><th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
-                                        PROGRESS
-                                    </th>
+                                    <>
                                         <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
-                                            DOCS
+                                            VIEW
+                                        </th>
+                                        <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
+                                            PROGRESS
                                         </th>
                                         <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                                             ACTION
@@ -205,6 +206,27 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
 
                                     {isEdit && (
                                         <>
+
+                                            <td
+                                                onClick={() => openAction("start", row)}
+                                                className="px-6 py-4 text-center">
+                                                <button
+                                                    className="
+                        flex items-center justify-center
+                        bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
+                        hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
+                        text-white p-2 rounded-full shadow-lg
+                        transition-all duration-200
+                        hover:scale-110 hover:-rotate-6
+                        ring-2 ring-transparent hover:ring-blue-300
+                        focus:outline-none focus:ring-4 focus:ring-blue-400
+                        "
+                                                    aria-label="Update"
+                                                    type="button"
+                                                >
+                                                    <FaEye className="w-5 h-5 drop-shadow" />
+                                                </button>
+                                            </td>
                                             <td
                                                 className="px-6 py-4 text-center">
                                                 <button
@@ -223,26 +245,6 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                                     type="button"
                                                 >
                                                     <GiProgression className="w-5 h-5 drop-shadow" />
-                                                </button>
-                                            </td>
-                                            <td
-                                                onClick={() => openAction("start", row)}
-                                                className="px-6 py-4 text-center">
-                                                <button
-                                                    className="
-                        flex items-center justify-center
-                        bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
-                        hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
-                        text-white p-2 rounded-full shadow-lg
-                        transition-all duration-200
-                        hover:scale-110 hover:-rotate-6
-                        ring-2 ring-transparent hover:ring-blue-300
-                        focus:outline-none focus:ring-4 focus:ring-blue-400
-                        "
-                                                    aria-label="Update"
-                                                    type="button"
-                                                >
-                                                    <IoDocumentsOutline className="w-5 h-5 drop-shadow" />
                                                 </button>
                                             </td>
                                             <td onClick={() => handleRoutePlan(onEditFun, row)}

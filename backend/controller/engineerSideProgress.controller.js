@@ -455,6 +455,7 @@ export const getEngineerProgressByTypeandProject = async (req, res) => {
                 phaseEndDate: phase.endDate,
 
                 actualCompletionPercent: report.actualCompletionPercent,
+                actualEndDate: report.actualEndDate,
                 actualProgressDay: report.actualProgressDay,
                 remarks: report.remarks,
 

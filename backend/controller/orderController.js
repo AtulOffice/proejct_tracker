@@ -88,6 +88,8 @@ export const getAllOrders = async (req, res) => {
       entityType: 1,
       soType: 1,
       bookingDate: 1,
+      deleveryDate: 1,
+      actualDeleveryDate: 1,
       createdAt: 1,
       updatedAt: 1,
     }).sort({

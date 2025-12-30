@@ -4,7 +4,7 @@ import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
-import { fetfchOrdersAll, fetfchProejctAll } from "../utils/apiCall";
+import { fetfchOrdersAll } from "../utils/apiCall";
 import OrderTableAll from "./orderListTable.jsx";
 
 const OrderList = () => {

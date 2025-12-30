@@ -274,7 +274,21 @@ export const getAllDocumentsDevelopmentData = async (req, res) => {
         email: 1,
       }
     )
-      .populate("developmentProjectList.documents.project", "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
+      .populate({
+        path: "developmentProjectList.documents.project",
+        select:
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+        populate: ({
+          path: "OrderMongoId",
+          select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
+          model: "Order",
+          populate: {
+            path: "concerningSalesManager",
+            select: "name email",
+            model: "MarketingMemberRecord",
+          }
+        }),
+      })
       .populate(
         "developmentProjectList.documents.phases.engineers",
         "name email"
@@ -297,8 +311,21 @@ export const getLogicDevelopmentData = async (req, res) => {
       req.user?._id,
       { "developmentProjectList.logic": 1 }
     )
-      .populate("developmentProjectList.logic.project", "projectName jobNumber service visitDate location OrderMongoId  CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
-      .populate("developmentProjectList.logic.phases.engineers", "name email")
+      .populate({
+        path: "developmentProjectList.logic.project",
+        select:
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+        populate: ({
+          path: "OrderMongoId",
+          select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
+          model: "Order",
+          populate: {
+            path: "concerningSalesManager",
+            select: "name email",
+            model: "MarketingMemberRecord",
+          }
+        }),
+      }).populate("developmentProjectList.logic.phases.engineers", "name email")
       .populate("developmentProjectList.logic.phases.peerEngineers", "name email");
 
     if (!engineer) {
@@ -321,7 +348,21 @@ export const getScadaDevelopmentData = async (req, res) => {
       req.user?._id,
       { "developmentProjectList.scada": 1 }
     )
-      .populate("developmentProjectList.scada.project", "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
+      .populate({
+        path: "developmentProjectList.scada.project",
+        select:
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+        populate: ({
+          path: "OrderMongoId",
+          select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
+          model: "Order",
+          populate: {
+            path: "concerningSalesManager",
+            select: "name email",
+            model: "MarketingMemberRecord",
+          }
+        }),
+      })
       .populate("developmentProjectList.scada.phases.engineers", "name email")
       .populate("developmentProjectList.scada.phases.peerEngineers", "name email");
 
@@ -346,7 +387,21 @@ export const getTestingDevelopmentData = async (req, res) => {
       req.user?._id,
       { "developmentProjectList.testing": 1 }
     )
-      .populate("developmentProjectList.testing.project", "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments")
+      .populate({
+        path: "developmentProjectList.testing.project",
+        select:
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+        populate: ({
+          path: "OrderMongoId",
+          select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
+          model: "Order",
+          populate: {
+            path: "concerningSalesManager",
+            select: "name email",
+            model: "MarketingMemberRecord",
+          }
+        }),
+      })
       .populate("developmentProjectList.testing.phases.engineers", "name email")
       .populate("developmentProjectList.testing.phases.peerEngineers", "name email");
 

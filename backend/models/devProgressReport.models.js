@@ -19,7 +19,7 @@ const EngineerProgressReportSchema = new mongoose.Schema(
 
         submittedBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Engineer",
+            ref: "EngineerRecord",
             required: true,
             index: true,
         },

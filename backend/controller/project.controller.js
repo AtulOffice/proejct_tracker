@@ -2291,19 +2291,18 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
       TYPES.forEach((type) => {
         (engineer.developmentProjectList?.[type] || []).forEach((proj) => {
           if (proj.project.toString() !== projectId.toString()) return;
-
           proj.phases.forEach((phase) => {
             const phaseProgress = progressReports.filter(
               (r) =>
                 r.phaseId?.toString() === phase._id.toString() &&
-                r.SectionId?.toString() === proj._id.toString()
+                r.SectionId?.toString() === proj._id.toString() &&
+                r.submittedBy?._id.toString() === engineer._id.toString()
             );
             phase.progressReports = phaseProgress;
           });
         });
       });
     });
-
     return res.status(200).json({
       success: true,
       planningId,

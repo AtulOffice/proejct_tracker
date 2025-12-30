@@ -155,8 +155,6 @@ export default function LogicDevelopmentExecution() {
     }
   };
 
-
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100 py-8 px-4">
       <div className="mx-auto max-w-6xl">
@@ -166,106 +164,16 @@ export default function LogicDevelopmentExecution() {
             <div className="flex items-center justify-between gap-6">
               <div>
                 <h2 className="text-3xl font-black text-gray-900 tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                  LOGIC DEVELOPMENT EXECUTION
+                  {logicPhaseData?.phase?.sectionName || "—"} LOGIC DEVELOPMENT EXECUTION
                 </h2>
-
               </div>
-
               <span className="flex-shrink-0 rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 to-emerald-100 px-5 py-2 text-xs font-bold uppercase tracking-wider text-emerald-700 shadow-lg">
                 In Progress
               </span>
             </div>
           </div>
-
-          {/* Content */}
           <div className="p-8 space-y-8">
-
             <div className="space-y-6">
-              {/* Section Name & Dev Scope */}
-              <div className="grid grid-cols-2 gap-6">
-                <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-[2px] hover:shadow-2xl hover:shadow-indigo-500/50 transition-all duration-300">
-                  <div className="relative rounded-2xl bg-white p-5 h-full backdrop-blur-xl">
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-indigo-200 rounded-full blur-3xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-indigo-100 rounded-lg">
-                        <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-1.5">
-                          Section Name
-                        </p>
-                        <p className="text-base font-bold text-gray-900">
-                          {logicPhaseData?.phase?.sectionName || "—"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-400 to-slate-600 p-[2px] hover:shadow-2xl hover:shadow-slate-500/50 transition-all duration-300">
-                  <div className="relative rounded-2xl bg-white p-5 h-full">
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-slate-200 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                    <div className="flex items-start gap-3">
-                      <div className="p-2 bg-slate-100 rounded-lg">
-                        <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                          DevScope Note
-                        </p>
-                        <p className="text-sm text-gray-700 leading-relaxed">
-                          {logicPhaseData?.project?.devScope || "—"}
-                          {/* {logicPhaseData?.project?.service || "—"} */}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Assigned To */}
-              <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 p-[2px] hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300">
-                <div className="relative rounded-2xl bg-white p-5 backdrop-blur-xl">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-purple-200 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1.5 bg-purple-100 rounded-lg">
-                        <svg className="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                        </svg>
-                      </div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-purple-600">
-                        Assigned To
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-
-                      {logicPhaseData?.engineers?.length > 0 ? (
-                        logicPhaseData?.engineers?.map((user, index) => (
-                          <a
-                            key={index}
-                            href={`mailto:${user.email}`}
-                            className="group/badge inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 text-sm text-purple-700 hover:from-purple-100 hover:to-pink-100 hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg"
-                          >
-                            <svg className="w-4 h-4 mr-2 group-hover/badge:animate-pulse" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                            </svg>
-                            {user.email}
-                          </a>
-                        ))
-                      ) : (
-                        <span className="text-gray-500">No assigned engineers</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Target Dates */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-[2px] hover:shadow-2xl hover:shadow-rose-500/50 transition-all duration-300">

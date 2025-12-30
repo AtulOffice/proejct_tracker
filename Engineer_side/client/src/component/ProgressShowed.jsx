@@ -1,6 +1,7 @@
 import React from "react";
 
 const ProgressShowed = ({ progressData, onClose }) => {
+    console.log(progressData)
     const rows = progressData?.data || [];
 
     const formatDate = (date) => {
@@ -63,6 +64,9 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                     <th className="px-4 py-3 text-center border-b border-gray-200">
                                         Report Date
                                     </th>
+                                    <th className="px-4 py-3 text-center border-b border-gray-200">
+                                        Completion Date
+                                    </th>
                                     <th className="px-4 py-3 text-left rounded-tr-2xl border-b border-gray-200">
                                         Remarks
                                     </th>
@@ -94,6 +98,9 @@ const ProgressShowed = ({ progressData, onClose }) => {
 
                                         <td className="px-4 py-3 text-center text-gray-500 border-b border-gray-100">
                                             {formatDate(row.reportDate)}
+                                        </td>
+                                        <td className="px-4 py-3 text-center text-gray-500 border-b border-gray-100">
+                                            {formatDate(row.actualEndDate)}
                                         </td>
 
                                         <td className="px-4 py-3 text-gray-700 border-b border-gray-100">

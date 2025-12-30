@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { formatDateDDMMYY } from "../utils/timeFormatter";
 
 export default function SectionDetailsModal({ project, onClose, activeExecution, setSelectedProject }) {
     const modalRef = useRef(null);
@@ -50,6 +51,27 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
         setSelectedProject(null);
 
     }
+
+    const getPhasePosition = (phaseStart, phaseEnd, sectionStart, sectionEnd) => {
+        if (!phaseStart || !phaseEnd || !sectionStart || !sectionEnd) {
+            return { left: "0%", width: "0%" };
+        }
+
+        const sStart = new Date(sectionStart);
+        const sEnd = new Date(sectionEnd);
+        const pStart = new Date(phaseStart);
+        const pEnd = new Date(phaseEnd);
+
+        const total = sEnd - sStart;
+
+        let left = ((pStart - sStart) / total) * 100;
+        let width = ((pEnd - pStart) / total) * 100;
+
+        left = Math.max(0, Math.min(left, 100));
+        width = Math.max(0, Math.min(width, 100 - left));
+
+        return { left: `${left}%`, width: `${width}%` };
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900/90 via-black/80 to-slate-900/90 backdrop-blur-xl p-4 overflow-hidden animate-in fade-in duration-300">
@@ -149,8 +171,6 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
                                             />
                                         </svg>
                                     </div>
-
-
                                     <button
                                         onClick={() => handlePlanSectionRoute(section?._id)}
                                         className="ml-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold shadow-lg hover:shadow-indigo-500/40 hover:scale-105 transition-all"
@@ -158,71 +178,93 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
                                         Action
                                     </button>
                                 </div>
-
                             </div>
 
-                            {/* Date Information */}
                             <div className="grid grid-cols-2 gap-4 mb-4">
-                                {/* Section Dates */}
-                                <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/50 shadow-md">
-                                    <h4 className="text-xs font-black uppercase tracking-wider text-blue-700 mb-3 flex items-center gap-2">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        Section Timeline
-                                    </h4>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs font-semibold text-gray-600">Start Date</span>
-                                            <span className="text-xs font-bold text-blue-900">
-                                                {formatDate(section.sectionStartDate)}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs font-semibold text-gray-600">End Date</span>
-                                            <span className="text-xs font-bold text-blue-900">
-                                                {formatDate(section.sectionEndDate)}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center justify-between pt-2 border-t border-blue-200">
-                                            <span className="text-xs font-semibold text-gray-600">Duration</span>
-                                            <span className="text-xs font-black text-blue-900">
-                                                {calculateDays(section.sectionStartDate, section.sectionEndDate)} days
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Actual Dates */}
                                 <div className="p-4 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/50 shadow-md">
                                     <h4 className="text-xs font-black uppercase tracking-wider text-amber-700 mb-3 flex items-center gap-2">
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        Phase Timeline
+                                        {activeExecution} Timeline
                                     </h4>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs font-semibold text-gray-600">Start Date</span>
-                                            <span className="text-xs font-bold text-amber-900">
-                                                {formatDate(section.startDate)}
-                                            </span>
+
+                                    {/* DATE INFO */}
+                                    <div className="space-y-3 text-xs mb-3">
+
+                                        {/* Section Dates */}
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-semibold text-gray-600">Section</span>
+                                            <div className="flex gap-4 font-bold text-amber-900">
+                                                <span>{formatDateDDMMYY(section.sectionStartDate)}</span>
+                                                <span>→</span>
+                                                <span>{formatDateDDMMYY(section.sectionEndDate)}</span>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs font-semibold text-gray-600">End Date</span>
-                                            <span className="text-xs font-bold text-amber-900">
-                                                {formatDate(section.endDate)}
-                                            </span>
+
+                                        {/* Execution Dates */}
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-semibold text-gray-600">{activeExecution}</span>
+                                            <div className="flex gap-4 font-bold text-amber-900">
+                                                <span>{formatDateDDMMYY(section.startDate)}</span>
+                                                <span>→</span>
+                                                <span>{formatDateDDMMYY(section.endDate)}</span>
+                                            </div>
                                         </div>
-                                        <div className="flex items-center justify-between pt-2 border-t border-amber-200">
-                                            <span className="text-xs font-semibold text-gray-600">Duration</span>
-                                            <span className="text-xs font-black text-amber-900">
-                                                {calculateDays(section.startDate, section.endDate)} days
-                                            </span>
+
+                                    </div>
+                                    
+                                    <div className="space-y-1">
+                                        <div className="flex justify-between text-[10px] text-gray-600">
+                                            <span>{formatDateDDMMYY(section.sectionStartDate) || "Start"}</span>
+                                            <span>{formatDateDDMMYY(section.sectionEndDate) || "End"}</span>
+                                        </div>
+
+                                        <div className="relative h-4 bg-gray-300 rounded-full overflow-hidden shadow-inner">
+                                            {/* Section Background */}
+                                            <div className="absolute h-full w-full bg-green-500/40 rounded-full"></div>
+
+                                            {/* Floating Phase Bar */}
+                                            {(() => {
+                                                const { left, width } = getPhasePosition(
+                                                    section.startDate,
+                                                    section.endDate,
+                                                    section.sectionStartDate,
+                                                    section.sectionEndDate
+                                                );
+                                                return (
+                                                    <div
+                                                        className="absolute h-full bg-indigo-500 rounded-full opacity-90"
+                                                        style={{ left, width }}
+                                                    />
+                                                );
+                                            })()}
+                                        </div>
+
+                                        <div className="text-[10px] text-center font-medium text-gray-700">
+                                            {formatDateDDMMYY(section.startDate) || "Start"} → {formatDateDDMMYY(section.endDate) || "End"}
                                         </div>
                                     </div>
                                 </div>
+                                <div className="mb-4 p-1 rounded-xl bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500 shadow-lg">
+                                    <div className="h-full w-full rounded-lg bg-white p-4">
+                                        <h4 className="text-xs font-black uppercase tracking-wider text-gray-700 mb-2 flex items-center gap-2">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                            Development Scope
+                                        </h4>
+                                        <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                                            {project?.project?.devScope || "No scope defined"}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
+
+
+
+
 
                             {/* Engineers Section */}
                             <div className="grid grid-cols-2 gap-4">
@@ -298,6 +340,6 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
                     ))}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
