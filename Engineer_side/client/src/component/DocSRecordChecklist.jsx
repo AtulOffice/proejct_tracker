@@ -233,6 +233,16 @@ const DocSRecordChecklist = ({ project, onClose }) => {
         "N/A": "N/A",
     };
 
+    const formatIndianAmount = (value) => {
+        if (value === null || value === undefined || value === "") return "—";
+
+        const num = Number(value);
+        if (isNaN(num)) return "—";
+
+        return num.toLocaleString("en-IN");
+    };
+
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900/80 via-black/70 to-slate-900/80 backdrop-blur-2xl p-4 overflow-hidden">
             <div className="relative w-full max-w-7xl max-h-[95vh] bg-white/95 backdrop-blur-3xl rounded-3xl shadow-3xl shadow-indigo-500/30 border border-white/40 overflow-hidden">
@@ -331,9 +341,9 @@ const DocSRecordChecklist = ({ project, onClose }) => {
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <Info label="Order Value (Supply)" value={project?.project?.OrderMongoId.orderValueSupply} />
-                                            <Info label="Order Value (Service)" value={project?.project?.OrderMongoId.orderValueService} />
-                                            <Info label="Order Value (Total)" value={project?.project?.OrderMongoId.orderValueTotal} />
+                                            <Info label="Order Value (Supply)" value={formatIndianAmount(project?.project?.OrderMongoId.orderValueSupply)} />
+                                            <Info label="Order Value (Service)" value={formatIndianAmount(project?.project?.OrderMongoId.orderValueService)} />
+                                            <Info label="Order Value (Total)" value={formatIndianAmount(project?.project?.OrderMongoId.orderValueTotal)} />
                                         </div>
                                     </div>
                                 </div>

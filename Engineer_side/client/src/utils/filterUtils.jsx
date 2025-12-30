@@ -1,8 +1,11 @@
-export const  filterProjectsUtils = ({ data, timeFilter, workBool = false }) => {
+export const filterProjectsUtils = ({ data, timeFilter, isPopulateSection = false }) => {
   return data.filter((project) => {
-    const projectDate = new Date(
-      workBool ? project.createdAt : project.createdAt
-    );
+    const createdAt =
+      isPopulateSection
+        ? project?.project?.createdAt
+        : project?.createdAt;
+
+    const projectDate = createdAt ? new Date(createdAt) : null;
     const currentDate = new Date();
 
     if (timeFilter === "all") return data;
@@ -32,3 +35,5 @@ export const  filterProjectsUtils = ({ data, timeFilter, workBool = false }) => 
     return data;
   });
 };
+
+

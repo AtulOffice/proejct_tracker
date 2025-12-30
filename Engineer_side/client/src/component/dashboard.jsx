@@ -22,9 +22,6 @@ import EngineerMom from "./Mom.form.jsx";
 import axios from "axios";
 import AssignmentPage from "./assingement.jsx";
 import EngineerWorkStatusFull from "./workFUllForm.jsx";
-import LogicDevelopmentExecution from "./EngineerLogic.jsx";
-import TestingDevelopmentExecution from "./EngineerTesting.jsx";
-import ScadaDevelopmentExecution from "./EngineerScada.jsx";
 
 const AdminDashboard = () => {
   const { toggle, toggleDev, user, toggleEng,

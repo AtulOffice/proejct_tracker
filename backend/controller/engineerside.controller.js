@@ -267,6 +267,13 @@ export const saveMomForEngineer = async (req, res) => {
 
 export const getAllDocumentsDevelopmentData = async (req, res) => {
   try {
+
+    const search = req.query.search?.trim();
+
+    const jobNumberMatch = search
+      ? { jobNumber: { $regex: new RegExp(search, "i") } }
+      : {};
+
     const data = await EngineerReocord.findById(
       req.user?._id,
       {
@@ -277,8 +284,9 @@ export const getAllDocumentsDevelopmentData = async (req, res) => {
     )
       .populate({
         path: "developmentProjectList.documents.project",
+        match: jobNumberMatch,
         select:
-          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace updatedAt createdAt",
         populate: ({
           path: "OrderMongoId",
           select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
@@ -299,7 +307,18 @@ export const getAllDocumentsDevelopmentData = async (req, res) => {
         "name email"
       );
 
-    res.status(200).json({ success: true, message: "Documents retrieved successfully", data: data?.developmentProjectList.documents });
+    if (!data) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Engineer not found" });
+    }
+
+    const docsData =
+      data.developmentProjectList?.documents?.filter(
+        (item) => item.project !== null
+      ) || [];
+
+    res.status(200).json({ success: true, message: "Documents retrieved successfully", data: docsData });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -308,17 +327,24 @@ export const getAllDocumentsDevelopmentData = async (req, res) => {
 
 export const getLogicDevelopmentData = async (req, res) => {
   try {
+    const search = req.query.search?.trim();
+
+    const jobNumberMatch = search
+      ? { jobNumber: { $regex: new RegExp(search, "i") } }
+      : {};
+
     const engineer = await EngineerReocord.findById(
       req.user?._id,
       { "developmentProjectList.logic": 1 }
     )
       .populate({
         path: "developmentProjectList.logic.project",
+        match: jobNumberMatch,
         select:
-          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace updatedAt createdAt",
         populate: ({
           path: "OrderMongoId",
-          select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
+          select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValuedocumentsTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
           model: "Order",
           populate: {
             path: "concerningSalesManager",
@@ -330,13 +356,19 @@ export const getLogicDevelopmentData = async (req, res) => {
       .populate("developmentProjectList.logic.phases.peerEngineers", "name email");
 
     if (!engineer) {
-      return res.status(404).json({ success: false, message: "Engineer not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Engineer not found" });
     }
+    const logicData =
+      engineer.developmentProjectList?.logic?.filter(
+        (item) => item.project !== null
+      ) || [];
 
     res.status(200).json({
       success: true,
       message: "Logic retrieved successfully",
-      data: engineer.developmentProjectList?.logic || [],
+      data: logicData,
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -345,14 +377,19 @@ export const getLogicDevelopmentData = async (req, res) => {
 
 export const getScadaDevelopmentData = async (req, res) => {
   try {
+    const search = req.query.search?.trim();
+    const jobNumberMatch = search
+      ? { jobNumber: { $regex: new RegExp(search, "i") } }
+      : {};
     const engineer = await EngineerReocord.findById(
       req.user?._id,
       { "developmentProjectList.scada": 1 }
     )
       .populate({
         path: "developmentProjectList.scada.project",
+        match: jobNumberMatch,
         select:
-          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace updatedAt createdAt",
         populate: ({
           path: "OrderMongoId",
           select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
@@ -371,10 +408,15 @@ export const getScadaDevelopmentData = async (req, res) => {
       return res.status(404).json({ success: false, message: "Engineer not found" });
     }
 
+    const scadaData =
+      engineer.developmentProjectList?.scada?.filter(
+        (item) => item.project !== null
+      ) || [];
+
     res.status(200).json({
       success: true,
       message: "Scada retrieved successfully",
-      data: engineer.developmentProjectList?.scada || [],
+      data: scadaData,
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
@@ -384,14 +426,21 @@ export const getScadaDevelopmentData = async (req, res) => {
 
 export const getTestingDevelopmentData = async (req, res) => {
   try {
+    const search = req.query.search?.trim();
+
+    const jobNumberMatch = search
+      ? { jobNumber: { $regex: new RegExp(search, "i") } }
+      : {};
+
     const engineer = await EngineerReocord.findById(
       req.user?._id,
       { "developmentProjectList.testing": 1 }
     )
       .populate({
         path: "developmentProjectList.testing.project",
+        match: jobNumberMatch,
         select:
-          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace",
+          "projectName jobNumber service visitDate location OrderMongoId CustomerDevDocuments SIEVPLDevDocuments dispatchDocuments devScope commScope Development ScadaPlace LogicPlace updatedAt createdAt",
         populate: ({
           path: "OrderMongoId",
           select: "entityType soType bookingDate client endUser site name technicalEmail phone orderValueTotal orderValueService orderValueSupply poReceived orderNumber deleveryDate actualDeleveryDate amndReqrd orderDate",
@@ -410,9 +459,14 @@ export const getTestingDevelopmentData = async (req, res) => {
       return res.status(404).json({ success: false, message: "Engineer not found" });
     }
 
+    const testingData =
+      engineer.developmentProjectList?.testing?.filter(
+        (item) => item.project !== null
+      ) || [];
+
     res.status(200).json({
       success: true, message: "Testing retrieved successfully",
-      data: engineer.developmentProjectList?.testing || [],
+      data: testingData,
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

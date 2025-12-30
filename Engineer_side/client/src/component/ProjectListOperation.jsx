@@ -53,6 +53,7 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
             const filtered = filterProjectsUtils({
                 data: data,
                 timeFilter,
+                isPopulateSection: true
             });
             setFilteredProjects(filtered);
         }, 100);
@@ -61,6 +62,8 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
     }, [timeFilter, data]);
 
     const filterRef = useRef(null);
+
+    console.log(filteredProjects)
 
     if (!data) {
         return <LoadingSkeltionAll />;
@@ -82,7 +85,7 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
             />
 
             <div className="flex-1 w-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200">
-                {filteredProjects.length > 0 ? (
+                {(filteredProjects.length > 0) ? (
                     <ProjectTableAllOperation
                         data={filteredProjects}
                         tableVal={tableVal}

@@ -312,6 +312,7 @@ export default function TestingDevelopmentExecution() {
                                     type="date"
                                     name="actualStartDate"
                                     value={formData.actualStartDate}
+                                    disabled={!!testingPhaseData?.LastphaseProgress?.actualStartDate}
                                     onChange={(e) => {
                                         handleChange(e);
                                         setFormData((prev) => ({
@@ -319,8 +320,11 @@ export default function TestingDevelopmentExecution() {
                                             actualProgressDay: calculateProgressDays(e.target.value),
                                         }));
                                     }}
-                                    className="w-full rounded-xl border-2 border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 transition-all"
-                                />
+                                    className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
+    ${testingPhaseData?.LastphaseProgress?.actualStartDate
+                                            ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                                            : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                                        }`} />
                             </div>
 
                             <div>

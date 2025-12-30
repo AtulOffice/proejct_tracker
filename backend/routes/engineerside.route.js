@@ -57,7 +57,6 @@ EngineerRouterside.get("/getAllLogic",
   getLogicDevelopmentData)
 
 
-
 EngineerRouterside.get("/getAllScada",
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
