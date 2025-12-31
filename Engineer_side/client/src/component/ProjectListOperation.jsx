@@ -62,9 +62,7 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
     }, [timeFilter, data]);
 
     const filterRef = useRef(null);
-
-    console.log(filteredProjects)
-
+    
     if (!data) {
         return <LoadingSkeltionAll />;
     }

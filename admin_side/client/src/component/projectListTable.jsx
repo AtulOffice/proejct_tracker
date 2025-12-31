@@ -165,7 +165,8 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((row, i) => {
-                const isCancelled = row?.isCancelled === true;
+                // const isCancelled = row?.isCancelled === true;
+                const isCancelled = true
 
                 const disabledBtn =
                   "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed pointer-events-none";
@@ -175,7 +176,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                     key={i}
                     className={`transition-colors duration-150
           ${isCancelled
-                        ? "bg-red-50 text-red-700"
+                        ? "bg-red-100 text-red-700"
                         : "hover:bg-slate-50"
                       }`}
                   >
@@ -217,17 +218,13 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                     {isEdit && (
                       <>
                         {/* VIEW */}
-                        <td className="px-6 py-4 text-center">
+                        <td className="px-6 py-4 text-center ">
                           <button
-                            disabled={isCancelled}
                             onClick={
-                              isCancelled ? undefined : () => hadleOpenPopup(row)
+                              () => hadleOpenPopup(row)
                             }
-                            className={`p-3 rounded-xl transition-all
-                  ${isCancelled
-                                ? disabledBtn
-                                : "bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 text-white hover:shadow-xl"
-                              }`}
+                            className={`p-3 rounded-xl transition-all bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 text-white hover:shadow-xl"
+                              `}
                             title={isCancelled ? "Action not allowed" : "View"}
                           >
                             <FaEye size={18} />
@@ -322,125 +319,114 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
         {data.map((project, indx) => {
           const isCancelled = project?.isCancelled === true;
 
-          const disabledBtn =
-            "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed pointer-events-none";
 
           return (
             <div
               key={indx}
-              onClick={isCancelled ? undefined : () => hadleOpenPopup(project)}
               className={`shadow-lg rounded-xl p-4 border transition-all
-        ${isCancelled
+          ${isCancelled
                   ? "bg-red-50 border-red-200 text-red-700 cursor-not-allowed"
                   : "bg-linear-to-br from-blue-50 via-white to-indigo-50 border-blue-200 hover:scale-[1.02] cursor-pointer"
                 }`}
             >
-              {/* HEADER */}
               <div className="flex items-center justify-between mb-3">
                 <div
                   className="text-base font-bold truncate max-w-[70%]"
                   title={project[tableVal[0]?.val]}
                 >
-                  {project[tableVal[0]?.val]}
+                  {middleEllipsis(project[tableVal[0]?.val])}
                 </div>
-
                 {isEdit && (
-                  <>
-                    {/* DEVELOPMENT */}
-                    {onEditFun === "DEVLOPMENT" ? (
-                      <button
-                        disabled={isCancelled}
-                        onClick={
-                          isCancelled
-                            ? undefined
-                            : (e) => {
+                  <div className={`flex items-center gap-2 ${isCancelled ? "opacity-60" : ""}`}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        hadleOpenPopup(project);
+                      }}
+                      className="p-2 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-md hover:scale-105 transition"
+                      title="View"
+                    >
+                      <FaEye size={18} />
+                    </button>
+                    {!isCancelled && (
+                      <>
+                        {onEditFun === "DEVLOPMENT" ? (
+                          <button
+                            onClick={(e) => {
                               e.stopPropagation();
                               handlAssignedDev(project);
-                            }
-                        }
-                        className={`flex items-center justify-center p-2 rounded-full shadow-lg transition-all
-                  ${isCancelled
-                            ? disabledBtn
-                            : project?.isPlanRecord
-                              ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 text-white hover:scale-110"
-                              : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 text-white hover:scale-110"
-                          }`}
-                        title={isCancelled ? "Action not allowed" : "Assign Development"}
-                      >
-                        <LuNotepadText className="w-5 h-5" />
-                      </button>
-                    ) : onEditFun === "URGENT" ? (
-                      /* URGENT */
-                      <button
-                        disabled={isCancelled}
-                        onClick={
-                          isCancelled
-                            ? undefined
-                            : (e) => {
+                            }}
+                            className={`p-2 rounded-full shadow-lg transition-all
+                        ${project?.isPlanRecord
+                                ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 text-white hover:scale-110"
+                                : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 text-white hover:scale-110"
+                              }`}
+                            title="Assign Development"
+                          >
+                            <LuNotepadText className="w-5 h-5" />
+                          </button>
+                        ) : onEditFun === "URGENT" ? (
+                          <button
+                            onClick={(e) => {
                               e.stopPropagation();
                               handleEditAction(onEditFun, project);
-                            }
-                        }
-                        className={`flex items-center justify-center p-2 rounded-full shadow-lg transition-all
-                  ${isCancelled
-                            ? disabledBtn
-                            : "bg-linear-to-tr from-yellow-500 via-amber-400 to-orange-400 text-white hover:scale-110"
-                          }`}
-                        title={isCancelled ? "Action not allowed" : "Urgent Edit"}
-                      >
-                        <MdEngineering className="w-5 h-5" />
-                      </button>
-                    ) : (
-                      /* NORMAL EDIT */
-                      <button
-                        disabled={isCancelled}
-                        onClick={
-                          isCancelled
-                            ? undefined
-                            : (e) => {
+                            }}
+                            className="p-2 rounded-full shadow-lg bg-linear-to-tr from-yellow-500 via-amber-400 to-orange-400 text-white hover:scale-110"
+                            title="Urgent Edit"
+                          >
+                            <MdEngineering className="w-5 h-5" />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) => {
                               e.stopPropagation();
                               handleEditAction(onEditFun, project);
-                            }
-                        }
-                        className={`inline-flex items-center justify-center p-2.5 rounded-lg transition-all
-                  ${isCancelled
-                            ? disabledBtn
-                            : "bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400"
-                          }`}
-                        title={isCancelled ? "Action not allowed" : "Edit"}
-                      >
-                        <MdEdit size={18} />
-                      </button>
+                            }}
+                            className="p-2.5 rounded-lg bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400"
+                            title="Edit"
+                          >
+                            <MdEdit size={18} />
+                          </button>
+                        )}
+                      </>
                     )}
-                  </>
+                  </div>
                 )}
               </div>
-
-              {/* BODY */}
               <div className="space-y-2 text-sm">
                 {tableVal.slice(1).map((col, i) => {
                   const val = project[col.val];
-                  const display = Array.isArray(val)
+
+                  let display = Array.isArray(val)
                     ? val.join(", ")
                     : col.val.toLowerCase().includes("date") && val
                       ? new Date(val).toISOString().split("T")[0]
-                      : val || "—";
+                      : val ?? "—";
+                  display = String(display);
+
+                  const hideFull =
+                    col.val === "jobNumber" ||
+                    col.val === "projectName" ||
+                    col.val === "endUser";
 
                   return (
                     <div key={i}>
                       <span className="font-medium text-indigo-600">
                         {col.head}:
                       </span>
-                      <span className="ml-2">{display}</span>
+                      <span className="ml-2">
+                        {hideFull ? middleEllipsis(display, 4, 3) : display}
+                      </span>
                     </div>
                   );
                 })}
               </div>
+
             </div>
           );
         })}
-
       </div>
+
       <div className="bg-linear-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
           <p className="text-base text-blue-700">

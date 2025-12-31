@@ -186,8 +186,6 @@ export default function EndChecklistForm({ project, onClose }) {
       );
 
       toast.success(response.data?.message || "End Checklist Saved Successfully");
-      console.log("✔ Response:", response.data);
-
       onClose();
     } catch (error) {
       console.error("❌ Submit Error:", error);

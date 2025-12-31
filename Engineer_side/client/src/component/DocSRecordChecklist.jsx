@@ -2,8 +2,6 @@ import React from "react";
 
 const DocSRecordChecklist = ({ project, onClose }) => {
     const documents = project?.project || {};
-    console.log(project)
-
     const [collOpen, setCollOpen] = React.useState(false);
 
     const formatDate = (date) => {

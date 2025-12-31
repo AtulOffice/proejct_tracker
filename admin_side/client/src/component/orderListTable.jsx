@@ -11,8 +11,6 @@ import { middleEllipsis } from "../utils/middleEliminator";
 const OrderTableAll = ({ data }) => {
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const navigate = useNavigate();
-  console.log(data)
-
   const handleUpdate = (id) => {
     try {
       navigate(`/updateOrder/${id}`, {

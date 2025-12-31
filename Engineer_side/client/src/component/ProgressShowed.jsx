@@ -1,7 +1,6 @@
 import React from "react";
 
 const ProgressShowed = ({ progressData, onClose }) => {
-    console.log(progressData)
     const rows = progressData?.data || [];
 
     const formatDate = (date) => {

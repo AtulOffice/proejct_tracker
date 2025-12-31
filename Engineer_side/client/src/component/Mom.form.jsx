@@ -30,9 +30,6 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(null);
   const [formData, setFormData] = useState(formval);
-
-  console.log(data)
-
   useEffect(() => {
     if (!formData.jobNumber) {
       setFormData(formval)
