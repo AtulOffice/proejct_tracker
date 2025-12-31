@@ -165,8 +165,8 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((row, i) => {
-                // const isCancelled = row?.isCancelled === true;
-                const isCancelled = true
+                const isCancelled = row?.isCancelled === true;
+              
 
                 const disabledBtn =
                   "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed pointer-events-none";
@@ -223,8 +223,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                             onClick={
                               () => hadleOpenPopup(row)
                             }
-                            className={`p-3 rounded-xl transition-all bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 text-white hover:shadow-xl"
-                              `}
+                            className={`p-3 rounded-xl transition-all bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 text-white hover:shadow-xl cursor-pointer`}
                             title={isCancelled ? "Action not allowed" : "View"}
                           >
                             <FaEye size={18} />
