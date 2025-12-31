@@ -82,26 +82,27 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleEngineer = () => { };
 
   const ProjectTab = [
-    {
-      head: "Project Name",
-      val: "projectName",
-    },
+
     {
       head: "JOB ID",
       val: "jobNumber",
     },
     {
-      head: "Status",
-      val: "status",
+      head: "Client",
+      val: "projectName",
     },
     {
-      head: "Delivery",
-      val: "deleveryDate",
+      head: "endUser",
+      val: "endUser",
     },
-    { head: "Visit", val: "visitDate" },
+    { head: "Booking", val: "bookingDate" },
+    {
+      head: "Target Delivery",
+      val: "actualDeleveryDate",
+    },
+
   ];
   const ProjectTabDev = [
     {
@@ -150,8 +151,8 @@ const AdminDashboard = () => {
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
       case "one":
         return <OneCard />;
-      case "twentyfour":
-        return <AddDocs />;
+      // case "twentyfour":
+      //   return <AddDocs />;
       case "two":
         return <ProjectCatogary key={"all"} all={true} title="ALL" />;
       case "three":
@@ -445,7 +446,7 @@ const AdminDashboard = () => {
                       ADD SRVC DETAILS
                     </div>
                   </li>
-                  <li>
+                  {/* <li>
                     <div
                       onClick={() => {
                         handleActiveBar("twentyfour");
@@ -457,7 +458,7 @@ const AdminDashboard = () => {
                       <FaRegSquarePlus className="mr-3" size={20} />
                       ADD DOCS DETAILS
                     </div>
-                  </li>
+                  </li> */}
                   <li>
                     <div
                       onClick={() => {

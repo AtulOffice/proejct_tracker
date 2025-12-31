@@ -480,6 +480,19 @@ export const fetchProjectsAllnewDocs = async () => {
   }
 };
 
+export const fetchProjectsAllnewDocsbyId = async (id) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/getProjectforDocsbyid/${id}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch projects:", err);
+    throw err;
+  }
+};
+
 
 export const fetchbyOrderbyId = async (id) => {
   try {

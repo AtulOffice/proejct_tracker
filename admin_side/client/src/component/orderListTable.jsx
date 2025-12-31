@@ -69,6 +69,9 @@ const OrderTableAll = ({ data }) => {
           <table className="w-full table-fixed">
             <thead className="sticky top-0">
               <tr className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
+                <th className="w-16 px-4 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+                  Sr No
+                </th>
                 <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Job ID
                 </th>
@@ -112,6 +115,9 @@ const OrderTableAll = ({ data }) => {
                         : "hover:bg-slate-50"
                       }`}
                   >
+                    <td className="px-4 py-4 text-center text-sm font-semibold">
+                      {indx + 1}
+                    </td>
                     <td className="px-6 py-4 text-sm font-mono whitespace-nowrap">
                       {middleEllipsis(order.jobNumber)}
                     </td>
@@ -183,62 +189,81 @@ const OrderTableAll = ({ data }) => {
           </table>
         </div>
       </div>
+
       {/* Mobile View - Optional Enhancement */}
       <div className="md:hidden space-y-3 p-4">
-        {data.map((order, indx) => (
-          <div
-            key={indx}
-            onClick={() => { hadleOpenPopup(order?._id) }}
-            className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-sm font-semibold text-gray-900 truncate max-w-[70%]">
-                {order.client}
+        {data.map((order, indx) => {
+          const isCancelled = order?.isCancelled === true;
+          return (
+            <div
+              key={indx}
+              onClick={() => hadleOpenPopup(order?._id)}
+              className={`border rounded-lg p-4 transition-all
+          ${isCancelled
+                  ? "bg-red-50 border-red-200 text-red-700 cursor-not-allowed"
+                  : "bg-white border-gray-200 hover:shadow-md cursor-pointer"
+                }`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div
+                  className="text-sm font-semibold truncate max-w-[70%]"
+                  title={middleEllipsis(order.client)}
+                >
+                  {order.client}
+                </div>
+                {!isCancelled && <button
+                  disabled={isCancelled}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isCancelled) handleUpdate(order._id);
+                  }}
+                  className={`p-2 rounded-md border transition-all
+              ${isCancelled
+                      ? "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
+                      : "bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100"
+                    }`}
+                  title={isCancelled ? "Action not allowed" : "Edit order"}
+                >
+                  <MdEdit size={16} />
+                </button>}
               </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleUpdate(order._id);
-                }}
-                className="p-2 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100"
-                title="Edit order"
-              >
-                <MdEdit size={16} />
-              </button>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Job Number:</span>
+                  <span className="font-medium">
+                    {middleEllipsis(order.jobNumber)}
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Booking Date:</span>
+                  <span className="font-medium">
+                    {order?.bookingDate
+                      ? new Date(order.bookingDate).toLocaleDateString("en-GB")
+                      : "—"}
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Entity Type:</span>
+                  <span>{order?.entityType || "—"}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-gray-500">SO Type:</span>
+                  <span>{order.soType || "—"}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Site:</span>
+                  <span>{middleEllipsis(order.site,10,5)}</span>
+                </div>
+              </div>
             </div>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-500">Job Number:</span>
-                <span className="text-gray-900 font-medium">
-                  {order.jobNumber}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Booking Date:</span>
-                <span className="text-gray-900 font-medium">
-                  {order?.bookingDate
-                    ? new Date(order.bookingDate).toLocaleDateString("en-GB")
-                    : "—"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Entity Type:</span>
-                <span className="text-gray-900">
-                  {order?.entityType || "—"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">SO Type:</span>
-                <span className="text-gray-900">{order.soType || "—"}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-500">Site:</span>
-                <span className="text-gray-900">{order.site || "—"}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
+
       {/* Footer Section */}
       <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div className="flex flex-wrap items-center justify-between gap-y-2">

@@ -9,6 +9,7 @@ import { UserCall } from "./utils/apiCall.jsx";
 import OrderForm from "./component/OrderForm.jsx";
 import UpdateOrderForm from "./component/updateOrder.jsx";
 import ProjectTimelineForm from "./component/projctTimeLineForm.jsx";
+import AddDocsSeperate from "./component/add.DocsSeperate.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useAppContext();
@@ -62,6 +63,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <UpdateForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/addDocs/:id"
+        element={
+          <ProtectedRoute>
+            <AddDocsSeperate />
           </ProtectedRoute>
         }
       />

@@ -100,7 +100,6 @@ export const updateRecordsDocs = async (req, res) => {
         project[key] = otherData[key];
       }
     });
-
     const mergeNested = (target = {}, source) => {
       if (!source) return target;
 
@@ -1472,6 +1471,54 @@ export const getAllProjectsnew = async (req, res) => {
   }
 };
 
+export const getAllProjectsnewbyId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Project ID is required",
+      });
+    }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Project ID",
+      });
+    }
+
+    const docsProject = await ProjectModel.findById(id)
+      .select(
+        "jobNumber entityType soType client _id Development priority ScadaPlace LogicPlace devScope CommisinionPO Workcommission commScope LinkedOrderNumber service swname swtechnicalEmail swphone isMailSent lotval CustomerDevDocuments SIEVPLDevDocuments swDevDocumentsforFat inspectionDocuments dispatchDocuments PostCommisionDocuments SIEVPLDevDocumentsRemarks CustomerDevDocumentsRemarks lotval"
+      )
+      .populate(
+        "OrderMongoId",
+        "name technicalEmail phone bookingDate client endUser site concerningSalesManager deleveryDate actualDeleveryDate"
+      )
+
+    if (!docsProject) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found or Docs already saved",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      docsProject,
+      message: "data fetched successfully"
+    });
+  } catch (error) {
+    console.error("Error fetching Projects For docs save:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching Docs Project",
+      error: error.message,
+    });
+  }
+};
+
 export const allProjectsFetch = async (req, res) => {
   const search = req.query.search || "";
 
@@ -1493,7 +1540,7 @@ export const allProjectsFetch = async (req, res) => {
     })
       .populate({
         path: "OrderMongoId",
-        select: "deleveryDate",
+        select: "deleveryDate bookingDate endUser actualDeleveryDate",
       })
       .sort({
         updatedAt: -1,
@@ -1509,6 +1556,9 @@ export const allProjectsFetch = async (req, res) => {
       createdAt: p.createdAt,
       updatedAt: p.updatedAt,
       deleveryDate: p.OrderMongoId?.deleveryDate || null,
+      bookingDate: p.OrderMongoId?.bookingDate || null,
+      endUser: p.OrderMongoId?.endUser || null,
+      actualDeleveryDate: p.OrderMongoId?.actualDeleveryDate || null,
       OrderMongoId: p.OrderMongoId?._id || null,
     }));
 

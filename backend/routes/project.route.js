@@ -24,6 +24,7 @@ import {
   ProjectsFetchDevById,
   getEngineerProjects,
   getAdminProjectProgressByPlanning,
+  getAllProjectsnewbyId,
 } from "../controller/project.controller.js";
 import {
   authenticate,
@@ -66,6 +67,13 @@ ProjectRouter.get(
   authenticate,
   authorizeRole("admin", "reception"),
   getAllProjectsnew
+);
+ProjectRouter.get(
+  "/getProjectforDocsbyid/:id",
+  refreshTokenMiddleware,
+  authenticate,
+  authorizeRole("admin", "reception"),
+  getAllProjectsnewbyId
 );
 
 ProjectRouter.get(

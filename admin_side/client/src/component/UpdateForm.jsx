@@ -1173,26 +1173,8 @@ const UpdateForm = () => {
             </div>
           </div>
 
-          {/* 📄 Work Scope & Description */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-red-300 shadow-sm">
-            <h3 className="font-bold text-lg text-red-800 mb-4">
-              📄 Work Scope & Description
-            </h3>
-            <div className="grid grid-cols-1 gap-4">
-              <TextArea
-                {...InputConst[4]}
-                value={formData.workScope}
-                handleChange={handleChange}
-              />
-              <TextArea
-                {...InputConst[33]}
-                handleChange={handleChange}
-                value={formData.description}
-              />
-            </div>
-          </div>
 
-          <DocumentsSection Docs={Docs} setDocs={setDocs} isDisable={true} />
+          {/* <DocumentsSection Docs={Docs} setDocs={setDocs} isDisable={true} /> */}
 
           <div className="flex justify-center mt-8">
             <button
