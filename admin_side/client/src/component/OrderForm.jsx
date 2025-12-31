@@ -4,7 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { fields } from "../utils/FieldConstant";
 
-export default function OrderForm() {
+export default function OrderForm({ setActiveCard }) {
   const [formData, setFormData] = useState(fields);
   const [errors, setErrors] = useState({});
   const [messages, setMessages] = useState({});
@@ -332,6 +332,7 @@ export default function OrderForm() {
         if (response.data) {
           toast.success("data saved successfully");
           setFormData(fields);
+          setActiveCard("twentytwo")
         } else {
           setErrors({
             submit: response.data.message || "Something went wrong.",

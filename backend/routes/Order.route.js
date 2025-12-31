@@ -5,6 +5,8 @@ import {
   getAllOrders,
   getOrderById,
   getAllOrdersnew,
+  cancelOrderAndProject,
+  restoreOrderAndProject,
 } from "../controller/orderController.js";
 
 export const OrderRouter = express.Router();
@@ -14,3 +16,5 @@ OrderRouter.get("/getAll", getAllOrders);
 OrderRouter.get("/getAllnew", getAllOrdersnew);
 OrderRouter.get("/fetchbyid/:id", getOrderById);
 OrderRouter.put("/update/:id", updateOrder);
+OrderRouter.put("/cancel/:orderId", cancelOrderAndProject);
+OrderRouter.put("/restore/:orderId", restoreOrderAndProject);

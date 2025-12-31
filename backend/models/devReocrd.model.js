@@ -5,6 +5,11 @@ const dailyTaskSchema = new mongoose.Schema({
   engineerId: { type: String, required: true },
   engineerName: { type: String, required: true, trim: true },
   projectName: { type: String, trim: true },
+  project: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Project",
+    required: true,
+  },
   scadaOrlogic: { type: Boolean },
   jobNumber: { type: String, trim: true },
   tasks: { type: String },

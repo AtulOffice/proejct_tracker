@@ -139,7 +139,6 @@ const OrderSchema = new mongoose.Schema(
 
     jobDescription: { type: String, trim: true },
     remarks: { type: String, trim: true },
-    // concerningSalesManager: { type: String, trim: true },
     concerningSalesManager: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "MarketingMemberRecord",
@@ -175,6 +174,10 @@ const OrderSchema = new mongoose.Schema(
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    isCancelled: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 );

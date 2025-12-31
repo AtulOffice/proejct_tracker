@@ -1,4 +1,5 @@
 import Order from "../models/orderSheet.model.js";
+import ProjectModel from "../models/Project.model.js";
 
 export const createOrder = async (req, res) => {
   try {
@@ -45,10 +46,13 @@ export const createOrder = async (req, res) => {
     // }
 
     const jobNumberRegex = new RegExp(`^${data.jobNumber}$`, "i");
-    const existing = await Order.findOne({
-      jobNumber: { $regex: jobNumberRegex },
-    });
-    if (existing) {
+
+    const [existing, existingProject] = await Promise.all([
+      Order.findOne({ jobNumber: jobNumberRegex }),
+      ProjectModel.findOne({ jobNumber: jobNumberRegex }),
+    ]);
+
+    if (existing || existingProject) {
       return res.status(400).json({
         success: false,
         message: "Job Number already exists",
@@ -90,6 +94,7 @@ export const getAllOrders = async (req, res) => {
       bookingDate: 1,
       deleveryDate: 1,
       actualDeleveryDate: 1,
+      isCancelled: 1,
       createdAt: 1,
       updatedAt: 1,
     }).sort({
@@ -260,6 +265,109 @@ export const getOrderById = async (req, res) => {
     });
   }
 };
+
+// cancell order
+
+export const cancelOrderAndProject = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    if (!orderId) {
+      return res.status(400).json({
+        success: false,
+        message: "Order ID is required",
+      });
+    }
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+    if (order.isCancelled) {
+      return res.status(400).json({
+        success: false,
+        message: "Order is already cancelled",
+      });
+    }
+    order.isCancelled = true;
+    await order.save();
+    if (order?.ProjectDetails && mongoose.Types.ObjectId.isValid(order.ProjectDetails)) {
+      await ProjectModel.findByIdAndUpdate(
+        order.ProjectDetails,
+        { isCancelled: true },
+        { new: true }
+      );
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Order and related project cancelled successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+// restore project opertaion
+
+export const restoreOrderAndProject = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    if (!orderId) {
+      return res.status(400).json({
+        success: false,
+        message: "Order ID is required",
+      });
+    }
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    if (!order.isCancelled) {
+      return res.status(400).json({
+        success: false,
+        message: "Order is not cancelled",
+      });
+    }
+
+    order.isCancelled = false;
+    await order.save();
+
+    if (
+      order?.ProjectDetails &&
+      mongoose.Types.ObjectId.isValid(order.ProjectDetails)
+    ) {
+      await ProjectModel.findByIdAndUpdate(
+        order.ProjectDetails,
+        { isCancelled: false },
+        { new: true }
+      );
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Order and related project restored successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+
 
 // Delete order
 export const deleteOrder = async (req, res) => {
