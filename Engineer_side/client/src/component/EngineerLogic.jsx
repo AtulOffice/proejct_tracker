@@ -9,7 +9,7 @@ export default function LogicDevelopmentExecution() {
   const { id } = useParams()
   const navigate = useNavigate();
   const { user } = useAppContext();
-  const [logicPhaseData, setLogicPhaseData] = React.useState(null);
+  const [PhaseData, setPhaseData] = React.useState(null);
 
   const getInitialFormData = () => ({
     phaseId: "",
@@ -31,7 +31,7 @@ export default function LogicDevelopmentExecution() {
   React.useEffect(() => {
     const PhaseLogic = async () => {
       const response = await fetchPhaseLogic({ id })
-      setLogicPhaseData(response?.data);
+      setPhaseData(response?.data);
     }
     PhaseLogic()
   }, [id])
@@ -56,23 +56,23 @@ export default function LogicDevelopmentExecution() {
 
 
   React.useEffect(() => {
-    if (!logicPhaseData) return;
+    if (!PhaseData) return;
 
     setFormData((prev) => ({
       ...prev,
-      projectId: logicPhaseData.project?._id || "",
-      phaseId: logicPhaseData.phase?._id || "",
-      targetStartDate: logicPhaseData.phase?.startDate || "",
-      targetEndDate: logicPhaseData.phase?.endDate || "",
+      projectId: PhaseData.project?._id || "",
+      phaseId: PhaseData.phase?._id || "",
+      targetStartDate: PhaseData.phase?.startDate || "",
+      targetEndDate: PhaseData.phase?.endDate || "",
       submittedBy: user?._id || "",
-      SectionId: logicPhaseData?.SectionId || "",
-      actualCompletionPercent: logicPhaseData?.LastphaseProgress?.actualCompletionPercent,
-      actualStartDate: toInputDate(logicPhaseData?.LastphaseProgress?.actualStartDate),
-      actualEndDate: toInputDate(logicPhaseData?.LastphaseProgress?.actualEndDate),
-      actualProgressDay: calculateProgressDays(logicPhaseData?.LastphaseProgress?.actualStartDate, logicPhaseData?.LastphaseProgress?.actualEndDate),
-      currentProgressDay: calculateProgressDays(logicPhaseData?.LastphaseProgress?.actualStartDate, logicPhaseData?.LastphaseProgress?.actualEndDate)
+      SectionId: PhaseData?.SectionId || "",
+      actualCompletionPercent: PhaseData?.LastphaseProgress?.actualCompletionPercent,
+      actualStartDate: toInputDate(PhaseData?.LastphaseProgress?.actualStartDate),
+      actualEndDate: toInputDate(PhaseData?.LastphaseProgress?.actualEndDate),
+      actualProgressDay: calculateProgressDays(PhaseData?.LastphaseProgress?.actualStartDate, PhaseData?.LastphaseProgress?.actualEndDate),
+      currentProgressDay: calculateProgressDays(PhaseData?.LastphaseProgress?.actualStartDate, PhaseData?.LastphaseProgress?.actualEndDate)
     }));
-  }, [logicPhaseData]);
+  }, [PhaseData]);
 
   const calculateDurationInDays = (startDate, endDate, fallback = "—") => {
     if (!startDate || !endDate) return fallback;
@@ -143,17 +143,13 @@ export default function LogicDevelopmentExecution() {
       return "Completion % must be between 0 and 100";
     if (
       formData.actualCompletionPercent <
-      (logicPhaseData?.phase?.CompletionPercentage ?? 0)
+      (PhaseData?.phase?.CompletionPercentage ?? 0)
     ) {
-      return `Completion percentage must be greater than or equal to the previous value (${logicPhaseData?.phase?.CompletionPercentage}%).`;
+      return `Completion percentage must be greater than or equal to the previous value (${PhaseData?.phase?.CompletionPercentage}%).`;
     }
 
     return null;
   };
-
-
-
-
 
   const handleSubmit = async () => {
     const error = validateForm();
@@ -187,11 +183,11 @@ export default function LogicDevelopmentExecution() {
             <div className="flex items-center justify-between gap-6">
               <div>
                 <h2 className="text-3xl font-black text-gray-900 tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                  {logicPhaseData?.phase?.sectionName || "—"} LOGIC DEVELOPMENT EXECUTION
+                  {PhaseData?.phase?.sectionName || "—"} LOGIC DEVELOPMENT EXECUTION
                 </h2>
               </div>
               <span className="flex-shrink-0 rounded-2xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 to-emerald-100 px-5 py-2 text-xs font-bold uppercase tracking-wider text-emerald-700 shadow-lg">
-                {logicPhaseData?.phase.CompletionPercentage} %
+                {PhaseData?.phase.CompletionPercentage} %
               </span>
             </div>
           </div>
@@ -213,7 +209,7 @@ export default function LogicDevelopmentExecution() {
                       </div>
                       <p className="text-xl font-extrabold text-gray-900 group-hover:text-rose-600 transition-colors">
 
-                        {formatDateDDMMYY(logicPhaseData?.phase?.startDate)}
+                        {formatDateDDMMYY(PhaseData?.phase?.startDate)}
                       </p>
                     </div>
                   </div>
@@ -232,7 +228,7 @@ export default function LogicDevelopmentExecution() {
                         </p>
                       </div>
                       <p className="text-xl font-extrabold text-gray-900 group-hover:text-rose-600 transition-colors">
-                        {formatDateDDMMYY(logicPhaseData?.phase?.endDate)}
+                        {formatDateDDMMYY(PhaseData?.phase?.endDate)}
                       </p>
                     </div>
                   </div>
@@ -252,7 +248,7 @@ export default function LogicDevelopmentExecution() {
                       </div>
                       <div className="flex items-center justify-center">
                         <span className="text-4xl font-black bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
-                          {calculateDurationInDays(logicPhaseData?.phase?.startDate, logicPhaseData?.phase?.endDate)}
+                          {calculateDurationInDays(PhaseData?.phase?.startDate, PhaseData?.phase?.endDate)}
                         </span>
                         <span className="ml-1 text-sm font-bold text-emerald-600">days</span>
                       </div>
@@ -303,10 +299,10 @@ export default function LogicDevelopmentExecution() {
                   type="date"
                   name="actualStartDate"
                   value={formData.actualStartDate}
-                  disabled={!!logicPhaseData?.LastphaseProgress?.actualStartDate}
+                  disabled={!!PhaseData?.LastphaseProgress?.actualStartDate}
                   onChange={handleChange}
                   className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
-    ${logicPhaseData?.LastphaseProgress?.actualStartDate
+    ${PhaseData?.LastphaseProgress?.actualStartDate
                       ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
                       : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
                     }`}
