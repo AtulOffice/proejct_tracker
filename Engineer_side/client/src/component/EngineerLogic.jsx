@@ -10,47 +10,50 @@ export default function LogicDevelopmentExecution() {
   const navigate = useNavigate();
   const { user } = useAppContext();
   const [logicPhaseData, setLogicPhaseData] = React.useState(null);
-  const logicval = {
+
+  const getInitialFormData = () => ({
     phaseId: "",
     SectionId: "",
     projectId: "",
     submittedBy: "",
     targetStartDate: "",
     targetEndDate: "",
-
     actualStartDate: "",
     actualEndDate: "",
-
     reportDate: new Date().toISOString().split("T")[0],
-
     actualProgressDay: 0,
+    currentProgressDay: 0,
     actualCompletionPercent: 0,
-
     remarks: "",
-  }
-  const [formData, setFormData] = React.useState(logicval);
+  });
+  const [formData, setFormData] = React.useState(getInitialFormData);
+
   React.useEffect(() => {
     const PhaseLogic = async () => {
       const response = await fetchPhaseLogic({ id })
       setLogicPhaseData(response?.data);
     }
     PhaseLogic()
-  }, [])
+  }, [id])
 
   const toInputDate = (date) => {
     if (!date) return "";
     return new Date(date).toISOString().split("T")[0];
   };
 
-  const calculateProgressDays = (startDate) => {
+  const calculateProgressDays = (startDate, actualEndDate) => {
     if (!startDate) return 0;
+
     const start = new Date(startDate);
-    const today = new Date();
-    const diff = Math.ceil(
-      (today - start) / (1000 * 60 * 60 * 24)
-    );
-    return diff > 0 ? diff : 0;
+    const end = actualEndDate ? new Date(actualEndDate) : new Date();
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+    const diffMs = end - start;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 0;
   };
+
+
 
   React.useEffect(() => {
     if (!logicPhaseData) return;
@@ -63,8 +66,11 @@ export default function LogicDevelopmentExecution() {
       targetEndDate: logicPhaseData.phase?.endDate || "",
       submittedBy: user?._id || "",
       SectionId: logicPhaseData?.SectionId || "",
+      actualCompletionPercent: logicPhaseData?.LastphaseProgress?.actualCompletionPercent,
       actualStartDate: toInputDate(logicPhaseData?.LastphaseProgress?.actualStartDate),
-      actualProgressDay: calculateProgressDays(logicPhaseData?.LastphaseProgress?.actualStartDate)
+      actualEndDate: toInputDate(logicPhaseData?.LastphaseProgress?.actualEndDate),
+      actualProgressDay: calculateProgressDays(logicPhaseData?.LastphaseProgress?.actualStartDate, logicPhaseData?.LastphaseProgress?.actualEndDate),
+      currentProgressDay: calculateProgressDays(logicPhaseData?.LastphaseProgress?.actualStartDate, logicPhaseData?.LastphaseProgress?.actualEndDate)
     }));
   }, [logicPhaseData]);
 
@@ -85,27 +91,39 @@ export default function LogicDevelopmentExecution() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "actualCompletionPercent") {
-      if (value === "") {
-        setFormData((prev) => ({
+      let num = Math.max(0, Math.min(100, parseInt(value, 10)));
+
+      setFormData((prev) => {
+        const endDate = num === 100
+          ? new Date().toISOString().split("T")[0]
+          : "";
+
+        const progress = calculateProgressDays(prev.actualStartDate, endDate);
+
+        return {
           ...prev,
-          actualCompletionPercent: "",
-          actualEndDate: "",
-        }));
-        return;
-      }
-      let num = parseInt(value, 10);
-      if (isNaN(num)) return;
-      num = Math.max(0, Math.min(100, num));
-      setFormData((prev) => ({
-        ...prev,
-        actualCompletionPercent: num,
-        actualEndDate:
-          num === 100
-            ? new Date().toISOString().split("T")[0]
-            : "",
-      }));
+          actualCompletionPercent: num,
+          actualEndDate: endDate,
+          actualProgressDay: progress,
+          currentProgressDay: progress,
+        };
+      });
       return;
     }
+
+    if (name === "actualStartDate") {
+      setFormData((prev) => {
+        const progress = calculateProgressDays(value, prev.actualEndDate);
+        return {
+          ...prev,
+          actualStartDate: value,
+          currentProgressDay: progress,
+          actualProgressDay: prev.actualCompletionPercent === 100 ? progress : prev.actualProgressDay,
+        };
+      });
+      return;
+    }
+
 
     setFormData((prev) => ({
       ...prev,
@@ -147,11 +165,11 @@ export default function LogicDevelopmentExecution() {
     try {
       const payload = {
         ...formData,
-        actualProgressDay: calculateProgressDays(formData.actualStartDate)
+        actualProgressDay: calculateProgressDays(formData.actualStartDate, formData?.actualEndDate)
       };
-      const response = await createProgressReport(payload);
+      await createProgressReport(payload);
       toast.success("Progress submitted successfully");
-      setFormData(logicval);
+      setFormData(getInitialFormData());
       navigate("/")
     } catch (err) {
       console.error(err);
@@ -276,7 +294,6 @@ export default function LogicDevelopmentExecution() {
             </div>
 
             {/* Actual Dates */}
-            {/* Actual Dates */}
             <div className="grid grid-cols-3 gap-6 items-end">
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
@@ -287,13 +304,7 @@ export default function LogicDevelopmentExecution() {
                   name="actualStartDate"
                   value={formData.actualStartDate}
                   disabled={!!logicPhaseData?.LastphaseProgress?.actualStartDate}
-                  onChange={(e) => {
-                    handleChange(e);
-                    setFormData((prev) => ({
-                      ...prev,
-                      actualProgressDay: calculateProgressDays(e.target.value),
-                    }));
-                  }}
+                  onChange={handleChange}
                   className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
     ${logicPhaseData?.LastphaseProgress?.actualStartDate
                       ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
@@ -312,14 +323,22 @@ export default function LogicDevelopmentExecution() {
                   className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-600 shadow-sm"
                   disabled
                   value={
-                    formData.actualCompletionPercent === 100
-                      ? new Date().toISOString().split("T")[0]
-                      : ""
+                    formData?.actualEndDate
                   }
                 />
               </div>
+              {formData.actualCompletionPercent < 100 && <div>
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
+                  current progress days
+                </label>
+                <input
+                  className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-center text-sm font-semibold text-gray-600 shadow-sm"
+                  disabled
+                  value={formData.currentProgressDay}
+                />
+              </div>}
 
-              <div>
+              {formData.actualCompletionPercent === 100 && <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
                   # of days
                 </label>
@@ -328,21 +347,12 @@ export default function LogicDevelopmentExecution() {
                   disabled
                   value={formData.actualProgressDay}
                 />
-              </div>
+              </div>}
+
             </div>
 
             {/* Current Progress */}
             <div className="grid grid-cols-3 gap-6">
-              <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
-                  Current Date
-                </label>
-                <input
-                  className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm"
-                  disabled
-                  value={new Date().toLocaleDateString("en-IN")}
-                />
-              </div>
 
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
