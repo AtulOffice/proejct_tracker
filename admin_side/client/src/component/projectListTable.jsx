@@ -13,6 +13,7 @@ import ProjectTimelineForm from "../utils/project.Planning";
 import { FaEye } from "react-icons/fa";
 import { SlDocs } from "react-icons/sl";
 import { middleEllipsis } from "../utils/middleEliminator";
+import { GiProgression } from "react-icons/gi";
 
 const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editType }) => {
 
@@ -51,7 +52,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   const hadleOpenPopup = async (project) => {
     try {
       const id = project?.OrderMongoId || project?._id || project?.id;
-
       if (!id) {
         console.log("Invalid project data — ID missing");
         return;
@@ -166,7 +166,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((row, i) => {
                 const isCancelled = row?.isCancelled === true;
-              
+
 
                 const disabledBtn =
                   "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed pointer-events-none";
@@ -231,7 +231,22 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                         </td>
 
                         {/* DOCS */}
-                        <td className="px-6 py-4 text-center">
+                        {onEditFun === "DEVLOPMENT" ? <td className="px-6 py-4 text-center">
+                          <button
+                            disabled={isCancelled}
+                            onClick={
+                              isCancelled ? undefined : () => handleDocsOpen(row)
+                            }
+                            className={`p-3 rounded-xl transition-all
+                  ${isCancelled
+                                ? disabledBtn
+                                : "bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white hover:shadow-xl"
+                              }`}
+                            title={isCancelled ? "Action not allowed" : "Documents"}
+                          >
+                            <GiProgression size={18} />
+                          </button>
+                        </td> : <td className="px-6 py-4 text-center">
                           <button
                             disabled={isCancelled}
                             onClick={
@@ -246,7 +261,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           >
                             <SlDocs size={18} />
                           </button>
-                        </td>
+                        </td>}
 
                         {/* EDIT / ASSIGN */}
                         <td className="px-6 py-4 text-center">

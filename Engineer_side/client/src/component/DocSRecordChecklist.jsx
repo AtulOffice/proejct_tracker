@@ -3,6 +3,9 @@ import React from "react";
 const DocSRecordChecklist = ({ project, onClose }) => {
     const documents = project?.project || {};
     const [collOpen, setCollOpen] = React.useState(false);
+    const [collOpenfirst, setCollOpenfirst] = React.useState(false);
+    const [collOpensecond, setCollOpensecond] = React.useState(false);
+    const [collOpenthird, setCollOpenthird] = React.useState(false);
 
     const formatDate = (date) => {
         if (!date) return "—";
@@ -275,7 +278,7 @@ const DocSRecordChecklist = ({ project, onClose }) => {
                     <div className="inline-flex items-center gap-2">
                         <div>
                             <h2 className="text-xl font-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent tracking-tight leading-tight">
-                                📋 DOCUMENTS AND PROJECTS INFO
+                                📋PROJECTS INFO AND DOCUMENTS
                             </h2>
                         </div>
                     </div>
@@ -285,7 +288,7 @@ const DocSRecordChecklist = ({ project, onClose }) => {
                     <div className="w-full mb-6">
                         <button
                             onClick={() => setCollOpen(!collOpen)}
-                            className="w-full bg-gray-300 p-3 rounded-lg flex justify-between items-center hover:bg-gray-400 transition"
+                            className="w-full mb-5 bg-gray-300 p-3 rounded-lg flex justify-between items-center hover:bg-gray-400 transition"
                         >
                             <span className="text-lg font-medium">
                                 {collOpen ? "Hide" : "Show"} Order Details
@@ -415,22 +418,50 @@ const DocSRecordChecklist = ({ project, onClose }) => {
                             </div>
                         )}
                     </div>
-                    <DocumentTableSection
+                    <button
+                        onClick={() => setCollOpenfirst(!collOpenfirst)}
+                        className="w-full bg-gray-300 p-3 rounded-lg flex justify-between items-center hover:bg-gray-400 transition"
+                    >
+                        <span className="text-lg font-medium">
+                            {collOpenfirst ? "Hide" : "Show"} Customer Development Documents
+                        </span>
+                        <span className="text-xl">{collOpenfirst ? "▲" : "▼"}</span>
+                    </button>
+                    {collOpenfirst && <DocumentTableSection
                         title="Customer Development Documents"
                         data={documents.CustomerDevDocuments}
                         color="indigo"
                     />
-
-                    <DocumentTableSection
+                    }
+                    <button
+                        onClick={() => setCollOpensecond(!collOpensecond)}
+                        className="w-full bg-gray-300 p-3 rounded-lg flex justify-between items-center hover:bg-gray-400 transition"
+                    >
+                        <span className="text-lg font-medium">
+                            {collOpensecond ? "Hide" : "Show"} SIEVPL Development Documents
+                        </span>
+                        <span className="text-xl">{collOpensecond ? "▲" : "▼"}</span>
+                    </button>
+                    {collOpensecond && <DocumentTableSection
                         title="SIEVPL Development Documents"
                         data={documents.SIEVPLDevDocuments}
                         color="emerald"
-                    />
+                    />}
 
-                    <DispatchDocumentTableSection
+                    <button
+                        onClick={() => setCollOpenthird(!collOpenthird)}
+                        className="w-full bg-gray-300 p-3 rounded-lg flex justify-between items-center hover:bg-gray-400 transition"
+                    >
+                        <span className="text-lg font-medium">
+                            {collOpenthird ? "Hide" : "Show"} Dispatch Documents
+                        </span>
+                        <span className="text-xl">{collOpenthird ? "▲" : "▼"}</span>
+                    </button>
+
+                    {collOpenthird && <DispatchDocumentTableSection
                         title="Dispatch Documents"
                         data={documents.dispatchDocuments}
-                    />
+                    />}
                 </div>
             </div>
         </div>

@@ -702,6 +702,7 @@ export default function OrderForm({ setActiveCard }) {
                 "Enter Contact Number",
 
               )}
+              {renderInput("actualDeleveryDate", "Target Delivery Date", "date")}
             </div>
           </section>
 
@@ -781,8 +782,6 @@ export default function OrderForm({ setActiveCard }) {
                 </>
               )}
 
-
-              {renderInput("actualDeleveryDate", "Target Delivery Date", "date")}
 
 
             </div>

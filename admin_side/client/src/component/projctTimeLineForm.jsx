@@ -712,7 +712,7 @@ const ProjectTimelineForm1 = () => {
             <div className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl w-full max-w-5xl mx-auto border border-gray-200">
                 <div className="text-center mb-8">
                     <h2 className="text-2xl font-bold text-gray-800 drop-shadow-sm">
-                        PROJECT TIMELINE FORM - 1
+                        PROJECT TIMELINE FORM
                     </h2>
                     {name && (
                         <p className="text-sm text-gray-500 mt-2">
@@ -1119,8 +1119,10 @@ const ProjectTimelineForm1 = () => {
                                         <h3 className="font-bold text-xl text-gray-800">Team Assignments</h3>
                                     </div> */}
 
+
+
                                     <EngineerSelector
-                                        phase="scada"
+                                        phase="logic"
                                         blockIndex={blockIndex}
                                         block={block}
                                         engineersList={engineersList}
@@ -1128,9 +1130,8 @@ const ProjectTimelineForm1 = () => {
                                         removeEngineer={removeEngineer}
                                         getEngineerName={getEngineerName}
                                     />
-
                                     <EngineerSelector
-                                        phase="logic"
+                                        phase="scada"
                                         blockIndex={blockIndex}
                                         block={block}
                                         engineersList={engineersList}

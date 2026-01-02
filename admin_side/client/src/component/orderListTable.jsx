@@ -7,10 +7,15 @@ import { MdCancel, MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import axios from "axios";
 import { middleEllipsis } from "../utils/middleEliminator";
+import { useAppContext } from "../appContex";
+import PopupConfirmation from "./PopuP.Page";
 
 const OrderTableAll = ({ data }) => {
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
+  const [id, seId] = useState("");
+  const [cancelFlag, setCancelflag] = useState(false)
   const navigate = useNavigate();
+  const { setToggle } = useAppContext()
   const handleUpdate = (id) => {
     try {
       navigate(`/updateOrder/${id}`, {
@@ -28,13 +33,15 @@ const OrderTableAll = ({ data }) => {
         {},
         { withCredentials: true }
       );
-
+      setToggle((prev => !prev))
       toast.success(res?.data?.message || "Project cancelled successfully");
     } catch (e) {
       console.error(e);
       toast.error(
         e?.response?.data?.message || "Failed to cancel the order"
       );
+    } finally {
+      setCancelflag(false)
     }
   };
 
@@ -56,6 +63,16 @@ const OrderTableAll = ({ data }) => {
 
   return (
     <div className="relative italic h-full col-span-full w-full overflow-hidden rounded-lg shadow-sm bg-white border border-gray-200">
+      {cancelFlag && (
+        <PopupConfirmation
+          setCancelflag={setCancelflag}
+          handleConfirm={() => handleCancelled(id)}
+          // isDisabled={isDisabled}
+          title="Are you sure?"
+          message={`Do you really want to cancel this Order ? This action cannot be undone.`}
+          btnval="YES"
+        />
+      )}
       {selectedProjectForPopup && (
         <OrderDetailsPopup
           order={selectedProjectForPopup}
@@ -82,9 +99,9 @@ const OrderTableAll = ({ data }) => {
                 <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Target Del Date
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
+                {/* <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   SO Type
-                </th>
+                </th> */}
                 <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
                   Site
                 </th>
@@ -117,7 +134,8 @@ const OrderTableAll = ({ data }) => {
                       {indx + 1}
                     </td>
                     <td className="px-6 py-4 text-sm font-mono whitespace-nowrap">
-                      {middleEllipsis(order.jobNumber)}
+                      {/* {middleEllipsis(order.jobNumber)} */}
+                      {order.jobNumber}
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm" title={order.client}>
@@ -130,9 +148,9 @@ const OrderTableAll = ({ data }) => {
                     <td className="px-6 py-4 text-sm whitespace-nowrap">
                       {order?.actualDeleveryDate || "—"}
                     </td>
-                    <td className="px-6 py-4 text-sm whitespace-nowrap">
+                    {/* <td className="px-6 py-4 text-sm whitespace-nowrap">
                       {order.soType || "—"}
-                    </td>
+                    </td> */}
                     <td className="px-6 py-4">
                       <div className="text-sm" title={order.site}>
                         {middleEllipsis(order.site, 10, 5)}
@@ -168,7 +186,11 @@ const OrderTableAll = ({ data }) => {
                     <td className="px-6 py-4 text-center">
                       <button
                         disabled={isCancelled}
-                        onClick={() => !isCancelled && handleCancelled(order._id)}
+                        onClick={() => {
+                          if (isCancelled) return;
+                          seId(order?._id);
+                          setCancelflag(true);
+                        }}
                         className={`p-2.5 rounded-lg transition-all
               ${isCancelled
                             ? disabledBtn
@@ -254,7 +276,7 @@ const OrderTableAll = ({ data }) => {
 
                 <div className="flex justify-between">
                   <span className="text-gray-500">Site:</span>
-                  <span>{middleEllipsis(order.site,10,5)}</span>
+                  <span>{middleEllipsis(order.site, 10, 5)}</span>
                 </div>
               </div>
             </div>

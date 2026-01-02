@@ -44,7 +44,7 @@ const PopupConfirmation = ({
             }}
             className="px-5 py-2 rounded-lg bg-linear-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-900 font-semibold transition shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Cancel
+            NO
           </button>
           <button
             disabled={isDisabled}

@@ -20,7 +20,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   const hadleOpenPopup = async (project) => {
     try {
       const id = project?.OrderMongoId || project?._id || project?.id;
-
+      console.log(project)
       if (!id) {
         console.log("Invalid project data — ID missing");
         return;
@@ -113,6 +113,9 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           <table className="w-full table-fixed">
             <thead className="sticky top-0">
               <tr className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
+                <th className="w-16 px-4 py-5 text-center text-base font-bold tracking-wide uppercase !text-gray-400">
+                  SR NO
+                </th>
                 {tableVal.map((col, idx) => (
                   <th
                     key={idx}
@@ -143,6 +146,9 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                   key={i}
                   className="hover:bg-slate-50 transition-colors duration-150 group"
                 >
+                  <td className="px-4 py-4 text-center text-sm font-semibold text-gray-700">
+                    {i + 1}
+                  </td>
                   {tableVal.map((col, j) => {
                     const val = row[col.val];
                     const display = formatValue(val, col.val);
