@@ -24,29 +24,14 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [onClose]);
 
-    const formatDate = (date) => {
-        if (!date) return "—";
-        return new Date(date).toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        });
-    };
-
-    const calculateDays = (startDate, endDate) => {
-        if (!startDate || !endDate) return "—";
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        const diffTime = Math.abs(end - start);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays;
-    };
-
     const navigate = useNavigate()
 
     const handlePlanSectionRoute = (sectionId) => {
-
-        navigate(`/plan/${activeExecution}/${sectionId}`);
+        navigate(`/plan/${activeExecution}/${sectionId}`, {
+            state: {
+                fromProject: true
+            }
+        })
         onClose?.();
         setSelectedProject(null);
 
@@ -214,7 +199,7 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
                                         </div>
 
                                     </div>
-                                    
+
                                     <div className="space-y-1">
                                         <div className="flex justify-between text-[10px] text-gray-600">
                                             <span>{formatDateDDMMYY(section.sectionStartDate) || "Start"}</span>

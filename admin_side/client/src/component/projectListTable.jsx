@@ -38,6 +38,22 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
     };
   }, []);
 
+  const handleShowProgress = async (entry) => {
+    try {
+      console.log("data val");
+      return;
+      const data = await fetchProgressByforEngineer({
+        projectId: entry?.project?._id,
+        type: onEditFun,
+      });
+      setProgressData(data);
+      setPorgress(true);
+    } catch (e) {
+      toast.error(e.response.data.message || "some error occured");
+      setPorgress(false);
+    }
+  };
+
   const handlAssignedDev = (project) => {
     try {
       navigate(`/timelineform/${project?._id}`)
@@ -235,7 +251,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           <button
                             disabled={isCancelled}
                             onClick={
-                              isCancelled ? undefined : () => handleDocsOpen(row)
+                              isCancelled ? undefined : () => handleShowProgress(row)
                             }
                             className={`p-3 rounded-xl transition-all
                   ${isCancelled

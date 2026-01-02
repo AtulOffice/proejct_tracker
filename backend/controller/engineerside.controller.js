@@ -493,7 +493,7 @@ export const getLogicPhaseById = async (req, res) => {
     const LastphaseProgress = await EngineerProgressReport
       .findOne({ phaseId: phaseObjectId })
       .sort({ createdAt: -1 })
-      .select("actualCompletionPercent createdAt reportDate actualStartDate");
+      .select("actualCompletionPercent createdAt reportDate actualStartDate actualEndDate");
 
     const result = await EngineerReocord.aggregate([
       { $match: { _id: engineerObjectId } },
@@ -643,7 +643,7 @@ export const getScadaPhaseById = async (req, res) => {
     const LastphaseProgress = await EngineerProgressReport
       .findOne({ phaseId: phaseObjectId })
       .sort({ createdAt: -1 })
-      .select("actualCompletionPercent createdAt reportDate actualStartDate");
+      .select("actualCompletionPercent createdAt reportDate actualStartDate actualEndDate");
 
     const result = await EngineerReocord.aggregate([
       { $match: { _id: engineerObjectId } },
@@ -794,7 +794,7 @@ export const getTestingPhaseById = async (req, res) => {
     const LastphaseProgress = await EngineerProgressReport
       .findOne({ phaseId: phaseObjectId })
       .sort({ createdAt: -1 })
-      .select("actualCompletionPercent createdAt reportDate actualStartDate");
+      .select("actualCompletionPercent createdAt reportDate actualStartDate actualEndDate");
 
     const result = await EngineerReocord.aggregate([
       { $match: { _id: engineerObjectId } },

@@ -1,12 +1,13 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { createProgressReport, fetchPhaseTesting } from "../utils/apiCall";
 import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
-import { formatDateDDMMYY } from "../utils/timeFormatter";
+import { calculateDurationInDays, calculateProgressDays, formatDateDDMMYY, toInputDate } from "../utils/timeFormatter";
 
 export default function LogicDevelopmentExecution() {
     const { id } = useParams()
+    const location = useLocation();
     const navigate = useNavigate();
     const { user } = useAppContext();
     const [PhaseData, setPhaseData] = React.useState(null);
@@ -29,29 +30,12 @@ export default function LogicDevelopmentExecution() {
     const [formData, setFormData] = React.useState(getInitialFormData);
 
     React.useEffect(() => {
-        const PhaseLogic = async () => {
+        const PhaseTest = async () => {
             const response = await fetchPhaseTesting({ id })
             setPhaseData(response?.data);
         }
-        PhaseLogic()
+        PhaseTest()
     }, [id])
-
-    const toInputDate = (date) => {
-        if (!date) return "";
-        return new Date(date).toISOString().split("T")[0];
-    };
-
-    const calculateProgressDays = (startDate, actualEndDate) => {
-        if (!startDate) return 0;
-
-        const start = new Date(startDate);
-        const end = actualEndDate ? new Date(actualEndDate) : new Date();
-        start.setHours(0, 0, 0, 0);
-        end.setHours(0, 0, 0, 0);
-        const diffMs = end - start;
-        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        return diffDays > 0 ? diffDays : 0;
-    };
 
     React.useEffect(() => {
         if (!PhaseData) return;
@@ -72,19 +56,6 @@ export default function LogicDevelopmentExecution() {
         }));
     }, [PhaseData]);
 
-    const calculateDurationInDays = (startDate, endDate, fallback = "—") => {
-        if (!startDate || !endDate) return fallback;
-
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-
-        if (isNaN(start) || isNaN(end)) return fallback;
-
-        const diffMs = end - start;
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-        return diffDays >= 0 ? diffDays : fallback;
-    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -170,7 +141,9 @@ export default function LogicDevelopmentExecution() {
             toast.error("Failed to submit progress");
         }
     };
-
+    if (!location.state?.fromProject || !id) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100 py-8 px-4">
@@ -297,6 +270,7 @@ export default function LogicDevelopmentExecution() {
                                     type="date"
                                     name="actualStartDate"
                                     value={formData.actualStartDate}
+                                    max={new Date().toISOString().split("T")[0]}
                                     disabled={!!PhaseData?.LastphaseProgress?.actualStartDate}
                                     onChange={handleChange}
                                     className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
@@ -357,6 +331,7 @@ export default function LogicDevelopmentExecution() {
                                     name="actualCompletionPercent"
                                     min={0}
                                     max={100}
+                                    disabled={PhaseData?.LastphaseProgress?.actualCompletionPercent === 100}
                                     value={formData.actualCompletionPercent}
                                     onChange={handleChange}
                                     onWheel={(e) => e.target.blur()}

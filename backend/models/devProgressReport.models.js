@@ -51,9 +51,13 @@ const EngineerProgressReportSchema = new mongoose.Schema(
         actualProgressDay: {
             type: Number,
             min: 0,
-            required: true,
+            default: 0
         },
-
+        currentProgressDay: {
+            type: Number,
+            min: 0,
+            default: 0
+        },
         actualCompletionPercent: {
             type: Number,
             min: 0,
