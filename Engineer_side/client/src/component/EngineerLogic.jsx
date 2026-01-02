@@ -56,6 +56,17 @@ export default function LogicDevelopmentExecution() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    const isCompleted =
+      PhaseData?.LastphaseProgress?.actualCompletionPercent === 100;
+
+    if (
+      isCompleted &&
+      (name === "actualCompletionPercent" || name === "actualStartDate")
+    ) {
+      return;
+    }
+
     if (name === "actualCompletionPercent") {
       let num = Math.max(0, Math.min(100, parseInt(value, 10)));
 

@@ -54,9 +54,19 @@ export default function LogicDevelopmentExecution() {
         }));
     }, [PhaseData]);
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
+
+        const isCompleted =
+            PhaseData?.LastphaseProgress?.actualCompletionPercent === 100;
+
+        if (
+            isCompleted &&
+            (name === "actualCompletionPercent" || name === "actualStartDate")
+        ) {
+            return;
+        }
+
         if (name === "actualCompletionPercent") {
             let num = Math.max(0, Math.min(100, parseInt(value, 10)));
 
@@ -64,9 +74,7 @@ export default function LogicDevelopmentExecution() {
                 const endDate = num === 100
                     ? new Date().toISOString().split("T")[0]
                     : "";
-
                 const progress = calculateProgressDays(prev.actualStartDate, endDate);
-
                 return {
                     ...prev,
                     actualCompletionPercent: num,
@@ -95,9 +103,6 @@ export default function LogicDevelopmentExecution() {
             [name]: value,
         }));
     };
-
-
-
 
     const validateForm = () => {
         if (!formData.projectId) return "Project is required";
