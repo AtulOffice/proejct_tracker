@@ -156,12 +156,12 @@ export default function SectionDetailsModal({ project, onClose, activeExecution,
                                             />
                                         </svg>
                                     </div>
-                                    <button
+                                    {(section.CompletionPercentage !== 100 || true) && <button
                                         onClick={() => handlePlanSectionRoute(section?._id)}
                                         className="ml-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-bold shadow-lg hover:shadow-indigo-500/40 hover:scale-105 transition-all"
                                     >
                                         Action
-                                    </button>
+                                    </button>}
                                 </div>
                             </div>
 

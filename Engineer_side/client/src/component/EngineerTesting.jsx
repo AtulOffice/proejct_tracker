@@ -23,7 +23,6 @@ export default function LogicDevelopmentExecution() {
         actualEndDate: "",
         reportDate: new Date().toISOString().split("T")[0],
         actualProgressDay: 0,
-        currentProgressDay: 0,
         actualCompletionPercent: 0,
         remarks: "",
     });
@@ -51,8 +50,7 @@ export default function LogicDevelopmentExecution() {
             actualCompletionPercent: PhaseData?.LastphaseProgress?.actualCompletionPercent,
             actualStartDate: toInputDate(PhaseData?.LastphaseProgress?.actualStartDate),
             actualEndDate: toInputDate(PhaseData?.LastphaseProgress?.actualEndDate),
-            actualProgressDay: calculateProgressDays(PhaseData?.LastphaseProgress?.actualStartDate, PhaseData?.LastphaseProgress?.actualEndDate),
-            currentProgressDay: calculateProgressDays(PhaseData?.LastphaseProgress?.actualStartDate, PhaseData?.LastphaseProgress?.actualEndDate)
+            actualProgressDay: calculateProgressDays(PhaseData?.LastphaseProgress?.actualStartDate, PhaseData?.LastphaseProgress?.actualEndDate)
         }));
     }, [PhaseData]);
 
@@ -74,7 +72,6 @@ export default function LogicDevelopmentExecution() {
                     actualCompletionPercent: num,
                     actualEndDate: endDate,
                     actualProgressDay: progress,
-                    currentProgressDay: progress,
                 };
             });
             return;
@@ -86,7 +83,6 @@ export default function LogicDevelopmentExecution() {
                 return {
                     ...prev,
                     actualStartDate: value,
-                    currentProgressDay: progress,
                     actualProgressDay: prev.actualCompletionPercent === 100 ? progress : prev.actualProgressDay,
                 };
             });
@@ -295,27 +291,16 @@ export default function LogicDevelopmentExecution() {
                                     }
                                 />
                             </div>
-                            {formData.actualCompletionPercent < 100 && <div>
+                            <div>
                                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
-                                    current progress days
-                                </label>
-                                <input
-                                    className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-center text-sm font-semibold text-gray-600 shadow-sm"
-                                    disabled
-                                    value={formData.currentProgressDay}
-                                />
-                            </div>}
-
-                            {formData.actualCompletionPercent === 100 && <div>
-                                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
-                                    # of days
+                                    {formData.actualCompletionPercent === 100 ? "# of days" : "current progress days"}
                                 </label>
                                 <input
                                     className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-center text-sm font-semibold text-gray-600 shadow-sm"
                                     disabled
                                     value={formData.actualProgressDay}
                                 />
-                            </div>}
+                            </div>
 
                         </div>
 
