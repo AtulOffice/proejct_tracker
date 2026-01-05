@@ -5,6 +5,7 @@ import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import ProjectTableAllOperation from "./ProjectTableAllOperation";
+import ProjectTableAllOperationWork from "./ProjectTableAllOperationWork";
 
 const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
     const { toggle, user } = useAppContext();
@@ -62,7 +63,7 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
     }, [timeFilter, data]);
 
     const filterRef = useRef(null);
-    
+
     if (!data) {
         return <LoadingSkeltionAll />;
     }
@@ -84,13 +85,21 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
 
             <div className="flex-1 w-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200">
                 {(filteredProjects.length > 0) ? (
-                    <ProjectTableAllOperation
+                    onEditFun !== "WORKING" ? < ProjectTableAllOperation
                         data={filteredProjects}
                         tableVal={tableVal}
                         isEdit={isEdit}
                         onEditFun={onEditFun}
                         printTitle={printTitle}
                     />
+                        :
+                        < ProjectTableAllOperationWork
+                            data={filteredProjects}
+                            tableVal={tableVal}
+                            isEdit={isEdit}
+                            onEditFun={onEditFun}
+                            printTitle={printTitle}
+                        />
                 ) : (
                     <Notfound />
                 )}

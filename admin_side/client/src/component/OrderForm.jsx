@@ -3,6 +3,9 @@ import { AlertCircle, Save, Loader } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { fields } from "../utils/FieldConstant";
+import { toWords } from "number-to-words";
+import { numberToIndianWords } from "../utils/numberToword";
+import NumberFlow from '@number-flow/react';
 
 export default function OrderForm({ setActiveCard }) {
   const [formData, setFormData] = useState(fields);
@@ -707,14 +710,16 @@ export default function OrderForm({ setActiveCard }) {
           </section>
 
           {/* Financial Information Section */}
-          <section className="bg-linear-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200 shadow-sm hover:shadow-md transition-shadow">
+          <section className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-orange-600 rounded"></div>
               <h2 className="text-2xl font-bold text-orange-900">
                 Order Value
               </h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* First two inputs in same row */}
               {renderInput(
                 "orderValueSupply",
                 "Order Value - Supply (₹)",
@@ -731,19 +736,37 @@ export default function OrderForm({ setActiveCard }) {
                 true,
                 { min: 0, step: "0.01" }
               )}
-              {renderInput(
-                "orderValueTotal",
-                "Order Value - Total (₹)",
-                "number",
-                "",
-                false,
-                { min: 0, step: "0.01", readOnly: true }
-              )}
+
+              {/* Total value card spans full width */}
+              <div className="md:col-span-2 bg-white p-6 rounded-xl border-2 border-orange-300 shadow-lg">
+                <div className="flex flex-col gap-3">
+                  {/* Label */}
+                  <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+                    Total Order Value
+                  </p>
+
+                  {/* Animated Number */}
+                  <NumberFlow
+                    value={formData?.orderValueTotal}
+                    format={{
+                      style: 'currency',
+                      currency: 'INR',
+                      minimumFractionDigits: 2
+                    }}
+                    transformTiming={{ duration: 750, easing: 'ease-out' }}
+                    className="text-3xl font-bold text-orange-900 tabular-nums"
+                  />
+
+                  <div className="pt-3 border-t border-orange-100">
+                    <p className="text-sm font-medium text-gray-700 italic leading-relaxed">
+                      {numberToIndianWords(formData?.orderValueTotal)}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
-
-          {/* Order Details Section */}
           <section className="bg-linear-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-8 bg-purple-600 rounded"></div>

@@ -297,7 +297,7 @@ export default function LogicDevelopmentExecution() {
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
+                <label className="mb-2 blFock text-sm font-bold uppercase tracking-wide text-gray-700">
                   {formData.actualCompletionPercent === 100 ? "# of days" : "current progress days"}
                 </label>
                 <input

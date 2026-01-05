@@ -16,6 +16,7 @@ export const WrkStatusSave = async (req, res) => {
       workstatus,
       ProjectId,
       submittedBy,
+      progressPercent
     } = req.body;
 
     if (!jobNumber || !projectName || !currentEngineerName) {
@@ -68,6 +69,7 @@ export const WrkStatusSave = async (req, res) => {
       WorkStatus: workstatus,
       ProjectDetails: ProjectId,
       submittedBy,
+      progressPercent
     });
 
     await ProjectModel.findByIdAndUpdate(ProjectId, {
@@ -312,6 +314,285 @@ export const workStatusPaginationByEngineer = async (req, res) => {
     return res.status(500).json({
       success: false,
       error: err.message || "Server error",
+    });
+  }
+};
+
+
+// work operation for engineer
+
+export const getLatestWorkStatusByProjectId = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    console.log(projectId)
+    if (!projectId || !mongoose.Types.ObjectId.isValid(projectId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing projectId",
+      });
+    }
+
+    const data = await workStatusModel
+      .findOne({ ProjectDetails: projectId })
+      .sort({ createdAt: -1 })
+      .populate("submittedBy", "name email")
+      .lean();
+
+    if (!data) {
+      return res.status(404).json({
+        success: false,
+        message: "No work status found for this project",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Work status fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("getLatestWorkStatusByProjectId error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+export const getLatestWorkStatusForAllProjects = async (req, res) => {
+  try {
+    const data = await workStatusModel.aggregate([
+      {
+        $sort: { createdAt: -1 }
+      },
+
+      {
+        $group: {
+          _id: "$ProjectDetails",
+          progressPercent: { $first: "$progressPercent" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          projectId: "$_id",
+          progressPercent: 1
+        }
+      }
+    ]);
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No work status data found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Latest work status fetched for all projects",
+      data,
+    });
+
+  } catch (error) {
+    console.error("getLatestWorkStatusForAllProjects error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+export const getAllWorkStatusByProjectId = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+
+    if (!projectId || !mongoose.Types.ObjectId.isValid(projectId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing projectId",
+      });
+    }
+
+    const data = await workStatusModel
+      .find({ ProjectDetails: projectId })
+      .sort({ createdAt: -1 })
+      .populate("submittedBy", "name email")
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      message: "Work status list fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("getAllWorkStatusByProjectId error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+export const getAllWorkStatusBySubmittedBy = async (req, res) => {
+  try {
+    const { engineerId } = req.params;
+
+    if (!engineerId || !mongoose.Types.ObjectId.isValid(engineerId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or missing engineerId",
+      });
+    }
+
+    const data = await workStatusModel
+      .find({ submittedBy: engineerId })
+      .sort({ createdAt: -1 })
+      .populate("ProjectDetails", "projectName jobNumber location")
+      .lean();
+
+    return res.status(200).json({
+      success: true,
+      message: "Engineer work status fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("getAllWorkStatusBySubmittedBy error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+export const getDistinctProjectsWithLastSubmission = async (req, res) => {
+  try {
+    const data = await workStatusModel.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: "$ProjectDetails",
+          lastSubmission: { $first: "$$ROOT" },
+        },
+      },
+      { $replaceRoot: { newRoot: "$lastSubmission" } },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "ProjectDetails",
+          foreignField: "_id",
+          as: "project",
+        },
+      },
+      { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "submittedBy",
+          foreignField: "_id",
+          as: "engineer",
+        },
+      },
+      { $unwind: { path: "$engineer", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 0,
+          projectId: "$ProjectDetails",
+          projectName: "$project.projectName",
+          jobNumber: 1,
+          location: "$project.location",
+          lastProgressPercent: "$progressPercent",
+          lastWorkStatus: "$WorkStatus",
+          fromDate: 1,
+          toDate: 1,
+          lastSubmittedAt: "$createdAt",
+          lastSubmittedBy: {
+            _id: "$engineer._id",
+            name: "$engineer.name",
+          },
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      message: "Projects with last submitted work status fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("getDistinctProjectsWithLastSubmission error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+export const getDistinctProjectsByEngineerWithLastStatus = async (req, res) => {
+  try {
+    const engineerId = req.user?._id;
+    if (!mongoose.Types.ObjectId.isValid(engineerId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid engineer ID",
+      });
+    }
+
+    const data = await workStatusModel.aggregate([
+      {
+        $match: {
+          submittedBy: new mongoose.Types.ObjectId(engineerId),
+        },
+      },
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: "$ProjectDetails",
+          lastSubmission: { $first: "$$ROOT" },
+        },
+      },
+      { $replaceRoot: { newRoot: "$lastSubmission" } },
+      {
+        $lookup: {
+          from: "projects",
+          localField: "ProjectDetails",
+          foreignField: "_id",
+          as: "project",
+        },
+      },
+      { $unwind: { path: "$project", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: 0,
+          projectId: "$ProjectDetails",
+          projectName: "$project.projectName",
+          jobNumber: 1,
+          location: "$project.location",
+          progressPercent: 1,
+          WorkStatus: 1,
+          fromDate: 1,
+          toDate: 1,
+          submittedAt: "$createdAt",
+          engineerName: "$EngineerName",
+          OrderMongoId: "$project.OrderMongoId",
+          _id: "$project._id"
+        },
+      },
+    ]);
+
+    return res.status(200).json({
+      success: true,
+      message: "Engineer project work status fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("getProjectsByEngineerWithLastStatus error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
     });
   }
 };

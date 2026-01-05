@@ -4,12 +4,11 @@ import axios from "axios";
 import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
 import ExcelDocsInput from "../utils/Excelimport";
+import { getLatestworkSubmission } from "../utils/apiCall";
 
 const EngineerWorkStatusFull = () => {
-    const { user } = useAppContext()
-    const [data, setData] = useState()
-    const [loading, setLoading] = useState(false)
     const userformval = {
+        progressPercent: 0,
         workstatus: "",
         currentEngineerName: "",
         projectName: "",
@@ -28,37 +27,33 @@ const EngineerWorkStatusFull = () => {
         submittedBy: ""
     };
 
+    const { user } = useAppContext()
+    const [data, setData] = useState()
+    const [loading, setLoading] = useState(false)
+    const [lastWork, setLastWork] = useState([])
     const [formData, setFormData] = useState(userformval);
 
-    useEffect(() => {
-        if (!formData.jobNumber) {
-            setFormData(userformval)
-            return;
-        }
-        const selectedProject = data?.lastFiveAssignments?.find(
-            (item) => item.jobNumber === formData.jobNumber
-        );
-        if (selectedProject) {
-            setFormData((prev) => ({
-                ...prev,
-                submittedBy: user?._id,
-                ProjectId: selectedProject.projectId?._id,
-                currentEngineerName: user?.name,
-                projectName: selectedProject.projectId?.projectName || "",
-                location: selectedProject.projectId?.location,
-                StartChecklist: selectedProject.projectId?.StartChecklist,
-                EndChecklist: selectedProject.projectId?.EndChecklist,
-            }));
-        }
-    }, [formData.jobNumber, data]);
 
+
+
+    useEffect(() => {
+        const fetchLatestWork = async () => {
+            try {
+                const res = await getLatestworkSubmission();
+                setLastWork(res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchLatestWork();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}/engineerside/fetchAllProject/${user?._id}`, { withCredentials: true })
                 setData(response?.data)
-                console.log(response?.data?.lastFiveAssignments)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -67,10 +62,53 @@ const EngineerWorkStatusFull = () => {
         if (user?._id) fetchData();
     }, []);
 
+    useEffect(() => {
+        if (!formData.jobNumber) {
+            setFormData(userformval);
+            return;
+        }
+
+        const assignment = data?.lastFiveAssignments?.find(
+            a => a.jobNumber === formData.jobNumber
+        );
+        if (!assignment) return;
+
+        const project = assignment.projectId;
+        const percent =
+            lastWork?.find(
+                w => w.projectId?.toString() === project?._id?.toString()
+            )?.progressPercent ?? 0;
+
+        setFormData(prev => ({
+            ...prev,
+            submittedBy: user?._id,
+            ProjectId: project?._id,
+            currentEngineerName: user?.name,
+            projectName: project?.projectName || "",
+            location: project?.location,
+            StartChecklist: project?.StartChecklist,
+            EndChecklist: project?.EndChecklist,
+            progressPercent: percent,
+        }));
+    }, [formData.jobNumber, data, lastWork, user]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (new Date(formData.statusStartDate) > new Date(formData.statusEndDate)) {
             toast.error("Start date must be before end date");
+            return;
+        }
+        const previousPercent =
+            lastWork?.find(
+                item =>
+                    item.projectId?.toString() === formData?.ProjectId?.toString()
+            )?.progressPercent ?? 0;
+
+
+        if (formData.progressPercent < previousPercent) {
+            toast.error(
+                `Progress cannot be less than previous value (${previousPercent}%)`
+            );
             return;
         }
 
@@ -95,22 +133,38 @@ const EngineerWorkStatusFull = () => {
             setLoading(false);
         }
     };
-    const handleChange = (eOrName, value) => {
-        // Case 1: Normal event (input/select/textarea OR ExcelDocsInput)
+
+    const handleChange = (eOrName, manualValue) => {
         if (eOrName?.target) {
             const { name, value, type, checked } = eOrName.target;
+
+            let finalValue = type === "checkbox" ? checked : value;
+
+            if (name === "progressPercent") {
+                let num = Math.max(0, Math.min(100, parseInt(value, 10)));
+
+                setFormData((prev) => {
+                    return {
+                        ...prev,
+                        progressPercent: num,
+
+                    };
+                });
+                return;
+            }
+
             setFormData((prev) => ({
                 ...prev,
-                [name]: type === "checkbox" ? checked : value,
+                [name]: finalValue,
             }));
             return;
         }
 
-        // Case 2: Manual call handleChange("key", value)
+
         if (typeof eOrName === "string") {
             setFormData((prev) => ({
                 ...prev,
-                [eOrName]: value,
+                [eOrName]: manualValue,
             }));
         }
     };
@@ -256,23 +310,26 @@ const EngineerWorkStatusFull = () => {
                                     required
                                 />
                             </div>
+                            <div>
+                                <label className="block mb-2 text-sm font-semibold text-slate-700">
+                                    Completion Percent <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    name="progressPercent"
+                                    value={formData.progressPercent ?? 0}
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                    onWheel={(e) => e.target.blur()}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg"
+                                    required
+                                />
+                            </div>
+
                         </div>
                     </div>
-
-                    {/* Work Status Notes */}
-                    {/* <div className="bg-white rounded-xl p-6 shadow border border-slate-200">
-                        <label className="block mb-2 text-sm font-semibold text-slate-700">
-                            Work Status Details
-                        </label>
-                        <textarea
-                            name="workstatus"
-                            value={formData.workstatus}
-                            onChange={handleChange}
-                            rows="12"
-                            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg resize-none"
-                            placeholder="Enter detailed work status..."
-                        />
-                    </div> */}
 
                     <div className="bg-white rounded-xl p-6 shadow border border-slate-200">
                         <label className="block mb-2 text-sm font-semibold text-slate-700">
@@ -284,7 +341,6 @@ const EngineerWorkStatusFull = () => {
                             onChange={(e) => handleChange(e)}
                         />
                     </div>
-
 
                     {/* Submit Button */}
                     <div className="flex justify-center">

@@ -428,3 +428,31 @@ export const fetchWeeklyAssmentbyId = async (id) => {
     throw err;
   }
 };
+
+
+// work status operatioin
+
+export const getLatestworkSubmission = async () => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/worksts/getLatestworkSubmission`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("error while saving", err);
+    throw err;
+  }
+};
+export const fetchAllworkStatusforengineer = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/worksts/fetchAllworkStatusforengineer?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("error while saving", err);
+    throw err;
+  }
+};

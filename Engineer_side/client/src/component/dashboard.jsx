@@ -13,7 +13,7 @@ import ZeroCard from "./overview.Project";
 import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchEngineerOveriew, fetchProjectslist, fetfchProejctLOGIC, fetfchProejctSCADA, fetfchProejctDOCS, fetfchProejctTESTING, logout } from "../utils/apiCall";
+import { fetchEngineerOveriew, fetchProjectslist, fetfchProejctLOGIC, fetfchProejctSCADA, fetfchProejctDOCS, fetfchProejctTESTING, logout, fetchAllworkStatusforengineer } from "../utils/apiCall";
 import { useRef } from "react";
 import ProjectList from "./projectList.jsx";
 import ProjectListOperation from "./ProjectListOperation.jsx";
@@ -114,6 +114,25 @@ const AdminDashboard = () => {
     },
   ];
 
+  const worktActionTab = [
+    {
+      head: "Project",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "LAST REPORT",
+      val: "submittedAt",
+    },
+    {
+      head: "PROGRESS",
+      val: "progressPercent",
+    },
+  ];
+
 
   const renderCard = () => {
     switch (activeCard) {
@@ -142,10 +161,18 @@ const AdminDashboard = () => {
         return <EngineerWorkStatusFull />;
       case "six":
         return (
-          <ProjectCatogary
-            key={"work status"}
-            workStatus={true}
-            title="WORK STATUS"
+          // <ProjectCatogary
+          //   key={"work status"}
+          //   workStatus={true}
+          //   title="WORK STATUS"
+          // />
+          <ProjectListOperation
+            key={"WORKING"}
+            tableVal={worktActionTab}
+            fetchFun={fetchAllworkStatusforengineer}
+            isEdit={true}
+            onEditFun="WORKING"
+            printTitle="WORKING REPORT"
           />
         );
       case "eight":

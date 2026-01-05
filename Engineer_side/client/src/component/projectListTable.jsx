@@ -129,9 +129,9 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                     <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                       START
                     </th>
-                    <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
+                    {/* <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                       WORK
-                    </th>
+                    </th> */}
                     <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                       END
                     </th>
@@ -197,7 +197,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                         </button>
 
                       </td>
-                      <td onClick={() => openAction("work", row)}
+                      {/* <td onClick={() => openAction("work", row)}
                         className="px-6 py-4 text-center">
                         <button
                           className="relative group
@@ -215,7 +215,7 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                         >
                           <FaTools className="w-5 h-5 drop-shadow" />
                         </button>
-                      </td>
+                      </td> */}
                       <td
                         onClick={() => openAction("end", row)}
                         className="px-6 py-4 text-center">

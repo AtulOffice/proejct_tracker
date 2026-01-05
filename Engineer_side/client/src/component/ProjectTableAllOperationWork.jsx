@@ -11,21 +11,24 @@ import { GiProgression } from "react-icons/gi";
 import SectionDetailsModal from "./DevelopMentSection";
 import toast from "react-hot-toast";
 
-const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
+const ProjectTableAllOperationWork = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
+
     const printRef = useRef();
     const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
     const [isOrderFetched, setIsOrderFetched] = useState(false);
-    const [activeExecution, setActiveExecution] = useState();
     const [start, setStart] = useState(false);
     const [end, setEnd] = useState(false);
     const [work, setWork] = useState(false);
     const [progress, setPorgress] = useState(false)
     const [progressData, setProgressData] = useState()
 
+
+
     const hadleOpenPopup = async (project) => {
         try {
-            const id = project?.OrderMongoId?._id || project?._id || project?.id;
+
+            const id = project?.OrderMongoId || project?._id || project?.id;
             if (!id) {
                 console.log("Invalid project data — ID missing");
                 return;
@@ -33,7 +36,7 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
             let val;
             let orderFlag = false;
             if (project?.OrderMongoId) {
-                val = await fetchbyOrderbyId(project.OrderMongoId?._id);
+                val = await fetchbyOrderbyId(project.OrderMongoId);
                 orderFlag = true;
             } else {
                 val = await fetchbyProjectbyId(id);
@@ -67,19 +70,13 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
         return val || "—";
     };
 
+
     const openAction = (type, project) => {
         setSelectedProject(project);
         if (type === "start") setStart(true);
         if (type === "work") setWork(true);
         if (type === "end") setEnd(true);
     };
-
-    const handleRoutePlan = (onEditFun, project) => {
-        setWork(true);
-        setActiveExecution(onEditFun);
-        setSelectedProject(project);
-
-    }
 
     const handleShowProgress = async (entry) => {
         try {
@@ -95,12 +92,13 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
         }
     };
 
+
     return (
         <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
 
-            {progress && progressData && (
+            {/* {progress && progressData && (
                 <ProgressShowed project={selectedProject} onClose={() => setPorgress(false)} progressData={progressData} />
-            )}
+            )} */}
 
             {start && (
                 <DocSRecordChecklist
@@ -109,18 +107,6 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                     onClose={() => setStart(false)}
                 />
             )}
-            {work && activeExecution === "LOGIC" && (
-                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} setSelectedProject={setSelectedProject} activeExecution={activeExecution} />
-            )}
-
-            {work && activeExecution === "SCADA" && (
-                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} setSelectedProject={setSelectedProject} activeExecution={activeExecution} />
-            )}
-
-            {work && activeExecution === "TESTING" && (
-                <SectionDetailsModal onClose={() => setWork(false)} project={selectedProject} setSelectedProject={setSelectedProject} activeExecution={activeExecution} />
-            )}
-
 
             {
                 selectedProjectForPopup &&
@@ -137,7 +123,6 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                 ))
             }
 
-
             <div className="overflow-x-auto hidden md:block">
                 <div ref={printRef} className="max-h-[690px] overflow-y-auto">
                     <table className="w-full table-fixed">
@@ -149,7 +134,7 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                 {tableVal.map((col, idx) => (
                                     <th
                                         key={idx}
-                                        className="px-6 py-5 text-left text-base font-bold tracking-wide uppercase text-gray-400!"
+                                        className="w-37 px-6 py-5 text-left text-base font-bold tracking-wide uppercase text-gray-400!"
                                     >
                                         {col.head}
                                     </th>
@@ -162,9 +147,7 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                         <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
                                             PROGRESS
                                         </th>
-                                        {onEditFun !== "WORKING" && <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
-                                            ACTION
-                                        </th>}
+
 
                                     </>
                                 )}
@@ -177,31 +160,25 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                     key={i}
                                     className="hover:bg-slate-50 transition-colors duration-150 group"
                                 >
+
                                     <td className="px-4 py-4 text-center text-sm font-semibold text-gray-700">
                                         {i + 1}
                                     </td>
-
                                     {tableVal.map((col, j) => {
-                                        const val = onEditFun === "WORKING" ? row?.[col.val] : row?.project?.[col.val];
+                                        const val = row?.[col.val];
                                         const display = formatValue(val, col.val);
-                                        console.log(display)
+                                        console.log(row)
                                         return (
                                             <td
                                                 key={j}
                                                 className="px-6 py-4 text-base text-gray-700 whitespace-nowrap"
                                             >
                                                 <div
-                                                    className={`truncate ${col.val === "projectName"
-                                                        ? "cursor-pointer hover:text-indigo-600"
-                                                        : ""
-                                                        }`}
-                                                    onClick={() =>
-                                                        col.val === "projectName" && hadleOpenPopup
-                                                            ? hadleOpenPopup(row?.project)
-                                                            : null
-                                                    }
+                                                    className={`truncate`}
                                                 >
-                                                    {display}
+                                                    <div className="truncate max-w-full">
+                                                        {display}
+                                                    </div>
 
                                                 </div>
                                             </td>
@@ -212,7 +189,7 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                         <>
 
                                             <td
-                                                onClick={() => openAction("start", row)}
+                                                onClick={() => hadleOpenPopup(row)}
                                                 className="px-6 py-4 text-center">
                                                 <button
                                                     className="
@@ -251,26 +228,6 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                                     <GiProgression className="w-5 h-5 drop-shadow" />
                                                 </button>
                                             </td>
-                                            {onEditFun !== "WORKING" && <td onClick={() => handleRoutePlan(onEditFun, row)}
-                                                className="px-6 py-4 text-center">
-                                                <button
-                                                    className="relative group
-flex items-center justify-center
-bg-gradient-to-tr from-red-500 via-pink-500 to-yellow-500
-hover:from-red-600 hover:via-pink-600 hover:to-yellow-600
-text-white p-2 rounded-full shadow-lg
-transition-all duration-200
-hover:scale-110 hover:rotate-6
-ring-2 ring-transparent hover:ring-red-300
-focus:outline-none focus:ring-4 focus:ring-red-400
-"
-                                                    aria-label="Update"
-                                                    type="button"
-                                                >
-                                                    <FaTools className="w-5 h-5 drop-shadow" />
-                                                </button>
-                                            </td>}
-
                                         </>
                                     )}
                                 </tr>
@@ -350,7 +307,6 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                         <div className="space-y-2 text-sm text-blue-800">
                             {tableVal.slice(1).map((col, i) => {
                                 const val = project[col.val];
-                                console.log(val)
                                 const display = formatValue(val, col.val);
                                 return (
                                     <div key={i}>
@@ -378,4 +334,4 @@ focus:outline-none focus:ring-4 focus:ring-red-400
     );
 };
 
-export default ProjectTableAllOperation;
+export default ProjectTableAllOperationWork;

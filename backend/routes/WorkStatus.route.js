@@ -2,6 +2,10 @@ import express from "express";
 import {
   deleteWorkStatus,
   getAllWorkStatus,
+  getDistinctProjectsByEngineerWithLastStatus,
+  getDistinctProjectsWithLastSubmission,
+  getLatestWorkStatusByProjectId,
+  getLatestWorkStatusForAllProjects,
   getWorkStatusById,
   updateWorkStatus,
   workStatusPaginationByEngineer,
@@ -51,3 +55,26 @@ WorkstsRouter.get(
   authenticateEngineer,
   workStatusPaginationByEngineer
 );
+
+WorkstsRouter.get(
+  "/getLatestworkSubmissionbyProjectId/:projectId",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getLatestWorkStatusByProjectId
+);
+
+WorkstsRouter.get(
+  "/getLatestworkSubmission",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getLatestWorkStatusForAllProjects
+);
+
+WorkstsRouter.get(
+  "/fetchAllworkStatusforengineer",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getDistinctProjectsByEngineerWithLastStatus
+);
+
+

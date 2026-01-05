@@ -1559,7 +1559,15 @@ export const allProjectsFetch = async (req, res) => {
       bookingDate: p.OrderMongoId?.bookingDate || null,
       endUser: p.OrderMongoId?.endUser || null,
       actualDeleveryDate: p.OrderMongoId?.actualDeleveryDate || null,
-      OrderMongoId: p.OrderMongoId?._id || null,
+      OrderMongoId: p.OrderMongoId
+        ? {
+          _id: p.OrderMongoId._id,
+          deleveryDate: p.OrderMongoId.deleveryDate || null,
+          bookingDate: p.OrderMongoId.bookingDate || null,
+          endUser: p.OrderMongoId.endUser || null,
+          actualDeleveryDate: p.OrderMongoId.actualDeleveryDate || null,
+        }
+        : null,
     }));
 
     return res.json({
@@ -1570,6 +1578,64 @@ export const allProjectsFetch = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
+    return res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+export const allProjectsFetchDev = async (req, res) => {
+  const search = req.query.search || "";
+
+  try {
+    const filter = {
+      Development: { $in: ["LOGIC", "SCADA", "BOTH"] },
+    };
+
+    if (search) {
+      filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+    }
+
+    const projectSelectFields = {
+      jobNumber: 1,
+      projectName: 1,
+      status: 1,
+      visitDate: 1,
+      Development: 1,
+      createdAt: 1,
+      updatedAt: 1,
+      OrderMongoId: 1,
+      isPlanRecord: 1,
+      service: 1,
+      Development: 1,
+      LogicPlace: 1,
+      ScadaPlace: 1,
+      PlanDetails: 1,
+      devScope: 1,
+      commScope: 1,
+    };
+
+    const projects = await ProjectModel.find(filter, projectSelectFields)
+      .populate({
+        path: "OrderMongoId",
+        select: `
+      -paymentAdvance
+      -paymentPercent1 -paymentType1 -paymentType1other -paymentAmount1 -payemntCGBG1 -paymentrecieved1
+      -paymentPercent2 -paymentType2 -paymentType2other -paymentAmount2 -payemntCGBG2 -paymentrecieved2
+      -paymentPercent3 -paymentType3 -paymentType3other -paymentAmount3 -payemntCGBG3 -paymentrecieved3
+      -retentionYesNo -retentionPercent -retentionAmount -retentionDocs -retentinoDocsOther 
+      -retentionType -retentionPeriod
+      -__v
+    `,
+      })
+      .sort({
+        updatedAt: -1,
+        createdAt: -1,
+      });
+    return res.json({
+      success: true,
+      message: "Data fetched successfully",
+      totalItems: projects.length,
+      data: projects,
+    });
+  } catch (err) {
     return res.status(500).json({ success: false, error: "Server error" });
   }
 };
@@ -1641,64 +1707,7 @@ export const ProjectsFetchDevById = async (req, res) => {
   }
 };
 
-export const allProjectsFetchDev = async (req, res) => {
-  const search = req.query.search || "";
 
-  try {
-    const filter = {
-      Development: { $in: ["LOGIC", "SCADA", "BOTH"] },
-    };
-
-    if (search) {
-      filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
-    }
-
-    const projectSelectFields = {
-      jobNumber: 1,
-      projectName: 1,
-      status: 1,
-      visitDate: 1,
-      Development: 1,
-      createdAt: 1,
-      updatedAt: 1,
-      OrderMongoId: 1,
-      isPlanRecord: 1,
-      service: 1,
-      Development: 1,
-      LogicPlace: 1,
-      ScadaPlace: 1,
-      PlanDetails: 1,
-      devScope: 1,
-      commScope: 1,
-    };
-
-    const projects = await ProjectModel.find(filter, projectSelectFields)
-      .populate({
-        path: "OrderMongoId",
-        select: `
-      -paymentAdvance
-      -paymentPercent1 -paymentType1 -paymentType1other -paymentAmount1 -payemntCGBG1 -paymentrecieved1
-      -paymentPercent2 -paymentType2 -paymentType2other -paymentAmount2 -payemntCGBG2 -paymentrecieved2
-      -paymentPercent3 -paymentType3 -paymentType3other -paymentAmount3 -payemntCGBG3 -paymentrecieved3
-      -retentionYesNo -retentionPercent -retentionAmount -retentionDocs -retentinoDocsOther 
-      -retentionType -retentionPeriod
-      -__v
-    `,
-      })
-      .sort({
-        updatedAt: -1,
-        createdAt: -1,
-      });
-    return res.json({
-      success: true,
-      message: "Data fetched successfully",
-      totalItems: projects.length,
-      data: projects,
-    });
-  } catch (err) {
-    return res.status(500).json({ success: false, error: "Server error" });
-  }
-};
 
 export const getProjectOverview = async (req, res) => {
   try {

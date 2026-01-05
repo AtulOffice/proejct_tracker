@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 const EngineerWorkStatus = ({ project, onClose }) => {
+  console.log(project)
   const [loading, setLoading] = useState(false)
   const { user } = useAppContext()
   const userformval = {
+    progressPercent: 0,
     workstatus: "",
     currentEngineerName: "",
     projectName: "",
@@ -28,6 +30,7 @@ const EngineerWorkStatus = ({ project, onClose }) => {
   const [formData, setFormData] = useState(userformval);
 
   useEffect(() => {
+
     setFormData((prev) => ({ ...prev, jobNumber: project?.jobNumber || "", orderNumber: project?.orderNumber || "", projectName: project?.projectName || "", location: project?.location || "" }))
   }, [project])
 
@@ -78,12 +81,39 @@ const EngineerWorkStatus = ({ project, onClose }) => {
   };
 
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const handleChange = (eOrName, manualValue) => {
+    if (eOrName?.target) {
+      const { name, value, type, checked } = eOrName.target;
+
+      let finalValue = type === "checkbox" ? checked : value;
+
+      if (name === "progressPercent") {
+        let num = Math.max(0, Math.min(100, parseInt(value, 10)));
+
+        setFormData((prev) => {
+          return {
+            ...prev,
+            progressPercent: num,
+
+          };
+        });
+        return;
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: finalValue,
+      }));
+      return;
+    }
+
+
+    if (typeof eOrName === "string") {
+      setFormData((prev) => ({
+        ...prev,
+        [eOrName]: manualValue,
+      }));
+    }
   };
 
   return (

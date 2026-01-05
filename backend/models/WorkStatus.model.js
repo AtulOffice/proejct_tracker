@@ -1,6 +1,38 @@
 import mongoose from "mongoose";
 import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
+// for future
+const ProjectProgressSchema = new mongoose.Schema(
+  {
+    projectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
+      required: true,
+      unique: true,
+    },
+
+    overallCompletionPercent: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 0,
+    },
+
+    status: {
+      type: String,
+      enum: ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "ON_HOLD"],
+      default: "NOT_STARTED",
+    },
+
+    lastUpdatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+    },
+  },
+  { timestamps: true }
+);
+
+
 const WrkStatusSchema = new mongoose.Schema(
   {
     jobNumber: {
@@ -29,6 +61,12 @@ const WrkStatusSchema = new mongoose.Schema(
     WorkStatus: {
       type: String,
       required: true,
+    },
+    progressPercent: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 0,
     },
     StartChecklisttId: {
       type: mongoose.Schema.Types.ObjectId,

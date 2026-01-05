@@ -14,6 +14,7 @@ import { FaEye } from "react-icons/fa";
 import { SlDocs } from "react-icons/sl";
 import { middleEllipsis } from "../utils/middleEliminator";
 import { GiProgression } from "react-icons/gi";
+import toast from "react-hot-toast";
 
 const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editType }) => {
 
@@ -41,6 +42,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   const handleShowProgress = async (entry) => {
     try {
       console.log("data val");
+      toast.success("this feature comming soon");
       return;
       const data = await fetchProgressByforEngineer({
         projectId: entry?.project?._id,
@@ -67,7 +69,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
   const hadleOpenPopup = async (project) => {
     try {
-      const id = project?.OrderMongoId || project?._id || project?.id;
+      const id = project?.OrderMongoId?._id || project?._id || project?.id;
       if (!id) {
         console.log("Invalid project data — ID missing");
         return;
@@ -75,7 +77,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
       let val;
       let orderFlag = false;
       if (project?.OrderMongoId) {
-        val = await fetchbyOrderbyId(project.OrderMongoId);
+        val = await fetchbyOrderbyId(project.OrderMongoId?._id);
         orderFlag = true;
       } else {
         val = await fetchbyProjectbyId(id);
@@ -170,10 +172,10 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       view
                     </th>
                     <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
-                      Docs
+                        {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
                     </th>
                     <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
-                      Edit
+                      {onEditFun === "DEVLOPMENT" ? "PLAN" : "Edit"}
                     </th></>
                 )}
               </tr>
