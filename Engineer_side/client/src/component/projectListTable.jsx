@@ -9,7 +9,7 @@ import EngineerWorkStatus from "./add.work";
 import StartChecklistForm from "./startcheckList";
 
 const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editType }) => {
-
+  console.log(data)
   const printRef = useRef();
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -17,10 +17,10 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   const [start, setStart] = useState(false);
   const [end, setEnd] = useState(false);
   const [work, setWork] = useState(false);
+
   const hadleOpenPopup = async (project) => {
     try {
-      const id = project?.OrderMongoId || project?._id || project?.id;
-      console.log(project)
+      const id = project?.OrderMongoId?._id || project?._id || project?.id;
       if (!id) {
         console.log("Invalid project data — ID missing");
         return;
@@ -28,7 +28,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
       let val;
       let orderFlag = false;
       if (project?.OrderMongoId) {
-        val = await fetchbyOrderbyId(project.OrderMongoId);
+        val = await fetchbyOrderbyId(project.OrderMongoId?._id);
         orderFlag = true;
       } else {
         val = await fetchbyProjectbyId(id);

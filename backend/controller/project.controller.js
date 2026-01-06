@@ -2258,6 +2258,21 @@ export const getEngineerProjects = async (req, res) => {
         },
       },
       { $unwind: { path: "$projectData", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "projectData.OrderMongoId",
+          foreignField: "_id",
+          as: "orderData",
+        },
+      },
+      {
+        $unwind: {
+          path: "$orderData",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
       ...(search ? [{ $match: searchFilter }] : []),
 
       { $sort: { "projectData.updatedAt": -1 } },
@@ -2293,6 +2308,13 @@ export const getEngineerProjects = async (req, res) => {
           visitDate: "$projectData.visitDate",
           createdAt: "$projectData.createdAt",
           updatedAt: "$projectData.updatedAt",
+          OrderMongoId: {
+            $cond: [
+              { $ifNull: ["$orderData._id", false] },
+              { _id: "$orderData._id" },
+              "$$REMOVE"
+            ]
+          }
         },
       },
     ];

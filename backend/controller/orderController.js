@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Order from "../models/orderSheet.model.js";
 import ProjectModel from "../models/Project.model.js";
 
@@ -239,6 +240,14 @@ export const updateOrder = async (req, res) => {
 export const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
+    if (
+      !mongoose.Types.ObjectId.isValid(id)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid id ",
+      });
+    }
 
     const order = await Order.findById(id).populate({
       path: "ProjectDetails",

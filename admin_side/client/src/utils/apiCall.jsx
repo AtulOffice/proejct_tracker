@@ -506,3 +506,32 @@ export const fetchbyOrderbyId = async (id) => {
     throw e;
   }
 };
+
+
+// working fetch
+
+export const fetchAllworkStatusAdmin = async ({ search }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/worksts/fetchAllworkStatus?search=${search}`,
+      { withCredentials: true }
+    );
+    return res.data?.data;
+  } catch (err) {
+    console.error("error while saving", err);
+    throw err;
+  }
+};
+
+export const fetchCommisioningProgressByAdmin = async ({ projectId }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/worksts/fetchAllworkStatusbyProjectforAdmin/${projectId}`,
+      { withCredentials: true }
+    );
+    return res.data?.data;
+  } catch (err) {
+    console.error("Failed to fetch progress report:", err);
+    throw err;
+  }
+};

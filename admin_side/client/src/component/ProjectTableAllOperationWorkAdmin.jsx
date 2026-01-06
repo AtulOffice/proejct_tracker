@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { fetchbyOrderbyId, fetchbyProjectbyId, fetchCommisioningProgressByforEngineer, } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
 import { handlePrint } from "../utils/print";
 import { FaEye, FaTools } from "react-icons/fa";
 import { IoDocumentsOutline } from "react-icons/io5";
-import ProgressShowedWork from "./ProgressShowedWork";
 import { GiProgression } from "react-icons/gi";
 import toast from "react-hot-toast";
+import ProgressShowedWorkAdmin from "./client/src/component/ProgressShowedWorkAdmin";
+import { fetchbyOrderbyId, fetchbyProjectbyId, fetchCommisioningProgressByAdmin } from "../utils/apiCall";
 
-const ProjectTableAllOperationWork = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
-
+const ProjectTableAllOperationWorkAdmin = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
     const printRef = useRef();
     const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
@@ -25,7 +24,6 @@ const ProjectTableAllOperationWork = ({ data, tableVal, isEdit, onEditFun, print
 
     const hadleOpenPopup = async (project) => {
         try {
-            console.log(project)
             const id = project?.OrderMongoId?._id || project?._id || project?.id;
             if (!id) {
                 console.log("Invalid project data — ID missing");
@@ -78,7 +76,7 @@ const ProjectTableAllOperationWork = ({ data, tableVal, isEdit, onEditFun, print
 
     const handleShowProgressWork = async (entry) => {
         try {
-            const data = await fetchCommisioningProgressByforEngineer({
+            const data = await fetchCommisioningProgressByAdmin({
                 projectId: entry?._id
             });
             setProgressData(data);
@@ -94,7 +92,7 @@ const ProjectTableAllOperationWork = ({ data, tableVal, isEdit, onEditFun, print
         <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
 
             {progress && progressData && (
-                <ProgressShowedWork project={selectedProject} onClose={() => setPorgress(false)} progressData={progressData} />
+                <ProgressShowedWorkAdmin project={selectedProject} onClose={() => setPorgress(false)} progressData={progressData} />
             )}
 
             {
@@ -322,4 +320,4 @@ const ProjectTableAllOperationWork = ({ data, tableVal, isEdit, onEditFun, print
     );
 };
 
-export default ProjectTableAllOperationWork;
+export default ProjectTableAllOperationWorkAdmin;

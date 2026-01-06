@@ -82,7 +82,7 @@ const WrkStatusSchema = new mongoose.Schema(
     },
     submittedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "engineerrecords",
     },
   },
   {

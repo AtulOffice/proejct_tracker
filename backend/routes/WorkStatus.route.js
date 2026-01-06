@@ -2,9 +2,10 @@ import express from "express";
 import {
   deleteWorkStatus,
   getAllWorkStatus,
+  getAllWorkStatusByProjectAndEngineer,
+  getAllWorkStatusByProjectGroupedByEngineer,
   getDistinctProjectsByEngineerWithLastStatus,
-  getDistinctProjectsWithLastSubmission,
-  getLatestWorkStatusByProjectId,
+  getDistinctProjectsWithLastStatus,
   getLatestWorkStatusForAllProjects,
   getWorkStatusById,
   updateWorkStatus,
@@ -56,13 +57,15 @@ WorkstsRouter.get(
   workStatusPaginationByEngineer
 );
 
-WorkstsRouter.get(
-  "/getLatestworkSubmissionbyProjectId/:projectId",
-  refreshTokenEngineerMiddleware,
-  authenticateEngineer,
-  getLatestWorkStatusByProjectId
-);
+// this make for inidividual api call
+// WorkstsRouter.get(
+//   "/getLatestworkSubmissionbyProjectId/:projectId",
+//   refreshTokenEngineerMiddleware,
+//   authenticateEngineer,
+//   getLatestWorkStatusByProjectId
+// );
 
+// this make same for reduce api call
 WorkstsRouter.get(
   "/getLatestworkSubmission",
   refreshTokenEngineerMiddleware,
@@ -75,6 +78,27 @@ WorkstsRouter.get(
   refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getDistinctProjectsByEngineerWithLastStatus
+);
+
+WorkstsRouter.get(
+  "/fetchAllworkStatusbyProjectforengineer/:projectId",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getAllWorkStatusByProjectAndEngineer
+);
+
+WorkstsRouter.get(
+  "/fetchAllworkStatusbyProjectforAdmin/:projectId",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getAllWorkStatusByProjectGroupedByEngineer
+);
+
+WorkstsRouter.get(
+  "/fetchAllworkStatus",
+  refreshTokenEngineerMiddleware,
+  authenticateEngineer,
+  getDistinctProjectsWithLastStatus
 );
 
 

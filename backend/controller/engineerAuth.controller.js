@@ -137,7 +137,6 @@ export const forgotEngineer = async (req, res) => {
       text: otp,
       html: otpHtml(otp),
     });
-
     res.json({ success: true, message: "OTP sent successfully" });
   } catch (err) {
     console.error("Forgot Engineer Error:", err);

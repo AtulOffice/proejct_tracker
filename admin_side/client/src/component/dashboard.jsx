@@ -22,6 +22,7 @@ import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
+  fetchAllworkStatusAdmin,
   fetchProjectOveriew,
   fetchProjectsUrgentAction,
   fetfchProejctADev,
@@ -124,7 +125,24 @@ const AdminDashboard = () => {
     { head: "Visit", val: "visitDate" },
     { head: "LOGIC/SCADA", val: "Development" },
   ];
-
+  const worktActionTab = [
+    {
+      head: "Project",
+      val: "projectName",
+    },
+    {
+      head: "JOB ID",
+      val: "jobNumber",
+    },
+    {
+      head: "LAST REPORT",
+      val: "submittedAt",
+    },
+    {
+      head: "PROGRESS",
+      val: "progressPercent",
+    },
+  ];
   const ProjectActionTab = [
     {
       head: "Project Name",
@@ -193,10 +211,18 @@ const AdminDashboard = () => {
         );
       case "nine":
         return (
-          <ProjectCatogary
-            key={"work status"}
-            workStatus={true}
-            title="WORK STATUS"
+          // <ProjectCatogary
+          //   key={"work status"}
+          //   workStatus={true}
+          //   title="WORK STATUS"
+          // />
+          <ProjectList
+            key={"WORKING"}
+            tableVal={worktActionTab}
+            fetchFun={fetchAllworkStatusAdmin}
+            isEdit={true}
+            onEditFun="WORKING"
+            printTitle="WORKING REPORT"
           />
         );
       case "ten":
@@ -556,7 +582,7 @@ const AdminDashboard = () => {
                       ASSESSMENTS
                     </div>
                   </li>
-                  <li>
+                  {/* <li>
                     <div
                       onClick={() => {
                         handleActiveBar("fourteen");
@@ -568,11 +594,11 @@ const AdminDashboard = () => {
                       <GoProjectRoadmap className="mr-3" size={20} />
                       PROJECT DEV STATUS
                     </div>
-                  </li>
+                  </li> */}
                   {/* <li>
                     <div
                       onClick={() => {
-                        handleActiveBar("two");
+                        handleActiveBarF("two");
                         setSidebarOpen(false);
                       }}
                       className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""

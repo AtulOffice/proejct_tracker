@@ -123,6 +123,7 @@ const LoginPage = () => {
       }
     } finally {
       setIsOtopLoading(false);
+      setIsOpen(false)
     }
   };
 
@@ -306,7 +307,7 @@ const LoginPage = () => {
               >
                 {isOtpLoading
                   ? "Processing..."
-                  : isFun
+                  : (isFun && isOpen)
                     ? "Save"
                     : "Request OTP"}
               </button>

@@ -1,5 +1,4 @@
 export const filterProjectsUtils = ({ data, timeFilter, workBool = false }) => {
-
   return data.filter((project) => {
     const projectDate = new Date(
       workBool ? project.createdAt : project.createdAt

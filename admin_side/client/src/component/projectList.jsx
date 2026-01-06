@@ -5,6 +5,7 @@ import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import ProjectTableAll from "./projectListTable";
+import ProjectTableAllOperationWorkAdmin from "./ProjectTableAllOperationWorkAdmin";
 
 const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
   const { toggle } = useAppContext();
@@ -65,7 +66,7 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
   if (!data) {
     return <LoadingSkeltionAll />;
   }
-
+  
   return (
     <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
 
@@ -83,13 +84,19 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
 
       <div className="flex-1 w-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200">
         {filteredProjects.length > 0 ? (
-          <ProjectTableAll
+          onEditFun === "WORKING" ? (<ProjectTableAllOperationWorkAdmin
             data={filteredProjects}
             tableVal={tableVal}
             isEdit={isEdit}
             onEditFun={onEditFun}
             printTitle={printTitle}
-          />
+          />) : (<ProjectTableAll
+            data={filteredProjects}
+            tableVal={tableVal}
+            isEdit={isEdit}
+            onEditFun={onEditFun}
+            printTitle={printTitle}
+          />)
         ) : (
           <Notfound />
         )}

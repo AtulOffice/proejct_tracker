@@ -39,17 +39,19 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
     };
   }, []);
 
+
+  // this funciton make some change
   const handleShowProgress = async (entry) => {
     try {
-      console.log("data val");
       toast.success("this feature comming soon");
       return;
-      const data = await fetchProgressByforEngineer({
-        projectId: entry?.project?._id,
-        type: onEditFun,
-      });
-      setProgressData(data);
-      setPorgress(true);
+      // const data = await fetchProgressByforEngineer({
+      //   projectId: entry?.project?._id,
+      //   type: onEditFun,
+      // });
+      // console.log(data)
+      // setProgressData(data);
+      // setPorgress(true);
     } catch (e) {
       toast.error(e.response.data.message || "some error occured");
       setPorgress(false);
@@ -172,7 +174,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       view
                     </th>
                     <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
-                        {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
+                      {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
                     </th>
                     <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
                       {onEditFun === "DEVLOPMENT" ? "PLAN" : "Edit"}
