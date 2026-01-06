@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 const EngineerWorkStatus = ({ project, onClose }) => {
-  console.log(project)
   const [loading, setLoading] = useState(false)
   const { user } = useAppContext()
   const userformval = {

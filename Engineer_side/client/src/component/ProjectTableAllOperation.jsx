@@ -184,7 +184,7 @@ const ProjectTableAllOperation = ({ data, tableVal, isEdit, onEditFun, printTitl
                                     {tableVal.map((col, j) => {
                                         const val = onEditFun === "WORKING" ? row?.[col.val] : row?.project?.[col.val];
                                         const display = formatValue(val, col.val);
-                                        console.log(display)
+
                                         return (
                                             <td
                                                 key={j}
@@ -350,7 +350,6 @@ focus:outline-none focus:ring-4 focus:ring-red-400
                         <div className="space-y-2 text-sm text-blue-800">
                             {tableVal.slice(1).map((col, i) => {
                                 const val = project[col.val];
-                                console.log(val)
                                 const display = formatValue(val, col.val);
                                 return (
                                     <div key={i}>
