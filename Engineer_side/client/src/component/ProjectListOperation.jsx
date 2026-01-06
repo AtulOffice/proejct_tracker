@@ -8,7 +8,7 @@ import ProjectTableAllOperation from "./ProjectTableAllOperation";
 import ProjectTableAllOperationWork from "./ProjectTableAllOperationWork";
 
 const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
-    const { toggle, user } = useAppContext();
+    const { toggle } = useAppContext();
     const [searchTerm, setSearchTerm] = useState("");
     const [timeFilter, setTimeFilter] = useState("all");
     const [filteredProjects, setFilteredProjects] = useState([]);
@@ -50,11 +50,14 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
 
     useEffect(() => {
         if (!data) return;
+
+        const isPopulateSection = ["LOGIC", "SCADA", "TESTING"].includes(onEditFun);
+
         const filterfun = setTimeout(() => {
             const filtered = filterProjectsUtils({
                 data: data,
                 timeFilter,
-                isPopulateSection: true
+                isPopulateSection: isPopulateSection
             });
             setFilteredProjects(filtered);
         }, 100);

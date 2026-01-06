@@ -1,4 +1,5 @@
 export const filterProjectsUtils = ({ data, timeFilter, isPopulateSection = false }) => {
+  console.log(data)
   return data.filter((project) => {
     const createdAt =
       isPopulateSection
