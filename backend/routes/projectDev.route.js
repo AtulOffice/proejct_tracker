@@ -8,7 +8,7 @@ import {
   ProjectStatusSave,
   PaginationStatusprog,
   ProjectStatusfetchbyJobId,
-} from "../controller/projectDev.controler.js";
+} from "../controller/projectDev.controller.js";
 import { authenticate } from "../middlware/authaticate.js";
 import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
 
