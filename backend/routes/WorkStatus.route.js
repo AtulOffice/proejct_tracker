@@ -89,15 +89,15 @@ WorkstsRouter.get(
 
 WorkstsRouter.get(
   "/fetchAllworkStatusbyProjectforAdmin/:projectId",
-  refreshTokenEngineerMiddleware,
-  authenticateEngineer,
+  refreshTokenMiddleware,
+  authenticate,
   getAllWorkStatusByProjectGroupedByEngineer
 );
 
 WorkstsRouter.get(
   "/fetchAllworkStatus",
-  refreshTokenEngineerMiddleware,
-  authenticateEngineer,
+  refreshTokenMiddleware,
+  authenticate,
   getDistinctProjectsWithLastStatus
 );
 
