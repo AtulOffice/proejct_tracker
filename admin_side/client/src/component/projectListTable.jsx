@@ -51,11 +51,9 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
         toast.error("there is no plan related this project")
         return;
       }
-      console.log(entry?.PlanDetails)
       const data = await getAdminProjectProgressByPlanning({
         planId: entry?.PlanDetails
       });
-      console.log(data)
       setProgressData(data);
       setPorgress(true);
     } catch (e) {
@@ -365,7 +363,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
         {data.map((project, indx) => {
           const isCancelled = project?.isCancelled === true;
 
-
           return (
             <div
               key={indx}
@@ -375,15 +372,20 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                   : "bg-linear-to-br from-blue-50 via-white to-indigo-50 border-blue-200 hover:scale-[1.02] cursor-pointer"
                 }`}
             >
+              {/* HEADER */}
               <div className="flex items-center justify-between mb-3">
+                {/* TITLE */}
                 <div
                   className="text-base font-bold truncate max-w-[70%]"
                   title={project[tableVal[0]?.val]}
                 >
                   {middleEllipsis(project[tableVal[0]?.val])}
                 </div>
+
+                {/* ACTION BUTTONS */}
                 {isEdit && (
                   <div className={`flex items-center gap-2 ${isCancelled ? "opacity-60" : ""}`}>
+                    {/* VIEW */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -394,6 +396,28 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                     >
                       <FaEye size={18} />
                     </button>
+
+                    {/* DOCS / PROGRESS */}
+                    {!isCancelled && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEditFun === "DEVLOPMENT"
+                            ? handleShowProgress(project)
+                            : handleDocsOpen(project);
+                        }}
+                        className="p-2 rounded-lg bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white shadow-md hover:scale-105 transition"
+                        title={onEditFun === "DEVLOPMENT" ? "Progress" : "Documents"}
+                      >
+                        {onEditFun === "DEVLOPMENT" ? (
+                          <GiProgression size={18} />
+                        ) : (
+                          <SlDocs size={18} />
+                        )}
+                      </button>
+                    )}
+
+                    {/* EDIT / ASSIGN / URGENT */}
                     {!isCancelled && (
                       <>
                         {onEditFun === "DEVLOPMENT" ? (
@@ -439,6 +463,8 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                   </div>
                 )}
               </div>
+
+              {/* DETAILS */}
               <div className="space-y-2 text-sm">
                 {tableVal.slice(1).map((col, i) => {
                   const val = project[col.val];
@@ -448,6 +474,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                     : col.val.toLowerCase().includes("date") && val
                       ? new Date(val).toISOString().split("T")[0]
                       : val ?? "—";
+
                   display = String(display);
 
                   const hideFull =
@@ -456,22 +483,22 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                     col.val === "endUser";
 
                   return (
-                    <div key={i}>
+                    <div key={i} className="flex justify-between gap-2">
                       <span className="font-medium text-indigo-600">
                         {col.head}:
                       </span>
-                      <span className="ml-2">
+                      <span className="text-right">
                         {hideFull ? middleEllipsis(display, 4, 3) : display}
                       </span>
                     </div>
                   );
                 })}
               </div>
-
             </div>
           );
         })}
       </div>
+
 
       <div className="bg-linear-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
         <div className="flex flex-wrap items-center justify-between gap-y-2">

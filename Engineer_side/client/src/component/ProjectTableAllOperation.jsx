@@ -282,88 +282,134 @@ focus:outline-none focus:ring-4 focus:ring-red-400
 
             {/* sm view */}
             <div className="md:hidden space-y-4 p-2">
-                {data.map((project, indx) => (
-                    <div
-                        key={indx}
-                        onClick={() => hadleOpenPopup(project)}
-                        className="bg-linear-to-br from-blue-50 via-white to-indigo-50 shadow-lg rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
-                    >
-                        <div className="flex items-center justify-between mb-3">
-                            <div
-                                className="text-base font-bold text-indigo-700 truncate max-w-[70%]"
-                                title={project[tableVal[0]?.val]}
-                            >
-                                {project[tableVal[0]?.val]}
-                            </div>
-                            {isEdit && (
-                                <div className="flex items-center justify-end gap-3">
-                                    {/* START */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            openAction("start", project);
-                                        }}
-                                        className="
-        flex items-center justify-center
-        bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
-        hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
-        text-white p-2 rounded-full shadow-lg
-        transition-all duration-200
-        hover:scale-110 hover:-rotate-6
-        ring-2 ring-transparent hover:ring-blue-300
-        focus:outline-none focus:ring-4 focus:ring-blue-400
-      "
-                                        aria-label="Start"
-                                        type="button"
-                                    >
-                                        <IoDocumentsOutline className="w-5 h-5 drop-shadow" />
-                                    </button>
+                {data?.map((row, indx) => {
+                    // Same data source logic as desktop
+                    const projectData =
+                        onEditFun === "WORKING" ? row : row?.project;
 
-                                    {/* WORK */}
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            openAction("work", project);
-                                        }}
-                                        className="
-        flex items-center justify-center
-        bg-gradient-to-tr from-red-500 via-pink-500 to-yellow-500
-        hover:from-red-600 hover:via-pink-600 hover:to-yellow-600
-        text-white p-2 rounded-full shadow-lg
-        transition-all duration-200
-        hover:scale-110 hover:rotate-6
-        ring-2 ring-transparent hover:ring-red-300
-        focus:outline-none focus:ring-4 focus:ring-red-400
-      "
-                                        aria-label="Work"
-                                        type="button"
-                                    >
-                                        <FaTools className="w-5 h-5 drop-shadow" />
-                                    </button>
-
-
+                    return (
+                        <div
+                            key={indx}
+                            onClick={() =>
+                                projectData && hadleOpenPopup
+                                    ? hadleOpenPopup(projectData)
+                                    : null
+                            }
+                            className="
+          bg-linear-to-br from-blue-50 via-white to-indigo-50
+          shadow-lg rounded-xl p-4 border border-blue-200
+          transition-transform hover:scale-[1.02]
+        "
+                        >
+                            {/* HEADER */}
+                            <div className="flex items-center justify-between mb-3">
+                                {/* TITLE */}
+                                <div
+                                    className="text-base font-bold text-indigo-700 truncate max-w-[70%]"
+                                    title={projectData?.[tableVal[0]?.val]}
+                                >
+                                    {formatValue(
+                                        projectData?.[tableVal[0]?.val],
+                                        tableVal[0]?.val
+                                    )}
                                 </div>
-                            )}
 
-                        </div>
+                                {/* ACTION BUTTONS */}
+                                {isEdit && (
+                                    <div className="flex items-center justify-end gap-3">
+                                        {/* VIEW */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                openAction("start", row);
+                                            }}
+                                            className="
+                  flex items-center justify-center
+                  bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
+                  hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
+                  text-white p-2 rounded-full shadow-lg
+                  transition-all duration-200
+                  hover:scale-110 hover:-rotate-6
+                  ring-2 ring-transparent hover:ring-blue-300
+                  focus:outline-none focus:ring-4 focus:ring-blue-400
+                "
+                                            aria-label="View"
+                                            type="button"
+                                        >
+                                            <FaEye className="w-5 h-5 drop-shadow" />
+                                        </button>
 
-                        <div className="space-y-2 text-sm text-blue-800">
-                            {tableVal.slice(1).map((col, i) => {
-                                const val = project[col.val];
-                                const display = formatValue(val, col.val);
-                                return (
-                                    <div key={i}>
-                                        <span className="font-medium text-indigo-600">
-                                            {col.head}:
-                                        </span>
-                                        <span className="ml-2">{display}</span>
+                                        {/* PROGRESS */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleShowProgress(row);
+                                            }}
+                                            className="
+                  flex items-center justify-center
+                  bg-gradient-to-tr from-green-500 via-emerald-500 to-lime-500
+                  hover:from-green-600 hover:via-emerald-600 hover:to-lime-600
+                  text-white p-2 rounded-full shadow-lg
+                  transition-all duration-200
+                  hover:scale-110 hover:-rotate-6
+                  ring-2 ring-transparent hover:ring-green-300
+                  focus:outline-none focus:ring-4 focus:ring-green-400
+                "
+                                            aria-label="Progress"
+                                            type="button"
+                                        >
+                                            <GiProgression className="w-5 h-5 drop-shadow" />
+                                        </button>
+
+                                        {/* ACTION (ONLY IF NOT WORKING) */}
+                                        {onEditFun !== "WORKING" && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleRoutePlan(onEditFun, row);
+                                                }}
+                                                className="
+                    flex items-center justify-center
+                    bg-gradient-to-tr from-red-500 via-pink-500 to-yellow-500
+                    hover:from-red-600 hover:via-pink-600 hover:to-yellow-600
+                    text-white p-2 rounded-full shadow-lg
+                    transition-all duration-200
+                    hover:scale-110 hover:rotate-6
+                    ring-2 ring-transparent hover:ring-red-300
+                    focus:outline-none focus:ring-4 focus:ring-red-400
+                  "
+                                                aria-label="Action"
+                                                type="button"
+                                            >
+                                                <FaTools className="w-5 h-5 drop-shadow" />
+                                            </button>
+                                        )}
                                     </div>
-                                );
-                            })}
+                                )}
+                            </div>
+
+                            {/* DETAILS */}
+                            <div className="space-y-2 text-sm text-blue-800">
+                                {tableVal.slice(1).map((col, i) => {
+                                    const val = projectData?.[col.val];
+                                    const display = formatValue(val, col.val);
+
+                                    return (
+                                        <div key={i}>
+                                            <span className="font-medium text-indigo-600">
+                                                {col.head}:
+                                            </span>
+                                            <span className="ml-2">{display}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
+
+
             <div className="bg-linear-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
                 <div className="flex flex-wrap items-center justify-between gap-y-2">
                     <p className="text-base text-blue-700">

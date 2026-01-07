@@ -104,8 +104,6 @@ const ProgressShowed = ({ progressData, onClose }) => {
                         </button>
                     </div>
                 </div>
-
-                {/* Content */}
                 <div className="p-8 max-h-[75vh] overflow-y-auto bg-gray-50">
                     {sections.length === 0 ? (
                         <div className="text-center py-16">
@@ -124,7 +122,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                         <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
                                             <div
                                                 onClick={() => toggleSection(sectionId)}
-                                                className="cursor-pointer bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200 hover:from-gray-100 hover:to-gray-50 transition-all"
+                                                className="cursor-pointer bg-gradient-to-r from-gray-500 to-gray-100 px-6 py-4 border-b border-gray-200 hover:from-gray-100 hover:to-gray-500 transition-all"
                                             >
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-4 flex-1">
@@ -160,8 +158,6 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            {/* Section Content */}
                                             {isExpanded && (
                                                 <div className="p-6 space-y-6">
                                                     {["logic", "scada", "testing"].map((type) => {
@@ -170,7 +166,6 @@ const ProgressShowed = ({ progressData, onClose }) => {
 
                                                         return (
                                                             <div key={type} className="space-y-4">
-                                                                {/* Type Header */}
                                                                 <div className={`flex items-center gap-3 px-4 py-3 bg-gradient-to-r ${getTypeColor(type)} rounded-lg shadow-sm`}>
                                                                     <span className="text-2xl">{getTypeIcon(type)}</span>
                                                                     <h4 className="uppercase text-sm font-bold text-white tracking-wider">
@@ -180,8 +175,6 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                                         {engineers.length} {engineers.length === 1 ? "Engineer" : "Engineers"}
                                                                     </span>
                                                                 </div>
-
-                                                                {/* Engineers */}
                                                                 {engineers.map((engineer) => {
                                                                     const latestProgress = engineer.progressReports?.length > 0
                                                                         ? engineer.progressReports[engineer.progressReports.length - 1].actualCompletionPercent
@@ -192,7 +185,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                                             key={engineer.engineerId}
                                                                             className="border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 transition-all bg-white shadow-sm"
                                                                         >
-                                                                            {/* Engineer Header */}
+                                                            
                                                                             <div className="bg-gradient-to-r from-gray-50 to-white px-5 py-3 border-b border-gray-200">
                                                                                 <div className="flex items-center justify-between">
                                                                                     <div className="flex items-center gap-3">
@@ -218,8 +211,6 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-
-                                                                            {/* Reports Table */}
                                                                             <div className="overflow-x-auto">
                                                                                 <table className="w-full text-sm">
                                                                                     <thead className="bg-gray-100">
@@ -227,7 +218,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                                                             <th className="px-4 py-3 text-center">Progress</th>
                                                                                             <th className="px-4 py-3 text-center">Report Date</th>
                                                                                             <th className="px-4 py-3 text-center">Completion Date</th>
-                                                                                            <th className="px-4 py-3 text-left">Remarks</th>
+                                                                                            <th className="px-4 py-3 text-left">Notes</th>
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody className="divide-y divide-gray-200">
@@ -257,7 +248,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                                                                 </td>
                                                                                                 <td className="px-4 py-3">
                                                                                                     <p className="text-gray-600 leading-relaxed">
-                                                                                                        {truncate(row.remarks, 80)}
+                                                                                                        {truncate(row.remarks, 10)}
                                                                                                     </p>
                                                                                                 </td>
                                                                                             </tr>
@@ -274,15 +265,11 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                 </div>
                                             )}
                                         </div>
-
-                                        {/* Section Divider - Only between sections */}
                                         {sectionIndex < sections.length - 1 && (
                                             <div className="relative flex items-center justify-center py-6">
-                                                {/* Thicker dashed line */}
                                                 <div className="absolute inset-0 flex items-center">
                                                     <div className="w-full border-t-4 border-dashed border-gray-400"></div>
                                                 </div>
-                                                {/* Larger center badge */}
                                                 <div className="relative bg-white px-6 py-3 rounded-full border-4 border-gray-400 shadow-lg">
                                                     <div className="flex items-center gap-2">
                                                         <span className="text-gray-500 text-lg font-bold">Next Section</span>

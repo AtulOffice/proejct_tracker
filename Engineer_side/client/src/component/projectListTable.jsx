@@ -9,7 +9,6 @@ import EngineerWorkStatus from "./add.work";
 import StartChecklistForm from "./startcheckList";
 
 const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editType }) => {
-  console.log(data)
   const printRef = useRef();
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
