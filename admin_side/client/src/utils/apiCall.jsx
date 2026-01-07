@@ -140,6 +140,7 @@ export const fetfchProejctADev = async ({ search }) => {
     throw err;
   }
 };
+
 export const saveAllEngineers = async (data) => {
   try {
     const res = await axios.post(
@@ -535,3 +536,17 @@ export const fetchCommisioningProgressByAdmin = async ({ projectId }) => {
     throw err;
   }
 };
+
+export const getAdminProjectProgressByPlanning = async ({ planId }) => {
+  try {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/getAdminProjectProgressByPlanning/${planId}`,
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch progress report:", err);
+    throw err;
+  }
+};
+

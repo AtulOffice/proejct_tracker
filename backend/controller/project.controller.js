@@ -2346,54 +2346,102 @@ export const getEngineerProjects = async (req, res) => {
 export const getAdminProjectProgressByPlanning = async (req, res) => {
   try {
     const { planningId } = req.params;
+
     if (!planningId) {
       return res.status(400).json({
         success: false,
         message: "planningId is required",
       });
     }
+
     const plan = await PlanningModel.findById(planningId)
       .populate("allEngineers", "name email empId developmentProjectList")
       .lean();
+
     if (!plan) {
       return res.status(404).json({
         success: false,
         message: "Planning not found",
       });
     }
+
     const projectId = plan.ProjectDetails;
-    const progressReports = await EngineerProgressReport.find({
-      projectId,
-    })
+
+    const progressReports = await EngineerProgressReport.find({ projectId })
       .populate("submittedBy", "name email empId")
       .lean();
-    const TYPES = ["documents", "logic", "scada", "testing"];
+    const reportMap = {};
+    for (const r of progressReports) {
+      const key = `${r.submittedBy._id}_${r.SectionId}_${r.phaseId}`;
+      if (!reportMap[key]) reportMap[key] = [];
+      reportMap[key].push(r);
+    }
+
+    const TYPES = ["logic", "scada", "testing"];
+    const sectionMap = {};
     plan.allEngineers.forEach((engineer) => {
       TYPES.forEach((type) => {
-        (engineer.developmentProjectList?.[type] || []).forEach((proj) => {
-          if (proj.project.toString() !== projectId.toString()) return;
-          proj.phases.forEach((phase) => {
-            const phaseProgress = progressReports.filter(
-              (r) =>
-                r.phaseId?.toString() === phase._id.toString() &&
-                r.SectionId?.toString() === proj._id.toString() &&
-                r.submittedBy?._id.toString() === engineer._id.toString()
+        const devSections = engineer.developmentProjectList?.[type] || [];
+
+        devSections.forEach((section) => {
+          if (section.project.toString() !== projectId.toString()) return;
+
+          section.phases.forEach((phase) => {
+            const sectionName = phase.sectionName || "Unnamed Section";
+            const phaseIndex = phase.phaseIndex;
+
+            if (!sectionMap[sectionName]) {
+              sectionMap[sectionName] = {
+                sectionName,
+                phaseIndex,
+                logic: { engineers: [] },
+                scada: { engineers: [] },
+                testing: { engineers: [] },
+              };
+            }
+
+            const key = `${engineer._id}_${section._id}_${phase._id}`;
+            const reports = reportMap[key] || [];
+
+            if (reports.length === 0) return;
+
+            const typeBucket = sectionMap[sectionName][type];
+
+            let engineerEntry = typeBucket.engineers.find(
+              (e) => e.engineerId.toString() === engineer._id.toString()
             );
-            phase.progressReports = phaseProgress;
+
+            if (!engineerEntry) {
+              engineerEntry = {
+                engineerId: engineer._id,
+                name: engineer.name,
+                email: engineer.email,
+                empId: engineer.empId,
+                progressReports: [],
+              };
+              typeBucket.engineers.push(engineerEntry);
+            }
+
+            engineerEntry.progressReports.push(...reports);
           });
         });
       });
     });
+
+    const orderedSections = Object.values(sectionMap).sort(
+      (a, b) => a.phaseIndex - b.phaseIndex
+    );
+
     return res.status(200).json({
       success: true,
       planningId,
       projectId,
       projectName: plan.projectName,
       jobNumber: plan.jobNumber,
-      allEngineers: plan.allEngineers,
+      sections: orderedSections,
     });
   } catch (error) {
-    console.error(error);
+    console.error("getAdminProjectProgressByPlanning error:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",

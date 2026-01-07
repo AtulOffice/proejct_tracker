@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 
-import { fetchbyOrderbyId, fetchbyProjectbyId } from "../utils/apiCall";
+import { fetchbyOrderbyId, fetchbyProjectbyId, getAdminProjectProgressByPlanning } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
 import { MdEdit, MdEngineering } from "react-icons/md";
@@ -10,6 +10,7 @@ import EngineerForm from "./ProjectFormAction";
 import { useNavigate } from "react-router-dom";
 import { LuNotepadText } from "react-icons/lu";
 import ProjectTimelineForm from "../utils/project.Planning";
+import ProgressShowedAdmin from "./ProgressShowedAdmin";
 import { FaEye } from "react-icons/fa";
 import { SlDocs } from "react-icons/sl";
 import { middleEllipsis } from "../utils/middleEliminator";
@@ -26,6 +27,9 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   const [open, setOpen] = useState(false);
   const [planopen, setPlanOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState(null);
+  const [progress, setPorgress] = useState(false)
+  const [progressData, setProgressData] = useState()
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -43,15 +47,17 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   // this funciton make some change
   const handleShowProgress = async (entry) => {
     try {
-      toast.success("this feature comming soon");
-      return;
-      // const data = await fetchProgressByforEngineer({
-      //   projectId: entry?.project?._id,
-      //   type: onEditFun,
-      // });
-      // console.log(data)
-      // setProgressData(data);
-      // setPorgress(true);
+      if (!entry?.PlanDetails) {
+        toast.error("there is no plan related this project")
+        return;
+      }
+      console.log(entry?.PlanDetails)
+      const data = await getAdminProjectProgressByPlanning({
+        planId: entry?.PlanDetails
+      });
+      console.log(data)
+      setProgressData(data);
+      setPorgress(true);
     } catch (e) {
       toast.error(e.response.data.message || "some error occured");
       setPorgress(false);
@@ -140,6 +146,11 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
   return (
     <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+
+      {progress && progressData && (
+        <ProgressShowedAdmin project={selectedProject} onClose={() => setPorgress(false)} progressData={progressData} />
+      )}
+
       {selectedProjectForPopup &&
         (isOrderFetched ? (
           <OrderDetailsPopup
@@ -186,8 +197,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((row, i) => {
                 const isCancelled = row?.isCancelled === true;
-
-
                 const disabledBtn =
                   "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed pointer-events-none";
 
@@ -251,37 +260,40 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                         </td>
 
                         {/* DOCS */}
-                        {onEditFun === "DEVLOPMENT" ? <td className="px-6 py-4 text-center">
-                          <button
-                            disabled={isCancelled}
-                            onClick={
-                              isCancelled ? undefined : () => handleShowProgress(row)
-                            }
-                            className={`p-3 rounded-xl transition-all
+                        {onEditFun === "DEVLOPMENT" ?
+                          <td className="px-6 py-4 text-center">
+                            <button
+                              disabled={isCancelled}
+                              onClick={
+                                isCancelled ? undefined : () => handleShowProgress(row)
+                              }
+                              className={`p-3 rounded-xl transition-all
                   ${isCancelled
-                                ? disabledBtn
-                                : "bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white hover:shadow-xl"
-                              }`}
-                            title={isCancelled ? "Action not allowed" : "Documents"}
-                          >
-                            <GiProgression size={18} />
-                          </button>
-                        </td> : <td className="px-6 py-4 text-center">
-                          <button
-                            disabled={isCancelled}
-                            onClick={
-                              isCancelled ? undefined : () => handleDocsOpen(row)
-                            }
-                            className={`p-3 rounded-xl transition-all
+                                  ? disabledBtn
+                                  : "bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white hover:shadow-xl"
+                                }`}
+                              title={isCancelled ? "Action not allowed" : "Documents"}
+                            >
+                              <GiProgression size={18} />
+                            </button>
+                          </td>
+                          :
+                          <td className="px-6 py-4 text-center">
+                            <button
+                              disabled={isCancelled}
+                              onClick={
+                                isCancelled ? undefined : () => handleDocsOpen(row)
+                              }
+                              className={`p-3 rounded-xl transition-all
                   ${isCancelled
-                                ? disabledBtn
-                                : "bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white hover:shadow-xl"
-                              }`}
-                            title={isCancelled ? "Action not allowed" : "Documents"}
-                          >
-                            <SlDocs size={18} />
-                          </button>
-                        </td>}
+                                  ? disabledBtn
+                                  : "bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white hover:shadow-xl"
+                                }`}
+                              title={isCancelled ? "Action not allowed" : "Documents"}
+                            >
+                              <SlDocs size={18} />
+                            </button>
+                          </td>}
 
                         {/* EDIT / ASSIGN */}
                         <td className="px-6 py-4 text-center">

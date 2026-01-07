@@ -135,8 +135,7 @@ const projectSchema = new mongoose.Schema(
     },
     priority: {
       type: String,
-      required: true,
-      enum: ["low", "medium", "high", "critical"],
+      enum: ["low", "medium", "high", "critical", ""],
     },
     lotval: {
       type: Number,
