@@ -337,7 +337,7 @@ export default function ScadaDevelopmentExecution() {
                         {/* Remarks */}
                         <div>
                             <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-gray-700">
-                                Remarks
+                                PROGRESS REPORT
                             </label>
                             <textarea
                                 rows={4}
