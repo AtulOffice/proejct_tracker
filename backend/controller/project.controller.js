@@ -1420,6 +1420,8 @@ export const UrgentProjectAction = async (req, res) => {
         jobNumber: 1,
         status: 1,
         visitDate: 1,
+        createdAt: 1,
+        updatedAt: 1,
         deleveryDate: "$OrderMongoId.deleveryDate",
         service: 1,
         OrderMongoId: "$OrderMongoId._id",

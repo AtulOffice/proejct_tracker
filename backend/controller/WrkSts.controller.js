@@ -687,6 +687,7 @@ export const getDistinctProjectsWithLastStatus = async (req, res) => {
           fromDate: 1,
           toDate: 1,
           createdAt: "$createdAt",
+          updatedAt: "$updatedAt",
           submittedAt: "$createdAt",
           lastSubmittedBy: {
             _id: "$engineer._id",
