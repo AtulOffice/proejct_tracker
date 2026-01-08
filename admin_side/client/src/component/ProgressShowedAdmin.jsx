@@ -113,12 +113,12 @@ const ProgressShowed = ({ progressData, onClose }) => {
 
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-600/80 via-gray-600/80 to-slate-600/80 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-linear-to-br from-gray-600/80 via-gray-600/80 to-slate-600/80 backdrop-blur-sm p-4">
             <div className="absolute inset-0" onClick={onClose} />
 
             <div className="relative w-full max-w-7xl bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-200">
 
-                <div className="relative px-8 py-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 overflow-hidden">
+                <div className="relative px-8 py-6 bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 overflow-hidden">
                     <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
                     <div className="relative flex justify-between items-center">
                         <div>
@@ -138,110 +138,134 @@ const ProgressShowed = ({ progressData, onClose }) => {
                 </div>
 
 
-
-
-
-
                 <div className="p-8 max-h-[75vh] overflow-y-auto bg-gray-50">
-                    {progressData?.planRange?.map((section, sectionIndex) => (
-                        <React.Fragment key={sectionIndex}>
-                            <div className="col-span-2 flex flex-col gap-4 mb-8">
-                                <div className="flex items-center gap-3 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 rounded-2xl p-4 shadow-lg">
-                                    <div>
-                                        <h3 className="text-lg font-bold text-white">
-                                            {section.sectionName}
-                                        </h3>
-                                        <div className="flex gap-3 text-sm font-semibold text-white/90 mt-1.5">
-                                            <span className="flex items-center gap-1.5">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                                {formatDateDDMMYY(section.sectionStartDate)}
-                                            </span>
-                                            <span className="text-white/70 font-bold">→</span>
-                                            <span className="flex items-center gap-1.5">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                                {formatDateDDMMYY(section.sectionEndDate)}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* MASTER TIMELINE - Enhanced */}
-                                <div className="relative h-5 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full overflow-hidden shadow-md border border-gray-200">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-green-400/40 to-emerald-500/40 rounded-full" />
-
-                                    {PHASES.map(({ key, color }) => {
-                                        const phase = section.phases?.[key];
-                                        if (!phase) return null;
-
-                                        const { left, width } = getPhasePosition(
-                                            phase.startDate,
-                                            phase.endDate,
-                                            section.sectionStartDate,
-                                            section.sectionEndDate
-                                        );
-
-                                        return (
-                                            <div
-                                                key={key}
-                                                className={`absolute h-full rounded-full ${color} shadow-lg transition-all duration-300 hover:scale-y-110 hover:shadow-xl`}
-                                                style={{ left, width }}
-                                                title={`${key}: ${phase.startDate} → ${phase.endDate}`}
-                                            />
-                                        );
-                                    })}
-                                </div>
-                                <div className="bg-gradient-to-br from-white via-gray-50 to-white border border-gray-200 rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        {PHASES.map(({ key, color }) => {
-                                            const phase = section.phases?.[key];
-                                            if (!phase) return null;
-                                            return (
-                                                <div
-                                                    key={key}
-                                                    className="flex items-center gap-3 p-2.5 rounded-lg bg-white/60 backdrop-blur-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200 group"
-                                                >
-                                                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${color} shadow-md group-hover:scale-125 transition-transform duration-200`} />
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="font-semibold text-gray-800 capitalize text-xs mb-0.5">
-                                                            {key}
-                                                        </div>
-                                                        <div className="text-[11px] text-gray-600 flex items-center gap-1.5">
-                                                            <span className="truncate">{formatDateDDMMYY(phase.startDate)}</span>
-                                                            <span className="text-gray-400 flex-shrink-0">•</span>
-                                                            <span className="truncate">{formatDateDDMMYY(phase.endDate)}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                    {/* MASTER COLLAPSE HEADER */}
+                    <div
+                        onClick={() => toggleSection('all-plan-sections')}
+                        className="flex items-center justify-between gap-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 rounded-2xl p-4 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 mb-6"
+                    >
+                        <div className="flex items-center gap-3">
+                            <span className="text-2xl">📊</span>
+                            <div>
+                                <h3 className="text-lg font-bold text-white">
+                                    Plan Range Timeline
+                                </h3>
+                                <p className="text-sm text-white/80">
+                                    {progressData?.planRange?.length || 0} Sections
+                                </p>
                             </div>
-                            {sectionIndex < progressData.planRange.length - 1 && (
-                                <div className="relative flex items-center justify-center py-6 mb-8">
-                                    <div className="absolute inset-0 flex items-center">
-                                        <div className="w-full border-t-4 border-dashed border-indigo-300"></div>
-                                    </div>
-                                    <div className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 px-6 py-2 rounded-full shadow-lg">
-                                        <div className="flex items-center gap-2">
-                                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                            <span className="text-white text-sm font-bold">Next Section</span>
-                                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                            </svg>
+                        </div>
+                        <div className={`transform transition-transform duration-300 ${expandedSections['all-plan-sections'] !== false ? "rotate-180" : ""}`}>
+                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    {expandedSections['all-plan-sections'] !== false && (
+                        <>
+                            {progressData?.planRange?.map((section, sectionIndex) => (
+                                <React.Fragment key={sectionIndex}>
+                                    <div className="col-span-2 flex flex-col gap-4 mb-8">
+                                        <div className="flex items-center gap-3 bg-linear-to-r from-blue-500 via-purple-500 to-indigo-600 rounded-2xl p-4 shadow-lg">
+                                            <div>
+                                                <h3 className="text-lg font-bold text-white">
+                                                    {section.sectionName}
+                                                </h3>
+                                                <div className="flex gap-3 text-sm font-semibold text-white/90 mt-1.5">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                        {formatDateDDMMYY(section.sectionStartDate)}
+                                                    </span>
+                                                    <span className="text-white/70 font-bold">→</span>
+                                                    <span className="flex items-center gap-1.5">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                        {formatDateDDMMYY(section.sectionEndDate)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* MASTER TIMELINE - Enhanced */}
+                                        <div className="relative h-5 bg-linear-to-r from-gray-200 via-gray-100 to-gray-200 rounded-full overflow-hidden shadow-md border border-gray-200">
+                                            <div className="absolute inset-0 bg-linear-to-r from-green-400/40 to-emerald-500/40 rounded-full" />
+
+                                            {PHASES.map(({ key, color }) => {
+                                                const phase = section.phases?.[key];
+                                                if (!phase) return null;
+
+                                                const { left, width } = getPhasePosition(
+                                                    phase.startDate,
+                                                    phase.endDate,
+                                                    section.sectionStartDate,
+                                                    section.sectionEndDate
+                                                );
+
+                                                return (
+                                                    <div
+                                                        key={key}
+                                                        className={`absolute h-full rounded-full ${color} shadow-lg transition-all duration-300 hover:scale-y-110 hover:shadow-xl`}
+                                                        style={{ left, width }}
+                                                        title={`${key}: ${phase.startDate} → ${phase.endDate}`}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
+
+                                        <div className="bg-linear-to-br from-white via-gray-50 to-white border border-gray-200 rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                {PHASES.map(({ key, color }) => {
+                                                    const phase = section.phases?.[key];
+                                                    if (!phase) return null;
+                                                    return (
+                                                        <div
+                                                            key={key}
+                                                            className="flex items-center gap-3 p-2.5 rounded-lg bg-white/60 backdrop-blur-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200 group"
+                                                        >
+                                                            <div className={`w-3 h-3 rounded-full flex-shrink-0 ${color} shadow-md group-hover:scale-125 transition-transform duration-200`} />
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="font-semibold text-gray-800 capitalize text-xs mb-0.5">
+                                                                    {key}
+                                                                </div>
+                                                                <div className="text-[11px] text-gray-600 flex items-center gap-1.5">
+                                                                    <span className="truncate">{formatDateDDMMYY(phase.startDate)}</span>
+                                                                    <span className="text-gray-400 flex-shrink-0">•</span>
+                                                                    <span className="truncate">{formatDateDDMMYY(phase.endDate)}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )}
-                        </React.Fragment>
-                    ))}
 
+                                    {sectionIndex < progressData.planRange.length - 1 && (
+                                        <div className="relative flex items-center justify-center py-6 mb-8">
+                                            <div className="absolute inset-0 flex items-center">
+                                                <div className="w-full border-t-4 border-dashed border-indigo-300"></div>
+                                            </div>
+                                            <div className="relative bg-linear-to-r from-blue-500 via-purple-500 to-indigo-600 px-6 py-2 rounded-full shadow-lg">
+                                                <div className="flex items-center gap-2">
+                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                    <span className="text-white text-sm font-bold">Next Section</span>
+                                                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </>
+                    )}
 
 
                     {sections.length === 0 ? (
@@ -261,11 +285,11 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                         <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg">
                                             <div
                                                 onClick={() => toggleSection(sectionId)}
-                                                className="cursor-pointer bg-gradient-to-r from-gray-500 to-gray-100 px-6 py-4 border-b border-gray-200 hover:from-gray-100 hover:to-gray-500 transition-all"
+                                                className="cursor-pointer bg-linear-to-r from-gray-500 to-gray-100 px-6 py-4 border-b border-gray-200 hover:from-gray-100 hover:to-gray-500 transition-all"
                                             >
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-4 flex-1">
-                                                        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-md">
+                                                        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-md">
                                                             {section.phaseIndex + 1}
                                                         </div>
                                                         <div className="flex-1">
@@ -305,7 +329,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
 
                                                         return (
                                                             <div key={type} className="space-y-4">
-                                                                <div className={`flex items-center gap-3 px-4 py-3 bg-gradient-to-r ${getTypeColor(type)} rounded-lg shadow-sm`}>
+                                                                <div className={`flex items-center gap-3 px-4 py-3 bg-linear-to-r ${getTypeColor(type)} rounded-lg shadow-sm`}>
                                                                     <span className="text-2xl">{getTypeIcon(type)}</span>
                                                                     <h4 className="uppercase text-sm font-bold text-white tracking-wider">
                                                                         {type}
@@ -325,10 +349,10 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                                             className="border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 transition-all bg-white shadow-sm"
                                                                         >
 
-                                                                            <div className="bg-gradient-to-r from-gray-50 to-white px-5 py-3 border-b border-gray-200">
+                                                                            <div className="bg-linear-to-r from-gray-50 to-white px-5 py-3 border-b border-gray-200">
                                                                                 <div className="flex items-center justify-between">
                                                                                     <div className="flex items-center gap-3">
-                                                                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white font-bold shadow">
+                                                                                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white font-bold shadow">
                                                                                             {engineer.name?.charAt(0)?.toUpperCase() || "?"}
                                                                                         </div>
                                                                                         <div>
