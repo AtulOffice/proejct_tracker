@@ -2432,8 +2432,57 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
       (a, b) => a.phaseIndex - b.phaseIndex
     );
 
+
+    const normalizedPlanRange = plan.plans.map(section => {
+
+      const base =
+        section.documents?.[0] ||
+        section.scada?.[0] ||
+        section.logic?.[0] ||
+        section.testing?.[0];
+
+      return {
+        sectionName: base.sectionName,
+        sectionStartDate: base.sectionStartDate,
+        sectionEndDate: base.sectionEndDate,
+
+        phases: {
+          documents: section.documents?.[0]
+            ? {
+              startDate: section.documents[0].startDate,
+              endDate: section.documents[0].endDate,
+            }
+            : null,
+
+          scada: section.scada?.[0]
+            ? {
+              startDate: section.scada[0].startDate,
+              endDate: section.scada[0].endDate,
+            }
+            : null,
+
+          logic: section.logic?.[0]
+            ? {
+              startDate: section.logic[0].startDate,
+              endDate: section.logic[0].endDate,
+            }
+            : null,
+
+          testing: section.testing?.[0]
+            ? {
+              startDate: section.testing[0].startDate,
+              endDate: section.testing[0].endDate,
+            }
+            : null,
+        }
+      };
+    });
+
+
     return res.status(200).json({
       success: true,
+      messsage: "progress dev fetches succuessfullly",
+      planRange: normalizedPlanRange,
       planningId,
       projectId,
       projectName: plan.projectName,
