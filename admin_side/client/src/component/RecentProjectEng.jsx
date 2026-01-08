@@ -61,7 +61,7 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {assignments
                             ?.slice()
                             .reverse()
@@ -76,8 +76,6 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
                                     <p className="text-base text-gray-500 group-hover:text-gray-700 mb-4">
                                         {project.jobNumber}
                                     </p>
-
-                                    {/* MOM Documents Section */}
                                     {project.momDocuments && project.momDocuments.length > 0 && (
                                         <div className="mt-4 pt-4 border-t border-gray-200">
                                             <p className="text-sm font-medium text-gray-600 mb-3">
@@ -91,7 +89,6 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
                                                         className="flex items-center gap-2 px-3 py-2 bg-red-800 hover:bg-red-900 rounded-lg transition-colors shadow-md hover:shadow-lg"
                                                         title={`View PDF ${index + 1}`}
                                                     >
-                                                        {/* White PDF Icon */}
                                                         <svg
                                                             className="w-5 h-5 text-white"
                                                             fill="currentColor"
@@ -110,7 +107,154 @@ const AssignmentModal = ({ open, onClose, assignments }) => {
                                     )}
                                 </div>
                             ))}
+                    </div> */}
+
+                    <div className="w-full">
+                        <div className="max-w-full overflow-x-hidden rounded-xl shadow-lg border border-gray-100">
+                            <table className="min-w-full table-fixed bg-white w-full">
+                                <thead>
+                                    <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs uppercase tracking-wider">
+                                        <th className="px-6 py-4 text-left font-bold w-[28%]">Project</th>
+                                        <th className="px-6 py-3 text-left font-bold w-[12%]">Job No</th>
+                                        <th className="px-6 py-3 text-left font-bold w-[14%]">Start</th>
+                                        <th className="px-6 py-3 text-left font-bold w-[14%]">End</th>
+                                        <th className="px-6 py-3 text-center font-bold w-[12%]">Duration</th>
+                                        <th className="px-6 py-3 text-center font-bold w-[10%]">Status</th>
+                                        <th className="px-6 py-3 text-center font-bold w-[10%]">Docs</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody className="divide-y divide-gray-100">
+                                    {assignments?.length > 0 ? (
+                                        [...assignments].reverse().map((project, idx) => (
+                                            <tr
+                                                key={project._id || idx}
+                                                className={`
+                                group hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50
+                                transition-all duration-200 ${idx % 2 === 0 ? 'bg-gray-50/50' : ''}
+                                ${project.isFinalMom ? 'bg-green-50/50 border-green-100' : ''}
+                            `}
+                                            >
+                                                {/* Project Name */}
+                                                <td className="px-6 py-4">
+                                                    <div className="font-bold text-lg text-gray-900 group-hover:text-blue-700 truncate">
+                                                        {project.projectName}
+                                                    </div>
+                                                </td>
+
+                                                {/* Job Number */}
+                                                <td className="px-6 py-4">
+                                                    <span className="inline-flex items-center px-3 py-1.5 text-xs font-bold bg-blue-100 text-blue-800 rounded-full border border-blue-200">
+                                                        <svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                                                        </svg>
+                                                        {project.jobNumber}
+                                                    </span>
+                                                </td>
+
+                                                {/* Start Date */}
+                                                <td className="px-6 py-4 text-sm text-gray-700">
+                                                    {project.assignedAt ? (
+                                                        <div className="flex items-center gap-2">
+                                                            <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                            </svg>
+                                                            <span className="font-medium truncate">{new Date(project.assignedAt).toLocaleDateString('short')}</span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-gray-400">-</span>
+                                                    )}
+                                                </td>
+
+                                                {/* End Date */}
+                                                <td className="px-6 py-4 text-sm text-gray-700">
+                                                    {project.endTime ? (
+                                                        <div className="flex items-center gap-2">
+                                                            <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                            </svg>
+                                                            <span className="font-medium truncate">{new Date(project.endTime).toLocaleDateString('short')}</span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-gray-400">-</span>
+                                                    )}
+                                                </td>
+
+                                                {/* Duration */}
+                                                <td className="px-6 py-4 text-center">
+                                                    {project.durationDays ? (
+                                                        <span className="inline-flex items-center px-3 py-1.5 text-xs font-bold bg-gradient-to-r from-purple-500/10 to-purple-600/10 text-purple-800 rounded-full border border-purple-200">
+                                                            <svg className="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7.858 5.485a1 1 0 00-1.715 1.03L8.29 11H6a1 1 0 00-.997 1.105l2.858 6.857a1 1 0 001.715.095C10.858 18.095 11 17.785 11 17.5V6.5a1 1 0 00-.142-.485z" clipRule="evenodd" />
+                                                            </svg>
+                                                            {project.durationDays}d
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-gray-400">-</span>
+                                                    )}
+                                                </td>
+
+                                                {/* Status */}
+                                                <td className="px-6 py-4 text-center">
+                                                    {project.isFinalMom ? (
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-green-700 bg-green-100/90 rounded-full border border-green-200 shadow-sm">
+                                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                                            </svg>
+                                                            Final
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-amber-700 bg-amber-100/90 rounded-full border border-amber-200 shadow-sm animate-pulse">
+                                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                                            </svg>
+                                                            Pending
+                                                        </span>
+                                                    )}
+                                                </td>
+
+                                                {/* Documents */}
+                                                <td className="px-6 py-4 text-center">
+                                                    {project.momDocuments?.length > 0 ? (
+                                                        <div className="flex justify-center gap-1 flex-wrap -space-x-1">
+                                                            {project.momDocuments.map((url, i) => (
+                                                                <button
+                                                                    key={i}
+                                                                    onClick={() => handlePdfClick(url, i)}
+                                                                    className="group relative flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold 
+                                                    bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg shadow-md
+                                                    hover:from-red-600 hover:to-red-700 hover:shadow-lg hover:scale-110
+                                                    transition-all duration-200"
+                                                                    title={`View Document ${i + 1}`}
+                                                                >
+                                                                    <svg className="w-3.5 h-3.5 flex-shrink-0 group-hover:scale-110" fill="currentColor" viewBox="0 0 16 16">
+                                                                        <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1" />
+                                                                    </svg>
+                                                                    {i + 1}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-gray-400 text-xs">No docs</span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={7} className="py-12 text-center">
+                                                <Notfound />
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
+
+
+
                 </div>
             </div>
 

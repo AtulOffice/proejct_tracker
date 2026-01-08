@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { dateToJSONTransformer } from "../utils/dateconvert.js";
 
 const EngineerProgressReportSchema = new mongoose.Schema(
     {
@@ -69,6 +70,8 @@ const EngineerProgressReportSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
+
+dateToJSONTransformer(EngineerProgressReportSchema);
 
 const EngineerProgressReport = mongoose.model(
     "EngineerProgressReport",
