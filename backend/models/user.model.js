@@ -38,6 +38,9 @@ const Userschema = new mongoose.Schema(
       type: resetOtpSchema,
       select: false,
     },
+    isEmailVerified: { type: Boolean, default: false },
+    emailVerificationToken: String,
+    emailVerificationExpiry: Date,
   },
   { timestamps: true }
 );

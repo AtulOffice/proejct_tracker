@@ -7,6 +7,7 @@ import {
   forgotUser,
   resetUser,
   logoutUser,
+  verifyEmail,
 } from "../controller/user.controller.js";
 import { authenticate } from "../middlware/authaticate.js";
 import { refreshTokenMiddleware } from "../middlware/refreshToken.js";
@@ -31,6 +32,8 @@ userRouter.get(
   authenticate,
   findUserDetails
 );
+
+userRouter.get("/verify-email/:token", verifyEmail);
 userRouter.post("/forgetuser", forgotUser);
 userRouter.post("/resetuser", resetUser);
 userRouter.get("/logout", refreshTokenMiddleware, authenticate, logoutUser);
