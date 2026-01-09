@@ -7,6 +7,37 @@ import { sendMail } from "../utils/mailer.js";
 import { otpHtml } from "../utils/html.js";
 import { createAccessToken, createRefreshToken } from "../utils/utils.js";
 
+
+export const CreateUser = async (req, res) => {
+  try {
+    const { username, password, role } = req.body;
+    const isExist = await UserModels.findOne({ username });
+    if (isExist) {
+      return res.status(409).json({
+        success: false,
+        message: "this user already exist",
+      });
+    }
+    const newpassword = await bcrypt.hash(password, 10);
+    const data = await UserModels.create({
+      username,
+      password: newpassword,
+      role,
+    });
+    return res.status(201).json({
+      success: true,
+      message: "user created successfully",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json({
+      success: false,
+      message: "error while creating the user",
+    });
+  }
+};
+
 export const forgotUser = async (req, res) => {
   try {
     const { email } = req.body;
@@ -64,35 +95,8 @@ export const resetUser = async (req, res) => {
   }
 };
 
-export const CreateUser = async (req, res) => {
-  try {
-    const { username, password, role } = req.body;
-    const isExist = await UserModels.findOne({ username });
-    if (isExist) {
-      return res.status(409).json({
-        success: false,
-        message: "this user already exist",
-      });
-    }
-    const newpassword = await bcrypt.hash(password, 10);
-    const data = await UserModels.create({
-      username,
-      password: newpassword,
-      role,
-    });
-    return res.status(201).json({
-      success: true,
-      message: "user created successfully",
-      data,
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({
-      success: false,
-      message: "error while creating the user",
-    });
-  }
-};
+
+
 export const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;

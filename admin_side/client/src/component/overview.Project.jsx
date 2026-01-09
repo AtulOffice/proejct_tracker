@@ -139,6 +139,7 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
                     className="flex items-start italic space-x-3 sm:space-x-4"
                     key={indx}
                   >
+
                     <div className="bg-blue-100 p-1.5 sm:p-2 rounded-full mr-3 sm:mr-4">
                       <FaUser className="text-blue-500" size={16} />
                     </div>
@@ -150,17 +151,15 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
                         {project.projectName}
                       </p>
                       <div className="flex flex-wrap gap-1 sm:gap-2 mt-1">
-                        <span className="bg-blue-100 text-blue-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
-                          D-{project?.summary?.document}
-                        </span>
+
                         <span className="bg-yellow-100 text-yellow-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
-                          S-{project?.summary?.scada}
+                          L-{project?.overallProgress?.logic}
                         </span>
                         <span className="bg-green-100 text-green-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
-                          L-{project?.summary?.logic}
+                          S-{project?.overallProgress?.scada}
                         </span>
                         <span className="bg-purple-100 text-purple-600 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">
-                          T-{project?.summary?.test}
+                          T-{project?.overallProgress?.testing}
                         </span>
                       </div>
                     </div>

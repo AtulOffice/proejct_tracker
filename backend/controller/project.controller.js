@@ -1528,7 +1528,8 @@ export const allProjectsFetch = async (req, res) => {
     const filter = {};
 
     if (search) {
-      filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+      // filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+      filter.jobNumber = { $regex: search, $options: "i" };
     }
 
     const projects = await ProjectModel.find(filter, {
@@ -1710,10 +1711,110 @@ export const ProjectsFetchDevById = async (req, res) => {
 };
 
 
+export const calculateOverallProgressForAllPlannings = async () => {
+  const plans = await PlanningModel.find({})
+    .populate("allEngineers", "name empId developmentProjectList")
+    .lean();
+
+  const results = [];
+
+  for (const plan of plans) {
+    if (!Array.isArray(plan.allEngineers) || plan.allEngineers.length === 0) {
+      continue;
+    }
+
+    const projectId = plan.ProjectDetails;
+
+    const progressReports = await EngineerProgressReport.find({ projectId })
+      .populate("submittedBy", "_id")
+      .lean();
+
+    if (!progressReports.length) continue;
+    const reportMap = {};
+    for (const r of progressReports) {
+      const key = `${r.submittedBy._id}_${r.SectionId}_${r.phaseId}`;
+      if (!reportMap[key]) reportMap[key] = [];
+      reportMap[key].push(r);
+    }
+
+    const TYPES = ["logic", "scada", "testing"];
+    const sectionMap = {};
+
+    for (const engineer of plan.allEngineers) {
+      TYPES.forEach(type => {
+        const devSections = engineer.developmentProjectList?.[type] || [];
+
+        devSections.forEach(section => {
+          if (!section.project) return;
+          if (section.project.toString() !== projectId.toString()) return;
+
+          section.phases?.forEach(phase => {
+            const sectionName = phase.sectionName || "Unnamed Section";
+            const phaseIndex = phase.phaseIndex ?? 0;
+
+            if (!sectionMap[sectionName]) {
+              sectionMap[sectionName] = {
+                sectionName,
+                phaseIndex,
+                logic: { engineers: [] },
+                scada: { engineers: [] },
+                testing: { engineers: [] },
+              };
+            }
+
+            const key = `${engineer._id}_${section._id}_${phase._id}`;
+            const reports = reportMap[key] || [];
+            if (!reports.length) return;
+
+            const typeBucket = sectionMap[sectionName][type];
+
+            let engineerEntry = typeBucket.engineers.find(
+              e => e.engineerId.toString() === engineer._id.toString()
+            );
+
+            if (!engineerEntry) {
+              engineerEntry = {
+                engineerId: engineer._id,
+                progressReports: [],
+              };
+              typeBucket.engineers.push(engineerEntry);
+            }
+
+            engineerEntry.progressReports.push(...reports);
+          });
+        });
+      });
+    }
+
+    const orderedSections = Object.values(sectionMap).sort(
+      (a, b) => a.phaseIndex - b.phaseIndex
+    );
+    if (!orderedSections.length) continue;
+
+    const overallProgress = await calculateOverallProgress(orderedSections);
+    if (
+      overallProgress.logic === 0 &&
+      overallProgress.scada === 0 &&
+      overallProgress.testing === 0
+    ) {
+      continue;
+    }
+
+    results.push({
+      planningId: plan._id,
+      projectId,
+      jobNumber: plan.jobNumber,
+      projectName: plan.projectName,
+      overallProgress,
+    });
+  }
+  return results;
+};
+
+
 
 export const getProjectOverview = async (req, res) => {
   try {
-    // this is temm
     const filter = {};
     const pipeline = [];
 
@@ -1788,7 +1889,9 @@ export const getProjectOverview = async (req, res) => {
       createdAt: -1,
     });
 
-    const projectStatus = await ProjectDevModel.find().sort({ updatedAt: -1 });
+    // const projectStatus = await ProjectDevModel.find().sort({ updatedAt: -1 });
+    const projectStatus = await calculateOverallProgressForAllPlannings()
+
     const latestProjects = projects.slice(0, 3);
     const highPriority = projects
       .filter((p) => {
@@ -2345,6 +2448,41 @@ export const getEngineerProjects = async (req, res) => {
   }
 };
 
+
+export const calculateOverallProgress = async (sections) => {
+  const TYPES = ["logic", "scada", "testing"];
+
+  const bucket = {
+    logic: [],
+    scada: [],
+    testing: [],
+  };
+
+  sections.forEach(section => {
+    TYPES.forEach(type => {
+      section[type]?.engineers?.forEach(engineer => {
+        if (!engineer.progressReports?.length) return;
+
+        const latestReport = engineer.progressReports.reduce((latest, curr) =>
+          new Date(curr.createdAt) > new Date(latest.createdAt) ? curr : latest
+        );
+
+        bucket[type].push(latestReport.actualCompletionPercent || 0);
+      });
+    });
+  });
+
+  const avg = (arr) =>
+    arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
+
+  return {
+    logic: avg(bucket.logic),
+    scada: avg(bucket.scada),
+    testing: avg(bucket.testing),
+  };
+};
+
+
 export const getAdminProjectProgressByPlanning = async (req, res) => {
   try {
     const { planningId } = req.params;
@@ -2433,7 +2571,7 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
     const orderedSections = Object.values(sectionMap).sort(
       (a, b) => a.phaseIndex - b.phaseIndex
     );
-
+    const overallProgress = await calculateOverallProgress(orderedSections);
 
     const normalizedPlanRange = plan.plans.map(section => {
 
@@ -2487,6 +2625,7 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
       planRange: normalizedPlanRange,
       planningId,
       projectId,
+      overallProgress,
       projectName: plan.projectName,
       jobNumber: plan.jobNumber,
       sections: orderedSections,
