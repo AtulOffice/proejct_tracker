@@ -36,4 +36,6 @@ userRouter.get(
 userRouter.get("/verify-email/:token", verifyEmail);
 userRouter.post("/forgetuser", forgotUser);
 userRouter.post("/resetuser", resetUser);
-userRouter.get("/logout", refreshTokenMiddleware, authenticate, logoutUser);
+userRouter.get("/logout",
+  // authenticate,
+  logoutUser);

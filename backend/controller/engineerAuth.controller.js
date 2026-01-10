@@ -7,37 +7,42 @@ import { sendMail } from "../utils/mailer.js";
 import { createAccessToken, createRefreshToken } from "../utils/utils.js";
 import { otpHtml } from "../utils/html.js";
 
+
 export const loginEngineer = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
       return res.status(400).json({
         success: false,
         message: "Email and Password are required",
       });
     }
+
     const engineer = await EngineerReocord.findOne({ email }).select(
-      "+password -createdAt -updatedAt -developmentProjectList -assignments -workStatusRecords"
+      "+password +refreshTokens -createdAt -updatedAt -developmentProjectList -assignments -workStatusRecords"
     );
+
     if (!engineer) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Engineer not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Engineer not found",
+      });
     }
 
     const isPasswordValid = await bcrypt.compare(password, engineer.password);
     if (!isPasswordValid) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid password" });
+      return res.status(401).json({
+        success: false,
+        message: "Invalid password",
+      });
     }
 
     engineer.lastLogin = new Date();
-    await engineer.save();
-
     const engineerData = engineer.toObject();
     const {
       password: _,
+      refreshTokens,
       empId,
       isAssigned,
       phone,
@@ -46,17 +51,22 @@ export const loginEngineer = async (req, res) => {
       assignments,
       ...safeEngineer
     } = engineerData;
-
     const accessToken = createAccessToken(safeEngineer);
-    const refreshToken = createRefreshToken(safeEngineer);
+    const refreshToken = crypto.randomBytes(40).toString("hex");
+    engineer.refreshTokens = (engineer.refreshTokens || []).filter(
+      (t) => t.expires > Date.now()
+    );
 
-    res.cookie("accessTokenEngineer", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-      maxAge: 10 * 60 * 1000,
+    const MAX_SESSIONS = 5;
+    if (engineer.refreshTokens.length >= MAX_SESSIONS) {
+      engineer.refreshTokens.shift();
+    }
+    engineer.refreshTokens.push({
+      tokenHash: hashToken(refreshToken),
+      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      createdAt: new Date(),
     });
-
+    await engineer.save();
     res.cookie("refreshTokenEngineer", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
@@ -64,19 +74,21 @@ export const loginEngineer = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Engineer login successful",
+      accessToken,
       user: safeEngineer,
     });
   } catch (e) {
     console.error("Engineer Login Error:", e);
-    res.status(400).json({
+    return res.status(500).json({
       success: false,
       message: "Error while processing login",
     });
   }
 };
+
 export const findEngineerDetails = async (req, res) => {
   try {
     const { _id } = req.user;
@@ -180,29 +192,43 @@ export const resetEngineer = async (req, res) => {
   }
 };
 
-// 🔹 Logout
-export const logoutEngineer = (req, res) => {
+export const logoutEngineer = async (req, res) => {
   try {
-    res.clearCookie("accessTokenEngineer", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-    });
+    const token =
+      req.cookies?.refreshTokenEngineer ||
+      req.headers["refresh-token-engineer"] ||
+      req.body?.refreshTokenEngineer;
+    if (!token) {
+      res.clearCookie("refreshTokenEngineer");
+      return res.status(200).json({
+        success: true,
+        message: "Engineer logged out",
+      });
+    }
+
+    const tokenHash = hashToken(token);
+
+    await EngineerReocord.updateOne(
+      { "refreshTokens.tokenHash": tokenHash },
+      { $pull: { refreshTokens: { tokenHash } } }
+    );
+
     res.clearCookie("refreshTokenEngineer", {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Engineer logged out successfully",
     });
   } catch (error) {
     console.error("Logout Engineer Error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Error while logging out",
     });
   }
 };
+

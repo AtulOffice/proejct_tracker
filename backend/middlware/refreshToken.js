@@ -1,128 +1,152 @@
+import { UserModels } from "../models/user.model.js";
 import {
   createAccessToken,
   createRefreshToken,
+  hashToken,
   verifyRefreshToken,
   verifyToken,
 } from "../utils/utils.js";
+import crypto from "crypto"
 
-export const refreshTokenMiddleware = (req, res, next) => {
+export const refreshTokenMiddleware = async (req, res) => {
   try {
-    const { refreshToken } = req?.cookies;
+    const token =
+      req.cookies?.refreshToken ||
+      req.headers["refresh-token"] ||
+      req.body?.refreshToken;
 
-    if (!refreshToken) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Please login first" });
-    }
-    const decodedRefresh = verifyRefreshToken(refreshToken);
-
-    if (!decodedRefresh || !decodedRefresh?.user) {
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Invalid token. Please login again.",
+        message: "No refresh token",
       });
     }
 
-    const currentTime = Math.floor(Date.now() / 1000);
-    const timeLeft = decodedRefresh.exp - currentTime;
+    const tokenHash = hashToken(token);
 
-    if (timeLeft < 12 * 60 * 60) {
-      const newRefreshToken = createRefreshToken(decodedRefresh?.user);
+    const user = await UserModels.findOne({
+      "refreshTokens.tokenHash": tokenHash,
+    });
 
-      res.cookie("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== "development",
-        sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+    if (!user) {
+      return res.status(403).json({
+        success: false,
+        message: "Invalid refresh token",
       });
     }
-    const newAccessToken = createAccessToken(decodedRefresh.user);
-    res.cookie("accessToken", newAccessToken, {
+
+    user.refreshTokens = user.refreshTokens.filter(
+      (t) => t.expires > Date.now()
+    );
+
+    user.refreshTokens = user.refreshTokens.filter(
+      (t) => t.tokenHash !== tokenHash
+    );
+
+    const MAX_SESSIONS = 5;
+    if (user.refreshTokens.length >= MAX_SESSIONS) {
+      user.refreshTokens.shift();
+    }
+
+    const newRefreshToken = crypto.randomBytes(40).toString("hex");
+
+    user.refreshTokens.push({
+      tokenHash: hashToken(newRefreshToken),
+      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      createdAt: new Date(),
+    });
+
+    await user.save();
+
+    const safeUser = user.toObject();
+    delete safeUser.password;
+
+    const newAccessToken = createAccessToken(safeUser);
+
+    res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-      maxAge: 10 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    req.cookies.accessToken = newAccessToken;
-    next();
-  } catch (err) {
-    console.error("Token error:", err);
-    if (err.name === "TokenExpiredError") {
-      return res.status(401).json({
-        success: false,
-        message: "Session expired. Please login again.",
-      });
-    }
 
-    if (err.name === "JsonWebTokenError") {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid token. Please login again.",
-      });
-    }
-    return res
-      .status(401)
-      .json({ success: false, message: "Please login first" });
+    return res.json({
+      success: true,
+      accessToken: newAccessToken,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
 
-export const refreshTokenEngineerMiddleware = (req, res, next) => {
+export const refreshTokenEngineerMiddleware = async (req, res) => {
   try {
-    const { refreshTokenEngineer } = req?.cookies;
-    if (!refreshTokenEngineer) {
+    const token =
+      req.cookies?.refreshTokenEngineer ||
+      req.headers["refresh-token-engineer"] ||
+      req.body?.refreshTokenEngineer;
+
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Please login first with engineer Id",
+        message: "No refresh token (engineer)",
       });
     }
-    const decodedRefresh = verifyRefreshToken(refreshTokenEngineer);
+    const tokenHash = hashToken(token);
+    const engineer = await EngineerReocord.findOne({
+      "refreshTokens.tokenHash": tokenHash,
+    });
 
-    if (!decodedRefresh || !decodedRefresh?.user) {
-      return res.status(401).json({
+    if (!engineer) {
+      return res.status(403).json({
         success: false,
-        message: "Invalid token. Please login again engineer Id",
+        message: "Invalid refresh token (engineer)",
       });
     }
-
-    const currentTime = Math.floor(Date.now() / 1000);
-    const timeLeft = decodedRefresh.exp - currentTime;
-
-    if (timeLeft < 12 * 60 * 60) {
-      const newRefreshToken = createRefreshToken(decodedRefresh?.user);
-
-      res.cookie("refreshTokenEngineer", newRefreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== "development",
-        sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+    engineer.refreshTokens = engineer.refreshTokens.filter(
+      (t) => t.expires > Date.now()
+    );
+    engineer.refreshTokens = engineer.refreshTokens.filter(
+      (t) => t.tokenHash !== tokenHash
+    );
+    const MAX_SESSIONS = 5;
+    if (engineer.refreshTokens.length >= MAX_SESSIONS) {
+      engineer.refreshTokens.shift();
     }
-    const newAccessToken = createAccessToken(decodedRefresh.user);
-    res.cookie("accessTokenEngineer", newAccessToken, {
+
+    const newRefreshToken = crypto.randomBytes(40).toString("hex");
+
+    engineer.refreshTokens.push({
+      tokenHash: hashToken(newRefreshToken),
+      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      createdAt: new Date(),
+    });
+
+    await engineer.save();
+
+    const safeEngineer = engineer.toObject();
+    delete safeEngineer.password;
+
+    const newAccessToken = createAccessToken(safeEngineer);
+    res.cookie("refreshTokenEngineer", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-      maxAge: 10 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    req.cookies.accessTokenEngineer = newAccessToken;
-    next();
+    return res.json({
+      success: true,
+      accessToken: newAccessToken,
+    });
   } catch (err) {
-    console.error("Token error:", err);
-    if (err.name === "TokenExpiredError") {
-      return res.status(401).json({
-        success: false,
-        message: "Session expired. Please login again.",
-      });
-    }
-
-    if (err.name === "JsonWebTokenError") {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid token. Please login again.",
-      });
-    }
-    return res
-      .status(401)
-      .json({ success: false, message: "Please login first" });
+    console.error(err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };

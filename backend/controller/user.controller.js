@@ -5,7 +5,7 @@ dotenv.config();
 import crypto from "crypto";
 import { sendMail } from "../utils/mailer.js";
 import { otpHtml, verificationHtml } from "../utils/html.js";
-import { createAccessToken, createRefreshToken } from "../utils/utils.js";
+import { createAccessToken, createRefreshToken, hashToken } from "../utils/utils.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -191,87 +191,107 @@ export const resetUser = async (req, res) => {
   }
 };
 
-
 export const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const data = await UserModels.findOne({ username }).select("+password +isEmailVerified");
-    if (!data) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    if (!data.isEmailVerified) {
-      return res.status(403).json({
-        success: false,
-        message: "Please verify your email before login",
-      });
-    }
-    const isPasswordValid = await bcrypt.compare(password, data.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid password",
-      });
-    }
-    // const plainUser = data.toObject();
-    // const { password: _, ...safeUserData } = plainUser;
 
-    const accessToken = createAccessToken(safeUserData);
-    const refreshToken = createRefreshToken(safeUserData);
+    const user = await UserModels.findOne({ username }).select(
+      "+password +isEmailVerified +refreshTokens"
+    );
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-      maxAge: 10 * 60 * 1000,
+    if (!user)
+      return res.status(404).json({ success: false, message: "User not found" });
+
+    if (!user.isEmailVerified)
+      return res
+        .status(403)
+        .json({ success: false, message: "Email not verified" });
+
+    const isValid = await bcrypt.compare(password, user.password);
+
+    if (!isValid)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+
+    const safeUser = user.toObject();
+    delete safeUser.password;
+
+    const accessToken = createAccessToken(safeUser);
+    const refreshToken = crypto.randomBytes(40).toString("hex");
+
+    user.refreshTokens = user.refreshTokens.filter((t) => t.expires > Date.now());
+    const MAX_SESSIONS = 5;
+    if (user.refreshTokens.length >= MAX_SESSIONS) {
+      user.refreshTokens.shift();
+    }
+    user.refreshTokens.push({
+      tokenHash: hashToken(refreshToken),
+      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      createdAt: new Date(),
     });
+
+    await user.save();
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(200).json({
+    return res.json({
       success: true,
-      message: "Login successful",
-      user: safeUserData,
+      accessToken,
+      user: safeUser,
     });
-  } catch (e) {
-    console.log(e);
-    return res.status(400).json({
-      success: false,
-      message: "Error while processing login",
-    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-export const logoutUser = (req, res) => {
+export const logoutUser = async (req, res) => {
   try {
-    res.clearCookie("accessToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-    });
+    const token =
+      req.cookies?.refreshToken ||
+      req.headers["refresh-token"] ||
+      req.body?.refreshToken;
+
+    if (!token) {
+      return res.status(200).json({
+        success: true,
+        message: "Logged out",
+      });
+    }
+
+    const tokenHash = hashToken(token);
+    await UserModels.updateOne(
+      { "refreshTokens.tokenHash": tokenHash },
+      {
+        $pull: {
+          refreshTokens: { tokenHash },
+        },
+      }
+    );
+
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
     });
 
-    return res.status(200).json({
+    return res.json({
       success: true,
       message: "Logged out successfully",
     });
-  } catch (error) {
-    console.error("Logout error:", error);
+  } catch (err) {
+    console.error(err);
     return res.status(500).json({
       success: false,
-      message: "Error while logging out",
+      message: "Server error",
     });
   }
 };
+
 
 export const finduser = async (req, res) => {
   try {

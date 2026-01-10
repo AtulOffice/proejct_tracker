@@ -48,6 +48,7 @@ const engineerSchema = new mongoose.Schema(
         assignedAt: { type: Date, default: Date.now },
         endTime: { type: Date },
         durationDays: { type: Number, default: 0 },
+
         isMom: {
           type: Boolean,
           default: false,
@@ -187,6 +188,13 @@ const engineerSchema = new mongoose.Schema(
         },
       ],
     },
+    refreshTokens: [
+      {
+        tokenHash: String,
+        expires: Date,
+        createdAt: Date,
+      },
+    ]
   },
   { timestamps: true }
 );

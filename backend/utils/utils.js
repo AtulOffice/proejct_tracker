@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 export const createToken = (user) => {
   return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "10m" });
@@ -26,3 +27,8 @@ export const verifyAccessToken = (token) => {
 export const verifyRefreshToken = (token) => {
   return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
 };
+
+
+
+export const hashToken = (token) =>
+  crypto.createHash("sha256").update(token).digest("hex");

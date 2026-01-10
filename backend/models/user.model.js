@@ -41,6 +41,13 @@ const Userschema = new mongoose.Schema(
     isEmailVerified: { type: Boolean, default: false },
     emailVerificationToken: String,
     emailVerificationExpiry: Date,
+    refreshTokens: [
+      {
+        tokenHash: String,
+        expires: Date,
+        createdAt: Date,
+      },
+    ],
   },
   { timestamps: true }
 );
