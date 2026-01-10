@@ -7,11 +7,9 @@ import { sendMail } from "../utils/mailer.js";
 import { createAccessToken, createRefreshToken, hashToken } from "../utils/utils.js";
 import { otpHtml } from "../utils/html.js";
 
-
 export const loginEngineer = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     if (!email || !password) {
       return res.status(400).json({
         success: false,

@@ -188,6 +188,8 @@ const engineerSchema = new mongoose.Schema(
         },
       ],
     },
+    emailVerificationToken: String,
+    emailVerificationExpiry: Date,
     refreshTokens: [
       {
         tokenHash: String,
