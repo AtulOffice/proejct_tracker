@@ -7,12 +7,13 @@ import {
   updateEndChecklist,
   deleteEndChecklist,
 } from "../controller/endCheckList.controller.js";
+import { authenticateEngineer } from "../middlware/authaticate.js";
 
 export const EndRouter = express.Router();
 
-EndRouter.post("/save", saveEndChecklist);
+EndRouter.post("/save", authenticateEngineer, saveEndChecklist);
 EndRouter.get("/fetch", getAllEndChecklists);
 EndRouter.get("/project/:projectId", getEndChecklistByProject);
 EndRouter.get("/:checklistId", getEndChecklistById);
-EndRouter.put("/:checklistId", updateEndChecklist);
-EndRouter.delete("/:checklistId", deleteEndChecklist);
+EndRouter.put("/:checklistId", authenticateEngineer, updateEndChecklist);
+EndRouter.delete("/:checklistId", authenticateEngineer, deleteEndChecklist);

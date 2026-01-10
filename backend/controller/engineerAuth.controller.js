@@ -190,43 +190,5 @@ export const resetEngineer = async (req, res) => {
   }
 };
 
-export const logoutEngineer = async (req, res) => {
-  try {
-    const token =
-      req.cookies?.refreshTokenEngineer ||
-      req.headers["refresh-token-engineer"] ||
-      req.body?.refreshTokenEngineer;
-    if (!token) {
-      res.clearCookie("refreshTokenEngineer");
-      return res.status(200).json({
-        success: true,
-        message: "Engineer logged out",
-      });
-    }
 
-    const tokenHash = hashToken(token);
-
-    await EngineerReocord.updateOne(
-      { "refreshTokens.tokenHash": tokenHash },
-      { $pull: { refreshTokens: { tokenHash } } }
-    );
-
-    res.clearCookie("refreshTokenEngineer", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: "Engineer logged out successfully",
-    });
-  } catch (error) {
-    console.error("Logout Engineer Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Error while logging out",
-    });
-  }
-};
 

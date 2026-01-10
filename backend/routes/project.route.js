@@ -30,10 +30,6 @@ import {
   authenticate,
   authenticateEngineer,
 } from "../middlware/authaticate.js";
-import {
-  refreshTokenEngineerMiddleware,
-  refreshTokenMiddleware,
-} from "../middlware/refreshToken.js";
 import { authorizeRole } from "../middlware/authRole.js";
 
 export const ProjectRouter = express.Router();
@@ -45,9 +41,9 @@ export const ProjectRouter = express.Router();
 //   authorizeRole("admin", "reception"),
 //   Recordsformave
 // );
+
 ProjectRouter.post(
   "/save",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   RecordsformaveNew
@@ -55,7 +51,6 @@ ProjectRouter.post(
 
 ProjectRouter.get(
   "/getProjectOverview",
-  refreshTokenMiddleware,
   authenticate,
   // authorizeRole("admin", "reception"),
   getProjectOverview
@@ -63,14 +58,12 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/getProjectforDocs",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   getAllProjectsnew
 );
 ProjectRouter.get(
   "/getProjectforDocsbyid/:id",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   getAllProjectsnewbyId
@@ -78,100 +71,86 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/getEngineerOverview/:id",
-  refreshTokenEngineerMiddleware,
   authenticateEngineer,
   // authorizeRole("admin", "reception"),
   getEngineerOverview
 );
 
-ProjectRouter.get("/fetch", refreshTokenMiddleware, authenticate, findrecord);
+ProjectRouter.get("/fetch", authenticate, findrecord);
 
 ProjectRouter.get(
   "/fetch/:id",
-  refreshTokenMiddleware,
   authenticate,
   // authorizeRole("admin", "reception"),
   findrecordbyId
 );
 ProjectRouter.get(
   "/fetchbyjob",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   findrecordbyJobnumber
 );
 ProjectRouter.put(
   "/update/:id",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   updateRecords
 );
 ProjectRouter.put(
   "/updateDocs/:id",
-  refreshTokenMiddleware,
   authenticate,
   // authorizeRole("admin", "reception"),
   updateRecordsDocs
 );
 ProjectRouter.delete(
   "/delete/:id",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   deleteRecord
 );
 ProjectRouter.get(
   "/pagination",
-  refreshTokenMiddleware,
   authenticate,
   Pagination
 );
 ProjectRouter.get(
   "/Engineerpagination/:id",
-  refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getEngineerProjectsPaginated
 );
 
 ProjectRouter.get(
   "/EngineerProjectlist/:id",
-  refreshTokenEngineerMiddleware,
   authenticateEngineer,
   getEngineerProjects
 );
 
 ProjectRouter.get(
   "/latestProjectpagination",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   LatestProjectPagination
 );
 ProjectRouter.get(
   "/catogray/pagination",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   PaginationCatogary
 );
 ProjectRouter.get(
   "/devlopment/pagination",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   PaginationDevStatus
 );
 ProjectRouter.get(
   "/sotype/pagination",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   Paginationsotype
 );
 ProjectRouter.get(
   "/urgentProject/pagination",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   UrgentProjectPegination
@@ -179,7 +158,6 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/urgentProjectAction",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   UrgentProjectAction
@@ -187,7 +165,6 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/allProjectsfetch",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   allProjectsFetch
@@ -195,7 +172,6 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/allProjectsfetchdev",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   allProjectsFetchDev
@@ -203,7 +179,6 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/ProjectsfetchdevbyId/:id",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin", "reception"),
   ProjectsFetchDevById
@@ -211,9 +186,8 @@ ProjectRouter.get(
 
 ProjectRouter.get(
   "/getAdminProjectProgressByPlanning/:planningId",
-  // refreshTokenMiddleware,
-  // authenticate,
-  // authorizeRole("admin", "reception"),
+  authenticate,
+  authorizeRole("admin", "reception"),
   getAdminProjectProgressByPlanning
 );
 

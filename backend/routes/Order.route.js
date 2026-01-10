@@ -8,13 +8,14 @@ import {
   cancelOrderAndProject,
   restoreOrderAndProject,
 } from "../controller/order.Controller.js";
+import { authenticate } from "../middlware/authaticate.js";
 
 export const OrderRouter = express.Router();
 
-OrderRouter.post("/save", createOrder);
+OrderRouter.post("/save", authenticate, createOrder);
 OrderRouter.get("/getAll", getAllOrders);
 OrderRouter.get("/getAllnew", getAllOrdersnew);
 OrderRouter.get("/fetchbyid/:id", getOrderById);
-OrderRouter.put("/update/:id", updateOrder);
-OrderRouter.put("/cancel/:orderId", cancelOrderAndProject);
-OrderRouter.put("/restore/:orderId", restoreOrderAndProject);
+OrderRouter.put("/update/:id", authenticate, updateOrder);
+OrderRouter.put("/cancel/:orderId", authenticate, cancelOrderAndProject);
+OrderRouter.put("/restore/:orderId", authenticate, restoreOrderAndProject);

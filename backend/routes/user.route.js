@@ -19,16 +19,16 @@ export const userRouter = express.Router();
 
 userRouter.post("/createuser", CreateUser);
 userRouter.post("/loginuser", loginUser);
+userRouter.post("/refresh-token", refreshTokenMiddleware);
+
 userRouter.get(
   "/finduser/:id",
-  refreshTokenMiddleware,
   authenticate,
   authorizeRole("admin"),
   finduser
 );
 userRouter.get(
   "/fetchUserDeatails",
-  refreshTokenMiddleware,
   authenticate,
   findUserDetails
 );
@@ -37,5 +37,5 @@ userRouter.get("/verify-email/:token", verifyEmail);
 userRouter.post("/forgetuser", forgotUser);
 userRouter.post("/resetuser", resetUser);
 userRouter.get("/logout",
-  // authenticate,
+  authenticate,
   logoutUser);

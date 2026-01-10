@@ -60,6 +60,7 @@ export const refreshTokenMiddleware = async (req, res) => {
 
     const safeUser = user.toObject();
     delete safeUser.password;
+    delete safeUser.refreshTokens;
 
     const newAccessToken = createAccessToken(safeUser);
 
@@ -130,6 +131,7 @@ export const refreshTokenEngineerMiddleware = async (req, res) => {
 
     const safeEngineer = engineer.toObject();
     delete safeEngineer.password;
+    delete safeEngineer.refreshTokens;
 
     const newAccessToken = createAccessToken(safeEngineer);
     res.cookie("refreshTokenEngineer", newRefreshToken, {
