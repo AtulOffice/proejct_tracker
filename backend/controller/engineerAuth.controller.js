@@ -4,7 +4,7 @@ dotenv.config();
 import crypto from "crypto";
 import EngineerReocord from "../models/engineers..model.js";
 import { sendMail } from "../utils/mailer.js";
-import { createAccessToken, createRefreshToken } from "../utils/utils.js";
+import { createAccessToken, createRefreshToken, hashToken } from "../utils/utils.js";
 import { otpHtml } from "../utils/html.js";
 
 
