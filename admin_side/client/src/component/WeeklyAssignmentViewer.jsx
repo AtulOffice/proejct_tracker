@@ -1,6 +1,7 @@
 import React from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import AssignmentsPDF from "./AssignmentsPDF";
+import AssignmentsPDF from "../utils/AssignmentsPDF";
+
 
 const WeeklyAssignmentViewer = ({ open, onClose, weekData }) => {
   if (!open) return null;

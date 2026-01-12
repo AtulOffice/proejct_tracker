@@ -1,15 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Trash2, Edit3, UserPlus } from "lucide-react";
 import EngineerManagementForm from "./EngineerFormAction.jsx";
-import { useAppContext } from "../appContex.jsx";
-import {
-  deleteEngineer,
-  EditAllEngineers,
-  saveAllEngineers,
-} from "../utils/apiCall.jsx";
 import toast from "react-hot-toast";
 import PopupConfirmation from "./PopuP.Page.jsx";
 import AssignmentModal from "./RecentProjectEng.jsx";
+import { deleteEngineer, EditAllEngineers, saveAllEngineers } from "../apiCall/engineer.Api.js";
+import { toggleMode } from "../redux/slices/uiSlice.js";
+import { useDispatch } from "react-redux";
 
 const EngineerTable = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -17,7 +14,7 @@ const EngineerTable = ({ data }) => {
   const [editOpen, setEditOpen] = useState(false);
   const [showData, setShowData] = useState();
   const formRef = useRef(null);
-  const { setToggle } = useAppContext();
+  const dispatch = useDispatch()
   const [deleteFlag, setDeleteflag] = useState(false);
   const [id, setId] = useState(null);
 
@@ -85,7 +82,7 @@ const EngineerTable = ({ data }) => {
       await deleteEngineer(id);
       setDeleteflag(false);
       toast.success("data deleted successfully");
-      setToggle((prev) => !prev);
+      dispatch(toggleMode())
     } catch (error) {
       if (error.response) {
         toast.error(error.response.data.message || "something whent wrong")
@@ -98,9 +95,9 @@ const EngineerTable = ({ data }) => {
     e.stopPropagation();
     e.preventDefault();
     try {
-      const response = await saveAllEngineers(data);
+      await saveAllEngineers(data);
       toast.success("data saved successfully");
-      setToggle((prev) => !prev);
+      dispatch(toggleMode())
       setSaveOpen(false);
       setEditOpen(false);
     } catch (error) {
@@ -115,7 +112,7 @@ const EngineerTable = ({ data }) => {
     e.stopPropagation();
     e.preventDefault();
     try {
-      const response = await EditAllEngineers(data.id, {
+      await EditAllEngineers(data.id, {
         email: data.email,
         name: data.name,
         phone: data.phone,
@@ -123,7 +120,7 @@ const EngineerTable = ({ data }) => {
         manualOverride: data.manualOverride,
       });
       toast.success("data update successfully");
-      setToggle((prev) => !prev);
+      dispatch(toggleMode())
       setSaveOpen(false);
       setEditOpen(false);
     } catch (error) {

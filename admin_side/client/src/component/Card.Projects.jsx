@@ -5,11 +5,12 @@ import { FaDev } from "react-icons/fa";
 import PopupConfirmation from "./PopuP.Page";
 import { useNavigate } from "react-router-dom";
 import FootBarAll from "../utils/FootBarAll";
-import { deleteProject, updateProject } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
-import { useAppContext } from "../appContex";
 import { LuNotepadText } from "react-icons/lu";
-import ProjectTimelineForm from "../utils/project.Planning";
+import { deleteProject, updateProject } from "../apiCall/project.api";
+import ProjectTimelineForm from "./project.Planning";
+import { toggleMode } from "../redux/slices/uiSlice";
+import { useDispatch } from "react-redux";
 
 const CardAll = ({
   project,
@@ -25,14 +26,14 @@ const CardAll = ({
   const [isDisabled, setIsdisabled] = useState(false);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { setToggle } = useAppContext();
+  const dispatch = useDispatch()
 
   const handleDelete = async (id, jobNumber) => {
     setIsdisabled(true);
     try {
       await deleteProject(id, jobNumber);
       setDeleteflag(false);
-      setToggle((prev) => !prev);
+      dispatch(toggleMode())
     } catch (e) {
       if (e.data) {
         toast.error(e?.data?.message || "something went wrong");

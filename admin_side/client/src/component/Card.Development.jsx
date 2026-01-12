@@ -1,14 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { MdDeleteOutline, MdEdit, MdLocationOn } from "react-icons/md";
 import PopupConfirmation from "./PopuP.Page";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../appContex";
 import { LuNotepadText } from "react-icons/lu";
-import ProjectTimelineForm from "../utils/project.Planning";
 import { FaHome } from "react-icons/fa";
+import apiClient from "../api/axiosClient";
+import { useDispatch } from "react-redux";
+import { toggleDevMode, toggleMode } from "../redux/slices/uiSlice";
 
 const Description = ({ one, two, three, HomeStatus }) => {
   return (
@@ -140,21 +140,18 @@ const CardStatus = ({
   const [deleteFlag, setDeleteflag] = useState(false);
   const [updateFlag, setUpdateflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { setToggle, setToggleDev } = useAppContext();
+  const dispatch = useDispatch()
 
   const handleDelete = async (id, jobNumber) => {
     setIsdisabled(true);
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/projectDev/delete/${id}`,
-        { withCredentials: true }
-      );
+      await apiClient.delete(
+        `/projectDev/delete/${id}`);
       toast.success(`JobId ${jobNumber} deleted successfully`);
       setDeleteflag(false);
-      setToggleDev((prev) => !prev);
-      setToggle((prev) => !prev);
+      dispatch(toggleMode())
+      dispatch(toggleDevMode())
     } catch (e) {
       if (e.response) {
         toast.error(e.response?.data?.message || "something went wrong");
@@ -168,11 +165,7 @@ const CardStatus = ({
   const handleUpdateToggle = async (project) => {
     setIsdisabled(true);
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${project.jobNumber
-        }?check=${true}`,
-        { withCredentials: true }
-      );
+      const res = await apiClient.get(`/projectDev/existancecheck/${project.jobNumber}?check=${true}`);
       const exists = res?.data?.exists;
       if (!exists) {
         toast.error(res?.data?.message || "Project status does not exist");

@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 
 const AssignmentModal = ({ open, onClose, assignments }) => {
     const formRef = useRef(null);

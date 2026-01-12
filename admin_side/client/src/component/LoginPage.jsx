@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../apiCall/authApicall";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import apiClient from "../api/axiosClient";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -73,11 +73,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       setIsOtopLoading(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/forgetuser`,
-        { email: generatePassword?.email },
-        { withCredentials: true }
-      );
+      const response = await apiClient.post(`/forgetuser`, { email: generatePassword?.email });
       toast.success(response?.data?.message || "check mail for otp");
       setIsOpen(true);
       setIsfun(true);
@@ -96,14 +92,11 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       setIsOtopLoading(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/resetuser`,
-        {
-          email: generatePassword?.email,
-          otp: otp ? otp.join("") : "",
-          newPassword: generatePassword?.newPassword,
-        },
-        { withCredentials: true }
+      const response = await apiClient.post(`/resetuser`, {
+        email: generatePassword?.email,
+        otp: otp ? otp.join("") : "",
+        newPassword: generatePassword?.newPassword,
+      }
       );
       toast.success(response?.data?.message || "check mail for otp");
       setChange(true);

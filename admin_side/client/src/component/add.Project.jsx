@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { formval, docsVal } from "../utils/FieldConstant";
 import FormField from "./inputField";
-import { useAppContext } from "../appContex";
-import { addProject, fetfchOrdersAllnew } from "../utils/apiCall";
 import { FaFolderPlus } from "react-icons/fa6";
 import NotifiNewOrd from "./NotifiNewOrd";
-
-
-
+import { addProject } from "../apiCall/project.api";
+import { fetchOrdersAllNew } from "../apiCall/orders.Api";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDevMode, toggleMode } from "../redux/slices/uiSlice";
 
 const InputForm = () => {
-  const { toggle, setToggle, setToggleDev } = useAppContext();
+  const dispatch = useDispatch()
+  const { toggle } = useSelector((state) => state.ui);
   const [formData, setFormData] = useState(formval);
   const [isLoading, setIsLoading] = useState(false);
   const [debounceJobnumber, setdebounceJobNumber] = useState("");
@@ -45,7 +45,7 @@ const InputForm = () => {
   useEffect(() => {
     const getOrdersnew = async () => {
       try {
-        const val = await fetfchOrdersAllnew();
+        const val = await fetchOrdersAllNew();
         if (val) {
           setData(val?.orders);
         }
@@ -194,8 +194,8 @@ const InputForm = () => {
         engineerData: engineerData,
         Docs: Docs,
       });
-      setToggleDev((prev) => !prev);
-      setToggle((prev) => !prev);
+      dispatch(toggleMode())
+      dispatch(toggleDevMode())
     } catch (e) {
       console.log(e);
     } finally {

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import WeeklyAssignmentViewer from "./WeeklyAssignmentViewer";
-import { fetchWeeklyAssmentbyId } from "../utils/apiCall";
+import { fetchWeeklyAssmentbyId } from "../apiCall/assesMent.Api";
+
 
 const WeeklyTableAll = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -59,8 +60,8 @@ const WeeklyTableAll = ({ data }) => {
                 <tr
                   key={indx}
                   className={`hover:bg-blue-50/60 transition-colors duration-150 ${indx % 2 === 0
-                      ? "bg-linear-to-r from-white via-blue-50 to-white"
-                      : "bg-linear-to-r from-white via-blue-100 to-white"
+                    ? "bg-linear-to-r from-white via-blue-50 to-white"
+                    : "bg-linear-to-r from-white via-blue-100 to-white"
                     }`}
                 >
                   <td className="px-6 py-4">

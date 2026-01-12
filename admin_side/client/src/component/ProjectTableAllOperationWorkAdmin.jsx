@@ -6,8 +6,10 @@ import { FaEye, FaTools } from "react-icons/fa";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { GiProgression } from "react-icons/gi";
 import toast from "react-hot-toast";
-import ProgressShowedWorkAdmin from "./client/src/component/ProgressShowedWorkAdmin";
-import { fetchbyOrderbyId, fetchbyProjectbyId, fetchCommisioningProgressByAdmin } from "../utils/apiCall";
+import ProgressShowedWorkAdmin from "../component/ProgressShowedWorkAdmin";
+import { fetchOrderById } from "../apiCall/orders.Api";
+import { fetchbyProjectbyId } from "../apiCall/project.api";
+import { fetchCommisioningProgressByAdmin } from "../apiCall/workProgress.Api";
 
 const ProjectTableAllOperationWorkAdmin = ({ data, tableVal, isEdit, onEditFun, printTitle }) => {
     const printRef = useRef();
@@ -32,7 +34,7 @@ const ProjectTableAllOperationWorkAdmin = ({ data, tableVal, isEdit, onEditFun, 
             let val;
             let orderFlag = false;
             if (project?.OrderMongoId) {
-                val = await fetchbyOrderbyId(project.OrderMongoId?._id);
+                val = await fetchOrderById(project.OrderMongoId?._id);
                 orderFlag = true;
             } else {
                 val = await fetchbyProjectbyId(id);

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { X, UserPlus } from "lucide-react";
 import { Listbox } from "@headlessui/react";
-import { getavailableEngineers } from "../utils/apiCall";
-import { useAppContext } from "../appContex";
+
+import { getavailableEngineers } from "../apiCall/engineer.Api";
+import { useSelector } from "react-redux";
 
 export const EngineerAssignment = ({ setEngineerData, required = false }) => {
   const [selectedEngineer, setSelectedEngineer] = useState("");
@@ -55,7 +56,7 @@ export const EngineerAssignment = ({ setEngineerData, required = false }) => {
     setEngineerData(updatedAssignments);
   };
 
-  const { toggle } = useAppContext();
+  const { toggle } = useSelector((state) => state.ui);
 
   useEffect(() => {
     const getProjects = async () => {

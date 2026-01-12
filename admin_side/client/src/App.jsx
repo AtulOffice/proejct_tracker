@@ -17,7 +17,6 @@ import { setUser, setUserLoading } from "./redux/slices/authSlice";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useSelector((state) => state.auth);
-
   if (userLoading) return null;
   return user?.username ? children : <Navigate to="/login" />;
 };

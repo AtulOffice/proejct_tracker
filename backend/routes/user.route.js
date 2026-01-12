@@ -26,11 +26,11 @@ userRouter.get(
   authenticate,
   finduser
 );
-userRouter.get(
-  "/fetchUserDeatails",
-  authenticate,
-  findUserDetails
-);
+  userRouter.get(
+    "/fetchUserDeatails",
+    authenticate,
+    findUserDetails
+  );
 
 userRouter.get("/verify-email/:token", verifyEmail);
 userRouter.post("/forgetuser", forgotUser);

@@ -1,7 +1,4 @@
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-
-import { fetchbyOrderbyId, fetchbyProjectbyId, getAdminProjectProgressByPlanning } from "../utils/apiCall";
 import ProjectDetailsPopup from "../utils/cardPopup";
 import OrderDetailsPopup from "../utils/OrderShower";
 import { MdEdit, MdEngineering } from "react-icons/md";
@@ -9,13 +6,18 @@ import { handlePrint } from "../utils/print";
 import EngineerForm from "./ProjectFormAction";
 import { useNavigate } from "react-router-dom";
 import { LuNotepadText } from "react-icons/lu";
-import ProjectTimelineForm from "../utils/project.Planning";
 import ProgressShowedAdmin from "./ProgressShowedAdmin";
 import { FaEye } from "react-icons/fa";
 import { SlDocs } from "react-icons/sl";
 import { middleEllipsis } from "../utils/middleEliminator";
 import { GiProgression } from "react-icons/gi";
 import toast from "react-hot-toast";
+import { fetchOrderById } from "../apiCall/orders.Api";
+import { fetchbyProjectbyId } from "../apiCall/project.api";
+import { getAdminProjectProgressByPlanning } from "../apiCall/workProgress.Api";
+import ProjectTimelineForm from "./project.Planning";
+
+
 
 const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editType }) => {
 
@@ -83,7 +85,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
       let val;
       let orderFlag = false;
       if (project?.OrderMongoId) {
-        val = await fetchbyOrderbyId(project.OrderMongoId?._id);
+        val = await fetchOrderById(project.OrderMongoId?._id);
         orderFlag = true;
       } else {
         val = await fetchbyProjectbyId(id);

@@ -3,11 +3,9 @@ import { FaBook } from "react-icons/fa";
 import { format } from "date-fns";
 import { PieChart } from "react-minimal-pie-chart";
 import { FaUser } from "react-icons/fa6";
-import LollipopChart from "./overviewChart";
-import { useAppContext } from "../appContex";
+import LollipopChart from "../utils/overviewChart";
 
-const ProjectOverview = ({ overvew, setActiveCard }) => {
-  const { user } = useAppContext();
+const ProjectOverview = ({ overvew, setActiveCard, user }) => {
   const statusGroups = {
     upcoming: { name: "UpComing", cnt: 0 },
     running: { name: "Active", cnt: 0 },

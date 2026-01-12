@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../appContex";
 import CardAll from "./Card.Projects";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
@@ -7,18 +6,19 @@ import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import FilterCompodev from "../utils/filtercompo.dev";
 import CardWorkStatus from "./CardWorkStatus";
+import dayjs from "dayjs";
+import CardStatus from "./Card.Development";
 import {
   fetchProjects,
   fetchProjectsCatogary,
   fetchProjectsDevelopment,
   fetchProjectslatest,
   fetchProjectsSotype,
-  fetchProjectsUrgent,
-  fetchWorkStatus,
-} from "../utils/apiCall";
-import dayjs from "dayjs";
-import { fetchProjectsDevprogress } from "../utils/apiCall.Dev";
-import CardStatus from "./Card.Development";
+  fetchProjectsUrgent
+} from "../apiCall/project.api";
+import { fetchWorkStatus } from "../apiCall/workProgress.Api";
+import { fetchProjectsDevprogress } from "../apiCall/dev.Api";
+import { useSelector } from "react-redux";
 
 export const ProjectCatogary = ({
   status,
@@ -39,7 +39,8 @@ export const ProjectCatogary = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState();
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
-  const { toggle, user } = useAppContext();
+  const { toggle } = useSelector((state) => state.ui);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const handler = setTimeout(() => {

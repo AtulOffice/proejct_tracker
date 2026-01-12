@@ -6,9 +6,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { getStatus, statusSave } from "../utils/apiCall.Dev";
 import toast from "react-hot-toast";
-import { useAppContext } from "../appContex";
 import { CheckboxField, InputField, SelectField } from "../utils/dev.add";
 import {
   documentRows,
@@ -28,12 +26,16 @@ import {
   handleTestingRowChange,
 } from "../utils/handeler.dev";
 import { mapBackendToFrontend } from "../utils/backTofront";
+import { getStatus, statusSave } from "../apiCall/dev.Api";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDevMode } from "../redux/slices/uiSlice";
 
 const ProjectdevlopForm = () => {
   const nevigate = useNavigate();
   const location = useLocation();
   const { jobnumber } = useParams();
-  const { setToggleDev, user } = useAppContext();
+  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth);
 
   const [plans, setPlans] = useState(null);
   const [formData, setFormData] = useState({
@@ -91,7 +93,7 @@ const ProjectdevlopForm = () => {
         });
 
         response?.success && nevigate(`/page`);
-        setToggleDev((prev) => !prev);
+        dispatch(toggleDevMode())
         toast.success("Data saved successfully!");
       }
     } catch (error) {
@@ -571,7 +573,7 @@ const ProjectdevlopForm = () => {
                   <div>
                     <span className="font-semibold">End:</span>{" "}
                     {plans?.testing[0]
-                    ?.endDate
+                      ?.endDate
                       || "—"}
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import uiReducer from "./slices/uiSlice";
+import { createTransform } from "redux-persist";
 
 import {
     persistReducer,
@@ -20,10 +21,23 @@ const rootReducer = combineReducers({
     ui: uiReducer,
 });
 
+
+const authTransform = createTransform(
+    (inboundState) => {
+        return {
+            ...inboundState,
+            accessToken: null,
+        };
+    },
+    (outboundState) => outboundState,
+    { whitelist: ["auth"] }
+);
+
 const persistConfig = {
     key: "root",
     storage,
     whitelist: ["auth", "ui"],
+    transforms: [authTransform],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -18,16 +18,8 @@ import {
 import OneCard from "./add.Project";
 import AddDocs from "./add.Docs";
 import ZeroCard from "./overview.Project";
-import { useAppContext } from "../appContex";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import {
-  fetchAllworkStatusAdmin,
-  fetchProjectOveriew,
-  fetchProjectsUrgentAction,
-  fetfchProejctADev,
-  fetfchProejctAll,
-} from "../utils/apiCall";
 import {
   logout
 } from "../apiCall/authApicall";
@@ -41,12 +33,16 @@ import { ProjectCatogary } from "./ProjectCatogary.jsx";
 import OrderForm from "./OrderForm.jsx";
 import OrderList from "./orderList.jsx";
 import { FaShoppingCart } from "react-icons/fa";
+import { fetchAllworkStatusAdmin } from "../apiCall/workProgress.Api.js";
+import { fetchProjectOveriew, fetchProjectsUrgentAction, fetfchProejctADev, fetfchProejctAll } from "../apiCall/project.api.js";
+import { useSelector } from "react-redux";
 
 const AdminDashboard = () => {
-  return <div>hello world</div>
-
   const formRef = useRef(null);
-  const { toggle, user, userLoading, toggleDev } = useAppContext();
+
+  const { toggle, toggleDev } = useSelector((state) => state.ui);
+  const { user, userLoading } = useSelector((state) => state.auth);
+
   const [overvew, setOverview] = useState();
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -170,7 +166,7 @@ const AdminDashboard = () => {
   const renderCard = () => {
     switch (activeCard) {
       case "zero":
-        return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} />;
+        return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} user={user} />;
       case "one":
         return <OneCard />;
       // case "twentyfour":

@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../appContex";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
-import { fetfchOrdersAll } from "../utils/apiCall";
 import OrderTableAll from "./orderListTable.jsx";
+import { fetchOrdersAll } from "../apiCall/orders.Api.js";
+import { useSelector } from "react-redux";
 
 const OrderList = () => {
-  const { toggle } = useAppContext();
+  const { toggle } = useSelector((state) => state.ui);
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -27,7 +27,7 @@ const OrderList = () => {
     const getOrders = async () => {
       if (debounceSearchTerm && debounceSearchTerm.trim() !== "") {
         try {
-          const val = await fetfchOrdersAll({
+          const val = await fetchOrdersAll({
             search: debounceSearchTerm,
           });
           if (val) {
@@ -37,7 +37,7 @@ const OrderList = () => {
           console.error("Failed to fetch by jobNumber", error);
         }
       } else {
-        const val = await fetfchOrdersAll({
+        const val = await fetchOrdersAll({
           search: "",
         });
         if (val) {

@@ -15,7 +15,7 @@ const uiSlice = createSlice({
         setToggleDev: (state, action) => {
             state.toggleDev = action.payload;
         },
-        toggleSidebar: (state) => {
+        toggleMode: (state) => {
             state.toggle = !state.toggle;
         },
         toggleDevMode: (state) => {
@@ -24,7 +24,7 @@ const uiSlice = createSlice({
     },
 });
 
-export const { setToggle, setToggleDev, toggleSidebar, toggleDevMode } =
+export const { setToggle, setToggleDev, toggleMode, toggleDevMode } =
     uiSlice.actions;
 
 export default uiSlice.reducer;

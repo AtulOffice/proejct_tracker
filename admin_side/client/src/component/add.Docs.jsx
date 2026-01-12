@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { docsVal } from "../utils/FieldConstant";
-import { useAppContext } from "../appContex";
-import { fetchProjectsAllnewDocs } from "../utils/apiCall";
 import { FaFolderPlus } from "react-icons/fa6";
 import NotifiNewOrd from "./NotifiNewOrd";
 import { InputConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField } from "./subField";
 import DocumentsSection from "../utils/addDevDocs";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { fetchProjectsAllnewDocs } from "../apiCall/project.api";
+import apiClient from "../api/axiosClient";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDevMode, toggleMode } from "../redux/slices/uiSlice";
 
 const InputForm = () => {
-    const { toggle, setToggle, setToggleDev } = useAppContext();
+    const dispatch = useDispatch()
+    const { toggle } = useSelector((state) => state.ui);
+
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         jobNumber: "",
@@ -129,14 +132,11 @@ const InputForm = () => {
                 ...formData,
                 ...Docs,
             };
-            const response = await axios.put(
-                `${import.meta.env.VITE_API_URL}/updateDocs/${selectData._id}`,
-                finalData,
-                { withCredentials: true }
-            );
+            await apiClient.put(
+                `/updateDocs/${selectData._id}`, finalData);
             toast.success("Data updated successfully");
-            setToggle((prev) => !prev);
-            setToggleDev((prev) => !prev);
+            dispatch(toggleMode())
+            dispatch(toggleDevMode())
             navigate("/page", {
                 replace: true,
             });
@@ -156,9 +156,6 @@ const InputForm = () => {
             setSelectData(null)
         }
     };
-
-
-
 
     return (
         <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-linear-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">

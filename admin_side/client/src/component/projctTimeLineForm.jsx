@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     documentRows,
@@ -11,14 +9,18 @@ import {
     testingRows,
 } from "../utils/dev.context";
 import { mapFrontendToBackend } from "../utils/frontToback";
+import apiClient from "../api/axiosClient";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMode } from "../redux/slices/uiSlice";
 
 const ProjectTimelineForm1 = () => {
     const { id } = useParams();
-    const { user } = useAppContext();
+    const dispatch = useDispatch()
+    const { toggle } = useSelector((state) => state.ui);
+    const { user } = useSelector((state) => state.auth);
     const [collOpen, setCollOpen] = useState(false);
     const [project, setProject] = useState();
     const [loading, setLoading] = useState();
-    const { toggle, setToggle } = useAppContext();
     const [isPlan, setIsPlan] = useState(false)
     const navigate = useNavigate();
 
@@ -42,10 +44,7 @@ const ProjectTimelineForm1 = () => {
         const fetchProject = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/ProjectsfetchdevbyId/${id}`,
-                    { withCredentials: true }
-                );
+                const res = await apiClient.get(`/ProjectsfetchdevbyId/${id}`);
                 setProject(res.data?.data || null);
             } catch (err) {
                 console.error(err);
@@ -110,9 +109,7 @@ const ProjectTimelineForm1 = () => {
 
         const fetchPlanningData = async (planId) => {
             try {
-                const res = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/planningDev/fetchbyid/${planId}`, { withCredentials: true }
-                );
+                const res = await apiClient.get(`/planningDev/fetchbyid/${planId}`);
                 const defaultData = res.data?.data || {};
                 if (defaultData && defaultData.plans) setIsPlan(true);
 
@@ -197,9 +194,7 @@ const ProjectTimelineForm1 = () => {
     useEffect(() => {
         const fetchEngineerData = async () => {
             try {
-                const res = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/engineer/getAllEngineers`, { withCredentials: true }
-                );
+                const res = await apiClient.get(`/engineer/getAllEngineers`);
                 setEngineersList(res.data?.engineers || res.data?.data || []);
             } catch (err) {
                 console.error("Error fetching engineer data:", err);
@@ -459,13 +454,7 @@ const ProjectTimelineForm1 = () => {
                 projectId: project?._id,
                 userId: user?._id,
             };
-
-            const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/planningDev/save`,
-                payload,
-                { withCredentials: true }
-            );
-
+            const res = await apiClient.post(`/planningDev/save`, payload);
             toast.success(res.data?.message || "Plan saved successfully");
             navigate("/page");
 
@@ -479,8 +468,7 @@ const ProjectTimelineForm1 = () => {
                     },
                 ],
             });
-
-            setToggle((prev) => !prev);
+            dispatch(toggleMode())
         } catch (err) {
             console.error(err);
             if (err?.response?.data?.message) {

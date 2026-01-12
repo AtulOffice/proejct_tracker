@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AlertCircle, Save, Loader } from "lucide-react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { fields } from "../utils/FieldConstant";
-import { toWords } from "number-to-words";
+// import { toWords } from "number-to-words";
 import { numberToIndianWords } from "../utils/numberToword";
 import NumberFlow from '@number-flow/react';
+import apiClient from "../api/axiosClient";
 
 export default function OrderForm({ setActiveCard }) {
   const [formData, setFormData] = useState(fields);
@@ -328,10 +328,7 @@ export default function OrderForm({ setActiveCard }) {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/order/save`,
-          formData
-        );
+        const response = await apiClient.post(`/order/save`, formData);
         if (response.data) {
           toast.success("data saved successfully");
           setFormData(fields);
@@ -363,7 +360,7 @@ export default function OrderForm({ setActiveCard }) {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/market/getall`)
+        const response = await apiClient.get(`/market/getall`)
         setEmployees(response?.data?.data);
       } catch (err) {
         console.log(err)

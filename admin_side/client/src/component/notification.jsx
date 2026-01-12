@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../appContex";
-import { getAssignedEngineers } from "../utils/apiCall";
 import { FaCalendar } from "react-icons/fa6";
 import { handlePrint } from "../utils/print";
+import { getAssignedEngineers } from "../apiCall/engineer.Api";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMode } from "../redux/slices/uiSlice";
 
 const NotificationForm = ({ setOpen, formRef }) => {
-  const { toggle, setToggle } = useAppContext();
+  const dispatch = useDispatch()
+  const { toggle } = useSelector((state) => state.ui)
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const NotificationForm = ({ setOpen, formRef }) => {
         <div className="flex flex-row justify-center items-center space-x-2 sm:space-x-4 pb-6">
           <button
             type="button"
-            onClick={() => setToggle((prev) => !prev)}
+            onClick={() => dispatch(toggleMode())}
             className="px-6 sm:px-8 py-2 rounded-lg text-white font-semibold shadow transition bg-linear-to-r from-blue-600 via-indigo-500 to-sky-700 hover:bg-blue-700/90 hover:shadow-lg"
           >
             Refresh

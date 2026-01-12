@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../appContex";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import ProjectTableAll from "./projectListTable";
 import ProjectTableAllOperationWorkAdmin from "./ProjectTableAllOperationWorkAdmin";
+import { useSelector } from "react-redux";
 
 const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
-  const { toggle } = useAppContext();
+
+  const { toggle } = useSelector((state) => state.ui);
   const [searchTerm, setSearchTerm] = useState("");
   const [timeFilter, setTimeFilter] = useState("all");
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -66,7 +67,7 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
   if (!data) {
     return <LoadingSkeltionAll />;
   }
-  
+
   return (
     <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
 

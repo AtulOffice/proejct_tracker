@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import axios from "axios";
-import { useAppContext } from "../appContex";
 import { EngineerAssignment } from "./engineerInpt";
+import apiClient from "../api/axiosClient";
+import { useDispatch } from "react-redux";
+import { toggleDevMode, toggleMode } from "../redux/slices/uiSlice";
 
 const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [engineerData, setEngineerData] = useState([]);
-  const { setToggle, setToggleDev } = useAppContext();
+  const dispatch = useDispatch()
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsDisabled(true);
@@ -24,15 +25,12 @@ const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
         engineerData,
       };
 
-      const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/update/${selectedProject._id}`,
-        finalData,
-        { withCredentials: true }
-      );
+      await apiClient.put(
+        `/update/${selectedProject._id}`, finalData);
       toast.success("Data updated successfully");
-      setToggle((prev) => !prev);
       setOpen(false);
-      setToggleDev((prev) => !prev);
+      dispatch(toggleMode())
+      dispatch(toggleDevMode())
     } catch (e) {
       if (e.response) {
         toast.error(e.response?.data?.message || "Update failed");

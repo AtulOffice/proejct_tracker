@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchbyOrderbyId } from "../utils/apiCall";
 import toast from "react-hot-toast";
 import OrderDetailsPopup from "../utils/OrderShower";
 import { MdCancel, MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
-import axios from "axios";
 import { middleEllipsis } from "../utils/middleEliminator";
-import { useAppContext } from "../appContex";
 import PopupConfirmation from "./PopuP.Page";
+import { fetchOrderById } from "../apiCall/orders.Api";
+import { useDispatch } from "react-redux";
+import { toggleMode } from "../redux/slices/uiSlice";
+import apiClient from "../api/axiosClient";
 
 const OrderTableAll = ({ data }) => {
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [id, seId] = useState("");
   const [cancelFlag, setCancelflag] = useState(false)
   const navigate = useNavigate();
-  const { setToggle } = useAppContext()
+  const dispatch = useDispatch()
   const handleUpdate = (id) => {
     try {
       navigate(`/updateOrder/${id}`, {
@@ -28,12 +29,8 @@ const OrderTableAll = ({ data }) => {
 
   const handleCancelled = async (id) => {
     try {
-      const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/order/cancel/${id}`,
-        {},
-        { withCredentials: true }
-      );
-      setToggle((prev => !prev))
+      const res = await apiClient.put(`/order/cancel/${id}`);
+      dispatch(toggleMode())
       toast.success(res?.data?.message || "Project cancelled successfully");
     } catch (e) {
       console.error(e);
@@ -48,7 +45,7 @@ const OrderTableAll = ({ data }) => {
 
   const hadleOpenPopup = async (id) => {
     try {
-      const val = await fetchbyOrderbyId(id);
+      const val = await fetchOrderById(id);
       if (val) {
         setSelectedProjectForPopup(val);
       }

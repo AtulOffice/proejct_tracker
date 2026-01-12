@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { MdDeleteOutline } from "react-icons/md";
 import PopupConfirmation from "./PopuP.Page";
-import axios from "axios";
 import toast from "react-hot-toast";
 import WorkStatusModal from "./workPopup";
-import { useAppContext } from "../appContex";
+import { useDispatch } from "react-redux";
+import { toggleMode } from "../redux/slices/uiSlice";
+import apiClient from "../api/axiosClient";
 
 const CardWorkStatus = ({ project, indx }) => {
   const [deleteFlag, setDeleteflag] = useState(false);
   const [isDisabled, setIsdisabled] = useState(false);
   const [updateId, setUpdateid] = useState();
   const [details, setDetails] = useState(false);
-  const { setToggle } = useAppContext();
+  const dispatch = useDispatch()
 
   const formattedDate = (date) => {
     const validDate = new Date(date);
@@ -27,13 +28,10 @@ const CardWorkStatus = ({ project, indx }) => {
   const handleDelete = async (id) => {
     setIsdisabled(true);
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/worksts/delete/${id}`,
-        { withCredentials: true }
-      );
+      await apiClient.delete(`/worksts/delete/${id}`);
       toast.success(`Work Status deleted successfully`);
       setDeleteflag(false);
-      setToggle((prev) => !prev);
+      dispatch(toggleMode())
     } catch (e) {
       if (e.response) {
         toast.error(e.response?.data?.message || "something went wrong");

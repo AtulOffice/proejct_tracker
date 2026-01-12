@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import WorkStatusModal from "../../../workPopup";
+import WorkStatusModal from "./workPopup";
 
 const ProgressShowedWorkAdmin = ({ progressData, onClose }) => {
     const engineers = progressData || [];

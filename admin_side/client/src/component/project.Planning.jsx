@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "../appContex";
 import toast from "react-hot-toast";
-import axios from "axios";
 import {
   documentRows,
   logicRows,
@@ -9,13 +7,17 @@ import {
   screenRows,
   testingRows,
 } from "../utils/dev.context";
-import { mapFrontendToBackend } from "./frontToback";
+import { mapFrontendToBackend } from "../utils/frontToback";
+import apiClient from "../api/axiosClient";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMode } from "../redux/slices/uiSlice";
 
 const ProjectTimelineForm = ({ open, onClose, project }) => {
-  const { user } = useAppContext();
-  const [collOpen, setCollOpen] = useState(false);
-  const { toggle, setToggle } = useAppContext()
+  const dispatch = useDispatch()
+  const { user } = useSelector((state) => state.auth);
+  const { toggle } = useSelector((state) => state.ui);
 
+  const [collOpen, setCollOpen] = useState(false);
   const [formData, setFormData] = useState({
     documents: { startDate: "", endDate: "", planDetails: "", engineers: [] },
     logic: { startDate: "", endDate: "", planDetails: "", engineers: [] },
@@ -29,9 +31,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
   useEffect(() => {
     const fetchPlanningData = async (id) => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/planningDev/fetchbyid/${id}`
-        );
+        const res = await apiClient.get(`/planningDev/fetchbyid/${id}`);
         const defaultData = res.data?.data || {};
         defaultData?.updatedBy?.username &&
           setName(defaultData.updatedBy.username);
@@ -66,9 +66,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
   useEffect(() => {
     const fetchEngineerData = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/engineer/getAllEngineers`
-        );
+        const res = await apiClient.get(`/engineer/getAllEngineers`);
         setEngineersList(res.data?.engineers || res.data?.data || []);
       } catch (err) {
         console.error("Error fetching engineer data:", err);
@@ -145,15 +143,12 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
           rows: projectRows(),
         },
       }, project?.jobNumber)
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/planningDev/save`,
-        {
-          ...formData,
-          formDevbackData,
-          projectId: project?._id,
-          useId: user?._id,
-        },
-        { withCredentials: true }
+      const res = await apiClient.post(`/planningDev/save`, {
+        ...formData,
+        formDevbackData,
+        projectId: project?._id,
+        useId: user?._id,
+      },
       );
       toast.success(res.data?.message || "Plan saved successfully");
       onClose();
@@ -168,7 +163,7 @@ const ProjectTimelineForm = ({ open, onClose, project }) => {
         scada: { startDate: "", endDate: "", planDetails: "", engineers: [] },
         testing: { startDate: "", endDate: "", planDetails: "", engineers: [] },
       });
-      setToggle((prev) => !prev)
+      dispatch(toggleMode())
     } catch (e) {
       if (e?.response?.data?.message) {
         toast.error(e.response.data.message || "Something went wrong");

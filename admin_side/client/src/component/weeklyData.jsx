@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { saveWeeklyAssment } from "../utils/apiCall";
+
 import { engineerWeek } from "../utils/engineerWeek";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
+import { saveWeeklyAssment } from "../apiCall/assesMent.Api";
+import apiClient from "../api/axiosClient";
 
 const days = [
   "Monday",
@@ -37,11 +38,7 @@ const WeeklyAssignmentForm = () => {
 
   const FetchData = async (weekStart) => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL
-        }/devrecord/fetch?weekStart=${weekStart}`,
-        { withCredentials: true }
-      );
+      const res = await apiClient.get(`/devrecord/fetch?weekStart=${weekStart}`);
       toast.success("Existing tasks loaded");
       return res?.data?.data?.assignments || {};
     } catch (e) {

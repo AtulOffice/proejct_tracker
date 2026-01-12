@@ -1,9 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { docsVal, formval, InputConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField, TextArea } from "./subField";
-import { useAppContext } from "../appContex";
 import {
   Navigate,
   useLocation,
@@ -13,11 +11,14 @@ import {
 import LoadingSkeleton from "../utils/loaderForm";
 import { EngineerAssignment } from "./engineerInpt";
 import DocumentsSection from "../utils/addDevDocs";
+import apiClient from "../api/axiosClient";
+import { useDispatch } from "react-redux";
+import { toggleDevMode, toggleMode } from "../redux/slices/uiSlice";
 
 const UpdateForm = () => {
   const { id } = useParams();
   const location = useLocation();
-  const { setToggle, setToggleDev } = useAppContext();
+  const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     swname: "",
@@ -86,10 +87,7 @@ const UpdateForm = () => {
   useEffect(() => {
     const fetchByid = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/fetch/${id}`,
-          { withCredentials: true }
-        );
+        const res = await apiClient.get(`/fetch/${id}`);
         if (res?.data?.data) {
           const { OrderMongoId, ...otherData } = res.data.data;
           setOrderDetails(OrderMongoId)
@@ -297,16 +295,12 @@ const UpdateForm = () => {
         ...Docs,
       };
 
-      const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/update/${id}`,
-        finalData,
-        { withCredentials: true }
-      );
+      await apiClient.put(`/update/${id}`, finalData);
       toast.success("Data updated successfully");
       setFormData(formval);
       setDocs(docsVal);
-      setToggle((prev) => !prev);
-      setToggleDev((prev) => !prev);
+      dispatch(toggleMode())
+      dispatch(toggleDevMode())
       navigate("/page", {
         replace: true,
       });

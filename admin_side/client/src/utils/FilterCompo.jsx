@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppContext } from "../appContex";
+import { useDispatch } from "react-redux";
+import { toggleMode } from "../redux/slices/uiSlice";
 
 const FilterCompo = ({
   searchTerm,
@@ -14,7 +15,7 @@ const FilterCompo = ({
   EngHandle = false,
 }) => {
 
-  const { setToggle } = useAppContext();
+  const dispatch = useDispatch()
 
   const mapTime = {
     all: "All TIME",
@@ -64,7 +65,7 @@ const FilterCompo = ({
               refreshIcon.classList.add("animate-spin");
               setTimeFilter("all");
               setSearchTerm("");
-              setToggle((prev) => !prev);
+              dispatch(toggleMode())
               setTimeout(() => refreshIcon.classList.remove("animate-spin"), 1000);
             }}
             className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-800 

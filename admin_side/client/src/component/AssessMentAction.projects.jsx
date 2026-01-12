@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useAppContext } from "../appContex";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 
 import FilterCompoWeek from "../utils/FilterCompoWeek.jsx";
-import { fetchWeeklyAssment } from "../utils/apiCall";
 import WeeklyTableAll from "./WeeklyTableAll.jsx";
+import { fetchWeeklyAssment } from "../apiCall/assesMent.Api.js";
+import { useSelector } from "react-redux";
 
 const WeekRecordList = () => {
-  const { setToggle, toggle } = useAppContext();
+  const { toggle } = useSelector((state) => state.ui);
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState();
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
@@ -39,10 +39,6 @@ const WeekRecordList = () => {
         });
         if (val) {
           setData(val?.data);
-        }
-        try {
-        } catch (error) {
-          console.error("Failed to fetch data", error);
         }
       }
     };

@@ -1,8 +1,9 @@
 import React from "react";
-import { useAppContext } from "../appContex";
+import { toggleMode } from "../redux/slices/uiSlice";
+import { useDispatch } from "react-redux";
 
 const FilterCompoWeek = ({ searchTerm, setSearchTerm }) => {
-  const { setToggle } = useAppContext();
+  const dispatch = useDispatch()
   return (
     <>
       <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
@@ -37,7 +38,7 @@ const FilterCompoWeek = ({ searchTerm, setSearchTerm }) => {
               const refreshIcon = document.getElementById("refreshIcon");
               refreshIcon.classList.add("animate-spin");
               setSearchTerm("");
-              setToggle((prev) => !prev);
+              dispatch(toggleMode())
               setTimeout(() => {
                 refreshIcon.classList.remove("animate-spin");
               }, 1000);

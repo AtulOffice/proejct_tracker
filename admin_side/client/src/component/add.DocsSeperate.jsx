@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { docsVal } from "../utils/FieldConstant";
-import { useAppContext } from "../appContex";
-import { fetchProjectsAllnewDocsbyId } from "../utils/apiCall";
-import { FaFolderPlus } from "react-icons/fa6";
-import NotifiNewOrd from "./NotifiNewOrd";
 import { InputConst } from "../utils/FieldConstant";
 import { InputFiled, SelectField } from "./subField";
 import DocumentsSection from "../utils/addDevDocs";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { fetchProjectsAllnewDocsbyId } from "../apiCall/project.api";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDevMode, toggleMode } from "../redux/slices/uiSlice";
+import apiClient from "../api/axiosClient";
 
 const AddDocsSeperate = () => {
-    const { toggle, setToggle, setToggleDev } = useAppContext();
+    const dispatch = useDispatch()
+    const { toggle } = useSelector((state) => state.ui);
     const { id } = useParams()
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
@@ -140,14 +140,11 @@ const AddDocsSeperate = () => {
                 ...formData,
                 ...Docs,
             };
-            await axios.put(
-                `${import.meta.env.VITE_API_URL}/updateDocs/${selectData._id}`,
-                finalData,
-                { withCredentials: true }
-            );
+            await apiClient.put(
+                `/updateDocs/${selectData._id}`, finalData);
             toast.success("Data updated successfully");
-            setToggle((prev) => !prev);
-            setToggleDev((prev) => !prev);
+            dispatch(toggleMode())
+            dispatch(toggleDevMode())
             navigate("/page", {
                 replace: true,
             });

@@ -266,7 +266,6 @@ export const logoutUser = async (req, res) => {
       req.cookies?.refreshToken ||
       req.headers["refresh-token"] ||
       req.body?.refreshToken;
-    console.log(token)
     if (!token) {
       return res.status(200).json({
         success: true,
@@ -417,7 +416,7 @@ export const findUserDetails = async (req, res) => {
       });
     }
     const UserData = await UserModels.findById(_id).select(
-      "-createdAt -updatedAt -email"
+      "-createdAt -updatedAt -email -refreshTokens"
     );
     if (!UserData) {
       return res.status(404).json({

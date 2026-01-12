@@ -14,7 +14,7 @@ export const refreshTokenMiddleware = async (req, res) => {
       req.cookies?.refreshToken ||
       req.headers["refresh-token"] ||
       req.body?.refreshToken;
-    console.log("this hit",  token)
+      
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -27,7 +27,7 @@ export const refreshTokenMiddleware = async (req, res) => {
     const user = await UserModels.findOne({
       "refreshTokens.tokenHash": tokenHash,
     });
-    
+
     if (!user) {
       return res.status(403).json({
         success: false,

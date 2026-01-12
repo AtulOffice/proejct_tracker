@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { AlertCircle, Save, Loader } from "lucide-react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchbyOrderbyId } from "../utils/apiCall";
 import { fields } from "../utils/FieldConstant";
+import { fetchOrderById } from "../apiCall/orders.Api";
+import apiClient from "../api/axiosClient";
 
 export default function UpdateOrderForm() {
   const { id } = useParams();
@@ -21,7 +21,7 @@ export default function UpdateOrderForm() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const val = await fetchbyOrderbyId(id);
+        const val = await fetchOrderById(id);
         if (val) {
           setFormData((prev) => ({ ...prev, ...val }));
         } else {
@@ -77,7 +77,7 @@ export default function UpdateOrderForm() {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/market/getall`)
+        const response = await apiClient.get(`/market/getall`)
         setEmployees(response?.data?.data);
       } catch (err) {
         console.log(err)
@@ -318,10 +318,8 @@ export default function UpdateOrderForm() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const response = await axios.put(
-          `${import.meta.env.VITE_API_URL}/order/update/${id}`,
-          formData
-        );
+        const response = await apiClient.put(
+          `/order/update/${id}`, formData);
         if (response.data) {
           toast.success("data update successfully");
           setFormData(fields);
