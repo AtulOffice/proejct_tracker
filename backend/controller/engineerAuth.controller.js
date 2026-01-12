@@ -129,7 +129,7 @@ export const forgotEngineer = async (req, res) => {
       expires: Date.now() + 10 * 60 * 1000,
       used: false,
     };
-
+     console.log(otp)
     await engineer.save();
     await sendMail({
       to: email,

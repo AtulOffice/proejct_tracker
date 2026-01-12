@@ -21,8 +21,32 @@ export const verifyToken = (token) => {
 };
 
 export const verifyAccessToken = (token) => {
+  if (!token || typeof token !== "string") {
+    throw new Error("Access token missing");
+  }
+  if (token.startsWith("Bearer ")) {
+    token = token.split(" ")[1];
+  }
+
+  if (token.split(".").length !== 3) {
+    throw new Error("Access token malformed");
+  }
+
   return jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 };
+
 export const verifyRefreshToken = (token) => {
+  if (!token || typeof token !== "string") {
+    throw new Error("Refresh token missing");
+  }
+
+  if (token.startsWith("Bearer ")) {
+    token = token.split(" ")[1];
+  }
+
+  if (token.split(".").length !== 3) {
+    throw new Error("Refresh token malformed");
+  }
+
   return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
 };

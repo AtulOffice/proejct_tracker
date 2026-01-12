@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Trash2, Edit3, UserPlus } from "lucide-react";
 import EngineerManagementForm from "./EngineerFormAction.jsx";
 import { useAppContext } from "../appContex.jsx";
+import Notfound from "../utils/Notfound";
 import {
   deleteEngineer,
   EditAllEngineers,
@@ -278,7 +279,7 @@ const EngineerTable = ({ data }) => {
           </table>
         </div>
       ) : (
-        <NoDataFound />
+        <Notfound />
       )
       }
       <div className="md:hidden mt-4 space-y-4">
