@@ -28,7 +28,5 @@ export const verifyRefreshToken = (token) => {
   return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
 };
 
-
-
 export const hashToken = (token) =>
   crypto.createHash("sha256").update(token).digest("hex");
