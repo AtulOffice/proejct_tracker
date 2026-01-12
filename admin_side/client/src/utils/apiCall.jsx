@@ -1,5 +1,13 @@
 import axios from "axios";
 import toast from "react-hot-toast";
+import apiClient from "../api/axiosClient.js";
+import { setUser } from "../redux/slices/authSlice";
+
+
+
+
+
+// change for the redux   
 
 export const fetchProjectOveriew = async () => {
   try {
@@ -220,53 +228,8 @@ export const deleteEngineer = async (id) => {
   }
 };
 
-export const login = async ({ username, password, navigate, setUser }) => {
-  if (!username || !password) {
-    toast.error("Please enter both username and password");
-    return;
-  }
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/loginuser`,
-      { username, password },
-      { withCredentials: true }
-    );
-    const user = response?.data?.user;
-    setUser(user);
-    if (user) {
-      setUser(user);
-      toast.success("Login successful");
-      navigate("/page", {
-        replace: true,
-      });
-    } else {
-      toast.error("Login failed: Token not received");
-    }
-  } catch (error) {
-    if (error.response) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error("somthing went wrong when login");
-      console.log(error.message);
-    }
-    console.error("Login error:", error);
-    throw error;
-  }
-};
 
-export const logout = async () => {
-  try {
-    await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
-      withCredentials: true,
-    });
-  } catch (e) {
-    if (e.response) {
-      toast.error(e.response?.data?.message || "Logout failed");
-    }
-    console.error("Logout error:", e);
-    throw e;
-  }
-};
+
 
 export const fetchWorkStatus = async ({ page, search }) => {
   try {
@@ -308,21 +271,7 @@ export const fetchbyProjectbyId = async (id) => {
   }
 };
 
-export const UserCall = async () => {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/fetchUserDeatails`,
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (e) {
-    console.error("Error fetching user:", e);
-    if (e.response) {
-      console.log(e.response.data);
-    }
-    throw e;
-  }
-};
+
 
 export const addProject = async ({ formData, engineerData, Docs }) => {
   try {

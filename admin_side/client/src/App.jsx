@@ -1,41 +1,45 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import LoginPage from "./component/LoginPage.jsx";
 import TaskDisplay from "./component/dashboard.jsx";
-import { AppProvider, useAppContext } from "./appContex";
 import UpdateForm from "./component/UpdateForm.jsx";
 import ProjectdevlopForm from "./component/add.devstatus.jsx";
-import { UserCall } from "./utils/apiCall.jsx";
 import OrderForm from "./component/OrderForm.jsx";
 import UpdateOrderForm from "./component/updateOrder.jsx";
 import ProjectTimelineForm from "./component/projctTimeLineForm.jsx";
 import AddDocsSeperate from "./component/add.DocsSeperate.jsx";
 
+import { UserCall } from "./apiCall/authApicall";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, setUserLoading } from "./redux/slices/authSlice";
+
 const ProtectedRoute = ({ children }) => {
-  const { user, userLoading } = useAppContext();
-  if (!userLoading) {
-    return user?.username ? children : <Navigate to="/login" />;
-  }
+  const { user, userLoading } = useSelector((state) => state.auth);
+
+  if (userLoading) return null;
+  return user?.username ? children : <Navigate to="/login" />;
 };
 
 const AppRoutes = () => {
-  const { setUser, setUserLoading } = useAppContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const data = await UserCall();
-        setUser(data?.user || null);
+        dispatch(setUser(data?.user || null));
       } catch (err) {
         console.error(err);
-        setUser(null);
+        dispatch(setUser(null));
       } finally {
-        setUserLoading(false);
+        dispatch(setUserLoading(false));
       }
     };
 
     fetchUser();
-  }, []);
+  }, [dispatch]);
 
   return (
     <Routes>
@@ -47,6 +51,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/page"
         element={
@@ -55,9 +60,11 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route path="/newPage" element={<OrderForm />} />
 
       <Route path="/login" element={<LoginPage />} />
+
       <Route
         path="/update/:id"
         element={
@@ -66,6 +73,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/addDocs/:id"
         element={
@@ -74,6 +82,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/timelineform/:id"
         element={
@@ -82,6 +91,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/updateOrder/:id"
         element={
@@ -90,6 +100,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/develop/:jobnumber"
         element={
@@ -98,6 +109,7 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
@@ -105,11 +117,9 @@ const AppRoutes = () => {
 
 const App = () => {
   return (
-    <AppProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AppProvider>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 };
 

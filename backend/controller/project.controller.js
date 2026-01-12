@@ -1811,8 +1811,6 @@ export const calculateOverallProgressForAllPlannings = async () => {
   return results;
 };
 
-
-
 export const getProjectOverview = async (req, res) => {
   try {
     const filter = {};

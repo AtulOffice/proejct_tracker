@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../appContex";
-import { login } from "../utils/apiCall";
+import { login } from "";
 import axios from "axios";
 import toast from "react-hot-toast";
 const LoginPage = () => {
@@ -11,7 +11,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-  const nevigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
 

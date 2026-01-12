@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../appContex";
-import { login } from "../utils/apiCall";
+import { login } from "../apiCall/authApicall";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+
 const LoginPage = () => {
-  const { setUser } = useAppContext();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
   });
-  const nevigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
 
@@ -64,8 +64,8 @@ const LoginPage = () => {
     login({
       username: loginData.username.trim().toLowerCase(),
       password: loginData.password,
-      navigate: navigate,
-      setUser: setUser,
+      navigate,
+      dispatch,
     });
   };
 
@@ -331,15 +331,14 @@ const LoginPage = () => {
                 >
                   <span className="absolute top-0 left-0 w-0 h-full bg-white opacity-20 transition-all duration-300 group-hover:w-full"></span>
                   <span
-                    className={`relative flex items-center justify-center gap-2 ${
-                      isOtpLoading ? "cursor-not-allowed" : ""
-                    }`}
+                    className={`relative flex items-center justify-center gap-2 ${isOtpLoading ? "cursor-not-allowed" : ""
+                      }`}
                   >
                     {isOtpLoading
                       ? "Processing"
                       : isFun
-                      ? "save"
-                      : "Request OTP"}
+                        ? "save"
+                        : "Request OTP"}
                   </span>
                 </button>
               </div>

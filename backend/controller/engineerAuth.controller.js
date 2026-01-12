@@ -18,7 +18,7 @@ export const loginEngineer = async (req, res) => {
     }
 
     const engineer = await EngineerReocord.findOne({ email }).select(
-      "+password +refreshTokens -createdAt -updatedAt -developmentProjectList -assignments -workStatusRecords"
+      "+password +refreshTokens"
     );
 
     if (!engineer) {
@@ -37,18 +37,20 @@ export const loginEngineer = async (req, res) => {
     }
 
     engineer.lastLogin = new Date();
-    const engineerData = engineer.toObject();
-    const {
-      password: _,
-      refreshTokens,
-      empId,
-      isAssigned,
-      phone,
-      manualOverride,
-      lastLogin,
-      assignments,
-      ...safeEngineer
-    } = engineerData;
+    const safeEngineer = engineer.toObject();
+    delete safeEngineer.password;
+    delete safeEngineer.refreshTokens;
+    delete safeEngineer.developmentProjectList;
+    delete safeEngineer.assignments;
+    delete safeEngineer.workStatusRecords;
+    delete safeEngineer.createdAt;
+    delete safeEngineer.updatedAt;
+    delete safeEngineer.manualOverride;
+    delete safeEngineer.phone;
+    delete safeEngineer.isAssigned;
+    delete safeEngineer.lastLogin;
+    delete safeEngineer.empId;
+
     const accessToken = createAccessToken(safeEngineer);
     const refreshToken = crypto.randomBytes(40).toString("hex");
     engineer.refreshTokens = (engineer.refreshTokens || []).filter(
@@ -65,6 +67,7 @@ export const loginEngineer = async (req, res) => {
       createdAt: new Date(),
     });
     await engineer.save();
+
     res.cookie("refreshTokenEngineer", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
@@ -72,12 +75,19 @@ export const loginEngineer = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({
+    const clientType = req.headers["x-client-type"] || "web";
+
+    const payload = {
       success: true,
       message: "Engineer login successful",
       accessToken,
       user: safeEngineer,
-    });
+    };
+
+    if (clientType === "mobile") {
+      payload.refreshToken = refreshToken;
+    }
+    return res.status(200).json(payload);
   } catch (e) {
     console.error("Engineer Login Error:", e);
     return res.status(500).json({
@@ -86,6 +96,7 @@ export const loginEngineer = async (req, res) => {
     });
   }
 };
+
 export const logoutEngineer = async (req, res) => {
   try {
     const token =

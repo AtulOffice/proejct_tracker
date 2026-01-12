@@ -216,6 +216,10 @@ export const loginUser = async (req, res) => {
 
     const safeUser = user.toObject();
     delete safeUser.password;
+    delete safeUser.refreshTokens;
+    delete safeUser.isEmailVerified;
+    delete safeUser.createdAt;
+    delete safeUser.updatedAt;
 
     const accessToken = createAccessToken(safeUser);
     const refreshToken = crypto.randomBytes(40).toString("hex");
@@ -230,7 +234,6 @@ export const loginUser = async (req, res) => {
       expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
       createdAt: new Date(),
     });
-
     await user.save();
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -238,11 +241,19 @@ export const loginUser = async (req, res) => {
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.json({
+
+    const clientType = req.headers["x-client-type"] || "web";
+
+    const payload = {
       success: true,
       accessToken,
       user: safeUser,
-    });
+    };
+
+    if (clientType === "mobile") {
+      payload.refreshToken = refreshToken;
+    }
+    return res.json(payload);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false, message: "Server error" });
@@ -255,7 +266,7 @@ export const logoutUser = async (req, res) => {
       req.cookies?.refreshToken ||
       req.headers["refresh-token"] ||
       req.body?.refreshToken;
-
+    console.log(token)
     if (!token) {
       return res.status(200).json({
         success: true,

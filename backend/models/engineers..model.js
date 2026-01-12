@@ -111,12 +111,6 @@ const engineerSchema = new mongoose.Schema(
               sectionEndDate: Date,
               startDate: Date,
               endDate: Date,
-              CompletionPercentage: {
-                type: Number,
-                min: 0,
-                max: 100,
-                default: 0,
-              },
               engineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],

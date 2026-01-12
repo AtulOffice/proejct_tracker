@@ -2,12 +2,12 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 export const createToken = (user) => {
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "10m" });
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: "1m" });
 };
 
 export const createAccessToken = (user) => {
   return jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "10m",
+    expiresIn: "1m",
   });
 };
 

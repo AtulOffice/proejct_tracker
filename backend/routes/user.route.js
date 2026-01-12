@@ -24,7 +24,6 @@ userRouter.post("/refresh-token", refreshTokenMiddleware);
 userRouter.get(
   "/finduser/:id",
   authenticate,
-  authorizeRole("admin"),
   finduser
 );
 userRouter.get(
@@ -36,6 +35,4 @@ userRouter.get(
 userRouter.get("/verify-email/:token", verifyEmail);
 userRouter.post("/forgetuser", forgotUser);
 userRouter.post("/resetuser", resetUser);
-userRouter.get("/logout",
-  authenticate,
-  logoutUser);
+userRouter.get("/logout", logoutUser);

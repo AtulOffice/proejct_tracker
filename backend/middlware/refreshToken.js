@@ -14,7 +14,7 @@ export const refreshTokenMiddleware = async (req, res) => {
       req.cookies?.refreshToken ||
       req.headers["refresh-token"] ||
       req.body?.refreshToken;
-
+    console.log("this hit",  token)
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -27,7 +27,7 @@ export const refreshTokenMiddleware = async (req, res) => {
     const user = await UserModels.findOne({
       "refreshTokens.tokenHash": tokenHash,
     });
-
+    
     if (!user) {
       return res.status(403).json({
         success: false,
@@ -71,10 +71,18 @@ export const refreshTokenMiddleware = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({
+    const clientType = req.headers["x-client-type"] || "web";
+
+    const payload = {
       success: true,
       accessToken: newAccessToken,
-    });
+    };
+
+    if (clientType === "mobile") {
+      payload.refreshToken = newRefreshToken;
+    }
+
+    return res.json(payload);
   } catch (err) {
     console.error(err);
     return res.status(500).json({
@@ -140,10 +148,18 @@ export const refreshTokenEngineerMiddleware = async (req, res) => {
       sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.json({
+
+    const clientType = req.headers["x-client-type"] || "web";
+
+    const payload = {
       success: true,
       accessToken: newAccessToken,
-    });
+    };
+
+    if (clientType === "mobile") {
+      payload.refreshToken = newRefreshToken;
+    }
+    return res.json(payload);
   } catch (err) {
     console.error(err);
     return res.status(500).json({
