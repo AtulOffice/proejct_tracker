@@ -111,6 +111,7 @@ export const refreshTokenMiddleware = async (req, res) => {
   }
 };
 
+
 export const refreshTokenEngineerMiddleware = async (req, res) => {
   try {
     const token =
@@ -124,10 +125,53 @@ export const refreshTokenEngineerMiddleware = async (req, res) => {
         message: "No refresh token (engineer)",
       });
     }
+
     const tokenHash = hashToken(token);
-    const engineer = await EngineerReocord.findOne({
-      "refreshTokens.tokenHash": tokenHash,
-    });
+
+    const MAX_SESSIONS = 5;
+    const newRefreshToken = crypto.randomBytes(40).toString("hex");
+    const newRefreshHash = hashToken(newRefreshToken);
+
+    const newTokenObj = {
+      tokenHash: newRefreshHash,
+      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      createdAt: new Date(),
+    };
+    const engineer = await EngineerReocord.findOneAndUpdate(
+      {
+        "refreshTokens.tokenHash": tokenHash,
+        "refreshTokens.expires": { $gt: Date.now() },
+      },
+      [
+        {
+          $set: {
+            refreshTokens: {
+              $slice: [
+                {
+                  $concatArrays: [
+                    {
+                      $filter: {
+                        input: "$refreshTokens",
+                        as: "t",
+                        cond: {
+                          $and: [
+                            { $gt: ["$$t.expires", Date.now()] },
+                            { $ne: ["$$t.tokenHash", tokenHash] },
+                          ],
+                        },
+                      },
+                    },
+                    [newTokenObj],
+                  ],
+                },
+                -MAX_SESSIONS,
+              ],
+            },
+          },
+        },
+      ],
+      { new: true }
+    ).lean();
 
     if (!engineer) {
       return res.status(403).json({
@@ -135,32 +179,13 @@ export const refreshTokenEngineerMiddleware = async (req, res) => {
         message: "Invalid refresh token (engineer)",
       });
     }
-    engineer.refreshTokens = engineer.refreshTokens.filter(
-      (t) => t.expires > Date.now()
-    );
-    engineer.refreshTokens = engineer.refreshTokens.filter(
-      (t) => t.tokenHash !== tokenHash
-    );
-    const MAX_SESSIONS = 5;
-    if (engineer.refreshTokens.length >= MAX_SESSIONS) {
-      engineer.refreshTokens.shift();
-    }
 
-    const newRefreshToken = crypto.randomBytes(40).toString("hex");
-
-    engineer.refreshTokens.push({
-      tokenHash: hashToken(newRefreshToken),
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-      createdAt: new Date(),
-    });
-
-    await engineer.save();
-
-    const safeEngineer = engineer.toObject();
+    const safeEngineer = { ...engineer };
     delete safeEngineer.password;
     delete safeEngineer.refreshTokens;
 
     const newAccessToken = createAccessToken(safeEngineer);
+
     res.cookie("refreshTokenEngineer", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
@@ -176,8 +201,9 @@ export const refreshTokenEngineerMiddleware = async (req, res) => {
     };
 
     if (clientType === "mobile") {
-      payload.refreshToken = newRefreshToken;
+      payload.refreshTokenEngineer = newRefreshToken;
     }
+
     return res.json(payload);
   } catch (err) {
     console.error(err);
