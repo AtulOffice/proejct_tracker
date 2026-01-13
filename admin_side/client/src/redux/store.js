@@ -26,7 +26,7 @@ const authTransform = createTransform(
     (inboundState) => {
         return {
             ...inboundState,
-            accessToken: null,
+            // accessToken: null,
         };
     },
     (outboundState) => outboundState,

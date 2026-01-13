@@ -35,10 +35,11 @@ import OrderList from "./orderList.jsx";
 import { FaShoppingCart } from "react-icons/fa";
 import { fetchAllworkStatusAdmin } from "../apiCall/workProgress.Api.js";
 import { fetchProjectOveriew, fetchProjectsUrgentAction, fetfchProejctADev, fetfchProejctAll } from "../apiCall/project.api.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminDashboard = () => {
   const formRef = useRef(null);
+  const dispatch = useDispatch()
 
   const { toggle, toggleDev } = useSelector((state) => state.ui);
   const { user, userLoading } = useSelector((state) => state.auth);
@@ -74,7 +75,7 @@ const AdminDashboard = () => {
   };
   const handleLogOut = () => {
     try {
-      logout();
+      logout({ dispatch, navigate });
       toast.success("logout successfully");
       navigate("/login");
     } catch (e) {

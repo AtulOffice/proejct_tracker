@@ -33,7 +33,6 @@ export const login = async ({ username, password, navigate, dispatch }) => {
 export const UserCall = async () => {
     try {
         const response = await apiClient.get("/fetchUserDeatails");
-        console.log(response.data)
         return response.data;
     } catch (e) {
         console.error("Error fetching user:", e);

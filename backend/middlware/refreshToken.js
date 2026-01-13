@@ -183,7 +183,6 @@ import crypto from "crypto"
 //   }
 // };
 export const refreshTokenMiddleware = async (req, res) => {
-  // console.log("this is called")
   try {
     const token =
       req.cookies?.refreshToken ||

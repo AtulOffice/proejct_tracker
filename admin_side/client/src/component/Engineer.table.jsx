@@ -7,6 +7,7 @@ import AssignmentModal from "./RecentProjectEng.jsx";
 import { deleteEngineer, EditAllEngineers, saveAllEngineers } from "../apiCall/engineer.Api.js";
 import { toggleMode } from "../redux/slices/uiSlice.js";
 import { useDispatch } from "react-redux";
+import Notfound from "../utils/Notfound";
 
 const EngineerTable = ({ data }) => {
   const [open, setOpen] = useState(false);
@@ -275,7 +276,7 @@ const EngineerTable = ({ data }) => {
           </table>
         </div>
       ) : (
-        <NoDataFound />
+        <Notfound />
       )
       }
       <div className="md:hidden mt-4 space-y-4">

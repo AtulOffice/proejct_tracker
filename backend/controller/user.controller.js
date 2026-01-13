@@ -5,10 +5,9 @@ dotenv.config();
 import crypto from "crypto";
 import { sendMail } from "../utils/mailer.js";
 import { otpHtml, verificationHtml } from "../utils/html.js";
-import { createAccessToken, createRefreshToken, hashToken } from "../utils/tokens.js";
+import { createAccessToken, createRefreshToken, encrypt, hashToken } from "../utils/tokens.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import redis from "../utils/redis.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -223,12 +222,6 @@ export const loginUser = async (req, res) => {
     delete safeUser.updatedAt;
 
     const accessToken = createAccessToken(safeUser);
-    await redis.set(
-      `at:${hashToken(accessToken)}`,
-      safeUser._id.toString(),
-      "EX",
-      60
-    );
     const refreshToken = crypto.randomBytes(40).toString("hex");
 
     user.refreshTokens = user.refreshTokens.filter((t) => t.expires > Date.now());
@@ -279,7 +272,6 @@ export const logoutUser = async (req, res) => {
         message: "Logged out",
       });
     }
-
     const tokenHash = hashToken(token);
     await UserModels.updateOne(
       { "refreshTokens.tokenHash": tokenHash },
