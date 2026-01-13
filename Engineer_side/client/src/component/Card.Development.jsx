@@ -2,12 +2,12 @@ import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { MdDeleteOutline, MdEdit, MdLocationOn } from "react-icons/md";
 import PopupConfirmation from "./PopuP.Page";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
 import { LuNotepadText } from "react-icons/lu";
 import { FaHome } from "react-icons/fa";
+import apiClient from "../api/axiosClient";
 
 const Description = ({ one, two, three, HomeStatus }) => {
   return (
@@ -104,11 +104,10 @@ const ProgressBar = ({
         {[...Array(5)].map((_, index) => (
           <div
             key={index}
-            className={`w-2 h-1 rounded-full transition-all duration-300 ${
-              index < Math.ceil((value || 0) / 20)
+            className={`w-2 h-1 rounded-full transition-all duration-300 ${index < Math.ceil((value || 0) / 20)
                 ? `bg-gradient-to-r ${colorFrom} ${colorTo} shadow-sm`
                 : "bg-gray-300"
-            }`}
+              }`}
           />
         ))}
       </div>
@@ -116,12 +115,12 @@ const ProgressBar = ({
         {value >= 100
           ? "Complete"
           : value >= 75
-          ? "Almost Done"
-          : value >= 50
-          ? "In Progress"
-          : value >= 25
-          ? "Getting Started"
-          : "Not Started"}
+            ? "Almost Done"
+            : value >= 50
+              ? "In Progress"
+              : value >= 25
+                ? "Getting Started"
+                : "Not Started"}
       </span>
     </div>
   </div>
@@ -138,10 +137,7 @@ const CardStatus = ({ project, indx }) => {
   const handleDelete = async (id, jobNumber) => {
     setIsdisabled(true);
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/projectDev/delete/${id}`,
-        { withCredentials: true }
-      );
+      await apiClient.delete(`/projectDev/delete/${id}`);
       toast.success(`JobId ${jobNumber} deleted successfully`);
       setDeleteflag(false);
       setToggleDev((prev) => !prev);
@@ -161,12 +157,8 @@ const CardStatus = ({ project, indx }) => {
   const handleUpdateToggle = async (project) => {
     setIsdisabled(true);
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projectDev/existancecheck/${
-          project.JobNumber
-        }?check=${true}`,
-        { withCredentials: true }
-      );
+      const res = await apiClient.get(
+        `/projectDev/existancecheck/${project.JobNumber}?check=${true}`);
       const exists = res?.data?.exists;
       if (!exists) {
         toast.error(res?.data?.message || "Project status does not exist");

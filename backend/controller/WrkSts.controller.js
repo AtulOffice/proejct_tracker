@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import EngineerReocord from "../models/engineers..model.js";
+import EngineerReocord from "../models/engineers.model.js";
 import ProjectModel from "../models/Project.model.js";
 import workStatusModel from "../models/WorkStatus.model.js";
 import workStratuModel from "../models/WorkStatus.model.js";

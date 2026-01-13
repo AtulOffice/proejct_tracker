@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
+import apiClient from "../api/axiosClient";
 
 const ENUMVAL = ["YES", "NO", "N/A"];
 const PROJECT_STATUS = ["OPEN", "CLOSED"];
@@ -42,12 +42,8 @@ export default function EndChecklistForm({ project, onClose }) {
 
     const loadData = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/endCheck/project/${project._id}`
-        );
-
+        const res = await apiClient.get(`/endCheck/project/${project._id}`);
         const checklist = res.data?.data || null;
-
         if (checklist) {
           console.log("📌 Existing END checklist found — merging");
 
@@ -180,11 +176,7 @@ export default function EndChecklistForm({ project, onClose }) {
         projectId: project?._id || null,
         submittedBy: user?._id || null,
       };
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/endCheck/save`,
-        bodyData
-      );
-
+      const response = await apiClient.post(`/endCheck/save`, bodyData);
       toast.success(response.data?.message || "End Checklist Saved Successfully");
       onClose();
     } catch (error) {
@@ -320,7 +312,7 @@ export default function EndChecklistForm({ project, onClose }) {
             />
           </div>
         </Section>
-        
+
         <Section
           title="Project Performance"
           color="from-purple-500 to-pink-500"

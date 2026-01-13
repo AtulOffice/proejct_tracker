@@ -10,22 +10,21 @@ import {
 } from "react-icons/ri";
 import OneCard from "./add.work.jsx";
 import ZeroCard from "./overview.Project";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext.jsx";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { fetchEngineerOveriew, fetchProjectslist, fetfchProejctLOGIC, fetfchProejctSCADA, fetfchProejctDOCS, fetfchProejctTESTING, logout, fetchAllworkStatusforengineer } from "../utils/apiCall";
+import { fetchEngineerOveriew, fetchProjectslist, fetchProjectLOGIC, fetchProjectSCADA, fetchProjectTESTING, logout, fetchAllworkStatusforengineer } from "../utils/apiCall";
 import { useRef } from "react";
 import ProjectList from "./projectList.jsx";
 import ProjectListOperation from "./ProjectListOperation.jsx";
 import { ProjectCatogary } from "./ProjectCatogary.jsx";
 import EngineerMom from "./Mom.form.jsx";
-import axios from "axios";
 import AssignmentPage from "./assingement.jsx";
 import EngineerWorkStatusFull from "./workFUllForm.jsx";
+import apiClient from "../api/axiosClient.js";
 
 const AdminDashboard = () => {
-  const { toggle, toggleDev, user, toggleEng,
-    setToggleEng } = useAppContext();
+  const { toggle, toggleDev, user, toggleEng, setUser, setToggleEng } = useAppContext();
   const [overvew, setOverview] = useState();
   const [Assignments, setAssignments] = useState([])
 
@@ -49,7 +48,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/engineerside/fetchAllEngineersProjectshow/${user?._id}`, { withCredentials: true })
+        const response = await apiClient.get(`/engineerside/fetchAllEngineersProjectshow/${user?._id}`)
         setAssignments(response?.data?.totalAssignments || []);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -71,7 +70,7 @@ const AdminDashboard = () => {
   const handleLogOut = () => {
     try {
       toast.success("logout successfully");
-      logout();
+      logout({ navigate: navigate, setUser: setUser });
       navigate("/login");
     } catch (e) {
       console.log(e);
@@ -180,7 +179,7 @@ const AdminDashboard = () => {
           <ProjectListOperation
             key={"LOGIC"}
             tableVal={ProjectActionTab}
-            fetchFun={fetfchProejctLOGIC}
+            fetchFun={fetchProjectLOGIC}
             isEdit={true}
             onEditFun="LOGIC"
             printTitle="LOGIC PROEJCT"
@@ -192,7 +191,7 @@ const AdminDashboard = () => {
           <ProjectListOperation
             key={"SCADA"}
             tableVal={ProjectActionTab}
-            fetchFun={fetfchProejctSCADA}
+            fetchFun={fetchProjectSCADA}
             isEdit={true}
             onEditFun="SCADA"
             printTitle="SCADA PROEJCT"
@@ -203,7 +202,7 @@ const AdminDashboard = () => {
           <ProjectListOperation
             key={"TESTING"}
             tableVal={ProjectActionTab}
-            fetchFun={fetfchProejctTESTING}
+            fetchFun={fetchProjectTESTING}
             isEdit={true}
             onEditFun="TESTING"
             printTitle="TESTING PROEJCT"

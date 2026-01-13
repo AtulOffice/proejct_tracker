@@ -1,12 +1,10 @@
 import { UserModels } from "../models/user.model.js";
 import {
   createAccessToken,
-  createRefreshToken,
   hashToken,
-  verifyRefreshToken,
-  verifyToken,
 } from "../utils/tokens.js";
 import crypto from "crypto"
+import EngineerReocord from "../models/engineers.model.js"
 
 export const refreshTokenMiddleware = async (req, res) => {
   try {
@@ -111,7 +109,6 @@ export const refreshTokenMiddleware = async (req, res) => {
   }
 };
 
-
 export const refreshTokenEngineerMiddleware = async (req, res) => {
   try {
     const token =
@@ -183,6 +180,16 @@ export const refreshTokenEngineerMiddleware = async (req, res) => {
     const safeEngineer = { ...engineer };
     delete safeEngineer.password;
     delete safeEngineer.refreshTokens;
+    delete safeEngineer.developmentProjectList;
+    delete safeEngineer.assignments;
+    delete safeEngineer.workStatusRecords;
+    delete safeEngineer.createdAt;
+    delete safeEngineer.updatedAt;
+    delete safeEngineer.manualOverride;
+    delete safeEngineer.phone;
+    delete safeEngineer.isAssigned;
+    delete safeEngineer.lastLogin;
+    delete safeEngineer.empId;
 
     const newAccessToken = createAccessToken(safeEngineer);
 

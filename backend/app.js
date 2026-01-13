@@ -19,7 +19,7 @@ import { ImageUploadRouter } from "./routes/image.route.js";
 import { StartRouter } from "./routes/startCheckList.routes.js";
 import { EndRouter } from "./routes/endCheckList.routes.js";
 import { MarketRouter } from "./routes/marketing.route.js";
-import {connectRedis} from "./utils/redis.js"
+import { connectRedis } from "./utils/redis.js"
 dotenv.config();
 
 const port = process.env.PORT || 9000;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
 import Notfound from "../utils/Notfound";
 import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
@@ -66,10 +66,6 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
     }, [timeFilter, data]);
 
     const filterRef = useRef(null);
-
-    if (!data) {
-        return <LoadingSkeltionAll />;
-    }
 
     return (
         <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">

@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { motion } from "framer-motion";
 import PopupConfirmation from "./PopuP.Page";
-import axios from "axios";
 import toast from "react-hot-toast";
 import WorkStatusModal from "./workPopup";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
+import apiClient from "../api/axiosClient";
 
 const CardWorkStatus = ({ project, indx }) => {
   const [deleteFlag, setDeleteflag] = useState(false);
@@ -27,10 +27,7 @@ const CardWorkStatus = ({ project, indx }) => {
   const handleDelete = async (id) => {
     setIsdisabled(true);
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/worksts/delete/${id}`,
-        { withCredentials: true }
-      );
+      await apiClient.delete(`/worksts/delete/${id}`);
       toast.success(`Work Status deleted successfully`);
       setDeleteflag(false);
       setToggle((prev) => !prev);

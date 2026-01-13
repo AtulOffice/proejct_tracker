@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Upload, FileText, Trash2, Save, CheckCircle2 } from "lucide-react";
-import axios from "axios";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
 import toast from "react-hot-toast"
+import apiClient from "../api/axiosClient";
 
 const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
 
@@ -71,7 +71,7 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/engineerside/fetchAllEngineersProject/${user?._id}`, { withCredentials: true })
+        const response = await apiClient.get(`/engineerside/fetchAllEngineersProject/${user?._id}`)
         setData(response?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -114,16 +114,8 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
         })),
       };
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/engineerside/saveMomoRelatedProject/${user?._id}`,
-        payload,
-        {
-          withCredentials: true,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-
+      const response = await apiClient.post(
+        `/engineerside/saveMomoRelatedProject/${user?._id}`, payload);
       if (response.data.success) {
         toast.success("MOM saved successfully!");
         setFormData(formval);

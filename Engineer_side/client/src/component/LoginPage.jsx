@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../appContex";
-import { login } from "";
-import axios from "axios";
+import { useAppContext } from "../appContext";
 import toast from "react-hot-toast";
+import { login } from "../utils/apiCall";
+import apiClient from "../api/axiosClient";
 const LoginPage = () => {
-  const { setUser } = useAppContext();
+  const { setUser, accessToken, setAccessToken } = useAppContext();
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
@@ -66,6 +66,7 @@ const LoginPage = () => {
       password: loginData.password,
       navigate: navigate,
       setUser: setUser,
+      setAccessToken: setAccessToken
     });
   };
 
@@ -73,11 +74,8 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       setIsOtopLoading(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/engineerauth/forgetuser`,
-        { email: generatePassword?.email },
-        { withCredentials: true }
-      );
+      const response = await apiClient.post(
+        `/engineerauth/forgetuser`, { email: generatePassword?.email });
       toast.success(response?.data?.message || "check mail for otp");
       setIsOpen(true);
       setIsfun(true);
@@ -96,14 +94,12 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       setIsOtopLoading(true);
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/engineerauth/resetuser`,
+      const response = await apiClient.post(`/engineerauth/resetuser`,
         {
           email: generatePassword?.email,
           otp: otp ? otp.join("") : "",
           newPassword: generatePassword?.newPassword,
-        },
-        { withCredentials: true }
+        }
       );
       toast.success(response?.data?.message || "check mail for otp");
       setChange(true);

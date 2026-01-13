@@ -8,6 +8,9 @@ export const AppProvider = ({ children }) => {
   const [toggleDev, setToggleDev] = useState(false);
   const [user, setUser] = useState();
   const [userLoading, setUserLoading] = useState(true);
+  const [accessToken, setAccessToken] = useState(() => {
+    return localStorage.getItem("accessToken") || "";
+  });
   return (
     <Context.Provider
       value={{
@@ -20,7 +23,9 @@ export const AppProvider = ({ children }) => {
         userLoading,
         setUserLoading,
         toggleEng,
-        setToggleEng
+        setToggleEng,
+        accessToken,
+        setAccessToken
       }}
     >
       {children}

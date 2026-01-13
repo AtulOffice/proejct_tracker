@@ -1,12 +1,9 @@
-import axios from "axios";
-import toast from "react-hot-toast";
+import apiClient from "../api/axiosClient";
 
 export const fetchProjectsDev = async ({ page, search }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL
-      }/projectDev/paginationdev?page=${page}&limit=6&search=${search}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/projectDev/paginationdev?page=${page}&limit=6&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
@@ -21,10 +18,8 @@ export const fetchProjectsDevprogress = async ({
   statusFilter,
 }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL
-      }/projectDev/paginationdevprog?page=${page}&limit=6&search=${search}&statusprog=${statusFilter}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/projectDev/paginationdevprog?page=${page}&limit=6&search=${search}&statusprog=${statusFilter}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
@@ -35,34 +30,22 @@ export const fetchProjectsDevprogress = async ({
 
 export const statusSave = async ({ data }) => {
   try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_API_URL}/projectDev/save`,
-      data,
-      { withCredentials: true }
-    );
+    const res = await apiClient.post(`/projectDev/save`, data);
     return res.data;
   } catch (err) {
-    if (err.response) {
-      throw err.response;
-    }
     console.error("Failed to save project status:", err);
+    if (err.response) throw err.response;
     throw err;
   }
 };
 
 export const getStatus = async (Jobnumber) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL
-      }/projectDev/fetchbyjobnumber/${Jobnumber}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/projectDev/fetchbyjobnumber/${Jobnumber}`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch project status by job number:", err);
-    if (err.response) {
-      throw err.response;
-    }
+    if (err.response) throw err.response;
     throw new Error("Failed to fetch project status");
   }
 };

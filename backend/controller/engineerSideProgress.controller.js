@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 import EngineerProgressReport from "../models/devProgressReport.models.js";
-import EngineerReocord from "../models/engineers..model.js";
+import EngineerReocord from "../models/engineers.model.js";
 
 export const validateProgressBody = (body) => {
     const errors = [];

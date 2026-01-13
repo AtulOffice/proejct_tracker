@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import EngineerReocord from "../models/engineers..model.js";
+import EngineerReocord from "../models/engineers.model.js";
 import {
   deleteImageToGlobalServer,
   uploadImageToGlobalServer,

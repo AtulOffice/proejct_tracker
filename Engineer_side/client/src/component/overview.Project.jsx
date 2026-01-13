@@ -3,7 +3,7 @@ import { FaBook } from "react-icons/fa";
 import { format } from "date-fns";
 import { FaUser } from "react-icons/fa6";
 import LollipopChart from "./overviewChart";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
 import UnderDevelopment from "./underdevelopment";
 
 const ProjectOverview = ({ overvew, setActiveCard }) => {

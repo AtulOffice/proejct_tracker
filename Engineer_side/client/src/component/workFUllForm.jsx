@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { X, Briefcase, Calendar, MapPin, Users, FileText } from "lucide-react";
-import axios from "axios";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
 import toast from "react-hot-toast";
 import ExcelDocsInput from "../utils/Excelimport";
 import { getLatestworkSubmission } from "../utils/apiCall";
+import apiClient from "../api/axiosClient";
 
 const EngineerWorkStatusFull = () => {
     const userformval = {
@@ -52,7 +52,7 @@ const EngineerWorkStatusFull = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/engineerside/fetchAllProject/${user?._id}`, { withCredentials: true })
+                const response = await apiClient.get(`/engineerside/fetchAllProject/${user?._id}`)
                 setData(response?.data)
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -115,11 +115,7 @@ const EngineerWorkStatusFull = () => {
         try {
             setLoading(true);
 
-            const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/worksts/save`,
-                formData,
-                { withCredentials: true }
-            );
+            const response = await apiClient.post(`/worksts/save`, formData);
             if (response.data.success) {
                 toast.success("Work status submitted successfully!");
                 setFormData(userformval);

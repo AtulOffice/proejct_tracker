@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
 import CardAll from "./Card.Projects";
 import Notfound from "../utils/Notfound";
-import LoadingSkeltionAll from "../utils/LoaderAllPorject";
 import { filterProjectsUtils } from "../utils/filterUtils";
 import FilterCompo from "../utils/FilterCompo";
 import FilterCompodev from "../utils/filtercompo.dev";
@@ -123,9 +122,6 @@ export const ProjectCatogary = ({
     }
   };
 
-  if (!data) {
-    return <LoadingSkeltionAll />;
-  }
 
   return (
     <div className="max-w-8xl min-h-[140vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">

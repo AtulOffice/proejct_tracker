@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { X, Briefcase, Calendar, MapPin, Users, FileText } from "lucide-react";
-import { useAppContext } from "../appContex";
+import { useAppContext } from "../appContext";
 import toast from "react-hot-toast";
-import axios from "axios";
+import apiClient from "../api/axiosClient";
 
 const EngineerWorkStatus = ({ project, onClose }) => {
   const [loading, setLoading] = useState(false)
@@ -50,11 +50,7 @@ const EngineerWorkStatus = ({ project, onClose }) => {
         currentEngineerName: user?.name,
       };
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/worksts/save`,
-        payload,
-        { withCredentials: true }
-      );
+      const response = await apiClient.post(`/worksts/save`,payload);
       if (response.data.success) {
         toast.success("Work status submitted successfully!");
         setFormData({

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useAppContext } from "../appContex";
-import axios from "axios";
+import { useAppContext } from "../appContext";
+import apiClient from "../api/axiosClient";
 
 const YESNO = ["YES", "NO", "N/A"];
 const ARRANGEMENT = ["SIEVPL", "CUSTOMER"]
@@ -67,9 +67,7 @@ const StartChecklistForm = ({ project, onClose }) => {
 
     const loadData = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/startCheck/project/${project._id}`
-        );
+        const res = await apiClient.get(`/startCheck/project/${project._id}`);
 
         const checklist = res.data?.data || null;
 
@@ -200,7 +198,7 @@ const StartChecklistForm = ({ project, onClose }) => {
         toast.error("Please fill all required fields");
         return;
       }
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/startCheck/save`, {
+      const response = await apiClient.post(`/startCheck/save`, {
         ...formData,
         poDate: formData.poDate ? new Date(formData.poDate) : null,
         visitStartDate: formData.visitStartDate ? new Date(formData.visitStartDate) : null,

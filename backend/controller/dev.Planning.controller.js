@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import PlanningModel from "../models/dev.Planning.model.js";
 import ProjectDevModel from "../models/Project.Dev.model.js";
 import ProjectModel from "../models/Project.model.js";
-import EngineerReocord from "../models/engineers..model.js";
+import EngineerReocord from "../models/engineers.model.js";
 
 export const PlanningSave = async (req, res) => {
   try {

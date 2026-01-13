@@ -38,11 +38,13 @@ WorkstsRouter.delete(
 );
 WorkstsRouter.get(
   "/pagination",
+  authenticateEngineer,
   workStatusPegination
 );
 
 WorkstsRouter.get(
   "/paginationeng/:engineerId",
+  authenticateEngineer,
   workStatusPaginationByEngineer
 );
 
@@ -56,26 +58,31 @@ WorkstsRouter.get(
 // this make same for reduce api call
 WorkstsRouter.get(
   "/getLatestworkSubmission",
+  authenticateEngineer,
   getLatestWorkStatusForAllProjects
 );
 
 WorkstsRouter.get(
   "/fetchAllworkStatusforengineer",
+  authenticateEngineer,
   getDistinctProjectsByEngineerWithLastStatus
 );
 
 WorkstsRouter.get(
   "/fetchAllworkStatusbyProjectforengineer/:projectId",
+  authenticateEngineer,
   getAllWorkStatusByProjectAndEngineer
 );
 
 WorkstsRouter.get(
   "/fetchAllworkStatusbyProjectforAdmin/:projectId",
+  authenticateEngineer,
   getAllWorkStatusByProjectGroupedByEngineer
 );
 
 WorkstsRouter.get(
   "/fetchAllworkStatus",
+  authenticateEngineer,
   getDistinctProjectsWithLastStatus
 );
 

@@ -1,27 +1,20 @@
-import axios from "axios";
 import toast from "react-hot-toast";
+import apiClient from "../api/axiosClient";
+
 
 export const fetchEngineerOveriew = async (id) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/getEngineerOverview/${id}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/getEngineerOverview/${id}`);
     return res.data;
   } catch (err) {
-    console.error("Failed to fetch projects:", err);
+    console.error("Failed to fetch engineer overview:", err);
     throw err;
   }
 };
 
 export const fetchProjects = async ({ page, search, id }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL
-      }/Engineerpagination/${id}?page=${page}&limit=15&search=${search}`,
-      { withCredentials: true }
-    );
-
+    const res = await apiClient.get(`/Engineerpagination/${id}?page=${page}&limit=15&search=${search}`);
     return {
       data: res.data?.assignments,
       hashMore: page < res.data?.pagination?.totalPages,
@@ -34,66 +27,60 @@ export const fetchProjects = async ({ page, search, id }) => {
 
 export const fetchProjectslist = async ({ search, id }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL
-      }/EngineerProjectlist/${id}?search=${search}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/EngineerProjectlist/${id}?search=${search}`
     );
     return res.data?.assignments;
   } catch (err) {
-    console.error("Failed to fetch projects:", err);
+    console.error("Failed to fetch projects list:", err);
     throw err;
   }
 };
 
-export const fetfchProejctDOCS = async ({ search }) => {
+export const fetchProjectDOCS = async ({ search }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/getAlldocs?search=${search}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/engineerside/getAlldocs?search=${search}`
     );
     return res.data;
   } catch (err) {
-    console.error("Failed to fetch projects:", err);
+    console.error("Failed to fetch docs:", err);
     throw err;
   }
 };
 
-export const fetfchProejctLOGIC = async ({ search }) => {
+export const fetchProjectLOGIC = async ({ search }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/getAllLogic?search=${search}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/engineerside/getAllLogic?search=${search}`
     );
     return res.data;
   } catch (err) {
-    console.error("Failed to fetch projects:", err);
+    console.error("Failed to fetch logic:", err);
     throw err;
   }
 };
 
-export const fetfchProejctSCADA = async ({ search }) => {
+export const fetchProjectSCADA = async ({ search }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/getAllScada?search=${search}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/engineerside/getAllScada?search=${search}`
     );
     return res.data;
   } catch (err) {
-    console.error("Failed to fetch projects:", err);
+    console.error("Failed to fetch scada:", err);
     throw err;
   }
 };
 
-export const fetfchProejctTESTING = async ({ search }) => {
+export const fetchProjectTESTING = async ({ search }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/getAlltesting?search=${search}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/engineerside/getAlltesting?search=${search}`
     );
     return res.data;
   } catch (err) {
-    console.error("Failed to fetch projects:", err);
+    console.error("Failed to fetch testing projects:", err);
     throw err;
   }
 };
@@ -102,10 +89,7 @@ export const fetfchProejctTESTING = async ({ search }) => {
 
 export const fetchPhaseLogic = async ({ id }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/getlogicphase/${id}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/engineerside/getlogicphase/${id}`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch projects:", err);
@@ -115,10 +99,7 @@ export const fetchPhaseLogic = async ({ id }) => {
 
 export const fetchPhaseScada = async ({ id }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/getscadaphase/${id}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/engineerside/getscadaphase/${id}`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch projects:", err);
@@ -128,10 +109,7 @@ export const fetchPhaseScada = async ({ id }) => {
 
 export const fetchPhaseTesting = async ({ id }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/gettestingphase/${id}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/engineerside/gettestingphase/${id}`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch projects:", err);
@@ -140,39 +118,34 @@ export const fetchPhaseTesting = async ({ id }) => {
 };
 
 
+
 // save the progress report
 
 
 export const createProgressReport = async (payload) => {
   try {
-    const res = await axios.post(
-      `${import.meta.env.VITE_API_URL}/engineerside/progresssSave/`,
-      payload,
-      { withCredentials: true }
-    );
+    const res = await apiClient.post(`/engineerside/progresssSave/`, payload);
     return res.data;
   } catch (err) {
     console.error("Failed to create progress report:", err);
     throw err;
   }
 };
+
 export const fetchProgressBySection = async ({ sectionId }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/section/${sectionId}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/engineerside/section/${sectionId}`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch section progress:", err);
     throw err;
   }
 };
+
 export const fetchProgressByProject = async ({ projectId }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/projectforSectionReport/${projectId}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/engineerside/projectforSectionReport/${projectId}`
     );
     return res.data;
   } catch (err) {
@@ -180,24 +153,22 @@ export const fetchProgressByProject = async ({ projectId }) => {
     throw err;
   }
 };
+
 export const fetchProgressById = async ({ id }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/progress/${id}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/engineerside/progress/${id}`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch progress report:", err);
     throw err;
   }
 };
+
 export const updateProgressReport = async ({ id, payload }) => {
   try {
-    const res = await axios.put(
-      `${import.meta.env.VITE_API_URL}/engineerside/updateProgress/${id}`,
-      payload,
-      { withCredentials: true }
+    const res = await apiClient.put(
+      `/engineerside/updateProgress/${id}`,
+      payload
     );
     return res.data;
   } catch (err) {
@@ -205,27 +176,22 @@ export const updateProgressReport = async ({ id, payload }) => {
     throw err;
   }
 };
+
 export const deleteProgressReport = async ({ id }) => {
   try {
-    const res = await axios.delete(
-      `${import.meta.env.VITE_API_URL}/engineerside/deleteProgress/${id}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.delete(`/engineerside/deleteProgress/${id}`);
     return res.data;
   } catch (err) {
     console.error("Failed to delete progress report:", err);
     throw err;
   }
 };
-
 // find the section progressData
 
 export const fetchProgressByforEngineer = async ({ projectId, type }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerside/getProgreforshowbyproject/${projectId}?sectiontype=${type}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(
+      `/engineerside/getProgreforshowbyproject/${projectId}?sectiontype=${type}`);
     return res.data;
   } catch (err) {
     console.error("Failed to fetch progress report:", err);
@@ -234,57 +200,16 @@ export const fetchProgressByforEngineer = async ({ projectId, type }) => {
 };
 
 
-export const getavailableEngineers = async () => {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineer/getAvailableEngineers`,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error("error while fetching all engineer", err);
-    throw err;
-  }
-};
-
-export const getAssignedEngineers = async () => {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineer/getAssignedEngineers`,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error("error while fetching all engineer", err);
-    throw err;
-  }
-};
-
 export const getAllEngineers = async () => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineer/getAllEngineers`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/engineer/getAllEngineers`);
     return res.data;
   } catch (err) {
     console.error("error while fetching all engineer", err);
     throw err;
   }
 };
-export const EditAllEngineers = async (id, data) => {
-  try {
-    const res = await axios.put(
-      `${import.meta.env.VITE_API_URL}/engineer/editEngineer/${id}`,
-      data,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error("error while updating data", err);
-    throw err;
-  }
-};
+
 
 
 export const login = async ({ email, password, navigate, setUser }) => {
@@ -294,52 +219,37 @@ export const login = async ({ email, password, navigate, setUser }) => {
   }
 
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/engineerauth/loginengineer`,
-      { email, password },
-      { withCredentials: true }
-    );
+    const response = await apiClient.post("/engineerauth/loginengineer", {
+      email,
+      password,
+    });
     const user = response?.data?.user;
-    setUser(user);
-    if (user) {
-      setUser(user);
-      toast.success("Login successful");
-      navigate("/page");
-    } else {
-      toast.error("Login failed: Token not received");
-    }
+    localStorage.setItem("accessToken", response?.data?.accessToken);
+    if (user) setUser(user);
+    toast.success("Login successful");
+    navigate("/page");
   } catch (error) {
-    if (error.response) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error("somthing went wrong when login");
-      console.log(error.message);
-    }
+    toast.error(error?.response?.data?.message || "Something went wrong when login");
     console.error("Login error:", error);
     throw error;
   }
 };
 
-export const logout = async () => {
+export const logout = async ({ navigate, setUser }) => {
   try {
-    await axios.get(`${import.meta.env.VITE_API_URL}/engineerauth/logout`, {
-      withCredentials: true,
-    });
+    await apiClient.get(`/engineerauth/logout`);
   } catch (e) {
-    if (e.response) {
-      toast.error(e.response?.data?.message || "Logout failed");
-    }
     console.error("Logout error:", e);
-    throw e;
+  } finally {
+    localStorage.removeItem("accessToken");
+    if (setUser) setUser(null);
+    if (navigate) navigate("/login");
   }
 };
-
 export const fetchWorkStatusEngineerEngineer = async ({ page, search, id }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL
-      }/worksts/paginationeng/${id}?page=${page}&limit=15&search=${search}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/worksts/paginationeng/${id}?page=${page}&limit=15&search=${search}`
     );
     return { data: res.data.data, hashMore: page < res.data.totalPages };
   } catch (err) {
@@ -350,10 +260,7 @@ export const fetchWorkStatusEngineerEngineer = async ({ page, search, id }) => {
 
 export const fetchSearchData = async ({ jobNumber }) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/fetchbyjob?jobNumber=${jobNumber}`,
-      { withCredentials: true }
-    );
+    const response = await apiClient.get(`/fetchbyjob?jobNumber=${jobNumber}`);
     return response.data.data;
   } catch (e) {
     console.log(e.message);
@@ -363,10 +270,7 @@ export const fetchSearchData = async ({ jobNumber }) => {
 
 export const fetchbyProjectbyId = async (id) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/fetch/${id}`,
-      { withCredentials: true }
-    );
+    const response = await apiClient.get(`/fetch/${id}`);
     return response.data.data;
   } catch (e) {
     console.log(e.message);
@@ -376,10 +280,7 @@ export const fetchbyProjectbyId = async (id) => {
 
 export const fetchbyOrderbyId = async (id) => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/order/fetchbyid/${id}`,
-      { withCredentials: true }
-    );
+    const response = await apiClient.get(`/order/fetchbyid/${id}`);
     return response.data.data;
   } catch (e) {
     console.log(e.message);
@@ -389,9 +290,8 @@ export const fetchbyOrderbyId = async (id) => {
 
 export const UserCall = async () => {
   try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/engineerauth/fetchengineerDeatails`,
-      { withCredentials: true }
+    const response = await apiClient.get(
+      `/engineerauth/fetchengineerDeatails`
     );
     return response.data;
   } catch (e) {
@@ -403,53 +303,23 @@ export const UserCall = async () => {
   }
 };
 
-export const fetchWeeklyAssment = async ({ search }) => {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/devrecord/fetchall`,
-      { withCredentials: true }
-    );
-    return res?.data;
-  } catch (err) {
-    console.error("error while saving", err);
-    throw err;
-  }
-};
-
-export const fetchWeeklyAssmentbyId = async (id) => {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/devrecord/fetchbyid/${id}`,
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (err) {
-    console.error("error while saving", err);
-    throw err;
-  }
-};
 
 
-// work status operatioin
 
 export const getLatestworkSubmission = async () => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/worksts/getLatestworkSubmission`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/worksts/getLatestworkSubmission`);
     return res.data;
   } catch (err) {
     console.error("error while saving", err);
     throw err;
   }
 };
+
 export const fetchAllworkStatusforengineer = async ({ search }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/worksts/fetchAllworkStatusforengineer?search=${search}`,
-      { withCredentials: true }
-    );
+    const res = await apiClient.get(`/worksts/fetchAllworkStatusforengineer?search=${search}`);
+    console.log(res)
     return res.data;
   } catch (err) {
     console.error("error while saving", err);
@@ -459,9 +329,8 @@ export const fetchAllworkStatusforengineer = async ({ search }) => {
 
 export const fetchCommisioningProgressByforEngineer = async ({ projectId }) => {
   try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/worksts/fetchAllworkStatusbyProjectforengineer/${projectId}`,
-      { withCredentials: true }
+    const res = await apiClient.get(
+      `/worksts/fetchAllworkStatusbyProjectforengineer/${projectId}`
     );
     return res.data;
   } catch (err) {
@@ -469,4 +338,3 @@ export const fetchCommisioningProgressByforEngineer = async ({ projectId }) => {
     throw err;
   }
 };
-
