@@ -544,6 +544,7 @@ const ProjectTimelineForm1 = () => {
         handleEngineerToggle,
         removeEngineer,
         getEngineerName,
+        isSaved = false,
     }) => {
         const sec = block?.[phase]?.[0] || { engineers: [] };
 
@@ -607,98 +608,123 @@ const ProjectTimelineForm1 = () => {
                         </span>
                     )}
                 </div>
-                <div className="relative mb-4">
-                    <input
-                        type="text"
-                        name="engineer-search"
-                        autoComplete="new-password"
-                        spellCheck={false}
-                        placeholder="Search engineers..."
-                        value={search}
-                        onFocus={() => setOpen(true)}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl"
-                    />
+                {isSaved ? (
+                    <div>
 
-                    {search && (
-                        <button
-                            type="button"
-                            onClick={() => setSearch("")}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                        >
-                            ✕
-                        </button>
-                    )}
-                </div>
-                {open && (
-                    <div className="mb-4 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg">
-                        {filteredEngineers.length === 0 ? (
-                            <div className="p-4 text-center text-gray-500 text-sm">
-                                No engineers found
+                        {sec.engineers.length === 0 ? (
+                            <div className="text-sm text-gray-500 italic">
+                                No engineers assigned
                             </div>
                         ) : (
-                            <div className="divide-y divide-gray-100">
-                                {filteredEngineers.map((eng) => {
-                                    const name = eng.username || eng.name || eng.email || "Unknown";
-                                    const checked = sec.engineers.includes(eng._id);
-
-                                    return (
-                                        <label
-                                            key={eng._id}
-                                            className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition
-                      ${checked ? "bg-green-50" : "hover:bg-gray-50"}`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={checked}
-                                                onChange={() =>
-                                                    handleEngineerToggle(blockIndex, phase, 0, eng._id)
-                                                }
-                                                className="w-4 h-4 text-green-600 rounded"
-                                            />
-                                            <span
-                                                className={`flex-1 text-sm ${checked
-                                                    ? "text-green-800 font-medium"
-                                                    : "text-gray-700"
-                                                    }`}
-                                            >
-                                                {name}
-                                            </span>
-                                        </label>
-                                    );
-                                })}
+                            <div className="flex flex-wrap gap-2">
+                                {sec.engineers.map((eid) => (
+                                    <span
+                                        key={eid}
+                                        className="px-4 py-2 rounded-full bg-green-100 border border-green-200
+                  text-green-800 text-sm font-medium"
+                                    >
+                                        {getEngineerName(eid)}
+                                    </span>
+                                ))}
                             </div>
                         )}
                     </div>
-                )}
-                {sec.engineers.length > 0 && (
-                    <div>
-                        <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
-                            Selected Engineers
-                        </p>
+                ) : (
+                    <>
+                        <div className="relative mb-4">
+                            <input
+                                type="text"
+                                name="engineer-search"
+                                autoComplete="new-password"
+                                spellCheck={false}
+                                placeholder="Search engineers..."
+                                value={search}
+                                onFocus={() => setOpen(true)}
+                                onChange={(e) => setSearch(e.target.value)}
+                                className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl"
+                            />
 
-                        <div className="flex flex-wrap gap-2">
-                            {sec.engineers.map((eid) => (
-                                <span
-                                    key={eid}
-                                    className="px-4 py-2 rounded-full bg-green-100 border border-green-200
-                           text-green-800 text-sm font-medium flex items-center gap-2"
+                            {search && (
+                                <button
+                                    type="button"
+                                    onClick={() => setSearch("")}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                                 >
-                                    {getEngineerName(eid)}
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            removeEngineer(blockIndex, phase, 0, eid)
-                                        }
-                                        className="w-5 h-5 flex items-center justify-center rounded-full
-                             bg-red-100 text-red-600 hover:bg-red-200"
-                                    >
-                                        ✕
-                                    </button>
-                                </span>
-                            ))}
+                                    ✕
+                                </button>
+                            )}
                         </div>
-                    </div>
+
+                        {open && (
+                            <div className="mb-4 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg">
+                                {filteredEngineers.length === 0 ? (
+                                    <div className="p-4 text-center text-gray-500 text-sm">
+                                        No engineers found
+                                    </div>
+                                ) : (
+                                    <div className="divide-y divide-gray-100">
+                                        {filteredEngineers.map((eng) => {
+                                            const name =
+                                                eng.username || eng.name || eng.email || "Unknown";
+                                            const checked = sec.engineers.includes(eng._id);
+
+                                            return (
+                                                <label
+                                                    key={eng._id}
+                                                    className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition
+                        ${checked ? "bg-green-50" : "hover:bg-gray-50"}`}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={checked}
+                                                        onChange={() =>
+                                                            handleEngineerToggle(blockIndex, phase, 0, eng._id)
+                                                        }
+                                                        className="w-4 h-4 text-green-600 rounded"
+                                                    />
+                                                    <span
+                                                        className={`flex-1 text-sm ${checked
+                                                            ? "text-green-800 font-medium"
+                                                            : "text-gray-700"
+                                                            }`}
+                                                    >
+                                                        {name}
+                                                    </span>
+                                                </label>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {sec.engineers.length > 0 && (
+                            <div>
+                                <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
+                                    Selected Engineers
+                                </p>
+
+                                <div className="flex flex-wrap gap-2">
+                                    {sec.engineers.map((eid) => (
+                                        <span
+                                            key={eid}
+                                            className="px-4 py-2 rounded-full bg-green-100 border border-green-200
+                    text-green-800 text-sm font-medium flex items-center gap-2"
+                                        >
+                                            {getEngineerName(eid)}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeEngineer(blockIndex, phase, 0, eid)}
+                                                className="w-5 h-5 flex items-center justify-center rounded-full
+                      bg-red-100 text-red-600 hover:bg-red-200"
+                                            >
+                                                ✕
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         );
@@ -720,8 +746,6 @@ const ProjectTimelineForm1 = () => {
                         </p>
                     )}
                 </div>
-
-                {/* Project Info Collapsible */}
                 <div className="w-full mb-6">
                     <button
                         onClick={() => setCollOpen(!collOpen)}
@@ -855,8 +879,6 @@ const ProjectTimelineForm1 = () => {
                         </div>
                     )}
                 </div>
-
-                {/* ADD PLANNING BLOCK BUTTON */}
                 <div className="mb-6 flex items-center justify-between gap-3">
                     <button
                         type="button"
@@ -874,11 +896,7 @@ const ProjectTimelineForm1 = () => {
                             key={blockIndex}
                             className="relative space-y-6 border-2 border-green-300 rounded-2xl p-8 bg-linear-to-br from-green-50/50 via-white to-emerald-50/30 shadow-xl hover:shadow-2xl transition-all duration-300"
                         >
-                            {/* Decorative corner accent */}
                             <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-green-400/10 to-transparent rounded-bl-full"></div>
-
-                            {/* Block Header */}
-
                             <div className="flex items-center justify-between p-6 mb-6 bg-linear-to-r from-green-50 to-emerald-50 rounded-xl border-l-4 border-green-500 shadow-md hover:shadow-lg transition-all duration-200">
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-12 bg-linear-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -890,7 +908,6 @@ const ProjectTimelineForm1 = () => {
                                         </h2>
                                     </div>
                                 </div>
-                                {/* {blockIndex !== 0 && ( */}
                                 {canRemoveBlock(blockIndex) && (
                                     <button
                                         type="button"
@@ -904,22 +921,11 @@ const ProjectTimelineForm1 = () => {
                                     </button>
                                 )}
                             </div>
-
-
-                            {/* Main Content Panel */}
                             <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
 
-                                {/* Section Details Card */}
                                 <div className="mb-8 p-6 bg-linear-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
-                                    {/* <div className="flex items-center gap-2 mb-4">
-                                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        <h3 className="font-bold text-lg text-gray-800">Section Information</h3>
-                                    </div> */}
 
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                                        {/* Section Name */}
                                         <div className="space-y-2">
                                             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                                                 <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -941,8 +947,6 @@ const ProjectTimelineForm1 = () => {
                                                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:border-gray-400"
                                             />
                                         </div>
-
-                                        {/* Section Start Date */}
                                         <div className="space-y-2">
                                             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                                                 <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -964,8 +968,6 @@ const ProjectTimelineForm1 = () => {
                                                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:border-gray-400"
                                             />
                                         </div>
-
-                                        {/* Section End Date */}
                                         <div className="space-y-2">
                                             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                                                 <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -989,30 +991,14 @@ const ProjectTimelineForm1 = () => {
                                         </div>
                                     </div>
                                 </div>
-
-
-                                {/* Phase Timeline Table */}
                                 <div className="mb-8">
-                                    {/* <div className="flex items-center gap-2 mb-5">
-                                        <div className="w-10 h-10 bg-linear-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <h3 className="font-bold text-xl text-gray-800">Phase Timeline</h3>
-                                    </div> */}
-
-                                    {/* Table Container with better styling */}
                                     <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
-                                        {/* Table Header */}
                                         <div className="grid grid-cols-5 gap-4 p-4 bg-linear-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
                                             <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">Phase</div>
                                             <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">Start Date</div>
                                             <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">End Date</div>
                                             <div className="col-span-2 font-bold text-sm text-gray-700 uppercase tracking-wide">Progress</div>
                                         </div>
-
-                                        {/* Table Rows */}
                                         <div className="divide-y divide-gray-100">
                                             {["documents", "scada", "logic", "testing"].map((phase, idx) => {
                                                 const sec = block[phase][0];
@@ -1028,15 +1014,12 @@ const ProjectTimelineForm1 = () => {
                                                         className={`grid grid-cols-5 gap-4 p-4 items-center hover:bg-gray-50 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
                                                             }`}
                                                     >
-                                                        {/* Phase Name */}
                                                         <div className="flex items-center gap-2">
                                                             <span className="text-xl">{phaseIcons[phase]}</span>
                                                             <span className="font-semibold text-gray-800 capitalize">
                                                                 {phase}
                                                             </span>
                                                         </div>
-
-                                                        {/* Start Date */}
                                                         <input
                                                             type="date"
                                                             value={sec.startDate}
@@ -1045,8 +1028,6 @@ const ProjectTimelineForm1 = () => {
                                                             }
                                                             className="p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm shadow-sm hover:border-gray-400"
                                                         />
-
-                                                        {/* End Date */}
                                                         <input
                                                             type="date"
                                                             value={sec.endDate}
@@ -1055,25 +1036,15 @@ const ProjectTimelineForm1 = () => {
                                                             }
                                                             className="p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-sm shadow-sm hover:border-gray-400"
                                                         />
-
-                                                        {/* Progress Bar */}
                                                         <div className="col-span-2 flex flex-col gap-1">
-
-                                                            {/* DATE LABELS */}
                                                             <div className="flex justify-between text-xs text-gray-600">
                                                                 <span>{block.documents[0].sectionStartDate || "Start"}</span>
                                                                 <span>{block.documents[0].sectionEndDate || "End"}</span>
                                                             </div>
-
-                                                            {/* MAIN MASTER TIMELINE BAR */}
                                                             <div className="relative h-4 bg-gray-300 rounded-full overflow-hidden shadow-inner">
-
-                                                                {/* FILLED MAIN BAR (SECTION PROGRESS BASED ON TODAY) */}
                                                                 <div
                                                                     className="absolute h-full w-full bg-green-500/40 rounded-full"
                                                                 ></div>
-
-                                                                {/* FLOATING PHASE BAR */}
                                                                 {(() => {
                                                                     const { left, width } = getPhasePosition(
                                                                         sec.startDate,
@@ -1090,8 +1061,6 @@ const ProjectTimelineForm1 = () => {
                                                                 })()}
 
                                                             </div>
-
-                                                            {/* FLOAT LABEL */}
                                                             <div className="text-[10px] text-gray-700 text-center font-medium">
                                                                 {sec.startDate || "Start"} → {sec.endDate || "End"}
                                                             </div>
@@ -1105,19 +1074,7 @@ const ProjectTimelineForm1 = () => {
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Engineer Selectors */}
                                 <div className="space-y-6 mb-8">
-                                    {/* <div className="flex items-center gap-2 mb-2">
-                                        <div className="w-10 h-10 bg-linear-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                            </svg>
-                                        </div>
-                                        <h3 className="font-bold text-xl text-gray-800">Team Assignments</h3>
-                                    </div> */}
-
-
 
                                     <EngineerSelector
                                         phase="logic"
@@ -1127,6 +1084,7 @@ const ProjectTimelineForm1 = () => {
                                         handleEngineerToggle={handleEngineerToggle}
                                         removeEngineer={removeEngineer}
                                         getEngineerName={getEngineerName}
+                                        isSaved={blockIndex < savedBlocksCount}
                                     />
                                     <EngineerSelector
                                         phase="scada"
@@ -1136,6 +1094,7 @@ const ProjectTimelineForm1 = () => {
                                         handleEngineerToggle={handleEngineerToggle}
                                         removeEngineer={removeEngineer}
                                         getEngineerName={getEngineerName}
+                                        isSaved={blockIndex < savedBlocksCount}
                                     />
 
                                     <EngineerSelector
@@ -1146,6 +1105,7 @@ const ProjectTimelineForm1 = () => {
                                         handleEngineerToggle={handleEngineerToggle}
                                         removeEngineer={removeEngineer}
                                         getEngineerName={getEngineerName}
+                                        isSaved={blockIndex < savedBlocksCount}
                                     />
                                 </div>
 
@@ -1169,10 +1129,7 @@ const ProjectTimelineForm1 = () => {
                             </div>
                         </div>
                     ))}
-
-                    {/* Submit Button */}
                     <div className="flex justify-center pt-8 pb-4">
-                        {/* {!project?.PlanDetails && <button */}
                         {<button
                             type="submit"
                             className="group relative px-12 py-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 font-bold text-lg overflow-hidden transform hover:scale-105 active:scale-95"
