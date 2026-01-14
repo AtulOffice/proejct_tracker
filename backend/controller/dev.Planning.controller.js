@@ -61,6 +61,7 @@ export const PlanningSave = async (req, res) => {
           devScope: project.Development,
           createdBy: userId,
         });
+
     await ProjectModel.findByIdAndUpdate(project._id, {
       PlanDetails: planning._id,
       DevelopmentDetials: projectDev._id,
@@ -186,61 +187,194 @@ export const PlanningSave = async (req, res) => {
     //   })
     // );
 
+    // await Promise.all(
+    //   engineerIdsToProcess.map(async (engineerId) => {
+    //     const engineer = await EngineerReocord.findById(engineerId);
+    //     if (!engineer) return;
+    //     sectionNames.forEach((sec) => {
+    //       if (!engineer.developmentProjectList?.[sec]) return;
+    //       engineer.developmentProjectList[sec] =
+    //         engineer.developmentProjectList[sec].filter(
+    //           (entry) =>
+    //             entry.project.toString() !== project._id.toString()
+    //         );
+    //     });
+    //     for (const section of sectionNames) {
+    //       let sectionPhases = phasesBySection[section];
+    //       if (section === "documents") {
+    //         sectionPhases = phasesBySection.documents.map((docPhase) => {
+    //           const derivedEngineers = ["logic", "scada", "testing"]
+    //             .flatMap((sec) =>
+    //               phasesBySection[sec]
+    //                 .filter((p) => p.phaseIndex === docPhase.phaseIndex)
+    //                 .flatMap((p) => p.phaseEngineers)
+    //             );
+    //           return {
+    //             ...docPhase,
+    //             phaseEngineers: [...new Set(derivedEngineers)],
+    //           };
+    //         });
+    //       }
+
+    //       const engineerPhases = sectionPhases
+    //         .filter((phase) => phase.phaseEngineers.includes(engineerId))
+    //         .map((phase) => ({
+    //           phaseIndex: phase.phaseIndex,
+    //           totalPhases: phase.totalPhases,
+    //           sectionName: phase.sectionName,
+    //           sectionStartDate: phase.sectionStartDate,
+    //           sectionEndDate: phase.sectionEndDate,
+    //           startDate: phase.startDate,
+    //           endDate: phase.endDate,
+    //           engineers: phase.phaseEngineers,
+    //           peerEngineers: phase.peerEngineers,
+    //         }));
+    //       if (engineerPhases.length === 0) continue;
+    //       engineer.developmentProjectList[section] =
+    //         engineer.developmentProjectList[section] || [];
+    //       engineer.developmentProjectList[section].push({
+    //         project: project._id,
+    //         phases: engineerPhases,
+    //       });
+    //     }
+
+    //     const data = await engineer.save();
+    //     console.dir(data?.developmentProjectList?.logic, { depth: null })
+    //   })
+    // );
+
+    const phaseKey = (p) => `${p.phaseIndex}::${p.sectionName || ""}`;
+    const sameDate = (a, b) => {
+      if (!a && !b) return true;
+      if (!a || !b) return false;
+      return new Date(a).getTime() === new Date(b).getTime();
+    };
+
+    const sameArray = (a = [], b = []) => {
+      if (a.length !== b.length) return false;
+      const A = a.map(String).sort();
+      const B = b.map(String).sort();
+      return A.every((v, i) => v === B[i]);
+    };
+
     await Promise.all(
       engineerIdsToProcess.map(async (engineerId) => {
         const engineer = await EngineerReocord.findById(engineerId);
         if (!engineer) return;
-        sectionNames.forEach((sec) => {
-          if (!engineer.developmentProjectList?.[sec]) return;
-          engineer.developmentProjectList[sec] =
-            engineer.developmentProjectList[sec].filter(
-              (entry) =>
-                entry.project.toString() !== project._id.toString()
-            );
-        });
+
+        let modified = false;
+
         for (const section of sectionNames) {
           let sectionPhases = phasesBySection[section];
           if (section === "documents") {
             sectionPhases = phasesBySection.documents.map((docPhase) => {
-              const derivedEngineers = ["logic", "scada", "testing"]
-                .flatMap((sec) =>
-                  phasesBySection[sec]
-                    .filter((p) => p.phaseIndex === docPhase.phaseIndex)
-                    .flatMap((p) => p.phaseEngineers)
-                );
+              const derivedEngineers = ["logic", "scada", "testing"].flatMap((sec) =>
+                phasesBySection[sec]
+                  .filter((p) => p.phaseIndex === docPhase.phaseIndex)
+                  .flatMap((p) => p.phaseEngineers)
+              );
+
               return {
                 ...docPhase,
                 phaseEngineers: [...new Set(derivedEngineers)],
               };
             });
           }
-
           const engineerPhases = sectionPhases
-            .filter((phase) => phase.phaseEngineers.includes(engineerId))
+            .filter((phase) => phase.phaseEngineers.includes(engineerId.toString()))
             .map((phase) => ({
               phaseIndex: phase.phaseIndex,
               totalPhases: phase.totalPhases,
-              sectionName: phase.sectionName,
-              sectionStartDate: phase.sectionStartDate,
-              sectionEndDate: phase.sectionEndDate,
-              startDate: phase.startDate,
-              endDate: phase.endDate,
-              engineers: phase.phaseEngineers,
-              peerEngineers: phase.peerEngineers,
+              sectionName: phase.sectionName || "",
+              sectionStartDate: phase.sectionStartDate || null,
+              sectionEndDate: phase.sectionEndDate || null,
+              startDate: phase.startDate || null,
+              endDate: phase.endDate || null,
+              engineers: (phase.phaseEngineers || []).map(String),
+              peerEngineers: (phase.peerEngineers || []).map(String),
             }));
-          if (engineerPhases.length === 0) continue;
+
           engineer.developmentProjectList[section] =
             engineer.developmentProjectList[section] || [];
-          engineer.developmentProjectList[section].push({
-            project: project._id,
-            phases: engineerPhases,
-          });
+          let projectEntry = engineer.developmentProjectList[section].find(
+            (entry) => entry.project.toString() === project._id.toString()
+          );
+          if (engineerPhases.length === 0) {
+            if (projectEntry) {
+              engineer.developmentProjectList[section] =
+                engineer.developmentProjectList[section].filter(
+                  (entry) => entry.project.toString() !== project._id.toString()
+                );
+              modified = true;
+            }
+            continue;
+          }
+          if (!projectEntry) {
+            engineer.developmentProjectList[section].push({
+              project: project._id,
+              phases: engineerPhases.map((p) => ({
+                ...p,
+                CompletionPercentage: 0,
+              })),
+            });
+            modified = true;
+            continue;
+          }
+          const existingPhases = Array.isArray(projectEntry.phases)
+            ? projectEntry.phases
+            : [];
+          const existingMap = new Map();
+          existingPhases.forEach((p) => existingMap.set(phaseKey(p), p));
+
+          const updatedPhases = [];
+
+          for (const newP of engineerPhases) {
+            const key = phaseKey(newP);
+            const oldP = existingMap.get(key);
+
+            if (oldP) {
+              const changed =
+                oldP.totalPhases !== newP.totalPhases ||
+                (oldP.sectionName || "") !== (newP.sectionName || "") ||
+                !sameDate(oldP.sectionStartDate, newP.sectionStartDate) ||
+                !sameDate(oldP.sectionEndDate, newP.sectionEndDate) ||
+                !sameDate(oldP.startDate, newP.startDate) ||
+                !sameDate(oldP.endDate, newP.endDate) ||
+                !sameArray(oldP.engineers, newP.engineers) ||
+                !sameArray(oldP.peerEngineers, newP.peerEngineers);
+
+              if (changed) {
+                oldP.totalPhases = newP.totalPhases;
+                oldP.sectionName = newP.sectionName;
+                oldP.sectionStartDate = newP.sectionStartDate;
+                oldP.sectionEndDate = newP.sectionEndDate;
+                oldP.startDate = newP.startDate;
+                oldP.endDate = newP.endDate;
+                oldP.engineers = newP.engineers;
+                oldP.peerEngineers = newP.peerEngineers;
+                modified = true;
+              }
+              updatedPhases.push(oldP);
+            } else {
+              updatedPhases.push({
+                ...newP,
+                CompletionPercentage: 0,
+              });
+              modified = true;
+            }
+          }
+          if (existingPhases.length !== updatedPhases.length) {
+            modified = true;
+          }
+          projectEntry.phases = updatedPhases;
         }
 
-        await engineer.save();
+        if (modified) {
+          const data = await engineer.save();
+          console.dir(data?.developmentProjectList?.logic, { depth: null });
+        }
       })
     );
-
 
 
     return res.status(200).json({

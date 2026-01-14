@@ -37,6 +37,13 @@ const ProjectTimelineForm1 = () => {
             },
         ],
     });
+    const [savedBlocksCount, setSavedBlocksCount] = useState(0);
+
+    const canRemoveBlock = (blockIndex) => {
+        if (blockIndex === 0) return false;
+        return blockIndex >= savedBlocksCount;
+    };
+
 
     const [name, setName] = useState("");
     const [engineersList, setEngineersList] = useState([]);
@@ -112,6 +119,9 @@ const ProjectTimelineForm1 = () => {
                 const res = await apiClient.get(`/planningDev/fetchbyid/${planId}`);
                 const defaultData = res.data?.data || {};
                 if (defaultData && defaultData.plans) setIsPlan(true);
+                if (Array.isArray(defaultData.plans)) {
+                    setSavedBlocksCount(defaultData.plans.length);
+                }
 
                 if (defaultData?.updatedBy?.username) {
                     setName(defaultData.updatedBy.username);
@@ -399,7 +409,6 @@ const ProjectTimelineForm1 = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
-
         try {
             const formDevbackData = mapFrontendToBackend(
                 {
@@ -881,7 +890,8 @@ const ProjectTimelineForm1 = () => {
                                         </h2>
                                     </div>
                                 </div>
-                                {blockIndex !== 0 && (
+                                {/* {blockIndex !== 0 && ( */}
+                                {canRemoveBlock(blockIndex) && (
                                     <button
                                         type="button"
                                         onClick={() => removePlanningBlock(blockIndex)}
@@ -1162,7 +1172,8 @@ const ProjectTimelineForm1 = () => {
 
                     {/* Submit Button */}
                     <div className="flex justify-center pt-8 pb-4">
-                        {!project?.PlanDetails && <button
+                        {/* {!project?.PlanDetails && <button */}
+                        {<button
                             type="submit"
                             className="group relative px-12 py-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 font-bold text-lg overflow-hidden transform hover:scale-105 active:scale-95"
                         >

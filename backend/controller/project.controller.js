@@ -1586,14 +1586,14 @@ export const allProjectsFetch = async (req, res) => {
 };
 export const allProjectsFetchDev = async (req, res) => {
   const search = req.query.search || "";
-
   try {
     const filter = {
       Development: { $in: ["LOGIC", "SCADA", "BOTH"] },
     };
 
     if (search) {
-      filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+      // filter.jobNumber = { $regex: new RegExp(`^${search}$`, "i") };
+      filter.jobNumber = { $regex: search, $options: "i" };
     }
 
     const projectSelectFields = {

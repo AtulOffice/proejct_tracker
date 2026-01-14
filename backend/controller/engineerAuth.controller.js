@@ -137,6 +137,37 @@ export const logoutEngineer = async (req, res) => {
   }
 };
 
+export const findEngineerDetailstemp = async (req, res) => {
+  try {
+    const _id = "690d9c410bf219e9ffa27c34";
+    if (!_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Please Login first",
+      });
+    }
+    const EngineerData = await EngineerReocord.findById(_id);
+    if (!EngineerData) {
+      return res.status(404).json({
+        success: false,
+        user: null,
+        message: "Engineer  not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: EngineerData,
+    });
+  } catch (e) {
+    console.error("Some error occurred:", e);
+    return res.status(401).json({
+      success: false,
+      message: "Token invalid or expired",
+    });
+  }
+};
+
 export const findEngineerDetails = async (req, res) => {
   try {
     const { _id } = req.user;

@@ -13,7 +13,7 @@ const sectionSchema = new mongoose.Schema(
     planDetails: { type: String, default: "" },
     engineers: { type: [String], default: [] },
   },
-  { _id: false }
+  // { _id: false }
 );
 
 const planningBlockSchema = new mongoose.Schema(
@@ -23,7 +23,7 @@ const planningBlockSchema = new mongoose.Schema(
     testing: { type: [sectionSchema], default: [] },
     documents: { type: [sectionSchema], default: [] },
   },
-  { _id: false }
+  // { _id: false }
 );
 
 const DevPlanningSchema = new mongoose.Schema(

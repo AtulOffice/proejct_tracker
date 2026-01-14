@@ -7,6 +7,7 @@ import {
   logoutEngineer,
   forgotEngineer,
   resetEngineer,
+  findEngineerDetailstemp,
 } from "../controller/engineerAuth.controller.js";
 
 export const engineerAuthRouter = express.Router();
@@ -16,6 +17,10 @@ engineerAuthRouter.get(
   "/fetchengineerDeatails",
   authenticateEngineer,
   findEngineerDetails
+);
+engineerAuthRouter.get(
+  "/fetchengineerDeatailstemp",
+  findEngineerDetailstemp
 );
 engineerAuthRouter.post("/refresh-token", refreshTokenEngineerMiddleware);
 
