@@ -45,7 +45,6 @@ export const logout = async ({ dispatch, navigate }) => {
         await apiClient.get("/logout");
         dispatch(logoutUser());
         await persistor.purge();
-        toast.success("Logout successful");
         navigate("/login", { replace: true });
     } catch (e) {
         toast.error(e?.response?.data?.message || "Logout failed");

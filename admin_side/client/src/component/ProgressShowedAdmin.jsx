@@ -161,7 +161,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                             </svg>
                         </div>
                     </div>
-                    
+
                     {expandedSections['all-plan-sections'] !== false && (
                         <>
                             {progressData?.planRange?.map((section, sectionIndex) => (
@@ -385,7 +385,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody className="divide-y divide-gray-200">
-                                                                                        {engineer.progressReports.map((row, idx) => (
+                                                                                        {[...engineer.progressReports].reverse().map((row, idx) => (
                                                                                             <tr
                                                                                                 key={idx}
                                                                                                 className="hover:bg-gray-50 transition-colors"
