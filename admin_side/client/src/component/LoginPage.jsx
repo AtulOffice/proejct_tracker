@@ -38,6 +38,13 @@ const LoginPage = () => {
       [id]: value,
     });
   };
+  const resetForgotPasswordState = () => {
+    setIsOpen(false);
+    setIsfun(false);
+    setOtp(new Array(6).fill(""));
+    setGeneratePassword({ email: "", newPassword: "" });
+  };
+
 
   const inputRefs = useRef([]);
 
@@ -110,12 +117,14 @@ const LoginPage = () => {
       }));
     } catch (e) {
       if (e.response) {
-        toast.error(e?.response?.data?.message || "Some error occurred");
+        toast.error(e?.response?.data?.message || "Some error occurred hello");
       } else {
         toast.error("Network error or password generate server not reachable");
       }
+      console.log("this happened ", e)
     } finally {
       setIsOtopLoading(false);
+
     }
   };
 
@@ -218,7 +227,10 @@ const LoginPage = () => {
 
               <button
                 type="button"
-                onClick={() => setChange(false)}
+                onClick={() => {
+                  setChange(false);
+                  resetForgotPasswordState()
+                }}
                 className="text-gray-500  hover:text-blue-500 cursor-pointer transition-colors"
               >
                 forgot password
@@ -348,7 +360,10 @@ const LoginPage = () => {
 
               <button
                 type="button"
-                onClick={() => setChange(true)}
+                onClick={() => {
+                  setChange(true);
+                  resetForgotPasswordState()
+                }}
                 className="text-gray-500  hover:text-blue-500 cursor-pointer transition-colors"
               >
                 Login page

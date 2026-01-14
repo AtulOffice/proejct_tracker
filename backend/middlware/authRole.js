@@ -8,7 +8,7 @@ export const authorizeRole = (...allowedRoles) => {
     }
 
     if (!allowedRoles.includes(user.role)) {
-      return res.status(403).json({ success: false, message: "Access denied" });
+      return res.status(401).json({ success: false, message: "Access denied" });
     }
 
     next();

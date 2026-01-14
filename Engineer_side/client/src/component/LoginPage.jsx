@@ -119,9 +119,16 @@ const LoginPage = () => {
       }
     } finally {
       setIsOtopLoading(false);
-      setIsOpen(false)
     }
   };
+
+  const resetForgotPasswordState = () => {
+    setIsOpen(false);
+    setIsfun(false);
+    setOtp(new Array(6).fill(""));
+    setGeneratePassword({ email: "", newPassword: "" });
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 via-blue-50 to-emerald-100 flex items-center justify-center p-4 sm:p-6 md:p-8">
@@ -212,7 +219,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 className="px-5 py-2.5 text-sm font-medium text-white bg-blue-200 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-                onClick={() => setChange(false)}
+                onClick={() => { setChange(false); resetForgotPasswordState() }}
               >
                 Generate Password
               </button>
@@ -313,7 +320,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 className="px-5 py-2.5 text-sm font-medium text-white bg-blue-200 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-                onClick={() => setChange(true)}
+                onClick={() => { setChange(true), resetForgotPasswordState() }}
               >
                 Back to Login
               </button>
@@ -321,7 +328,7 @@ const LoginPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

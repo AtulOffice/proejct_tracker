@@ -30,7 +30,7 @@ export const loginEngineer = async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(password, engineer.password);
     if (!isPasswordValid) {
-      return res.status(401).json({
+      return res.status(405).json({
         success: false,
         message: "Invalid password",
       });
@@ -161,7 +161,7 @@ export const findEngineerDetailstemp = async (req, res) => {
     });
   } catch (e) {
     console.error("Some error occurred:", e);
-    return res.status(401).json({
+    return res.status(405).json({
       success: false,
       message: "Token invalid or expired",
     });
@@ -194,7 +194,7 @@ export const findEngineerDetails = async (req, res) => {
     });
   } catch (e) {
     console.error("Some error occurred:", e);
-    return res.status(401).json({
+    return res.status(405).json({
       success: false,
       message: "Token invalid or expired",
     });

@@ -131,7 +131,7 @@ export const forgotUser = async (req, res) => {
         .json({ success: false, message: "User does not exist" });
     }
     if (!user.isEmailVerified) {
-      return res.status(403).json({
+      return res.status(405).json({
         success: false,
         message: "Please verify your email before resetting password",
       });
@@ -165,7 +165,7 @@ export const resetUser = async (req, res) => {
     }
 
     if (!user.isEmailVerified) {
-      return res.status(403).json({
+      return res.status(405).json({
         success: false,
         message: "Email not verified",
       });
@@ -177,14 +177,13 @@ export const resetUser = async (req, res) => {
       user.resetOtp.expires < Date.now() ||
       user.resetOtp.used
     ) {
-      return res.status(400).json({ error: "OTP invalid/expired" });
+      return res.status(400).json({ success: false, message: "OTP invalid/expired" });
     }
 
     user.resetOtp.used = true;
     user.password = await bcrypt.hash(newPassword, 12);
     await user.save();
-
-    res.json({ message: "Password reset successful" });
+    return res.status(200).json({ message: "Password reset successful" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -204,14 +203,14 @@ export const loginUser = async (req, res) => {
 
     if (!user.isEmailVerified)
       return res
-        .status(403)
+        .status(405)
         .json({ success: false, message: "Email not verified" });
 
     const isValid = await bcrypt.compare(password, user.password);
 
     if (!isValid)
       return res
-        .status(401)
+        .status(405)
         .json({ success: false, message: "Invalid credentials" });
 
     const safeUser = user.toObject();
@@ -341,7 +340,7 @@ export const updateUserPassword = async (req, res) => {
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
       return res
-        .status(401)
+        .status(405)
         .json({ success: false, message: "Incorrect current password" });
     }
 
@@ -431,7 +430,7 @@ export const findUserDetails = async (req, res) => {
     });
   } catch (e) {
     console.error("Some error occurred:", e);
-    return res.status(401).json({
+    return res.status(405).json({
       success: false,
       message: "Token invalid or expired",
     });

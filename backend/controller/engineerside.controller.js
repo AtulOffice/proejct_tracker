@@ -607,7 +607,7 @@ export const getLogicPhaseById = async (req, res) => {
     data.LastphaseProgress = LastphaseProgress
 
     if (!isEngineerAllowed) {
-      return res.status(403).json({
+      return res.status(405).json({
         success: false,
         message: "Access denied to this phase",
       });
@@ -757,7 +757,7 @@ export const getScadaPhaseById = async (req, res) => {
     data.LastphaseProgress = LastphaseProgress
 
     if (!isEngineerAllowed) {
-      return res.status(403).json({
+      return res.status(405).json({
         success: false,
         message: "Access denied to this phase",
       });
@@ -908,7 +908,7 @@ export const getTestingPhaseById = async (req, res) => {
     data.LastphaseProgress = LastphaseProgress
 
     if (!isEngineerAllowed) {
-      return res.status(403).json({
+      return res.status(405).json({
         success: false,
         message: "Access denied to this phase",
       });
