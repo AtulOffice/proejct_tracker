@@ -69,7 +69,7 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="min-h-screen flex flex-col lg:ml-60 px-6 pt-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
 
       <FilterCompo
         searchTerm={searchTerm}
@@ -109,3 +109,6 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
 };
 
 export default ProjectList;
+
+
+

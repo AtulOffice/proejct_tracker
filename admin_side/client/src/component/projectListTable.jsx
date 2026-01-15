@@ -145,7 +145,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   }
 
   return (
-    <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+    <div className="relative h-full col-span-full w-full  overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
 
       {progress && progressData && (
         <ProgressShowedAdmin project={selectedProject} onClose={() => setPorgress(false)} progressData={progressData} />
@@ -164,32 +164,35 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           />
         ))}
       <div className="overflow-x-auto hidden md:block">
-        <div ref={printRef} className="max-h-[690px] overflow-y-auto">
+        <div ref={printRef} className="max-h-[460px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0">
-              <tr className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
-                <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+              <tr className="bg-gray-900 ">
+                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                   SR NO
                 </th>
+
                 {tableVal.map((col, idx) => (
                   <th
                     key={idx}
-                    className="px-6 py-5 text-left text-base font-bold tracking-wide uppercase text-gray-400!"
+                    className="px-4 py-1.5 text-left font-semibold text-white!"
                   >
                     {col.head}
                   </th>
                 ))}
+
                 {isEdit && (
                   <>
-                    <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
-                      view
+                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+                      View
                     </th>
-                    <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                       {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
                     </th>
-                    <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                       {onEditFun === "DEVLOPMENT" ? "PLAN" : "Edit"}
-                    </th></>
+                    </th>
+                  </>
                 )}
               </tr>
             </thead>
@@ -204,13 +207,16 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                   <tr
                     key={i}
                     className={`transition-colors duration-150
-          ${isCancelled
+    ${isCancelled
                         ? "bg-red-100 text-red-700"
-                        : "hover:bg-slate-50"
+                        : i % 2 === 1
+                          ? "bg-gray-200 hover:bg-slate-100"
+                          : "bg-white hover:bg-slate-50"
                       }`}
                   >
+
                     {/* SR NO */}
-                    <td className="px-4 py-4 text-center text-sm font-semibold">
+                    <td className="px-4 py-1 text-center text-sm font-semibold">
                       {i + 1}
                     </td>
 
@@ -228,7 +234,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       return (
                         <td
                           key={j}
-                          className="px-6 py-4 text-base whitespace-nowrap"
+                          className="px-6 py-1 text-base whitespace-nowrap"
                         >
                           <div
                             className={`truncate
@@ -247,12 +253,12 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                     {isEdit && (
                       <>
                         {/* VIEW */}
-                        <td className="px-6 py-4 text-center ">
+                        <td className="px-6 py-1 text-center ">
                           <button
                             onClick={
                               () => hadleOpenPopup(row)
                             }
-                            className={`p-3 rounded-xl transition-all bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 text-white hover:shadow-xl cursor-pointer`}
+                            className={`p-3 rounded-xl transition-all bg-transparent text-white hover:bg-gray-200 cursor-pointer`}
                             title={isCancelled ? "Action not allowed" : "View"}
                           >
                             <FaEye size={18} />
@@ -261,7 +267,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
                         {/* DOCS */}
                         {onEditFun === "DEVLOPMENT" ?
-                          <td className="px-6 py-4 text-center">
+                          <td className="px-6 py-1 text-center">
                             <button
                               disabled={isCancelled}
                               onClick={
@@ -270,7 +276,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                               className={`p-3 rounded-xl transition-all
                   ${isCancelled
                                   ? disabledBtn
-                                  : "bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white hover:shadow-xl"
+                                  : "bg-transparent text-white hover:bg-gray-200"
                                 }`}
                               title={isCancelled ? "Action not allowed" : "Documents"}
                             >
@@ -278,7 +284,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                             </button>
                           </td>
                           :
-                          <td className="px-6 py-4 text-center">
+                          <td className="px-6 py-1 text-center">
                             <button
                               disabled={isCancelled}
                               onClick={
@@ -287,7 +293,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                               className={`p-3 rounded-xl transition-all
                   ${isCancelled
                                   ? disabledBtn
-                                  : "bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white hover:shadow-xl"
+                                  : "bg-transparent text-white hover:bg-gray-200"
                                 }`}
                               title={isCancelled ? "Action not allowed" : "Documents"}
                             >
@@ -296,7 +302,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           </td>}
 
                         {/* EDIT / ASSIGN */}
-                        <td className="px-6 py-4 text-center">
+                        <td className="px-6 py-1 text-center">
                           {onEditFun === "DEVLOPMENT" ? (
                             <button
                               disabled={isCancelled}
@@ -321,10 +327,10 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                                   ? undefined
                                   : () => handleEditAction(onEditFun, row)
                               }
-                              className={`p-2 rounded-full shadow-lg transition-all
+                              className={`p-2 rounded-full transition-all
                     ${isCancelled
                                   ? disabledBtn
-                                  : "bg-linear-to-tr from-yellow-500 via-amber-400 to-orange-400 text-white hover:scale-110"
+                                  : "bg-transparent text-white hover:scale-110"
                                 }`}
                             >
                               <MdEngineering className="w-5 h-5" />
@@ -340,7 +346,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                               className={`p-2.5 rounded-lg transition-all
                     ${isCancelled
                                   ? disabledBtn
-                                  : "bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400"
+                                  : "bg-transparent text-white hover:bg-gray-200"
                                 }`}
                             >
                               <MdEdit size={18} />
@@ -408,7 +414,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                             ? handleShowProgress(project)
                             : handleDocsOpen(project);
                         }}
-                        className="p-2 rounded-lg bg-gradient-to-br from-indigo-400 via-blue-500 to-sky-500 text-white shadow-md hover:scale-105 transition"
+                        className="p-2 rounded-lg bg-transparent text-white shadow-md hover:scale-105 transition"
                         title={onEditFun === "DEVLOPMENT" ? "Progress" : "Documents"}
                       >
                         {onEditFun === "DEVLOPMENT" ? (
@@ -502,15 +508,16 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
       </div>
 
 
-      <div className="bg-linear-to-r from-blue-50 to-indigo-50/70 px-6 py-5 border-t border-blue-100 mt-4">
-        <div className="flex flex-wrap items-center justify-between gap-y-2">
-          <p className="text-base text-blue-700">
+      <div className="bg-linear-to-r from-blue-50 to-indigo-50/70 px-4 py-1.5 border-t border-blue-100 mt-2">
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-blue-700">
             Showing{" "}
-            <span className="font-bold text-blue-800">{data.length}</span>{" "}
+            <span className="font-semibold text-blue-800">{data.length}</span>{" "}
             project{data.length !== 1 ? "s" : ""}
           </p>
         </div>
       </div>
+
       {
         open && (
           <EngineerForm

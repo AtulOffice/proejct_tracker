@@ -26,7 +26,7 @@ const FilterCompo = ({
   };
   return (
     <>
-      <div className="flex flex-col lg:flex-row items-center justify-between mb-10 gap-6 w-full">
+      <div className="flex flex-col lg:flex-row items-center justify-between mb-2 gap-6 w-full">
         {/* SEARCH BOX */}
         <div className="relative w-full lg:w-1/2 group mb-4 lg:mb-0">
           <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
@@ -47,7 +47,7 @@ const FilterCompo = ({
             type="text"
             className="bg-white border-2 border-gray-200 text-gray-900 text-md rounded-xl 
         focus:ring-4 focus:ring-indigo-200 focus:border-indigo-400 
-        block w-full pl-12 p-3.5 transition-all shadow-sm"
+        block w-full pl-12 py-1 px-3 transition-all shadow-sm"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -65,18 +65,18 @@ const FilterCompo = ({
               refreshIcon.classList.add("animate-spin");
               setTimeFilter("all");
               setSearchTerm("");
-              dispatch(toggleMode())
+              dispatch(toggleMode());
               setTimeout(() => refreshIcon.classList.remove("animate-spin"), 1000);
             }}
-            className="p-2 rounded-lg bg-white hover:bg-gray-100 text-gray-800 
-          border border-gray-300 transition-all duration-200 
-          flex items-center justify-center shadow-sm shrink-0"
+            className="h-9 w-9 rounded-lg bg-white hover:bg-gray-100 text-gray-800 
+  border border-gray-300 transition-all duration-200 
+  flex items-center justify-center shadow-sm shrink-0"
             title="Refresh tasks"
           >
             <svg
               id="refreshIcon"
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 transition-transform duration-1000"
+              className="h-4 w-4 transition-transform duration-1000"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -90,15 +90,17 @@ const FilterCompo = ({
             </svg>
           </button>
 
+
           {/* FILTER BUTTON */}
           <div ref={filterRef} className="relative w-auto lg:w-auto">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="w-full lg:w-auto text-gray-800 bg-white 
-            hover:bg-gray-100 focus:ring-4 focus:ring-indigo-200 
-            font-medium rounded-xl text-md px-6 py-3.5 
-            inline-flex items-center justify-center shadow-sm 
-            transition-all shrink-0 border border-gray-300"
+  hover:bg-gray-100 focus:ring-2 focus:ring-indigo-200 
+  font-medium rounded-lg text-sm px-4 py-2 
+  inline-flex items-center justify-center shadow-sm 
+  transition-all shrink-0 border border-gray-300"
+
               type="button"
             >
               <svg
@@ -133,44 +135,43 @@ const FilterCompo = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute z-10 w-40 mt-3 bg-white rounded-xl shadow-xl 
-                border border-gray-200"
+                  className="absolute right-0 z-10 w-40 mt-2 bg-white rounded-lg shadow-xl border border-gray-200"
+
                 >
-                  <ul className="p-4 space-y-2 text-sm text-gray-700">
-                    {["all", "today", "thisWeek", "thisMonth", "thisYear"].map(
-                      (filter) => (
-                        <li key={filter}>
-                          <div className="flex p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                            <input
-                              type="radio"
-                              id={`filter-${filter}`}
-                              name="timeFilter"
-                              value={filter}
-                              checked={timeFilter === filter}
-                              onChange={() => {
-                                setIsFilterOpen(false);
-                                setTimeFilter(filter);
-                              }}
-                              className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                            />
-                            <label
-                              htmlFor={`filter-${filter}`}
-                              className="ml-2 w-full text-md font-medium text-gray-900"
-                            >
-                              {filter === "all" && "All time"}
-                              {filter === "today" && "Today"}
-                              {filter === "thisWeek" && "This week"}
-                              {filter === "thisMonth" && "This month"}
-                              {filter === "thisYear" && "This year"}
-                            </label>
-                          </div>
-                        </li>
-                      )
-                    )}
+                  <ul className="p-2 space-y-1 text-sm text-gray-700">
+                    {["all", "today", "thisWeek", "thisMonth", "thisYear"].map((filter) => (
+                      <li key={filter}>
+                        <div className="flex items-center p-1.5 rounded-md hover:bg-gray-100 transition-colors">
+                          <input
+                            type="radio"
+                            id={`filter-${filter}`}
+                            name="timeFilter"
+                            value={filter}
+                            checked={timeFilter === filter}
+                            onChange={() => {
+                              setIsFilterOpen(false);
+                              setTimeFilter(filter);
+                            }}
+                            className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                          />
+                          <label
+                            htmlFor={`filter-${filter}`}
+                            className="ml-2 w-full text-sm font-medium text-gray-900"
+                          >
+                            {filter === "all" && "All time"}
+                            {filter === "today" && "Today"}
+                            {filter === "thisWeek" && "This week"}
+                            {filter === "thisMonth" && "This month"}
+                            {filter === "thisYear" && "This year"}
+                          </label>
+                        </div>
+                      </li>
+                    ))}
                   </ul>
                 </motion.div>
               )}
             </AnimatePresence>
+
           </div>
         </div>
       </div>

@@ -13,8 +13,7 @@ export const PlanningSave = async (req, res) => {
         message: "Invalid Project ID",
       });
     }
-
-
+    
     const project = await ProjectModel.findById(projectId);
     if (!project) {
       return res.status(404).json({

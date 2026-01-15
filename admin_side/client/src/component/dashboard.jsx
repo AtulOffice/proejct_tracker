@@ -108,7 +108,7 @@ const AdminDashboard = () => {
   ];
   const ProjectTabDev = [
     {
-      head: "Project Name",
+      head: "Project",
       val: "projectName",
     },
     {
@@ -146,7 +146,7 @@ const AdminDashboard = () => {
   ];
   const ProjectActionTab = [
     {
-      head: "Project Name",
+      head: "Project",
       val: "projectName",
     },
     {
