@@ -229,7 +229,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           : val || "—";
 
                       const hideFull =
-                        col.val === "jobNumber" || col.val === "projectName" || col.val === "endUser";
+                        col.val === "projectName" || col.val === "endUser";
 
                       return (
                         <td
@@ -237,7 +237,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           className="px-6 py-1 text-base whitespace-nowrap"
                         >
                           <div
-                            className={`truncate
+                            className={`
                   ${col.val === "projectName" && !isCancelled
                                 ? "cursor-pointer hover:text-indigo-600"
                                 : ""
@@ -485,9 +485,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
                   display = String(display);
 
-                  const hideFull =
-                    col.val === "jobNumber" ||
-                    col.val === "projectName" ||
+                  const hideFull = col.val === "projectName" ||
                     col.val === "endUser";
 
                   return (

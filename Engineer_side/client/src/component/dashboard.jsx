@@ -67,6 +67,18 @@ const AdminDashboard = () => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  const menuItems = [
+    { key: "zero", label: "DASHBOARD", icon: RiDashboardLine },
+    { key: "two", label: "PROJECTS", icon: GoProjectRoadmap },
+    { key: "three", label: "SUBMIT MOM", icon: GoProjectRoadmap },
+    { key: "eight", label: "LOGIC", icon: GoProjectRoadmap },
+    { key: "nine", label: "SCADA", icon: GoProjectRoadmap },
+    { key: "ten", label: "TESTING", icon: GoProjectRoadmap },
+    { key: "five", label: "WORK REPO", icon: GoProjectRoadmap },
+    { key: "four", label: "MOM LIST", icon: GoProjectRoadmap },
+    { key: "six", label: "WORK LIST", icon: RiProgress2Line, isLink: true },
+  ];
+
   const handleLogOut = () => {
     try {
       toast.success("logout successfully");
@@ -298,146 +310,47 @@ const AdminDashboard = () => {
 
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-45 lg:translate-x-0
+  ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex flex-col h-full">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
             <h2 className="text-xl font-bold text-indigo-600">{""}</h2>
           </div>
-          <nav className="flex-1 px-4 py-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
-            <ul className="space-y-2">
 
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("zero");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <RiDashboardLine
-                    className="mr-3 text-indigo-500"
-                    size={20}
-                  />
-                  DASHBOARD
-                </div>
-              </li>
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("two");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  ASSIGNED PROJ
-                </div>
-              </li>
+          <nav className="flex-1 px-2 py-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+            <ul className="space-y-1">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const baseClass = `flex items-center px-3 py-2 text-gray-700 cursor-pointer font-medium rounded-md
+            ${activeCard === item.key ? "bg-indigo-50" : "hover:bg-gray-50"}`;
 
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("three");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  SUBMIT MOM
-                </div>
-              </li>
-              <>
-                <li>
-                  <div
-                    onClick={() => {
-                      handleActiveBar("eight");
-                      setSidebarOpen(false);
-                    }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                  >
-                    <GoProjectRoadmap className="mr-3" size={20} />
-                    PROJECT INCLUDE LOGIC
-                  </div>
-                </li>
+                const onClick = () => {
+                  handleActiveBar(item.key);
+                  setSidebarOpen(false);
+                };
 
-                <li>
-                  <div
-                    onClick={() => {
-                      handleActiveBar("nine");
-                      setSidebarOpen(false);
-                    }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                  >
-                    <GoProjectRoadmap className="mr-3" size={20} />
-                    PROJECT INCLUDE SCADA
-                  </div>
-                </li>
-                <li>
-                  <div
-                    onClick={() => {
-                      handleActiveBar("ten");
-                      setSidebarOpen(false);
-                    }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                  >
-                    <GoProjectRoadmap className="mr-3" size={20} />
-                    PROJECT INCLUDE TESTING
-                  </div>
-                </li></>
-
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("five");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "five" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  WORK REPORT
-                </div>
-              </li>
-              <li>
-                <div
-                  onClick={() => {
-                    handleActiveBar("four");
-                    setSidebarOpen(false);
-                  }}
-                  className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "four" ? "bg-indigo-50 rounded-md" : ""
-                    }`}
-                >
-                  <GoProjectRoadmap className="mr-3" size={20} />
-                  MOM LIST
-                </div>
-              </li>
-              <>
-                <li>
-                  <a
-                    onClick={() => {
-                      handleActiveBar("six");
-                      setSidebarOpen(false);
-                    }}
-                    className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
-                      }`}
-                  >
-                    <RiProgress2Line className="mr-3" size={20} />
-                    WORK LIST
-                  </a>
-                </li>
-              </>
+                return (
+                  <li key={item.key}>
+                    {item.isLink ? (
+                      <a onClick={onClick} className={baseClass}>
+                        <Icon className="mr-3 text-indigo-500" size={20} />
+                        {item.label}
+                      </a>
+                    ) : (
+                      <div onClick={onClick} className={baseClass}>
+                        <Icon className="mr-3 text-indigo-500" size={20} />
+                        {item.label}
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
         </div>
       </aside>
+
       {renderCard()}
     </div>
   );

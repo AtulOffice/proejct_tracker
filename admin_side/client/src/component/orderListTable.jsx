@@ -59,7 +59,7 @@ const OrderTableAll = ({ data }) => {
   };
 
   return (
-    <div className="relative italic h-full col-span-full w-full overflow-hidden rounded-lg shadow-sm bg-white border border-gray-200">
+    <div className="relative h-full col-span-full w-full overflow-hidden rounded-lg shadow-sm bg-white border border-gray-200">
       {cancelFlag && (
         <PopupConfirmation
           setCancelflag={setCancelflag}
@@ -77,110 +77,112 @@ const OrderTableAll = ({ data }) => {
         />
       )}
       <div className="overflow-x-auto hidden md:block">
-        <div className="max-h-[690px] overflow-y-auto">
+        <div className="max-h-[460px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0">
-              <tr className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
-                <th className="w-16 px-4 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+              <tr className="bg-gray-900">
+                <th className="w-16 px-2 py-1.5 text-center font-semibold text-white!">
                   Sr No
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
+                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
                   Job ID
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
+                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
                   Client Name
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
+                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
                   Booking Date
                 </th>
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
-                  Target Del Date
+                <th className="w-32 px-2 py-1.5 text-left font-semibold text-white!">
+                  Targt Del Date
                 </th>
-                {/* <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
-                  SO Type
-                </th> */}
-                <th className="w-32 px-6 py-4 text-left text-sm font-semibold tracking-wide uppercase text-white!">
+                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
                   Site
                 </th>
-                <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                   view
                 </th>
-                <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                   Edit
                 </th>
-                <th className="w-20 px-6 py-4 text-center text-sm font-semibold tracking-wide uppercase text-white!">
+                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                   Cancel
                 </th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((order, indx) => {
                 const isCancelled = order?.isCancelled === true;
                 const disabledBtn =
-                  "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed";
+                  "text-gray-400  cursor-not-allowed";
+
                 return (
                   <tr
                     key={indx}
-                    className={`transition-colors duration-200
-          ${isCancelled
-                        ? "bg-red-50 text-red-700"
-                        : "hover:bg-slate-50"
+                    className={`transition-colors duration-150
+            ${isCancelled
+                        ? "bg-red-100 text-red-700"
+                        : indx % 2 === 1
+                          ? "bg-gray-200 hover:bg-slate-100"
+                          : "bg-white hover:bg-slate-50"
                       }`}
                   >
-                    <td className="px-4 py-4 text-center text-sm font-semibold">
+                    <td className="px-4 py-1 text-center text-sm font-semibold">
                       {indx + 1}
                     </td>
-                    <td className="px-6 py-4 text-sm font-mono whitespace-nowrap">
-                      {/* {middleEllipsis(order.jobNumber)} */}
+
+                    <td className="px-6 py-1 text-base whitespace-nowrap font-mono">
                       {order.jobNumber}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm" title={order.client}>
+
+                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                      <div className="truncate text-sm" title={order.client}>
                         {middleEllipsis(order.client, 10, 5)}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm font-mono whitespace-nowrap">
+
+                    <td className="px-6 py-1 text-base whitespace-nowrap font-mono">
                       {order?.bookingDate || "—"}
                     </td>
-                    <td className="px-6 py-4 text-sm whitespace-nowrap">
+
+                    <td className="px-6 py-1 text-base whitespace-nowrap">
                       {order?.actualDeleveryDate || "—"}
                     </td>
-                    {/* <td className="px-6 py-4 text-sm whitespace-nowrap">
-                      {order.soType || "—"}
-                    </td> */}
-                    <td className="px-6 py-4">
-                      <div className="text-sm" title={order.site}>
+
+                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                      <div className="truncate text-sm" title={order.site}>
                         {middleEllipsis(order.site, 10, 5)}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center">
+
+                    <td className="px-6 py-1 text-center">
                       <button
                         onClick={() => hadleOpenPopup(order._id)}
-                        className={`p-3 rounded-xl transition-all
-                          ${isCancelled
-                            ? "bg-blue-200 text-blue-400 border border-gray-300"
-                            : "bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 text-white hover:shadow-xl"
-                          }`}
+                        className={`p-3 rounded-xl transition-all bg-transparent text-white hover:bg-gray-200`}
                         title={isCancelled ? "Action not allowed" : "View order"}
                       >
                         <FaEye size={18} />
                       </button>
                     </td>
-                    <td className="px-6 py-4 text-center">
+
+                    <td className="px-6 py-1 text-center">
                       <button
                         disabled={isCancelled}
                         onClick={() => !isCancelled && handleUpdate(order._id)}
                         className={`p-2.5 rounded-lg transition-all
-              ${isCancelled
+      ${isCancelled
                             ? disabledBtn
-                            : "bg-linear-to-br from-emerald-50 to-teal-50 text-emerald-600 border border-emerald-200 hover:border-emerald-400"
+                            : "bg-transparent text-emerald-600 hover:bg-gray-200"
                           }`}
                         title={isCancelled ? "Action not allowed" : "Edit order"}
                       >
                         <MdEdit size={18} />
                       </button>
                     </td>
-                    <td className="px-6 py-4 text-center">
+
+
+                    <td className="px-6 py-1 text-center">
                       <button
                         disabled={isCancelled}
                         onClick={() => {
@@ -189,21 +191,22 @@ const OrderTableAll = ({ data }) => {
                           setCancelflag(true);
                         }}
                         className={`p-2.5 rounded-lg transition-all
-              ${isCancelled
+      ${isCancelled
                             ? disabledBtn
-                            : "bg-gradient-to-br from-red-200 to-rose-200 border border-red-600 hover:shadow-red-500/40"
+                            : "bg-transparent text-red-600 hover:bg-gray-200"
                           }`}
                         title={isCancelled ? "Order already cancelled" : "Cancel order"}
                       >
                         <MdCancel size={18} />
                       </button>
                     </td>
+
                   </tr>
                 );
               })}
             </tbody>
-
           </table>
+
         </div>
       </div>
 
@@ -282,15 +285,16 @@ const OrderTableAll = ({ data }) => {
       </div>
 
       {/* Footer Section */}
-      <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
-        <div className="flex flex-wrap items-center justify-between gap-y-2">
-          <p className="text-sm text-gray-600">
+      <div className="bg-gray-50 px-4 py-2 border-t border-gray-200">
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-gray-600">
             Showing{" "}
             <span className="font-semibold text-gray-900">{data.length}</span>{" "}
             {data.length !== 1 ? "entries" : "entry"}
           </p>
         </div>
       </div>
+
     </div >
   );
 };

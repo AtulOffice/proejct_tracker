@@ -16,6 +16,17 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
     const [data, setData] = useState();
     const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
 
+    const dummyData = Array.from({ length: 20 }, (_, i) => ({
+        id: i + 1,
+        projectName: `Project ${i + 1}`,
+        jobNumber: `JOB-${String(i + 1).padStart(3, "0")}`,
+        clientName: `Client ${i + 1}`,
+        endUser: `EndUser ${i + 1}`,
+        bookingDate: `2026-01-${String((i % 28) + 1).padStart(2, "0")}`,
+        deliveryDate: `2026-02-${String((i % 28) + 1).padStart(2, "0")}`,
+        site: `Site ${i + 1}`,
+    }));
+
     useEffect(() => {
         const handler = setTimeout(() => {
             setdebounceSerchTerm(searchTerm);
@@ -68,7 +79,7 @@ const ProjectListOperation = ({ tableVal, isEdit, fetchFun, onEditFun, printTitl
     const filterRef = useRef(null);
 
     return (
-        <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+        <div className="min-h-screen flex flex-col lg:ml-45 px-6 pt-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
 
             <FilterCompo
                 searchTerm={searchTerm}

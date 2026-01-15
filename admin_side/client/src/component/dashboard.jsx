@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { GoProjectRoadmap } from "react-icons/go";
-import { FaClipboardList, FaRegSquarePlus } from "react-icons/fa6";
-import { MdCancel, MdOutlinePendingActions } from "react-icons/md";
-import { TbUrgent } from "react-icons/tb";
 import logimg from "../assets/logo_image.png";
-import {
-  RiCustomerServiceFill,
-  RiNotification3Line,
-  RiProgress2Line,
-} from "react-icons/ri";
+import { RiNotification3Line } from "react-icons/ri";
 import {
   RiMenu4Line,
   RiCloseLine,
-  RiDashboardLine,
   RiLogoutBoxRLine,
 } from "react-icons/ri";
 import OneCard from "./add.Project";
-import AddDocs from "./add.Docs";
 import ZeroCard from "./overview.Project";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -32,12 +22,14 @@ import ProjectList from "./projectList";
 import { ProjectCatogary } from "./ProjectCatogary.jsx";
 import OrderForm from "./OrderForm.jsx";
 import OrderList from "./orderList.jsx";
-import { FaShoppingCart } from "react-icons/fa";
 import { fetchAllworkStatusAdmin } from "../apiCall/workProgress.Api.js";
 import { fetchProjectOveriew, fetchProjectsUrgentAction, fetfchProejctADev, fetfchProejctAll } from "../apiCall/project.api.js";
 import { useDispatch, useSelector } from "react-redux";
+import { menuItems, ProjectActionTab, ProjectTab, ProjectTabDev, worktActionTab } from "../utils/menuItems.jsx";
 
 const AdminDashboard = () => {
+
+
   const formRef = useRef(null);
   const dispatch = useDispatch()
 
@@ -84,86 +76,6 @@ const AdminDashboard = () => {
     }
   };
 
-
-  const ProjectTab = [
-
-    {
-      head: "JOB ID",
-      val: "jobNumber",
-    },
-    {
-      head: "Client",
-      val: "projectName",
-    },
-    {
-      head: "endUser",
-      val: "endUser",
-    },
-    { head: "Booking", val: "bookingDate" },
-    {
-      head: "Target Delivery",
-      val: "actualDeleveryDate",
-    },
-
-  ];
-  const ProjectTabDev = [
-    {
-      head: "Project",
-      val: "projectName",
-    },
-    {
-      head: "JOB ID",
-      val: "jobNumber",
-    },
-    {
-      head: "Status",
-      val: "status",
-    },
-    {
-      head: "Delivery",
-      val: "deleveryDate",
-    },
-    { head: "Visit", val: "visitDate" },
-    { head: "LOGIC/SCADA", val: "Development" },
-  ];
-  const worktActionTab = [
-    {
-      head: "Project",
-      val: "projectName",
-    },
-    {
-      head: "JOB ID",
-      val: "jobNumber",
-    },
-    {
-      head: "LAST REPORT",
-      val: "submittedAt",
-    },
-    {
-      head: "PROGRESS",
-      val: "progressPercent",
-    },
-  ];
-  const ProjectActionTab = [
-    {
-      head: "Project",
-      val: "projectName",
-    },
-    {
-      head: "JOB ID",
-      val: "jobNumber",
-    },
-    {
-      head: "Status",
-      val: "status",
-    },
-    {
-      head: "Delivery",
-      val: "deleveryDate",
-    },
-    { head: "Visit", val: "visitDate" },
-    { head: "DEV/COMM", val: "service" },
-  ];
   const renderCard = () => {
     switch (activeCard) {
       case "zero":
@@ -327,6 +239,27 @@ const AdminDashboard = () => {
     };
   }, [sidebarRef, setSidebarOpen]);
 
+  const SidebarItem = ({ item, activeCard, handleActiveBar, setSidebarOpen }) => {
+    const Icon = item.icon;
+
+    return (
+      <li>
+        <div
+          onClick={() => {
+            handleActiveBar(item.key);
+            setSidebarOpen(false);
+          }}
+          className={`flex items-center px-4 py-2.5 text-gray-700 cursor-pointer font-medium rounded-md
+          ${activeCard === item.key ? "bg-indigo-50" : "hover:bg-gray-50"}`}
+        >
+          <Icon className="mr-3 text-indigo-500" size={20} />
+          {item.label}
+        </div>
+      </li>
+    );
+  };
+
+
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-blue-100 to-indigo-100">
       {open && <NotificationForm formRef={formRef} setOpen={setOpen} />}
@@ -403,385 +336,31 @@ const AdminDashboard = () => {
 
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex flex-col h-full">
           <div className="h-16 flex items-center justify-center border-b border-gray-200">
-            <h2 className="text-xl font-bold text-indigo-600">{""}</h2>
+            <h2 className="text-lg font-bold text-indigo-600">{""}</h2>
           </div>
-          <nav className="flex-1 px-4 py-6 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
-            <ul className="space-y-2">
-              {(user?.role === "reception" || user?.role == "admin") && (
-                <>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("zero");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "zero" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <RiDashboardLine
-                        className="mr-3 text-indigo-500"
-                        size={20}
-                      />
-                      DASHBOARD
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("twentyone");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twentyone"
-                        ? "bg-indigo-50 rounded-md"
-                        : ""
-                        }`}
-                    >
-                      <FaShoppingCart className="mr-3" size={20} />
-                      CREATE ORDER
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("twentytwo");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twentytwo"
-                        ? "bg-indigo-50 rounded-md"
-                        : ""
-                        }`}
-                    >
-                      <FaClipboardList className="mr-3" size={20} />
-                      ORDER LIST
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("one");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "one" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <FaRegSquarePlus className="mr-3" size={20} />
-                      ADD SRVC DETAILS
-                    </div>
-                  </li>
-                  {/* <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("twentyfour");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twentyfour" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <FaRegSquarePlus className="mr-3" size={20} />
-                      ADD DOCS DETAILS
-                    </div>
-                  </li> */}
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("ninteen");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ninteen"
-                        ? "bg-indigo-50 rounded-md"
-                        : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ALL PROJECTS
-                    </div>
-                  </li>
-                  {(user?.role == "admin" || user?.role == "reception") && (
-                    <>
-                      <li>
-                        <div
-                          onClick={() => {
-                            handleActiveBar("sixteen");
-                            setSidebarOpen(false);
-                          }}
-                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "sixteen"
-                            ? "bg-indigo-50 rounded-md"
-                            : ""
-                            }`}
-                        >
-                          <GoProjectRoadmap className="mr-3" size={20} />
-                          PROJECT ACTIONS
-                        </div>
-                      </li>
-                    </>
-                  )}
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("twentythree");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twentythree"
-                        ? "bg-indigo-50 rounded-md"
-                        : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      PROJ INC DEV
-                    </div>
-                  </li>
-                  {user?.role == "admin" && (
-                    <>
-                      <li>
-                        <div
-                          onClick={() => {
-                            handleActiveBar("seventeen");
-                            setSidebarOpen(false);
-                          }}
-                          className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "seventeen"
-                            ? "bg-indigo-50 rounded-md"
-                            : ""
-                            }`}
-                        >
-                          <GoProjectRoadmap className="mr-3" size={20} />
-                          ENGINEERS
-                        </div>
-                      </li>
-                    </>
-                  )}
-
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("eighteen");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eighteen"
-                        ? "bg-indigo-50 rounded-md"
-                        : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      WEEKLY ASSESSMENT
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("twenty");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twenty" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ASSESSMENTS
-                    </div>
-                  </li>
-                  {/* <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("fourteen");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fourteen" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      PROJECT DEV STATUS
-                    </div>
-                  </li> */}
-                  {/* <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBarF("two");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "two" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      ALL
-                    </div>
-                  </li> */}
-
-
-                  {/* <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("three");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "three" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      UPCOMING
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("ten");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "ten" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      RUNNING
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("twelve");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "twelve" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      NO REQUEST
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("eleven");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eleven" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      LATEST
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("four");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "four" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <MdOutlinePendingActions className="mr-3" size={20} />
-                      PENDING
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("five");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "five" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      COMPLETED
-                    </div>
-                  </li>
-                  <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("thirteen");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "thirteen"
-                        ? "bg-indigo-50 rounded-md"
-                        : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      CLOSED
-                    </div>
-                  </li>
-                  <li>
-                    <a
-                      onClick={() => {
-                        handleActiveBar("seven");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "seven" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <TbUrgent className="mr-3" size={20} />
-                      URGENT
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      onClick={() => {
-                        handleActiveBar("six");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "six" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <RiCustomerServiceFill className="mr-3" size={20} />
-                      SERVICES
-                    </a>
-                  </li> */}
-                  {/* <li>
-                    <div
-                      onClick={() => {
-                        handleActiveBar("fifteen");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "fifteen"
-                        ? "bg-indigo-50 rounded-md"
-                        : ""
-                        }`}
-                    >
-                      <GoProjectRoadmap className="mr-3" size={20} />
-                      PROJECTS UNDER DEVLOPMENT
-                    </div>
-                  </li> */}
-                </>
-              )}
-
-              {(user?.role == "admin" || user?.role == "reception") && (
-                <>
-                  {/* <li>
-                    <a
-                      onClick={() => {
-                        handleActiveBar("eight");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "eight" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <MdCancel className="mr-3" size={20} />
-                      CANCELLED
-                    </a>
-                  </li> */}
-                  <li>
-                    <a
-                      onClick={() => {
-                        handleActiveBar("nine");
-                        setSidebarOpen(false);
-                      }}
-                      className={`flex items-center px-4 py-3 text-gray-700 cursor-pointer font-medium ${activeCard === "nine" ? "bg-indigo-50 rounded-md" : ""
-                        }`}
-                    >
-                      <RiProgress2Line className="mr-3" size={20} />
-                      WORK STATUS
-                    </a>
-                  </li>
-                </>
-              )}
+          <nav className="flex-1 px-2 py-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+            <ul className="space-y-1">
+              {menuItems
+                .filter((item) => item.roles.includes(user?.role))
+                .map((item) => (
+                  <SidebarItem
+                    key={item.key}
+                    item={item}
+                    activeCard={activeCard}
+                    handleActiveBar={handleActiveBar}
+                    setSidebarOpen={setSidebarOpen}
+                  />
+                ))}
             </ul>
           </nav>
         </div>
       </aside>
+
       {renderCard()}
     </div>
   );

@@ -68,7 +68,7 @@ const OrderList = () => {
   }
 
   return (
-    <div className="max-w-8xl h-full lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="min-h-screen flex flex-col lg:ml-60 px-6 pt-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <FilterCompo
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -81,10 +81,7 @@ const OrderList = () => {
         EngHandle={true}
       />
 
-      <div
-        layout="true"
-        className="w-full min-h-[56vh] h-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200"
-      >
+      <div className="flex-1 w-full overflow-hidden rounded-xl shadow-lg bg-white border border-gray-200">
         {filteredProjects.length > 0 ? (
           <OrderTableAll data={filteredProjects} />
         ) : (

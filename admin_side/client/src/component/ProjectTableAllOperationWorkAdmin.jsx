@@ -91,7 +91,7 @@ const ProjectTableAllOperationWorkAdmin = ({ data, tableVal, isEdit, onEditFun, 
 
 
     return (
-        <div className="relative h-full col-span-full w-full italic overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
+        <div className="relative h-full col-span-full w-full overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200">
 
             {progress && progressData && (
                 <ProgressShowedWorkAdmin project={selectedProject} onClose={() => setPorgress(false)} progressData={progressData} />
@@ -116,104 +116,79 @@ const ProjectTableAllOperationWorkAdmin = ({ data, tableVal, isEdit, onEditFun, 
                 <div ref={printRef} className="max-h-[690px] overflow-y-auto">
                     <table className="w-full table-fixed">
                         <thead className="sticky top-0">
-                            <tr className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 border-b-2 border-purple-400 shadow-md">
-                                <th className="w-16 px-4 py-5 text-center text-base font-bold tracking-wide uppercase !text-gray-400">
+                            <tr className="bg-gray-900">
+                                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                                     SR NO
                                 </th>
+
                                 {tableVal.map((col, idx) => (
                                     <th
                                         key={idx}
-                                        className="w-37 px-6 py-5 text-left text-base font-bold tracking-wide uppercase text-gray-400!"
+                                        className="px-4 py-1.5 text-left font-semibold text-white!"
                                     >
                                         {col.head}
                                     </th>
                                 ))}
+
                                 {isEdit && (
                                     <>
-                                        <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
+                                        <th className="w-24 px-4 py-1.5 text-center font-semibold text-white!">
                                             VIEW
                                         </th>
-                                        <th className="w-24 px-6 py-5 text-center text-base font-bold tracking-wide uppercase text-gray-400!">
+                                        <th className="w-24 px-4 py-1.5 text-center font-semibold text-white!">
                                             PROGRESS
                                         </th>
-
-
                                     </>
                                 )}
                             </tr>
                         </thead>
 
+
                         <tbody className="divide-y divide-gray-100 bg-white">
                             {data?.map((row, i) => (
                                 <tr
                                     key={i}
-                                    className="hover:bg-slate-50 transition-colors duration-150 group"
+                                    className={`transition-colors duration-150
+        ${i % 2 === 1 ? "bg-gray-200 hover:bg-slate-100" : "bg-white hover:bg-slate-50"}
+      `}
                                 >
-
-                                    <td className="px-4 py-4 text-center text-sm font-semibold text-gray-700">
+                                    <td className="px-4 py-1 text-center text-sm font-semibold text-gray-700">
                                         {i + 1}
                                     </td>
+
                                     {tableVal.map((col, j) => {
                                         const val = row?.[col.val];
                                         const display = formatValue(val, col.val);
-                                        return (
-                                            <td
-                                                key={j}
-                                                className="px-6 py-4 text-base text-gray-700 whitespace-nowrap"
-                                            >
-                                                <div
-                                                    className={`truncate`}
-                                                >
-                                                    <div className="truncate max-w-full">
-                                                        {display}
-                                                    </div>
 
-                                                </div>
+                                        return (
+                                            <td key={j} className="px-6 py-1 text-base text-gray-700 whitespace-nowrap">
+                                                <div className="truncate max-w-full">{display}</div>
                                             </td>
                                         );
                                     })}
 
                                     {isEdit && (
                                         <>
-
-                                            <td
-                                                onClick={() => hadleOpenPopup(row)}
-                                                className="px-6 py-4 text-center">
+                                            {/* VIEW */}
+                                            <td onClick={() => hadleOpenPopup(row)} className="px-6 py-1 text-center">
                                                 <button
-                                                    className="
-                        flex items-center justify-center
-                        bg-gradient-to-tr from-blue-500 via-cyan-500 to-indigo-500
-                        hover:from-blue-600 hover:via-cyan-600 hover:to-indigo-600
-                        text-white p-2 rounded-full shadow-lg
-                        transition-all duration-200
-                        hover:scale-110 hover:-rotate-6
-                        ring-2 ring-transparent hover:ring-blue-300
-                        focus:outline-none focus:ring-4 focus:ring-blue-400
-                        "
+                                                    className="p-2.5 rounded-lg transition-all bg-transparent text-gray-700 hover:bg-gray-200"
                                                     aria-label="Update"
                                                     type="button"
                                                 >
-                                                    <FaEye className="w-5 h-5 drop-shadow" />
+                                                    <FaEye className="w-5 h-5" />
                                                 </button>
                                             </td>
-                                            <td
-                                                className="px-6 py-4 text-center">
+
+                                            {/* PROGRESS */}
+                                            <td className="px-6 py-1 text-center">
                                                 <button
                                                     onClick={() => handleShowProgressWork(row)}
-                                                    className="
-                                flex items-center justify-center
-                                                    bg-gradient-to-tr from-green-500 via-emerald-500 to-lime-500
-                                                    hover:from-green-600 hover:via-emerald-600 hover:to-lime-600
-                                                    text-white p-2 rounded-full shadow-lg
-                                                    transition-all duration-200
-                                                    hover:scale-110 hover:-rotate-6
-                                                    ring-2 ring-transparent hover:ring-green-300
-                                                    focus:outline-none focus:ring-4 focus:ring-green-400
-                                                    "
+                                                    className="p-2.5 rounded-lg transition-all bg-transparent text-gray-700 hover:bg-gray-200"
                                                     aria-label="Update"
                                                     type="button"
                                                 >
-                                                    <GiProgression className="w-5 h-5 drop-shadow" />
+                                                    <GiProgression className="w-5 h-5" />
                                                 </button>
                                             </td>
                                         </>

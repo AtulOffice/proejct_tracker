@@ -14,7 +14,6 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editTy
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [data, setData] = useState();
   const [debounceSearchTerm, setdebounceSerchTerm] = useState(searchTerm);
-
   useEffect(() => {
     const handler = setTimeout(() => {
       setdebounceSerchTerm(searchTerm);
@@ -65,7 +64,7 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle, editTy
   const filterRef = useRef(null);
 
   return (
-    <div className="min-h-screen flex flex-col lg:ml-60 px-6 py-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="min-h-screen flex flex-col lg:ml-45 px-6 pt-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
 
       <FilterCompo
         searchTerm={searchTerm}

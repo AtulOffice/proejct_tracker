@@ -50,7 +50,7 @@ const AssignmentPage = ({ assignments }) => {
 
     return (
         <>
-            <div className="max-w-8xl min-h-[100vh] lg:ml-60 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+            <div className="max-w-8xl min-h-[100vh] lg:ml-45 px-6 py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-sm">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between my-10 px-4 lg:px-10">
                     <h2 className="text-3xl font-bold text-gray-800">
                         MOM RECORDS
@@ -87,14 +87,14 @@ const AssignmentPage = ({ assignments }) => {
                     <div className="overflow-x-hidden rounded-xl shadow-lg">
                         <table className="min-w-full bg-white">
                             <thead>
-                                <tr className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm uppercase tracking-wider">
-                                    <th className="px-6 py-4 text-left font-semibold">Project</th>
-                                    <th className="px-6 py-4 text-left font-semibold">Job No</th>
-                                    <th className="px-6 py-4 text-left font-semibold">Start</th>
-                                    <th className="px-6 py-4 text-left font-semibold">End</th>
-                                    <th className="px-6 py-4 text-center font-semibold">Duration</th>
-                                    <th className="px-6 py-4 text-center font-semibold">MOM</th>
-                                    <th className="px-6 py-4 text-center font-semibold">Docs</th>
+                                <tr className="bg-gray-900 text-white">
+                                    <th className="px-6 py-4 text-left font-semibold text-white!">Project</th>
+                                    <th className="px-6 py-4 text-left font-semibold text-white!">Job No</th>
+                                    <th className="px-6 py-4 text-left font-semibold text-white!">Start</th>
+                                    <th className="px-6 py-4 text-left font-semibold text-white!">End</th>
+                                    <th className="px-6 py-4 text-center font-semibold text-white!">Duration</th>
+                                    <th className="px-6 py-4 text-center font-semibold text-white!">MOM</th>
+                                    <th className="px-6 py-4 text-center font-semibold text-white!">Docs</th>
                                 </tr>
                             </thead>
 
