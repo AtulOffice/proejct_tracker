@@ -336,7 +336,7 @@ const AdminDashboard = () => {
 
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-64 lg:translate-x-0
+        className={`fixed top-0 left-0 h-screen bg-white shadow-lg transition-all duration-300 transform z-20 w-45 lg:translate-x-0
     ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex flex-col h-full">

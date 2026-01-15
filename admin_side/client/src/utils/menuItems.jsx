@@ -8,6 +8,7 @@ import {
     RiDashboardLine,
 } from "react-icons/ri";
 import { FaShoppingCart } from "react-icons/fa";
+import { MdAssignmentAdd } from "react-icons/md";
 
 export const menuItems = [
     {
@@ -18,37 +19,37 @@ export const menuItems = [
     },
     {
         key: "twentyone",
-        label: "CREATE ORDER",
+        label: "ORDER",
         icon: FaShoppingCart,
         roles: ["reception", "admin"],
     },
     {
         key: "twentytwo",
-        label: "ORDER LIST",
+        label: "ORDER",
         icon: FaClipboardList,
         roles: ["reception", "admin"],
     },
     {
         key: "one",
-        label: "ADD SRVC DETAILS",
+        label: "SRVC DET",
         icon: FaRegSquarePlus,
         roles: ["reception", "admin"],
     },
     {
         key: "ninteen",
-        label: "ALL PROJECTS",
+        label: "ALL PROJ",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
     {
         key: "sixteen",
-        label: "PROJECT ACTIONS",
+        label: "PROJ ACT",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
     {
         key: "twentythree",
-        label: "PROJ INC DEV",
+        label: "PROJ DEV",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
@@ -60,19 +61,19 @@ export const menuItems = [
     },
     {
         key: "eighteen",
-        label: "WEEKLY ASSESSMENT",
-        icon: GoProjectRoadmap,
+        label: "ASSMT",
+        icon: MdAssignmentAdd,
         roles: ["reception", "admin"],
     },
     {
         key: "twenty",
-        label: "ASSESSMENTS",
+        label: "ASSMT LIST",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
     {
         key: "nine",
-        label: "WORK STATUS",
+        label: "WORKS",
         icon: RiProgress2Line,
         roles: ["reception", "admin"],
     },

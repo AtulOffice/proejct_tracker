@@ -166,7 +166,7 @@ export const ProjectCatogary = ({
   }
 
   return (
-    <div className="max-w-8xl min-h-[140vh] lg:ml-60 px-6 py-12 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="max-w-8xl min-h-[140vh] lg:ml-40 px-6 py-12 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
       <h2 className="text-3xl font-bold text-gray-800 my-8 ml-10">{title}</h2>
 
       {devStatus ? (
