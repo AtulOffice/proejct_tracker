@@ -65,9 +65,9 @@ export default function OrderForm({ setActiveCard }) {
       formData.bookingDate &&
       formData.orderDate
     ) {
-      if (new Date(formData.orderDate) < new Date(formData.bookingDate)) {
-        msgs.orderDate =
-          "Order Date cannot be before Booking Date";
+      if (new Date(formData.orderDate) > new Date(formData.bookingDate)) {
+        msgs.orderDate = "Order Date must be earlier than Booking Date.";
+        msgs.bookingDate = "Booking Date must be later than Order Date.";
       }
     }
 
@@ -205,6 +205,7 @@ export default function OrderForm({ setActiveCard }) {
     // }
 
     if (isEmpty(formData.bookingDate)) newErrors.bookingDate = "Booking Date is required";
+    if (isEmpty(formData.actualDeleveryDate)) newErrors.bookingDate = "Target Delivery Date is required";
     if (isEmpty(formData.poReceived)) newErrors.poReceived = "PO Received is required";
     if (formData.invoiceTerm === "SI" && isEmpty(formData.creditDays)) {
       newErrors.creditDays = "Credit Days is required";
@@ -712,7 +713,7 @@ export default function OrderForm({ setActiveCard }) {
                 "Enter Contact Number",
 
               )}
-              {renderInput("actualDeleveryDate", "Target Delivery Date", "date")}
+              {renderInput("actualDeleveryDate", "Target Delivery Date", "date", "", true)}
             </div>
           </section>
 

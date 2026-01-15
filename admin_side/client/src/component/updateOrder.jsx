@@ -46,10 +46,10 @@ export default function UpdateOrderForm() {
         touched.orderDate) &&
       formData.bookingDate &&
       formData.orderDate &&
-      new Date(formData.orderDate) < new Date(formData.bookingDate)
+      new Date(formData.orderDate) > new Date(formData.bookingDate)
     ) {
-      msgs.orderDate = "Order Date cannot be before Booking Date";
-      msgs.bookingDate = "Booking Date is after Order Date";
+      msgs.orderDate = "Order Date must be earlier than Booking Date.";
+      msgs.bookingDate = "Booking Date must be later than Order Date.";
     }
 
     if (
@@ -104,7 +104,7 @@ export default function UpdateOrderForm() {
       if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
       return;
     }
-    
+
     const newValue =
       type === "number" && value !== "" ? parseFloat(value) : value;
 
@@ -201,6 +201,8 @@ export default function UpdateOrderForm() {
 
     if (touched.bookingDate && isEmpty(formData.bookingDate))
       newErrors.bookingDate = "Booking Date is required";
+    if (touched.actualDeleveryDate && isEmpty(formData.actualDeleveryDate))
+      newErrors.actualDeleveryDate = "Target Delivery Date is required";
 
     if (touched.poReceived && isEmpty(formData.poReceived))
       newErrors.poReceived = "PO Received is required";
@@ -681,6 +683,7 @@ export default function UpdateOrderForm() {
                 "Enter Contact Number",
 
               )}
+              {renderInput("actualDeleveryDate", "Target Delivery Date", "date", "", true)}
             </div>
           </section>
 
@@ -759,11 +762,6 @@ export default function UpdateOrderForm() {
                   )}
                 </>
               )}
-
-
-              {renderInput("actualDeleveryDate", "Target Delivery Date", "date")}
-
-
             </div>
           </section>
 
