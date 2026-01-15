@@ -219,6 +219,7 @@ export const loginUser = async (req, res) => {
     delete safeUser.isEmailVerified;
     delete safeUser.createdAt;
     delete safeUser.updatedAt;
+    console.log(safeUser)
 
     const accessToken = createAccessToken(safeUser);
     const refreshToken = crypto.randomBytes(40).toString("hex");
@@ -414,7 +415,7 @@ export const findUserDetails = async (req, res) => {
       });
     }
     const UserData = await UserModels.findById(_id).select(
-      "-createdAt -updatedAt -email -refreshTokens"
+      "-createdAt -updatedAt -refreshTokens"
     );
     if (!UserData) {
       return res.status(404).json({

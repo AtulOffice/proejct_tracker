@@ -41,16 +41,13 @@ const ProjectOverview = ({ overvew, setActiveCard, user }) => {
   ];
 
   return (
-    <div className={`transition-all duration-300 lg:ml-64 pt-16 min-h-screen`}>
+    <div className={`transition-all duration-300 lg:ml-40 pt-16 min-h-screen`}>
       <div className="p-6">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Dashboard Overview
-          </h2>
+        {/* <div className="mb-8">
           <p className="text-gray-600 mt-1">
             Welcome back, {user ? user?.username.toUpperCase() : "Admin!"}
           </p>
-        </div>
+        </div> */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           {(overvew?.statusGroups
             ? Object.entries(overvew.statusGroups)
@@ -201,64 +198,68 @@ const ProjectOverview = ({ overvew, setActiveCard, user }) => {
             LATEST PROJECT MODIFICATIONS
           </h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <table className="w-full table-fixed divide-y divide-gray-200">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-gray-900">
+                  <th className="px-4 py-1.5 text-left font-semibold text-white! rounded-tl-xl">
                     Project Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-1.5 text-left font-semibold text-white!">
                     Priority
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-1.5 text-left font-semibold text-white!">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-1.5 text-left font-semibold text-white!">
                     End Date(Expected)
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-1.5 text-right font-semibold text-white! rounded-tr-xl">
                     Client
                   </th>
                 </tr>
               </thead>
+
+
               <tbody className="bg-white divide-y divide-gray-200">
-                {(overvew?.latestProjects ? overvew.latestProjects : []).map(
-                  (project, indx) => (
-                    <tr key={indx}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {project.projectName}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {project.priority}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          {project.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {project?.endDate
-                          ? format(new Date(project.endDate), "dd MMM yyyy")
-                          : "NOT PROVIDED"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="text-indigo-600 hover:text-indigo-900">
-                          {project.client}
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                )}
+                {(overvew?.latestProjects ? overvew.latestProjects : []).map((project, indx) => (
+                  <tr
+                    key={indx}
+                    className={`transition-colors duration-150
+          ${indx % 2 === 1 ? "bg-gray-200 hover:bg-slate-100" : "bg-white hover:bg-slate-50"}
+        `}
+                  >
+                    <td className="px-4 py-1 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900 truncate">
+                        {project.projectName}
+                      </div>
+                    </td>
+
+                    <td className="px-4 py-1 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{project.priority}</div>
+                    </td>
+
+                    <td className="px-4 py-1 whitespace-nowrap">
+                      <span className="px-2 inline-flex text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        {project.status}
+                      </span>
+                    </td>
+
+                    <td className="px-4 py-1 whitespace-nowrap text-sm text-gray-500">
+                      {project?.endDate
+                        ? format(new Date(project.endDate), "dd MMM yyyy")
+                        : "NOT PROVIDED"}
+                    </td>
+
+                    <td className="px-4 py-1 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="text-indigo-600 hover:text-indigo-900">
+                        {project.client}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+
           </div>
         </div>
       </div>

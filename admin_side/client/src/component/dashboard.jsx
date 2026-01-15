@@ -26,6 +26,7 @@ import { fetchAllworkStatusAdmin } from "../apiCall/workProgress.Api.js";
 import { fetchProjectOveriew, fetchProjectsUrgentAction, fetfchProejctADev, fetfchProejctAll } from "../apiCall/project.api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { menuItems, ProjectActionTab, ProjectTab, ProjectTabDev, worktActionTab } from "../utils/menuItems.jsx";
+import { LogOut, Settings, User } from "lucide-react";
 
 const AdminDashboard = () => {
 
@@ -75,6 +76,7 @@ const AdminDashboard = () => {
       toast.error("error while logout");
     }
   };
+
 
   const renderCard = () => {
     switch (activeCard) {
@@ -220,6 +222,28 @@ const AdminDashboard = () => {
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const getInitials = (name = "") => {
+    const parts = name.trim().split(/\s+/).filter(Boolean);
+
+    if (parts.length === 0) return "?";
+    if (parts.length === 1) return parts[0][0].toUpperCase();
+
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+
   const handleActiveBar = (val) => {
     setActiveCard(val);
   };
@@ -280,21 +304,13 @@ const AdminDashboard = () => {
               {" "}
               <h1 className="text-xl sm:text-xl font-bold bg-linear-to-r from-pink-500 via-indigo-600 to-teal-400 text-transparent bg-clip-text animate-pulse shadow-lg p-2 rounded-lg border-2 border-indigo-300 hover:border-indigo-500 transition-all duration-300 transform hover:scale-110 tracking-wider flex items-center">
                 <span className="mr-2">✨</span>
-                <span className="hidden sm:inline">
-                  {user.role === "admin"
-                    ? "ADMIN DASHBOARD"
-                    : user?.role === "reception"
-                      ? "RECEPTION DASHBOARD"
-                      : "DESIGN DASHBOARD"}
-                </span>
-                <span className="inline sm:hidden">
-                  {user.role === "admin"
+                <span>
+                  {user?.role === "admin"
                     ? "ADMIN"
                     : user?.role === "reception"
                       ? "RECEPTION"
                       : "DESIGN"}
                 </span>
-
                 <span className="ml-2">✨</span>
               </h1>
             </div>
@@ -310,26 +326,59 @@ const AdminDashboard = () => {
                 {overvew?.todayNotice ?? 0}
               </span>
             </button>
-            <div className="relative">
-              <button className="flex items-center focus:outline-none">
-                <img
-                  src={logimg}
-                  alt="User Avatar"
-                  className="h-8 w-8 rounded-full object-cover"
-                />
+            <div ref={dropdownRef} className="relative">
+              <button
+                onClick={() => setIsOpen(true)}
+                className="flex items-center focus:outline-none">
+                <div className="h-8 w-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+                  {getInitials(user?.name || user?.username || "User")}
+                </div>
               </button>
+
+              {isOpen && (
+                <div className="absolute top-full right-0 mt-2 w-60 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in slide-in-from-top-2 duration-200 z-50">
+                  <div className="p-5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white relative">
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className="absolute top-4 right-4 p-1.5 bg-white/20 hover:bg-white/30 rounded-lg transition-all duration-200 group z-10"
+                    >
+                      <svg className="w-4 h-4 text-white group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-lg truncate">{user?.name || user?.username || "John Doe"}</h3>
+                        <p className="text-indigo-100 text-sm mt-0.5 truncate">{user?.email || "john.doe@example.com"}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="divide-y divide-gray-100">
+                    <div className="py-2">
+                      <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
+                        <User className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
+                        <span className="font-medium text-gray-900">Profile</span>
+                      </button>
+                    </div>
+
+                    <div className="py-2">
+                      <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
+                        <Settings className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
+                        <span className="font-medium text-gray-900">Settings</span>
+                      </button>
+
+                      <button onClick={handleLogOut} className="w-full flex items-center gap-3 px-4 py-3.5 hover:cursor-pointer hover:bg-red-50 border-t border-gray-100 transition-all duration-150 text-left group">
+                        <LogOut className="h-4.5 w-4.5 text-red-500 group-hover:text-red-600 flex-shrink-0" />
+                        <span className="font-medium text-red-600">Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <button
-              className="group relative flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-red-500 transition-all duration-300 rounded-lg hover:bg-red-50 active:scale-95 cursor-pointer"
-              onClick={handleLogOut}
-            >
-              <RiLogoutBoxRLine
-                size={20}
-                className="transition-transform duration-300 group-hover:translate-x-0.5"
-              />
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full"></span>
-            </button>
           </div>
         </div>
       </header>

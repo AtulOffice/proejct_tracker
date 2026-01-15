@@ -89,9 +89,22 @@ export default function UpdateOrderForm() {
     fetchEmployees();
   }, []);
 
+  const sanitizeJobNumber = (value = "") => {
+    return value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "");
+  };
+
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
+    if (name === "jobNumber") {
+      const cleaned = sanitizeJobNumber(value);
+      setFormData((prev) => ({ ...prev, jobNumber: cleaned }));
+      if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+      return;
+    }
+    
     const newValue =
       type === "number" && value !== "" ? parseFloat(value) : value;
 

@@ -269,7 +269,6 @@ export const PlanningSave = async (req, res) => {
 
         if (modified) {
           const data = await engineer.save();
-          console.dir(data?.developmentProjectList?.logic, { depth: null });
         }
       })
     );

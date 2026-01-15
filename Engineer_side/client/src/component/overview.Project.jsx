@@ -37,16 +37,13 @@ const ProjectOverview = ({ overvew, setActiveCard }) => {
 
 
   return (
-    <div className={`transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-gradient-to-br from-slate-50 to-gray-100`}>
+    <div className={`transition-all duration-300 lg:ml-40 pt-16 min-h-screen bg-gradient-to-br from-slate-50 to-gray-100`}>
       <div className="p-6">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">
-            Dashboard Overview
-          </h2>
+        {/* <div className="mb-8">
           <p className="text-gray-600 mt-2">
             Welcome back, <span className="font-semibold text-purple-600">{user ? user?.name.toUpperCase() : "ENGINEER"}</span>
           </p>
-        </div>
+        </div> */}
 
         {/* Desktop Cards */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
