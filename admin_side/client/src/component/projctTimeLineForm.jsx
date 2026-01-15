@@ -22,6 +22,7 @@ const ProjectTimelineForm1 = () => {
     const [project, setProject] = useState();
     const [loading, setLoading] = useState();
     const [isPlan, setIsPlan] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const emptySection = {
@@ -408,8 +409,10 @@ const ProjectTimelineForm1 = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (isLoading) return;
         if (!validateForm()) return;
         try {
+            setIsLoading(true);
             const formDevbackData = mapFrontendToBackend(
                 {
                     document: { rows: documentRows() },
@@ -485,6 +488,8 @@ const ProjectTimelineForm1 = () => {
             } else {
                 toast.error("Failed to save plan");
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -1132,20 +1137,64 @@ const ProjectTimelineForm1 = () => {
                     <div className="flex justify-center pt-8 pb-4">
                         {<button
                             type="submit"
-                            className="group relative px-12 py-4 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 font-bold text-lg overflow-hidden transform hover:scale-105 active:scale-95"
+                            disabled={isLoading}
+                            className={`group relative px-12 py-4 rounded-2xl shadow-xl transition-all duration-300 font-bold text-lg overflow-hidden transform active:scale-95
+    ${isLoading
+                                    ? "bg-gray-300 text-gray-600 cursor-not-allowed shadow-none"
+                                    : "bg-linear-to-r from-blue-600 to-indigo-600 text-white hover:shadow-2xl hover:scale-105"
+                                }`}
                         >
-                            <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <div className="relative flex items-center gap-3">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                            {!isLoading && (
+                                <div className="absolute inset-0 bg-linear-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            )}
 
-                                <span>{isPlan ? "Update" : "Create"} Software Development Plan</span>
-                                <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                </svg>
+                            <div className="relative flex items-center gap-3">
+                                {isLoading ? (
+                                    <>
+                                        {/* Spinner */}
+                                        <svg
+                                            className="w-6 h-6 animate-spin"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <circle
+                                                className="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                            />
+                                            <path
+                                                className="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                            />
+                                        </svg>
+
+                                        <span>Saving...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+
+                                        <span>{isPlan ? "Update" : "Create"} Software Development Plan</span>
+
+                                        <svg
+                                            className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                        </svg>
+                                    </>
+                                )}
                             </div>
-                        </button>}
+                        </button>
+                        }
                     </div>
 
                 </form>
