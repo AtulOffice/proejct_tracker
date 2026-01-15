@@ -210,7 +210,7 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
 
 
   return (
-    <div className="lg:ml-64 pt-20 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50/30 to-indigo-50 p-8">
+    <div className="lg:ml-40 pt-20 min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50/30 to-indigo-50 p-8">
 
       <div className="bg-white rounded-2xl shadow-lg mb-8 overflow-hidden">
         <div className="bg-gradient-to-r from-indigo-500 to-indigo-600 p-6">

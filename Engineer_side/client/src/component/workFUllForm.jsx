@@ -167,7 +167,7 @@ const EngineerWorkStatusFull = () => {
 
 
     return (
-        <div className="lg:ml-64 pt-20 min-h-screen bg-linear-to-br from-indigo-50 via-purple-50/30 to-indigo-50 p-8">
+        <div className="lg:ml-40 pt-20 min-h-screen bg-linear-to-br from-indigo-50 via-purple-50/30 to-indigo-50 p-8">
 
             <div className="bg-linear-to-r from-purple-600 via-pink-600 to-rose-600 px-10 py-6 shadow-md rounded-xl flex justify-between items-center mb-8">
                 <div className="flex items-center gap-3">
