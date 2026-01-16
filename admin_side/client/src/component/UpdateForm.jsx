@@ -347,7 +347,7 @@ const UpdateForm = () => {
                 ["Client Name", orderDetails?.client],
                 ["End User", orderDetails?.endUser],
                 ["Site Location", orderDetails?.site],
-                ["SIEPL Acct. Mgr. Email ", orderDetails?.concerningSalesManager],
+                ["SIEPL Acct. Mgr. Email ", orderDetails?.concerningSalesManager?.name],
                 ["Client Tech Person Name", orderDetails?.name],
                 ["Client Tech Person Email", orderDetails?.technicalEmail],
                 ["Client Tech Person Ph", orderDetails?.phone],

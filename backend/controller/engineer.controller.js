@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import EngineerReocord from "../models/engineers.model.js";
+import bcrypt from "bcryptjs";
 
 export const updateEngineerAssignmentStatusCrons = async () => {
   try {
@@ -131,12 +132,15 @@ export const saveEngineerRecord = async (req, res) => {
         message: "this employee code already exist",
       });
     }
+    const defaultPassword = "Admin@123";
+    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
     await EngineerReocord.create({
       name,
       email,
       phone,
       assignments,
       empId: empId.toUpperCase(),
+      password: hashedPassword
     });
 
     return res.status(201).json({

@@ -22,7 +22,7 @@ const OrderSchema = new mongoose.Schema(
     },
     endUser: { type: String, trim: true },
     site: { type: String, trim: true },
-    actualDeleveryDate: { type: Date },
+    actualDeleveryDate: { type: Date, require: true },
 
     orderNumber: { type: String, trim: true },
     orderDate: { type: Date },

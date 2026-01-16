@@ -89,6 +89,12 @@ const EngineerMom = ({ setActiveCard, isEdit = false, }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.momDocuments || formData.momDocuments.length === 0) {
+      toast.error("Please upload at least one MOM document before submitting.");
+      return;
+    }
+
     if (!formData.jobNumber || !formData.projectId) {
       toast.error("Please select a Job Number before submitting MOM.");
       return;

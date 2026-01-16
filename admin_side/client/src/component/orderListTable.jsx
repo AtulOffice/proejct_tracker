@@ -12,6 +12,7 @@ import { toggleMode } from "../redux/slices/uiSlice";
 import apiClient from "../api/axiosClient";
 
 const OrderTableAll = ({ data }) => {
+  console.log(data)
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [id, seId] = useState("");
   const [cancelFlag, setCancelflag] = useState(false)
@@ -79,37 +80,57 @@ const OrderTableAll = ({ data }) => {
       <div className="overflow-x-auto hidden md:block">
         <div className="max-h-[460px] overflow-y-auto">
           <table className="w-full table-fixed">
-            <thead className="sticky top-0">
+            <thead className="sticky top-0 z-10">
               <tr className="bg-gray-900">
                 <th className="w-16 px-2 py-1.5 text-center font-semibold text-white!">
                   Sr No
                 </th>
-                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
+
+                <th className="w-20 px-3 py-1.5 text-left font-semibold text-white!">
                   Job ID
                 </th>
-                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
-                  Client Name
+
+                <th className="w-32 px-3 py-1.5 text-left font-semibold text-white!">
+                  Client
                 </th>
-                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
+
+                <th className="w-32 px-3 py-1.5 text-left font-semibold text-white!">
                   Booking Date
                 </th>
+
                 <th className="w-32 px-2 py-1.5 text-left font-semibold text-white!">
-                  Targt Del Date
+                  Target Del Date
                 </th>
-                <th className="w-32 px-4 py-1.5 text-left font-semibold text-white!">
+
+                <th className="w-28 px-3 py-1.5 text-left font-semibold text-white!">
                   Site
                 </th>
-                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
-                  view
+
+                <th className="w-28 px-3 py-1.5 text-left font-semibold text-white!">
+                  Acc. M.
                 </th>
-                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+
+                <th className="w-16 px-2 py-1.5 text-center font-semibold text-white!">
+                  Po Rec.
+                </th>
+
+                <th className="w-16 px-2 py-1.5 text-center font-semibold text-white!">
+                  Amnd.
+                </th>
+
+                {/* ✅ Actions group */}
+                <th className="w-[60px] px-1 py-1.5 text-center font-semibold text-white!">
+                  View
+                </th>
+                <th className="w-[60px] px-1 py-1.5 text-center font-semibold text-white!">
                   Edit
                 </th>
-                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+                <th className="w-[70px] px-1 py-1.5 text-center font-semibold text-white!">
                   Cancel
                 </th>
               </tr>
             </thead>
+
 
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((order, indx) => {
@@ -152,8 +173,16 @@ const OrderTableAll = ({ data }) => {
 
                     <td className="px-6 py-1 text-base whitespace-nowrap">
                       <div className="truncate text-sm" title={order.site}>
-                        {middleEllipsis(order.site, 10, 5)}
+                        {middleEllipsis(order.site, 7, 5)}
                       </div>
+                    </td>
+                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                      {middleEllipsis(order?.concerningSalesManager?.name, 7, 5)}
+                    </td><td className="px-6 py-1 text-base whitespace-nowrap">
+                      {order?.poReceived || "—"}
+                    </td>
+                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                      {order?.amndReqrd || "—"}
                     </td>
 
                     <td className="px-6 py-1 text-center">

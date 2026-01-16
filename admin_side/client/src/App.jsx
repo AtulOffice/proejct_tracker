@@ -14,6 +14,7 @@ import { UserCall } from "./apiCall/authApicall";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, setUserLoading } from "./redux/slices/authSlice";
+import ProjectDetailsForm from "./component/testCompo.jsx";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useSelector((state) => state.auth);
@@ -56,6 +57,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <TaskDisplay />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/page1"
+        element={
+          <ProtectedRoute>
+            <ProjectDetailsForm />
           </ProtectedRoute>
         }
       />

@@ -34,7 +34,7 @@ const FormField = ({
                   ["Client Name", selectData.client],
                   ["End User", selectData.endUser],
                   ["Site Location", selectData.site],
-                  ["SIEPL Acct. Mgr. Email ", selectData.concerningSalesManager],
+                  ["SIEPL Acct. Mgr. Email ", selectData.concerningSalesManager?.name],
                   ["Client Tech Person Name", selectData.name],
                   ["Client Tech Person Email", selectData.technicalEmail],
                   ["Client Tech Person Ph", selectData.phone],

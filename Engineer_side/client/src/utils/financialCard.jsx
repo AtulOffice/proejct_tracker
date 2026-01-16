@@ -181,7 +181,7 @@ export const OrderDetailsCard = ({ order }) => {
           <EnhancedInfoRow label="Job Number" value={order?.jobNumber} />
           <EnhancedInfoRow
             label="Sales Manager"
-            value={order?.concerningSalesManager}
+            value={order?.concerningSalesManager?.name}
           />
           <EnhancedInfoRow
             label="Amendment Req."

@@ -902,9 +902,9 @@ export const findrecord = async (req, res) => {
 export const findrecordbyId = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await ProjectModel.findById(id).populate(
-      "OrderMongoId",
-      ` jobNumber entityType soType bookingDate client endUser site actualDeleveryDate
+    const data = await ProjectModel.findById(id).populate({
+      path: "OrderMongoId",
+      select: `jobNumber entityType soType bookingDate client endUser site actualDeleveryDate
     orderNumber orderDate deleveryDate name technicalEmail phone amndReqrd
     orderValueSupply orderValueService orderValueTotal cancellation
     paymentAdvance paymentPercent1 paymentType1 paymentType1other paymentAmount1
@@ -915,8 +915,14 @@ export const findrecordbyId = async (req, res) => {
     concerningSalesManager ProjectDetails isSaveInProject retentionYesNo retentionPercent
     retentionAmount retentionDocs retentinoDocsOther retentionType retentionPeriod
     invoiceTerm invoicePercent mileStone invoicemileStoneOther createdBy updatedBy
-    createdAt updatedAt `
-    );
+    createdAt updatedAt`,
+      populate: {
+        path: "concerningSalesManager",
+        model: "MarketingMemberRecord",
+        select: "name email"
+      },
+    });
+
 
     return res.status(200).json({
       success: true,
@@ -1340,13 +1346,12 @@ export const UrgentProjectPegination = async (req, res) => {
 
 export const UrgentProjectAction = async (req, res) => {
   const search = req.query.search || "";
-
   try {
     const pipeline = [];
     if (search) {
       pipeline.push({
         $match: {
-          jobNumber: { $regex: new RegExp(`^${search}$`, "i") },
+          jobNumber: { $regex: search, $options: "i" }
         },
       });
     }
@@ -1367,7 +1372,7 @@ export const UrgentProjectAction = async (req, res) => {
     });
     pipeline.push({
       $addFields: {
-        deliveryDateObj: "$OrderMongoId.deleveryDate",
+        deliveryDateObj: "$OrderMongoId.actualDeleveryDate",
         visitDateObj: "$visitDate",
       },
     });
@@ -1381,10 +1386,10 @@ export const UrgentProjectAction = async (req, res) => {
     });
     const today = new Date();
     const startDate = new Date(today);
-    startDate.setDate(today.getDate() - 180);
+    startDate.setDate(today.getDate() - 30);
 
     const endDate = new Date(today);
-    endDate.setDate(today.getDate() + 30);
+    endDate.setDate(today.getDate() + 180);
     pipeline.push({
       $match: {
         status: { $ne: "completed" },
@@ -1424,7 +1429,9 @@ export const UrgentProjectAction = async (req, res) => {
         updatedAt: 1,
         deleveryDate: "$OrderMongoId.deleveryDate",
         service: 1,
-        OrderMongoId: "$OrderMongoId._id",
+        OrderMongoId: {
+          _id: "$OrderMongoId._id",
+        },
       },
     });
 
@@ -1494,10 +1501,17 @@ export const getAllProjectsnewbyId = async (req, res) => {
       .select(
         "jobNumber entityType soType client _id Development priority ScadaPlace LogicPlace devScope CommisinionPO Workcommission commScope LinkedOrderNumber service swname swtechnicalEmail swphone isMailSent lotval CustomerDevDocuments SIEVPLDevDocuments swDevDocumentsforFat inspectionDocuments dispatchDocuments PostCommisionDocuments SIEVPLDevDocumentsRemarks CustomerDevDocumentsRemarks lotval"
       )
-      .populate(
-        "OrderMongoId",
-        "name technicalEmail phone bookingDate client endUser site concerningSalesManager deleveryDate actualDeleveryDate"
-      )
+      .populate({
+        path: "OrderMongoId",
+        select:
+          "name technicalEmail phone bookingDate client endUser site concerningSalesManager deleveryDate actualDeleveryDate",
+        populate: {
+          path: "concerningSalesManager",
+          model: "MarketingMemberRecord",
+          select: "name email",
+        },
+      });
+
 
     if (!docsProject) {
       return res.status(404).json({
@@ -1672,21 +1686,23 @@ export const ProjectsFetchDevById = async (req, res) => {
       commScope: 1,
     };
 
-    const project = await ProjectModel.findById(
-      id,
-      projectSelectFields
-    ).populate({
+    const project = await ProjectModel.findById(id, projectSelectFields).populate({
       path: "OrderMongoId",
       select: `
-          -paymentAdvance
-          -paymentPercent1 -paymentType1 -paymentType1other -paymentAmount1 -payemntCGBG1 -paymentrecieved1
-          -paymentPercent2 -paymentType2 -paymentType2other -paymentAmount2 -payemntCGBG2 -paymentrecieved2
-          -paymentPercent3 -paymentType3 -paymentType3other -paymentAmount3 -payemntCGBG3 -paymentrecieved3
-          -retentionYesNo -retentionPercent -retentionAmount -retentionDocs -retentinoDocsOther
-          -retentionType -retentionPeriod
-          -__v
-        `,
+    -paymentAdvance
+    -paymentPercent1 -paymentType1 -paymentType1other -paymentAmount1 -payemntCGBG1 -paymentrecieved1
+    -paymentPercent2 -paymentType2 -paymentType2other -paymentAmount2 -payemntCGBG2 -paymentrecieved2
+    -paymentPercent3 -paymentType3 -paymentType3other -paymentAmount3 -payemntCGBG3 -paymentrecieved3
+    -retentionYesNo -retentionPercent -retentionAmount -retentionDocs -retentinoDocsOther
+    -retentionType -retentionPeriod
+    -__v
+  `,
+      populate: {
+        path: "concerningSalesManager",
+        select: "name email phone empId",
+      },
     });
+
 
     if (!project) {
       return res.status(404).json({

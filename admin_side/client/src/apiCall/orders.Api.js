@@ -22,9 +22,9 @@ export const fetchOrdersAllNew = async () => {
     }
 };
 
-export const fetchOrderById = async (id) => {
+export const fetchOrderById = async (id, populate = true) => {
     try {
-        const response = await apiClient.get(`/order/fetchbyid/${id}`);
+        const response = await apiClient.get(`/order/fetchbyid/${id}?populateManager=${populate}`);
         return response.data?.data;
     } catch (e) {
         console.error("Failed to fetch order:", e);

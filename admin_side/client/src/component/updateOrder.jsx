@@ -16,12 +16,12 @@ export default function UpdateOrderForm() {
   const [touched, setTouched] = useState({});
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
-
+  console.log(formData)
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const val = await fetchOrderById(id);
+        const val = await fetchOrderById(id, false);
         if (val) {
           setFormData((prev) => ({ ...prev, ...val }));
         } else {

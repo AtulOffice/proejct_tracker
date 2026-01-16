@@ -69,7 +69,7 @@ const ProjectList = ({ tableVal, isEdit, fetchFun, onEditFun, printTitle }) => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:ml-40 px-6 pt-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
+    <div className="min-h-screen flex flex-col lg:ml-35 px-6 pt-20 bg-linear-to-br from-gray-50 to-white rounded-2xl shadow-sm">
 
       <FilterCompo
         searchTerm={searchTerm}

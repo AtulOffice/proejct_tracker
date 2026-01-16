@@ -785,7 +785,7 @@ const ProjectTimelineForm1 = () => {
                                         <Info label="Client" value={project?.OrderMongoId.client} />
                                         <Info label="End User" value={project?.OrderMongoId.endUser} />
                                         <Info label="Location" value={project?.OrderMongoId.site} />
-                                        <Info label="Accournt manager Email" value={project?.OrderMongoId.concerningSalesManager} />
+                                        <Info label="Accournt manager Email" value={project?.OrderMongoId.concerningSalesManager?.name} />
                                         <Info label="Technical Name" value={project?.OrderMongoId.name} />
                                         <Info label="Technical Email" value={project?.OrderMongoId.technicalEmail} />
                                         <Info label="Technical Phone" value={project?.OrderMongoId.phone} />

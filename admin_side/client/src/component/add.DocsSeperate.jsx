@@ -201,7 +201,7 @@ const AddDocsSeperate = () => {
                                             ["Client Name", selectData.client],
                                             ["End User", selectData.OrderMongoId?.endUser],
                                             ["Site Location", selectData.OrderMongoId?.site],
-                                            ["SIEPL Acct. Mgr. Email ", selectData.OrderMongoId?.concerningSalesManager],
+                                            ["SIEPL Acct. Mgr. Email ", selectData.OrderMongoId?.concerningSalesManager?.name],
                                             ["Client Tech Person Name", selectData.OrderMongoId?.name],
                                             ["Client Tech Person Email", selectData.OrderMongoId?.technicalEmail],
                                             ["Client Tech Person Ph", selectData.OrderMongoId?.phone],

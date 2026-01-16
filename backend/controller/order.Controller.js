@@ -98,10 +98,20 @@ export const getAllOrders = async (req, res) => {
       isCancelled: 1,
       createdAt: 1,
       updatedAt: 1,
-    }).sort({
-      updatedAt: -1,
-      createdAt: -1,
-    });
+      concerningSalesManager: 1,
+      orderValueTotal: 1,
+      poReceived: 1,
+      amndReqrd: 1
+    })
+      .populate({
+        path: "concerningSalesManager",
+        select: "name email",
+      })
+      .sort({
+        updatedAt: -1,
+        createdAt: -1,
+      });
+
 
     res.status(200).json({
       success: true,
@@ -240,19 +250,29 @@ export const updateOrder = async (req, res) => {
 export const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
-    if (
-      !mongoose.Types.ObjectId.isValid(id)
-    ) {
+    const { populateManager } = req.query;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid id ",
+        message: "Invalid id",
       });
     }
+    const shouldPopulateManager = populateManager !== "false";
 
-    const order = await Order.findById(id).populate({
+    let query = Order.findById(id).populate({
       path: "ProjectDetails",
       select: "",
     });
+
+    if (shouldPopulateManager) {
+      query = query.populate({
+        path: "concerningSalesManager",
+        select: "name email phone empId",
+      });
+    }
+
+    const order = await query;
 
     if (!order) {
       return res.status(404).json({
@@ -261,19 +281,21 @@ export const getOrderById = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: order,
     });
   } catch (error) {
     console.error("Error fetching order:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Error fetching order",
       error: error.message,
     });
   }
 };
+
+
 
 // cancell order
 

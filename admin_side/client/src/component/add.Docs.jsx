@@ -158,7 +158,7 @@ const InputForm = () => {
     };
 
     return (
-        <div className="transition-all duration-300 lg:ml-64 pt-16 min-h-screen bg-linear-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="transition-all duration-300 lg:ml-29 pt-16 min-h-screen bg-linear-to-br from-indigo-100 via-purple-100 to-pink-100 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
             <div className="mt-6 bg-white/20 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-full max-w-6xl border border-white/30">
                 <div className="flex flex-col w-full">
                     {open && (
@@ -227,7 +227,7 @@ const InputForm = () => {
                                             ["Client Name", selectData.client],
                                             ["End User", selectData.OrderMongoId?.endUser],
                                             ["Site Location", selectData.OrderMongoId?.site],
-                                            ["SIEPL Acct. Mgr. Email ", selectData.OrderMongoId?.concerningSalesManager],
+                                            ["SIEPL Acct. Mgr. Email ", selectData.OrderMongoId?.concerningSalesManager?.name],
                                             ["Client Tech Person Name", selectData.OrderMongoId?.name],
                                             ["Client Tech Person Email", selectData.OrderMongoId?.technicalEmail],
                                             ["Client Tech Person Ph", selectData.OrderMongoId?.phone],
