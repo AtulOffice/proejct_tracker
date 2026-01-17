@@ -55,8 +55,6 @@ export default function OrderForm({ setActiveCard }) {
     }
   }, [debounceJobnumber]);
 
-
-
   useEffect(() => {
     const msgs = {};
     if (
@@ -321,11 +319,10 @@ export default function OrderForm({ setActiveCard }) {
     //     newErrors.concerningSalesManager = "Enter valid email";
     //   }
     // }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -405,6 +402,7 @@ export default function OrderForm({ setActiveCard }) {
       document.addEventListener("mousedown", handleOutside);
       return () => document.removeEventListener("mousedown", handleOutside);
     }, []);
+    
     const selectedEngineer = engineersList.find(
       (eng) => eng._id === value
     );

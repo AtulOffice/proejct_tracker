@@ -22,11 +22,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(apiCors);
 
+app.get("/hello", (req, res) => {
+  return res
+    .status(200)
+    .json({ success: true, message: "hello i am image server" });
+});
 app.use("/", imageRoutes);
 app.use("/", videoRoutes);
 app.use("/", DocumentRouter);
 
 app.use("/videos", express.static(path.join(__dirname, "uploads/videos")));
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`,
+  });
+});
 
 cron.schedule("0 * * * *", async () => {
   await processDeleteQueue(__dirname);

@@ -56,7 +56,7 @@ app.use(cookieParser());
 app.get("/hello", (req, res) => {
   return res
     .status(200)
-    .json({ success: true, message: "hello i am server of form submission" });
+    .json({ success: true, message: "hello i am main server" });
 });
 app.use("/api/v1", ProjectRouter);
 app.use("/api/v1", userRouter);
