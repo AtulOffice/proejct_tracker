@@ -2500,7 +2500,6 @@ export const calculateOverallProgress = async (sections) => {
 export const getAdminProjectProgressByPlanning = async (req, res) => {
   try {
     const { planningId } = req.params;
-
     if (!planningId) {
       return res.status(400).json({
         success: false,
@@ -2533,14 +2532,13 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
 
     const TYPES = ["logic", "scada", "testing"];
     const sectionMap = {};
-    plan.allEngineers.forEach((engineer) => {
+    (Array.isArray(plan.allEngineers) ? plan.allEngineers : []).forEach((engineer) => {
       TYPES.forEach((type) => {
         const devSections = engineer.developmentProjectList?.[type] || [];
 
         devSections.forEach((section) => {
-          if (section.project.toString() !== projectId.toString()) return;
-
-          section.phases.forEach((phase) => {
+          if (!section?.project || !projectId || section.project.toString() !== projectId.toString()) return;
+          (Array.isArray(section.phases) ? section.phases : []).forEach((phase) => {
             const sectionName = phase.sectionName || "Unnamed Section";
             const phaseIndex = phase.phaseIndex;
 
@@ -2587,7 +2585,7 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
     );
     const overallProgress = await calculateOverallProgress(orderedSections);
 
-    const normalizedPlanRange = plan.plans.map(section => {
+    const normalizedPlanRange = (plan.plans || []).map(section => {
 
       const base =
         section.documents?.[0] ||
@@ -2595,6 +2593,7 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
         section.logic?.[0] ||
         section.testing?.[0];
 
+      if (!base) return null;
       return {
         sectionName: base.sectionName,
         sectionStartDate: base.sectionStartDate,
@@ -2630,7 +2629,7 @@ export const getAdminProjectProgressByPlanning = async (req, res) => {
             : null,
         }
       };
-    });
+    }).filter(Boolean);;
 
 
     return res.status(200).json({

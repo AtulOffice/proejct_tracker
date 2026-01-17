@@ -82,55 +82,12 @@ const AdminDashboard = () => {
     switch (activeCard) {
       case "zero":
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} user={user} />;
-      case "one":
-        return <OneCard />;
-      // case "twentyfour":
-      //   return <AddDocs />;
-      case "two":
-        return <ProjectCatogary key={"all"} all={true} title="ALL" />;
-      case "three":
-        return (
-          <ProjectCatogary
-            key={"upcomming"}
-            status="upcoming"
-            title="UPCOMING"
-          />
-        );
-      case "four":
-        return (
-          <ProjectCatogary key={"pending"} status="pending" title="PENDING" />
-        );
-      case "five":
-        return (
-          <ProjectCatogary
-            key={"completed"}
-            status="completed"
-            title="COMPLETED"
-          />
-        );
-      case "six":
-        return (
-          <ProjectCatogary key={"SERVICE"} soType="SERVICE" title="SERVICE" />
-        );
-      case "seven":
-        return (
-          <ProjectCatogary key={"urgent"} urgentMode={true} title="URGENT" />
-        );
-      case "eight":
-        return (
-          <ProjectCatogary
-            key={"cancelled"}
-            status="cancelled"
-            title="CANCELLED"
-          />
-        );
+      // case "seven":
+      //   return (
+      //     <ProjectCatogary key={"urgent"} urgentMode={true} title="URGENT" />
+      //   );
       case "nine":
         return (
-          // <ProjectCatogary
-          //   key={"work status"}
-          //   workStatus={true}
-          //   title="WORK STATUS"
-          // />
           <ProjectList
             key={"WORKING"}
             tableVal={worktActionTab}
@@ -138,40 +95,6 @@ const AdminDashboard = () => {
             isEdit={true}
             onEditFun="WORKING"
             printTitle="WORKING REPORT"
-          />
-        );
-      case "ten":
-        return (
-          <ProjectCatogary key={"running"} status="running" title="RUNNING" />
-        );
-      case "eleven":
-        return <ProjectCatogary key={"latest"} title="LATEST" />;
-      case "twelve":
-        return (
-          <ProjectCatogary
-            key={"no request"}
-            status="no request"
-            title="NO REQUEST"
-          />
-        );
-      case "thirteen":
-        return (
-          <ProjectCatogary key={"closed"} status="closed" title="CLOSED" />
-        );
-      case "fourteen":
-        return (
-          <ProjectCatogary
-            key={"devstatus"}
-            devStatus={true}
-            title="PROJECT DEVLOPMENT STATUS"
-          />
-        );
-      case "fifteen":
-        return (
-          <ProjectCatogary
-            key={"devFilter"}
-            devFilter={true}
-            title="PROJECT INCLUDED DEVLOPMENT"
           />
         );
       case "sixteen":
