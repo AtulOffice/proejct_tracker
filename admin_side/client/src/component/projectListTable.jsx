@@ -235,7 +235,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       return (
                         <td
                           key={j}
-                          className="px-6 py-1 text-base whitespace-nowrap"
+                          className="px-2 py-1 text-base whitespace-nowrap"
                         >
                           <div
                             className={`

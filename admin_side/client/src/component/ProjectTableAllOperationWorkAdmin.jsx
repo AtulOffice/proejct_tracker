@@ -148,9 +148,9 @@ const ProjectTableAllOperationWorkAdmin = ({ data, tableVal, isEdit, onEditFun, 
                             {data?.map((row, i) => (
                                 <tr
                                     key={i}
-                                    className={`transition-colors duration-150
-        ${i % 2 === 1 ? "bg-gray-200 hover:bg-slate-100" : "bg-white hover:bg-slate-50"}
-      `}
+                                    className={`transition-colors duration-150 font-mono
+    ${i % 2 === 1 ? "bg-gray-200 hover:bg-slate-100" : "bg-white hover:bg-slate-50"}
+  `}
                                 >
                                     <td className="px-4 py-1 text-center text-sm font-semibold text-gray-700">
                                         {i + 1}
@@ -161,7 +161,7 @@ const ProjectTableAllOperationWorkAdmin = ({ data, tableVal, isEdit, onEditFun, 
                                         const display = formatValue(val, col.val);
 
                                         return (
-                                            <td key={j} className="px-6 py-1 text-base text-gray-700 whitespace-nowrap">
+                                            <td key={j} className="px-2 py-1 text-base text-gray-700 whitespace-nowrap">
                                                 <div className="truncate max-w-full">{display}</div>
                                             </td>
                                         );

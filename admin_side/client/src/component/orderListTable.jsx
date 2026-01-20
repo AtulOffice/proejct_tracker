@@ -12,7 +12,6 @@ import { toggleMode } from "../redux/slices/uiSlice";
 import apiClient from "../api/axiosClient";
 
 const OrderTableAll = ({ data }) => {
-  console.log(data)
   const [selectedProjectForPopup, setSelectedProjectForPopup] = useState(null);
   const [id, seId] = useState("");
   const [cancelFlag, setCancelflag] = useState(false)
@@ -137,12 +136,11 @@ const OrderTableAll = ({ data }) => {
                 const isCancelled = order?.isCancelled === true;
                 const disabledBtn =
                   "text-gray-400  cursor-not-allowed";
-
                 return (
                   <tr
                     key={indx}
-                    className={`transition-colors duration-150
-            ${isCancelled
+                    className={`transition-colors duration-150 font-mono
+    ${isCancelled
                         ? "bg-red-100 text-red-700"
                         : indx % 2 === 1
                           ? "bg-gray-200 hover:bg-slate-100"
@@ -153,35 +151,35 @@ const OrderTableAll = ({ data }) => {
                       {indx + 1}
                     </td>
 
-                    <td className="px-6 py-1 text-base whitespace-nowrap font-mono">
+                    <td className="px-2 py-1 text-base whitespace-nowrap">
                       {order.jobNumber}
                     </td>
 
-                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                    <td className="px-2 py-1 text-base whitespace-nowrap">
                       <div className="truncate text-sm" title={order.client}>
                         {middleEllipsis(order.client, 10, 5)}
                       </div>
                     </td>
 
-                    <td className="px-6 py-1 text-base whitespace-nowrap font-mono">
+                    <td className="px-2 py-1 text-base whitespace-nowrap">
                       {order?.bookingDate || "—"}
                     </td>
 
-                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                    <td className="px-2 py-1 text-base whitespace-nowrap">
                       {order?.actualDeleveryDate || "—"}
                     </td>
 
-                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                    <td className="px-2 py-1 text-base whitespace-nowrap">
                       <div className="truncate text-sm" title={order.site}>
                         {middleEllipsis(order.site, 7, 5)}
                       </div>
                     </td>
-                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                    <td className="px-2 py-1 text-base whitespace-nowrap">
                       {middleEllipsis(order?.concerningSalesManager?.name, 7, 5)}
-                    </td><td className="px-6 py-1 text-base whitespace-nowrap">
+                    </td><td className="px-2 py-1 text-base whitespace-nowrap">
                       {order?.poReceived || "—"}
                     </td>
-                    <td className="px-6 py-1 text-base whitespace-nowrap">
+                    <td className="px-2 py-1 text-base whitespace-nowrap">
                       {order?.amndReqrd || "—"}
                     </td>
 
