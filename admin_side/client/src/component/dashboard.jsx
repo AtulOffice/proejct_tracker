@@ -29,6 +29,7 @@ import { menuItems, ProjectActionTab, ProjectTab, ProjectTabDev, worktActionTab 
 import { LogOut, Settings, User } from "lucide-react";
 import apiClient from "../api/axiosClient.js";
 import { setUser } from "../redux/slices/authSlice.js";
+import InputForm from "./add.Project";
 
 const AdminDashboard = () => {
 
@@ -84,6 +85,10 @@ const AdminDashboard = () => {
     switch (activeCard) {
       case "zero":
         return <ZeroCard overvew={overvew} setActiveCard={setActiveCard} user={user} />;
+      case "one":
+        return (
+          <InputForm />
+        );
       // case "seven":
       //   return (
       //     <ProjectCatogary key={"urgent"} urgentMode={true} title="URGENT" />
@@ -220,15 +225,14 @@ const AdminDashboard = () => {
       try {
         if (!selectedDesignation) return;
         if (!user?._id) return;
-
-        // avoid calling API again and again
         if (selectedDesignation === user.activeDesignation) return;
-
         const res = await apiClient.post(
           "/switch-designation",
           { activeDesignation: selectedDesignation }
         );
         dispatch(setUser(res?.data?.user || null));
+        setIsOpen(false)
+        setActiveCard("zero")
         toast.success(`Switched to ${selectedDesignation}`);
       } catch (err) {
         console.log(err);
@@ -401,7 +405,7 @@ const AdminDashboard = () => {
                 .filter(
                   (item) =>
                     item.roles.includes(user?.role) &&
-                    (user?.allowedMenuIds || []).includes(item.id)
+                    item.designations?.includes(user?.activeDesignation)
                 )
                 .map((item) => (
                   <SidebarItem
@@ -412,7 +416,6 @@ const AdminDashboard = () => {
                     setSidebarOpen={setSidebarOpen}
                   />
                 ))}
-
             </ul>
           </nav>
         </div>
