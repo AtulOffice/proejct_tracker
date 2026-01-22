@@ -26,6 +26,17 @@ const Userschema = new mongoose.Schema(
       type: [Number],
       default: []
     },
+    designations: {
+      type: [String],
+      enum: ["marketing", "commercial", "coordinator", "development", "commissioning"],
+      default: [],
+    },
+
+    activeDesignation: {
+      type: String,
+      enum: ["marketing", "commercial", "coordinator", "development","commissioning"],
+      default: null,
+    },
     email: {
       type: String,
       lowercase: true,

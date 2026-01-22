@@ -46,7 +46,7 @@ export const verifyEmail = async (req, res) => {
 
 export const CreateUser = async (req, res) => {
   try {
-    const { username, password, email } = req.body;
+    const { username, password, email, designations, activeDesignation } = req.body;
 
     if (!username || !password || !email) {
       return res.status(400).json({
@@ -71,11 +71,12 @@ export const CreateUser = async (req, res) => {
 
       existingUser.password = hashedPassword;
       existingUser.emailVerificationToken = newToken;
+      existingUser.activeDesignation = activeDesignation;
+      existingUser.designations = designations;
       existingUser.emailVerificationExpiry =
         new Date(Date.now() + 24 * 60 * 60 * 1000);
       await existingUser.save();
       const verifyLink = `${process.env.CLIENT_URL}/verify-email/${newToken}`;
-
       await sendMail({
         to: existingUser.email,
         subject: "Verify your email",
@@ -95,12 +96,13 @@ export const CreateUser = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      activeDesignation,
+      designations,
       emailVerificationToken: verificationToken,
       emailVerificationExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
     const verifyLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
-
     await sendMail({
       to: email,
       subject: "Verify your email",
@@ -120,6 +122,71 @@ export const CreateUser = async (req, res) => {
     });
   }
 };
+
+
+export const switchDesignation = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { activeDesignation } = req.body;
+
+    if (!activeDesignation) {
+      return res.status(400).json({
+        success: false,
+        message: "activeDesignation is required",
+      });
+    }
+
+    const VALID_DESIGNATIONS = [
+      "marketing",
+      "commercial",
+      "coordinator",
+      "development",
+      "commissioning",
+    ];
+
+    if (!VALID_DESIGNATIONS.includes(activeDesignation)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid designation",
+      });
+    }
+
+    const user = await UserModels.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!user.designations.includes(activeDesignation)) {
+      return res.status(404).json({
+        success: false,
+        message: "You are not allowed to switch to this designation",
+      });
+    }
+
+    user.activeDesignation = activeDesignation;
+    await user.save();
+    const updatedUser = await UserModels.findById(userId).select(
+      "-createdAt -updatedAt -refreshTokens"
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Designation switched successfully",
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.error("switchDesignation error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while switching designation",
+    });
+  }
+};
+
+
 
 export const forgotUser = async (req, res) => {
   try {

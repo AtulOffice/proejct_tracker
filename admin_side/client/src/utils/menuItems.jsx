@@ -17,6 +17,7 @@ export const menuItems = [
         label: "DASHBOARD",
         icon: RiDashboardLine,
         roles: ["reception", "admin"],
+        designations: ["marketing", "commercial", "technical", "development"],
     },
     {
         id: 21,
@@ -24,6 +25,7 @@ export const menuItems = [
         label: "ORDER",
         icon: FaShoppingCart,
         roles: ["reception", "admin"],
+        designations: ["commercial"],
     },
     {
         id: 22,
@@ -31,6 +33,7 @@ export const menuItems = [
         label: "ORDER",
         icon: FaClipboardList,
         roles: ["reception", "admin"],
+        designations: ["commercial"],
     },
     {
         id: 1,
@@ -38,6 +41,7 @@ export const menuItems = [
         label: "SRVC DET",
         icon: FaRegSquarePlus,
         roles: ["reception", "admin"],
+        designations: ["technical"],
     },
     {
         id: 19,
@@ -45,6 +49,7 @@ export const menuItems = [
         label: "ALL PROJ",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
+        designations: ["marketing", "commercial", "technical", "development"],
     },
     {
         id: 16,
@@ -52,6 +57,7 @@ export const menuItems = [
         label: "PROJ ACT",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
+        designations: ["marketing", "technical"],
     },
     {
         id: 23,
@@ -59,6 +65,7 @@ export const menuItems = [
         label: "PROJ DEV",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
+        designations: ["development"],
     },
     {
         id: 17,
@@ -66,6 +73,7 @@ export const menuItems = [
         label: "ENGINEERS",
         icon: GoProjectRoadmap,
         roles: ["admin"],
+        designations: ["technical", "development"], // you can decide as per your logic
     },
     {
         id: 18,
@@ -73,6 +81,7 @@ export const menuItems = [
         label: "ASSMT",
         icon: MdAssignmentAdd,
         roles: ["reception", "admin"],
+        designations: ["technical"],
     },
     {
         id: 20,
@@ -80,6 +89,7 @@ export const menuItems = [
         label: "ASSMT LIST",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
+        designations: ["technical"],
     },
     {
         id: 9,
@@ -87,8 +97,10 @@ export const menuItems = [
         label: "WORKS",
         icon: RiProgress2Line,
         roles: ["reception", "admin"],
+        designations: ["technical"],
     },
 ];
+
 
 
 export const ProjectTab = [

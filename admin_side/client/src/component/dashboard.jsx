@@ -27,6 +27,8 @@ import { fetchProjectOveriew, fetchProjectsUrgentAction, fetfchProejctADev, fetf
 import { useDispatch, useSelector } from "react-redux";
 import { menuItems, ProjectActionTab, ProjectTab, ProjectTabDev, worktActionTab } from "../utils/menuItems.jsx";
 import { LogOut, Settings, User } from "lucide-react";
+import apiClient from "../api/axiosClient.js";
+import { setUser } from "../redux/slices/authSlice.js";
 
 const AdminDashboard = () => {
 
@@ -205,7 +207,37 @@ const AdminDashboard = () => {
       </li>
     );
   };
+  const [selectedDesignation, setSelectedDesignation] = useState("");
 
+  useEffect(() => {
+    if (user?.activeDesignation) {
+      setSelectedDesignation(user.activeDesignation);
+    }
+  }, [user?.activeDesignation]);
+
+  useEffect(() => {
+    const switchNow = async () => {
+      try {
+        if (!selectedDesignation) return;
+        if (!user?._id) return;
+
+        // avoid calling API again and again
+        if (selectedDesignation === user.activeDesignation) return;
+
+        const res = await apiClient.post(
+          "/switch-designation",
+          { activeDesignation: selectedDesignation }
+        );
+        dispatch(setUser(res?.data?.user || null));
+        toast.success(`Switched to ${selectedDesignation}`);
+      } catch (err) {
+        console.log(err);
+        toast.error("Failed to switch designation");
+      }
+    };
+
+    switchNow();
+  }, [selectedDesignation]);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-blue-100 to-indigo-100">
@@ -259,40 +291,88 @@ const AdminDashboard = () => {
               </button>
 
               {isOpen && (
-                <div className="absolute top-full right-0 mt-2 w-60 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in slide-in-from-top-2 duration-200 z-50">
+                <div className="absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in slide-in-from-top-2 duration-200 z-50">
                   <div className="p-5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white relative">
                     <button
                       onClick={() => setIsOpen(false)}
                       className="absolute top-4 right-4 p-1.5 bg-white/20 hover:bg-white/30 rounded-lg transition-all duration-200 group z-10"
                     >
-                      <svg className="w-4 h-4 text-white group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <svg
+                        className="w-4 h-4 text-white group-hover:scale-110 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
                       </svg>
                     </button>
 
                     <div className="flex items-start gap-3">
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-lg truncate">{user?.name || user?.username || "John Doe"}</h3>
-                        <p className="text-indigo-100 text-sm mt-0.5 truncate">{user?.email || "john.doe@example.com"}</p>
+                        <h3 className="font-bold text-lg truncate">
+                          {user?.name || user?.username || "John Doe"}
+                        </h3>
+                        <p className="text-indigo-100 text-sm mt-0.5 truncate">
+                          {user?.email || "john.doe@example.com"}
+                        </p>
+                        {user?.activeDesignation && (
+                          <p className="text-indigo-200 text-xs mt-2 font-semibold tracking-wide">
+                            Active: {user.activeDesignation.toUpperCase()}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
 
                   <div className="divide-y divide-gray-100">
-                    <div className="py-2">
-                      <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
-                        <User className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
-                        <span className="font-medium text-gray-900">Profile</span>
-                      </button>
+                    <div className="py-3 px-4">
+                      <p className="text-xs font-bold text-gray-500 mb-2">DESIGNATIONS</p>
+
+                      <div className="flex flex-wrap gap-2">
+                        {(user?.designations || []).length === 0 ? (
+                          <p className="text-xs text-gray-400">No designation assigned</p>
+                        ) : (
+                          (user?.designations || []).map((d) => (
+                            <button
+                              key={d}
+                              onClick={() => setSelectedDesignation(d)}
+                              className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all duration-150
+                  ${selectedDesignation === d
+                                  ? "bg-indigo-600 text-white border-indigo-600"
+                                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                                }`}
+                            >
+                              {d.toUpperCase()}
+                            </button>
+                          ))
+                        )}
+                      </div>
                     </div>
+                    {/*
+      <div className="py-2">
+        <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
+          <User className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
+          <span className="font-medium text-gray-900">Profile</span>
+        </button>
+      </div>
 
+      <div className="py-2">
+        <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
+          <Settings className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
+          <span className="font-medium text-gray-900">Settings</span>
+        </button>
+      </div>
+      */}
                     <div className="py-2">
-                      <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
-                        <Settings className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
-                        <span className="font-medium text-gray-900">Settings</span>
-                      </button>
-
-                      <button onClick={handleLogOut} className="w-full flex items-center gap-3 px-4 py-3.5 hover:cursor-pointer hover:bg-red-50 border-t border-gray-100 transition-all duration-150 text-left group">
+                      <button
+                        onClick={handleLogOut}
+                        className="w-full flex items-center gap-3 px-4 py-3.5 hover:cursor-pointer hover:bg-red-50 border-t border-gray-100 transition-all duration-150 text-left group"
+                      >
                         <LogOut className="h-4.5 w-4.5 text-red-500 group-hover:text-red-600 flex-shrink-0" />
                         <span className="font-medium text-red-600">Sign Out</span>
                       </button>
