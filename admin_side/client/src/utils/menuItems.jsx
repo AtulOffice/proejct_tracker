@@ -12,72 +12,84 @@ import { MdAssignmentAdd } from "react-icons/md";
 
 export const menuItems = [
     {
+        id: 0,
         key: "zero",
         label: "DASHBOARD",
         icon: RiDashboardLine,
         roles: ["reception", "admin"],
     },
     {
+        id: 21,
         key: "twentyone",
         label: "ORDER",
         icon: FaShoppingCart,
         roles: ["reception", "admin"],
     },
     {
+        id: 22,
         key: "twentytwo",
         label: "ORDER",
         icon: FaClipboardList,
         roles: ["reception", "admin"],
     },
     {
+        id: 1,
         key: "one",
         label: "SRVC DET",
         icon: FaRegSquarePlus,
         roles: ["reception", "admin"],
     },
     {
+        id: 19,
         key: "ninteen",
         label: "ALL PROJ",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
     {
+        id: 16,
         key: "sixteen",
         label: "PROJ ACT",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
     {
+        id: 23,
         key: "twentythree",
         label: "PROJ DEV",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
     {
+        id: 17,
         key: "seventeen",
         label: "ENGINEERS",
         icon: GoProjectRoadmap,
         roles: ["admin"],
     },
     {
+        id: 18,
         key: "eighteen",
         label: "ASSMT",
         icon: MdAssignmentAdd,
         roles: ["reception", "admin"],
     },
     {
+        id: 20,
         key: "twenty",
         label: "ASSMT LIST",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
     },
     {
+        id: 9,
         key: "nine",
         label: "WORKS",
         icon: RiProgress2Line,
         roles: ["reception", "admin"],
     },
 ];
+
 
 export const ProjectTab = [
 

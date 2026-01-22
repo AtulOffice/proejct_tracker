@@ -991,7 +991,7 @@ const UpdateForm = () => {
             </>
           }
 
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-blue-300 shadow-sm">
+          {/* <div className="bg-indigo-50 p-6 rounded-lg border-2 border-blue-300 shadow-sm">
             <h3 className="font-bold text-lg text-blue-800 mb-4">
               📅 Timeline & Scheduling
             </h3>
@@ -1046,11 +1046,10 @@ const UpdateForm = () => {
               />
 
             </div>
-          </div>
-
+          </div> */}
 
           {/* 👷 Project Status & Engineer Assignment */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-orange-300 shadow-sm">
+          {/* <div className="bg-indigo-50 p-6 rounded-lg border-2 border-orange-300 shadow-sm">
             <h3 className="font-bold text-lg text-orange-800 mb-4">
               👷 Project Status & Engineer Assignment
             </h3>
@@ -1070,10 +1069,10 @@ const UpdateForm = () => {
                 <EngineerAssignment setEngineerData={setEngineerData} />
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* 🔧 Development & Technical */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-cyan-300 shadow-sm">
+          {/* <div className="bg-indigo-50 p-6 rounded-lg border-2 border-cyan-300 shadow-sm">
             <h3 className="font-bold text-lg text-cyan-800 mb-4">
               🔧 Development & Technical Track
             </h3>
@@ -1108,10 +1107,10 @@ const UpdateForm = () => {
                 />
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* ✅ Checklists & Submissions */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-pink-300 shadow-sm">
+          {/* <div className="bg-indigo-50 p-6 rounded-lg border-2 border-pink-300 shadow-sm">
             <h3 className="font-bold text-lg text-pink-800 mb-4">
               ✅ Checklists & Submissions
             </h3>
@@ -1138,10 +1137,10 @@ const UpdateForm = () => {
               />
 
             </div>
-          </div>
+          </div> */}
 
           {/* 📝 MOM & Documentation */}
-          <div className="bg-indigo-50 p-6 rounded-lg border-2 border-yellow-300 shadow-sm">
+          {/* <div className="bg-indigo-50 p-6 rounded-lg border-2 border-yellow-300 shadow-sm">
             <h3 className="font-bold text-lg text-yellow-800 mb-4">
               📝 MOM & Documentation
             </h3>
@@ -1165,12 +1164,9 @@ const UpdateForm = () => {
               />
 
             </div>
-          </div>
-
-
+          </div> */}
           {/* <DocumentsSection Docs={Docs} setDocs={setDocs} isDisable={true} /> */}
-
-          <div className="flex justify-center mt-8">
+          {/* <div className="flex justify-center mt-8">
             <button
               type="submit"
               disabled={isLoading}
@@ -1178,7 +1174,7 @@ const UpdateForm = () => {
             >
               Update
             </button>
-          </div>
+          </div> */}
         </form>
       </div >
     </div >

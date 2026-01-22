@@ -318,7 +318,11 @@ const AdminDashboard = () => {
           <nav className="flex-1 px-2 py-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
             <ul className="space-y-1">
               {menuItems
-                .filter((item) => item.roles.includes(user?.role))
+                .filter(
+                  (item) =>
+                    item.roles.includes(user?.role) &&
+                    (user?.allowedMenuIds || []).includes(item.id)
+                )
                 .map((item) => (
                   <SidebarItem
                     key={item.key}
@@ -328,6 +332,7 @@ const AdminDashboard = () => {
                     setSidebarOpen={setSidebarOpen}
                   />
                 ))}
+
             </ul>
           </nav>
         </div>

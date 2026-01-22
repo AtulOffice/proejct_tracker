@@ -22,6 +22,10 @@ const Userschema = new mongoose.Schema(
       requred: true,
       select: false,
     },
+    allowedMenuIds: {
+      type: [Number],
+      default: []
+    },
     email: {
       type: String,
       lowercase: true,
