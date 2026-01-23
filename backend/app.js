@@ -81,7 +81,7 @@ app.use((req, res) => {
 });
 
 app.listen(port, async () => {
-  await ConnDB({ str: process.env.DBSTR1 });
+  await ConnDB({ str: process.env.DBSTR});
   await connectRedis()
   console.log(`server is linsten on port ${port}`);
 });
