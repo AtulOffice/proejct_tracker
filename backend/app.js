@@ -19,7 +19,7 @@ import { ImageUploadRouter } from "./routes/image.route.js";
 import { StartRouter } from "./routes/startCheckList.routes.js";
 import { EndRouter } from "./routes/endCheckList.routes.js";
 import { MarketRouter } from "./routes/marketing.route.js";
-import { connectRedis } from "./utils/redis.js"
+import { connectRedis } from "./utils/redis.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -71,7 +71,7 @@ app.use("/api/v1/imageUploader", ImageUploadRouter);
 app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/startCheck", StartRouter);
 app.use("/api/v1/endCheck", EndRouter);
-app.use("/api/v1/market", MarketRouter)
+app.use("/api/v1/market", MarketRouter);
 
 app.use((req, res) => {
   res.status(404).json({
@@ -80,8 +80,10 @@ app.use((req, res) => {
   });
 });
 
+// HI
+
 app.listen(port, async () => {
-  await ConnDB({ str: process.env.DBSTR});
-  await connectRedis()
+  await ConnDB({ str: process.env.DBSTR });
+  await connectRedis();
   console.log(`server is linsten on port ${port}`);
 });
