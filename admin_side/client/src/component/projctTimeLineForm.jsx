@@ -1002,7 +1002,7 @@ const ProjectTimelineForm1 = () => {
                                             <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">Phase</div>
                                             <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">Start Date</div>
                                             <div className="font-bold text-sm text-gray-700 uppercase tracking-wide">End Date</div>
-                                            <div className="col-span-2 font-bold text-sm text-gray-700 uppercase tracking-wide">Progress</div>
+                                            <div className="col-span-2 font-bold text-sm text-gray-700 uppercase tracking-wide">Time Range</div>
                                         </div>
                                         <div className="divide-y divide-gray-100">
                                             {["documents", "scada", "logic", "testing"].map((phase, idx) => {

@@ -49,7 +49,7 @@ export const menuItems = [
         label: "ALL PROJ",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
-        designations: ["commissioning", "coordinator", "development"],
+        designations: ["commissioning", "coordinator"],
     },
     {
         id: 16,
@@ -81,7 +81,7 @@ export const menuItems = [
         label: "ASSMT",
         icon: MdAssignmentAdd,
         roles: ["reception", "admin"],
-        designations: ["development"],
+        designations: ["coordinator"],
     },
     {
         id: 20,
@@ -89,7 +89,7 @@ export const menuItems = [
         label: "ASSMT LIST",
         icon: GoProjectRoadmap,
         roles: ["reception", "admin"],
-        designations: ["development"],
+        designations: ["coordinator"],
     },
     {
         id: 9,
@@ -97,7 +97,7 @@ export const menuItems = [
         label: "WORKS",
         icon: RiProgress2Line,
         roles: ["reception", "admin"],
-        designations: ["coordinator", "commissioning"],
+        designations: ["commissioning"],
     },
 ];
 

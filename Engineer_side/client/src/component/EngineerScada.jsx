@@ -237,7 +237,7 @@ export default function ScadaDevelopmentExecution() {
                         <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
 
                         {/* Target Progress */}
-                        <div className="p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
+                        <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
                             <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
                                 Target Progress (Day)
                             </label>
@@ -263,6 +263,42 @@ export default function ScadaDevelopmentExecution() {
                                 ))}
                             </div>
                         </div>
+
+
+                        {/* SCADA Scope Disclaimer */}
+                       <div className="rounded-2xl border border-red-300/70 bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 px-4 py-4 sm:px-6 sm:py-5 text-sm text-red-900 shadow-lg backdrop-blur-sm ring-1 ring-red-200/60 mx-2 sm:mx-0">
+  <div className="mb-3 sm:mb-4 flex items-center justify-between">
+    <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] sm:tracking-[0.3em] text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
+      ⚠ SCADA Scope Disclaimer
+    </p>
+    <span className="rounded-full border border-red-300 bg-gradient-to-r from-red-100 to-rose-200 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] font-bold text-red-800 shadow-sm">
+      Scope Limited
+    </span>
+  </div>
+  
+  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-x-6 sm:gap-y-2 text-[12px] sm:text-[13px] font-semibold text-red-900">
+    {[
+      "Static Screens – 40%",
+      "Tagging Config – 20%",
+      "Alarm Config – 10%",
+      "Trend Config – 10%",
+      "Navigation Setup – 10%",
+      "Testing & Validation – 10%"
+    ].map((item) => (
+      <li key={item} className="flex items-center gap-2 sm:gap-2.5 group hover:bg-red-100/60 px-2 py-1.5 rounded-lg transition-all duration-200">
+        <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-gradient-to-r from-red-500 to-rose-500 shadow-sm scale-110 group-hover:scale-125 transition-transform flex-shrink-0" />
+        <span className="truncate">{item}</span>
+      </li>
+    ))}
+  </ul>
+
+  <p className="mt-4 text-[11px] sm:text-xs text-red-800/90 font-medium">
+    Note: Progress entered in this section represents <span className="font-bold">SCADA scope only</span> and does not indicate total project completion.
+  </p>
+</div>
+
+
+
 
                         {/* Actual Dates */}
                         <div className="grid grid-cols-3 gap-6 items-end">

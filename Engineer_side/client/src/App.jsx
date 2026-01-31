@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./component/LoginPage.jsx";
-import TaskDisplay from "./component/dashboard.jsx";
-import { AppProvider, useAppContext } from "./appContext.jsx";
-import { UserCall } from "./utils/apiCall.jsx";
-import TestingDevelopmentExecution from "./component/EngineerTesting.jsx";
-import ScadaDevelopmentExecution from "./component/EngineerScada.jsx";
-import LogicDevelopmentExecution from "./component/EngineerLogic.jsx";
+import LoginPage from "./component/LoginPage";
+import TaskDisplay from "./component/dashboard";
+import { AppProvider, useAppContext } from "./appContext";
+import { UserCall } from "./utils/apiCall";
+import TestingDevelopmentExecution from "./component/EngineerTesting";
+import ScadaDevelopmentExecution from "./component/EngineerScada";
+import LogicDevelopmentExecution from "./component/EngineerLogic";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useAppContext();

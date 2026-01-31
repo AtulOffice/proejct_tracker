@@ -234,7 +234,7 @@ export default function LogicDevelopmentExecution() {
                         <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
 
                         {/* Target Progress */}
-                        <div className="p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
+                        <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
                             <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
                                 Target Progress (Day)
                             </label>
