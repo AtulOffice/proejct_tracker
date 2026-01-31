@@ -82,14 +82,17 @@ export default function ScadaDevelopmentExecution() {
     ) {
       return;
     }
-
     if (name === "actualCompletionPercent") {
       let num = Math.max(0, Math.min(100, parseInt(value, 10)));
 
       setFormData((prev) => {
         const endDate =
-          num === 100 ? new Date().toISOString().split("T")[0] : "";
+          num === 100
+            ? new Date().toISOString().split("T")[0]
+            : prev.actualEndDate;
+
         const progress = calculateProgressDays(prev.actualStartDate, endDate);
+
         return {
           ...prev,
           actualCompletionPercent: num,
@@ -102,14 +105,18 @@ export default function ScadaDevelopmentExecution() {
 
     if (name === "actualStartDate") {
       setFormData((prev) => {
-        const progress = calculateProgressDays(value, prev.actualEndDate);
+        const endDate =
+          prev.actualCompletionPercent === 100
+            ? new Date().toISOString().split("T")[0]
+            : prev.actualEndDate;
+
+        const progress = calculateProgressDays(value, endDate);
+
         return {
           ...prev,
           actualStartDate: value,
-          actualProgressDay:
-            prev.actualCompletionPercent === 100
-              ? progress
-              : prev.actualProgressDay,
+          actualEndDate: endDate,
+          actualProgressDay: progress,
         };
       });
       return;
@@ -132,8 +139,7 @@ export default function ScadaDevelopmentExecution() {
       return "Completion % must be between 0 and 100";
     if (
       formData.actualCompletionPercent <
-        (PhaseData?.phase?.CompletionPercentage ?? 0) &&
-      false
+        (PhaseData?.phase?.CompletionPercentage ?? 0)
     ) {
       return `Completion percentage must be greater than or equal to the previous value (${PhaseData?.phase?.CompletionPercentage}%).`;
     }

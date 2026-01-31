@@ -88,7 +88,10 @@ export default function LogicDevelopmentExecution() {
 
       setFormData((prev) => {
         const endDate =
-          num === 100 ? new Date().toISOString().split("T")[0] : "";
+          num === 100
+            ? new Date().toISOString().split("T")[0]
+            : prev.actualEndDate;
+
         const progress = calculateProgressDays(prev.actualStartDate, endDate);
         return {
           ...prev,
@@ -102,14 +105,18 @@ export default function LogicDevelopmentExecution() {
 
     if (name === "actualStartDate") {
       setFormData((prev) => {
-        const progress = calculateProgressDays(value, prev.actualEndDate);
+        const endDate =
+          prev.actualCompletionPercent === 100
+            ? new Date().toISOString().split("T")[0]
+            : prev.actualEndDate;
+
+        const progress = calculateProgressDays(value, endDate);
+
         return {
           ...prev,
           actualStartDate: value,
-          actualProgressDay:
-            prev.actualCompletionPercent === 100
-              ? progress
-              : prev.actualProgressDay,
+          actualEndDate: endDate,
+          actualProgressDay: progress,
         };
       });
       return;
@@ -132,8 +139,7 @@ export default function LogicDevelopmentExecution() {
       return "Completion % must be between 0 and 100";
     if (
       formData.actualCompletionPercent <
-        (PhaseData?.phase?.CompletionPercentage ?? 0) &&
-      false
+        (PhaseData?.phase?.CompletionPercentage ?? 0)
     ) {
       return `Completion percentage must be greater than or equal to the previous value (${PhaseData?.phase?.CompletionPercentage}%).`;
     }
@@ -178,7 +184,10 @@ export default function LogicDevelopmentExecution() {
           <div className="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-indigo-500/10 border-b-2 border-gray-200 p-8">
             <div className="flex items-center justify-between gap-6">
               <div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <h2
+                  className="text-3xl font-black 
+                 tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+                >
                   {PhaseData?.phase?.sectionName || "—"} LOGIC DEVELOPMENT
                   EXECUTION
                 </h2>
@@ -331,7 +340,7 @@ export default function LogicDevelopmentExecution() {
 
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-x-6 sm:gap-y-2 text-[12px] sm:text-[13px] font-semibold text-red-900">
                 {[
-                  "Manual Logic (Block) & ID Mapping – 30%",
+                  "Manual Logic (Block) – 30%",
                   "Auto Sequence – 20%",
                   "Interlocks – 10%",
                   "Range, Unit & Description – 10%",
