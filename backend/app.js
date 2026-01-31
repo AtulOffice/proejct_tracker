@@ -80,8 +80,6 @@ app.use((req, res) => {
   });
 });
 
-// HI
-
 app.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   await connectRedis();

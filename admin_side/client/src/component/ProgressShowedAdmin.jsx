@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { formatDateDDMMYY } from "../utils/timeFormatter";
 
 const ProgressShowed = ({ progressData, onClose }) => {
-    console.log(progressData?.planRange)
     const [expandedSections, setExpandedSections] = useState({});
 
     const sections = Array.isArray(progressData?.sections)

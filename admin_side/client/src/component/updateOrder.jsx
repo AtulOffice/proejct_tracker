@@ -16,7 +16,6 @@ export default function UpdateOrderForm() {
   const [touched, setTouched] = useState({});
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
-  console.log(formData)
   useEffect(() => {
     const fetchData = async () => {
       try {
