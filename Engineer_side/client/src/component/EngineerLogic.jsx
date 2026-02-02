@@ -14,6 +14,7 @@ import {
   formatDateDDMMYY,
   toInputDate,
 } from "../utils/timeFormatter";
+import PhaseProgress from "./phaseProgress";
 
 export default function LogicDevelopmentExecution() {
   const { id } = useParams();
@@ -139,7 +140,7 @@ export default function LogicDevelopmentExecution() {
       return "Completion % must be between 0 and 100";
     if (
       formData.actualCompletionPercent <
-        (PhaseData?.phase?.CompletionPercentage ?? 0)
+      (PhaseData?.phase?.CompletionPercentage ?? 0)
     ) {
       return `Completion percentage must be greater than or equal to the previous value (${PhaseData?.phase?.CompletionPercentage}%).`;
     }
@@ -301,32 +302,7 @@ export default function LogicDevelopmentExecution() {
             <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
 
             {/* Target Progress */}
-            <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
-              <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
-                Target Progress (Day)
-              </label>
-
-              <div className="inline-flex rounded-xl border-2 border-emerald-300 bg-white/80 backdrop-blur-sm px-4 py-4 shadow-lg">
-                <div className="flex items-center gap-2 text-xs">
-                  {Array.from({ length: 25 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 text-xs font-black text-white shadow-md hover:scale-110 transition-transform cursor-pointer"
-                    >
-                      {i + 1}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-3 flex gap-2 text-xs font-semibold text-emerald-700">
-                {Array.from({ length: 26 }).map((_, i) => (
-                  <div key={i} className="w-8 text-center">
-                    {Math.round(((i + 1) / 26) * 100)}%
-                  </div>
-                ))}
-              </div>
-            </div>
+            <PhaseProgress phase={PhaseData} />
 
             <div className="rounded-2xl border border-red-300/70 bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 px-4 py-4 sm:px-6 sm:py-5 text-sm text-red-900 shadow-lg backdrop-blur-sm ring-1 ring-red-200/60 mx-2 sm:mx-0">
               <div className="mb-3 sm:mb-4 flex items-center justify-between">
@@ -341,10 +317,11 @@ export default function LogicDevelopmentExecution() {
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-x-6 sm:gap-y-2 text-[12px] sm:text-[13px] font-semibold text-red-900">
                 {[
                   "Manual Logic (Block) – 30%",
+                  "I/O & Mapping – 20%",
                   "Auto Sequence – 20%",
                   "Interlocks – 10%",
                   "Range, Unit & Description – 10%",
-                  "I/O & HMI Configuration – 10%",
+                   "I/O, Configuration – 10%",
                 ].map((item) => (
                   <li
                     key={item}
@@ -377,11 +354,10 @@ export default function LogicDevelopmentExecution() {
                   disabled={!!PhaseData?.LastphaseProgress?.actualStartDate}
                   onChange={handleChange}
                   className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
-    ${
-      PhaseData?.LastphaseProgress?.actualStartDate
-        ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
-        : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-    }`}
+    ${PhaseData?.LastphaseProgress?.actualStartDate
+                      ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                      : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                    }`}
                 />
               </div>
 

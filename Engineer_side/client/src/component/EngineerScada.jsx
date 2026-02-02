@@ -139,7 +139,7 @@ export default function ScadaDevelopmentExecution() {
       return "Completion % must be between 0 and 100";
     if (
       formData.actualCompletionPercent <
-        (PhaseData?.phase?.CompletionPercentage ?? 0)
+      (PhaseData?.phase?.CompletionPercentage ?? 0)
     ) {
       return `Completion percentage must be greater than or equal to the previous value (${PhaseData?.phase?.CompletionPercentage}%).`;
     }
@@ -376,11 +376,10 @@ export default function ScadaDevelopmentExecution() {
                   disabled={!!PhaseData?.LastphaseProgress?.actualStartDate}
                   onChange={handleChange}
                   className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
-    ${
-      PhaseData?.LastphaseProgress?.actualStartDate
-        ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
-        : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-    }`}
+    ${PhaseData?.LastphaseProgress?.actualStartDate
+                      ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                      : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                    }`}
                 />
               </div>
 
