@@ -14,6 +14,7 @@ import {
   formatDateDDMMYY,
   toInputDate,
 } from "../utils/timeFormatter";
+import PhaseProgress from "./phaseProgress";
 
 export default function ScadaDevelopmentExecution() {
   const { id } = useParams();
@@ -298,7 +299,7 @@ export default function ScadaDevelopmentExecution() {
             <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
 
             {/* Target Progress */}
-            <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
+            {/* <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
               <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
                 Target Progress (Day)
               </label>
@@ -323,7 +324,9 @@ export default function ScadaDevelopmentExecution() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
+
+            <PhaseProgress phase={PhaseData} />
 
             {/* SCADA Scope Disclaimer */}
             <div className="rounded-2xl border border-red-300/70 bg-gradient-to-br from-red-50 via-rose-50 to-pink-50 px-4 py-4 sm:px-6 sm:py-5 text-sm text-red-900 shadow-lg backdrop-blur-sm ring-1 ring-red-200/60 mx-2 sm:mx-0">

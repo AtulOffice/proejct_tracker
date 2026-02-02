@@ -1,68 +1,72 @@
-import { differenceInCalendarDays } from "date-fns";
+import { differenceInCalendarDays, format, isValid } from "date-fns";
+import React from "react";
 
 const PhaseProgress = ({ phase }) => {
-    console.log(phase);
-    return;
-    const start = new Date(phase.startDate);
-    const end = new Date(phase.endDate);
-    const today = new Date();
+    const startRaw = phase?.phase?.startDate;
+    const endRaw = phase?.phase?.endDate;
+    const progressDateRaw = phase?.LastphaseProgress?.createdAt;
 
-    const totalDays = Math.max(1, differenceInCalendarDays(end, start) + 1);
-    const daysPassed = Math.min(
-        totalDays,
-        Math.max(0, differenceInCalendarDays(today, start) + 1)
+    const start = startRaw ? new Date(startRaw) : null;
+    const end = endRaw ? new Date(endRaw) : null;
+    const progressDate = progressDateRaw ? new Date(progressDateRaw) : null;
+
+    if (!start || !end || !isValid(start) || !isValid(end) || end < start) {
+        return null;
+    }
+
+    const actualPercent = Math.min(
+        100,
+        Math.max(0, phase?.LastphaseProgress?.actualCompletionPercent || 0)
     );
 
-    const expectedPercent = Math.round((daysPassed / totalDays) * 100);
-    const actualPercent = phase.lastCompletionPercent || 0;
+    const actualStartRaw = phase?.LastphaseProgress?.actualStartDate;
+    const actualStart = actualStartRaw ? new Date(actualStartRaw) : null;
 
-    const totalBoxes = totalDays; // Dynamic based on phase length
-    const filledBoxes = Math.round((actualPercent / 100) * totalBoxes);
+    let daysPassed = "-";
+    if (actualStart && isValid(actualStart)) {
+        daysPassed = Math.max(
+            1,
+            differenceInCalendarDays(new Date(), actualStart) + 1
+        );
+    }
+
+    let progressColor = "from-red-500 to-rose-700";
+
+    if (actualPercent > 30 && actualPercent <= 50) {
+        progressColor = "from-orange-400 to-amber-600";
+    } else if (actualPercent > 50 && actualPercent <= 70) {
+        progressColor = "from-yellow-300 to-yellow-500";
+    } else if (actualPercent > 70 && actualPercent < 100) {
+        progressColor = "from-sky-400 to-blue-600";
+    } else if (actualPercent === 100) {
+        progressColor = "from-emerald-400 to-teal-600";
+    }
+
 
     return (
         <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
             <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
-                Target Progress (Day)
+                Phase Progress
             </label>
 
-            <div className="inline-flex rounded-xl border-2 border-emerald-300 bg-white/80 backdrop-blur-sm px-4 py-4 shadow-lg">
-                <div className="flex items-center gap-2 text-xs flex-wrap">
-                    {Array.from({ length: totalBoxes }).map((_, i) => {
-                        const isFilled = i < filledBoxes;
-                        const isToday = i === daysPassed - 1;
+            {/* Progress Bar */}
+            <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden shadow-inner relative">
+                <div
+                    className={`h-full bg-gradient-to-r ${progressColor} transition-all duration-500 flex items-center justify-between px-3 text-white text-xs font-bold`}
+                    style={{ width: `${actualPercent}%` }}
+                >
+                    <span>{actualPercent}%</span>
 
-                        return (
-                            <div
-                                key={i}
-                                className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-black shadow-md transition-transform cursor-pointer
-                  ${isFilled
-                                        ? "bg-gradient-to-br from-emerald-500 to-emerald-700 text-white"
-                                        : "bg-gray-200 text-gray-500"}
-                  ${isToday ? "ring-2 ring-yellow-400 scale-110" : ""}
-                `}
-                                title={`Day ${i + 1}`}
-                            >
-                                {i + 1}
-                            </div>
-                        );
-                    })}
+                    {progressDate && isValid(progressDate) && (
+                        <span className="whitespace-nowrap">
+                            {format(progressDate, "dd MMM")}
+                        </span>
+                    )}
                 </div>
             </div>
 
-            {/* Percent scale */}
-            <div className="mt-3 flex gap-2 text-xs font-semibold text-emerald-700 flex-wrap">
-                {Array.from({ length: totalBoxes }).map((_, i) => (
-                    <div key={i} className="w-8 text-center">
-                        {Math.round(((i + 1) / totalBoxes) * 100)}%
-                    </div>
-                ))}
-            </div>
-
-            {/* Summary */}
-            <div className="mt-4 text-sm font-semibold text-emerald-800">
-                Expected by today: {expectedPercent}%
-                <br />
-                Actual progress: {actualPercent}%
+            <div className="flex justify-end text-sm font-semibold text-emerald-800 mt-3">
+                <span>Today: {daysPassed} days</span>
             </div>
         </div>
     );

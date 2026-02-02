@@ -14,6 +14,7 @@ import {
   formatDateDDMMYY,
   toInputDate,
 } from "../utils/timeFormatter";
+import PhaseProgress from "./phaseProgress";
 
 export default function LogicDevelopmentExecution() {
   const { id } = useParams();
@@ -297,7 +298,7 @@ export default function LogicDevelopmentExecution() {
             <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
 
             {/* Target Progress */}
-            <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
+            {/* <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
               <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
                 Target Progress (Day)
               </label>
@@ -322,7 +323,9 @@ export default function LogicDevelopmentExecution() {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
+
+            <PhaseProgress phase={PhaseData} />
 
             {/* Actual Dates */}
             <div className="grid grid-cols-3 gap-6 items-end">
@@ -338,11 +341,10 @@ export default function LogicDevelopmentExecution() {
                   disabled={!!PhaseData?.LastphaseProgress?.actualStartDate}
                   onChange={handleChange}
                   className={`w-full rounded-xl border-2 px-4 py-3 text-sm transition-all
-    ${
-      PhaseData?.LastphaseProgress?.actualStartDate
-        ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
-        : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-    }`}
+    ${PhaseData?.LastphaseProgress?.actualStartDate
+                      ? "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
+                      : "border-amber-300 bg-amber-50 text-amber-900 focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                    }`}
                 />
               </div>
 
