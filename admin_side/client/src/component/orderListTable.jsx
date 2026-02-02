@@ -77,7 +77,7 @@ const OrderTableAll = ({ data }) => {
         />
       )}
       <div className="overflow-x-auto hidden md:block">
-        <div className="max-h-[460px] overflow-y-auto">
+        <div className="max-h-[560px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0 z-10">
               <tr className="bg-gray-900">

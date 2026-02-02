@@ -108,7 +108,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
         ))}
 
       <div className="overflow-x-auto hidden md:block">
-        <div ref={printRef} className="max-h-[450px] overflow-y-auto">
+        <div ref={printRef} className="max-h-[560px] overflow-y-auto">
           <table className="w-full table-fixed">
             <thead className="sticky top-0">
               <tr className="bg-gray-900">
