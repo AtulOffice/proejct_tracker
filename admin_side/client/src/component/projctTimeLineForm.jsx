@@ -23,6 +23,8 @@ const ProjectTimelineForm1 = () => {
     const [loading, setLoading] = useState();
     const [isPlan, setIsPlan] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
+    const [originalEngineers, setOriginalEngineers] = useState({});
+
     const navigate = useNavigate();
 
     const emptySection = {
@@ -129,12 +131,20 @@ const ProjectTimelineForm1 = () => {
                 }
 
                 if (Array.isArray(defaultData.plans) && defaultData.plans.length > 0) {
-                    const formattedPlans = defaultData.plans.map((block) => {
+
+                    const originalMap = {};
+
+                    const formattedPlans = defaultData.plans.map((block, blockIndex) => {
                         const fmt = (v) => (v ? new Date(v).toISOString().split("T")[0] : "");
+                        originalMap[blockIndex] = {
+                            logic: (block.logic?.[0]?.engineers) || [],
+                            scada: (block.scada?.[0]?.engineers) || [],
+                            testing: (block.testing?.[0]?.engineers) || [],
+                        };
 
                         return {
                             documents: (block.documents || []).length > 0
-                                ? (block.documents || []).map(sec => ({
+                                ? block.documents.map(sec => ({
                                     sectionName: sec.sectionName || "",
                                     sectionStartDate: fmt(sec.sectionStartDate),
                                     sectionEndDate: fmt(sec.sectionEndDate),
@@ -144,8 +154,9 @@ const ProjectTimelineForm1 = () => {
                                     engineers: sec.engineers || [],
                                 }))
                                 : [{ ...emptySection }],
+
                             logic: (block.logic || []).length > 0
-                                ? (block.logic || []).map(sec => ({
+                                ? block.logic.map(sec => ({
                                     sectionName: sec.sectionName || "",
                                     sectionStartDate: fmt(sec.sectionStartDate),
                                     sectionEndDate: fmt(sec.sectionEndDate),
@@ -155,8 +166,9 @@ const ProjectTimelineForm1 = () => {
                                     engineers: sec.engineers || [],
                                 }))
                                 : [{ ...emptySection }],
+
                             scada: (block.scada || []).length > 0
-                                ? (block.scada || []).map(sec => ({
+                                ? block.scada.map(sec => ({
                                     sectionName: sec.sectionName || "",
                                     sectionStartDate: fmt(sec.sectionStartDate),
                                     sectionEndDate: fmt(sec.sectionEndDate),
@@ -166,8 +178,9 @@ const ProjectTimelineForm1 = () => {
                                     engineers: sec.engineers || [],
                                 }))
                                 : [{ ...emptySection }],
+
                             testing: (block.testing || []).length > 0
-                                ? (block.testing || []).map(sec => ({
+                                ? block.testing.map(sec => ({
                                     sectionName: sec.sectionName || "",
                                     sectionStartDate: fmt(sec.sectionStartDate),
                                     sectionEndDate: fmt(sec.sectionEndDate),
@@ -180,8 +193,10 @@ const ProjectTimelineForm1 = () => {
                         };
                     });
 
+                    setOriginalEngineers(originalMap);
                     setFormData({ plans: formattedPlans });
-                } else {
+                }
+                else {
                     setFormData({
                         plans: [
                             {
@@ -298,12 +313,19 @@ const ProjectTimelineForm1 = () => {
         setFormData((prev) => {
             const plans = prev.plans.map((p, i) => {
                 if (i !== blockIndex) return p;
+
                 return {
                     ...p,
                     [phase]: p[phase].map((sec, si) => {
                         if (si !== sectionIndex) return sec;
+
+                        const locked =
+                            originalEngineers?.[blockIndex]?.[phase]?.includes(engineerId);
+
                         const currentEngineers = sec.engineers || [];
                         const isSelected = currentEngineers.includes(engineerId);
+                        if (locked && isSelected) return sec;
+
                         return {
                             ...sec,
                             engineers: isSelected
@@ -317,14 +339,22 @@ const ProjectTimelineForm1 = () => {
         });
     };
 
+
     const removeEngineer = (blockIndex, phase, sectionIndex, engineerId) => {
         setFormData((prev) => {
             const plans = prev.plans.map((p, i) => {
                 if (i !== blockIndex) return p;
+
                 return {
                     ...p,
                     [phase]: p[phase].map((sec, si) => {
                         if (si !== sectionIndex) return sec;
+
+                        const locked =
+                            originalEngineers?.[blockIndex]?.[phase]?.includes(engineerId);
+
+                        if (locked) return sec;
+
                         return {
                             ...sec,
                             engineers: (sec.engineers || []).filter((id) => id !== engineerId),
@@ -335,6 +365,7 @@ const ProjectTimelineForm1 = () => {
             return { ...prev, plans };
         });
     };
+
 
     const getEngineerName = (engineerId) => {
         const engineer = engineersList.find((e) => e._id === engineerId);
@@ -495,6 +526,14 @@ const ProjectTimelineForm1 = () => {
 
     if (!project) return null;
 
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center text-gray-500 text-lg">
+                Loading project details...
+            </div>
+        );
+    }
+
     const SERVICE_LABELS = {
         DEV: "Development",
         DEVCOM: "Development + Commissioning",
@@ -530,10 +569,12 @@ const ProjectTimelineForm1 = () => {
         const pStart = new Date(phaseStart);
         const pEnd = new Date(phaseEnd);
 
-        const total = sEnd - sStart;
+        const total = Math.max(1, sEnd - sStart);
+        const pStartClamped = new Date(Math.max(pStart, sStart));
+        const pEndClamped = new Date(Math.min(pEnd, sEnd));
 
-        let left = ((pStart - sStart) / total) * 100;
-        let width = ((pEnd - pStart) / total) * 100;
+        let left = ((pStartClamped - sStart) / total) * 100;
+        let width = ((pEndClamped - pStartClamped) / total) * 100;
 
         left = Math.max(0, Math.min(left, 100));
         width = Math.max(0, Math.min(width, 100 - left));
@@ -549,13 +590,12 @@ const ProjectTimelineForm1 = () => {
         handleEngineerToggle,
         removeEngineer,
         getEngineerName,
-        isSaved = false,
+        originalEngineers = {},
     }) => {
         const sec = block?.[phase]?.[0] || { engineers: [] };
 
         const [search, setSearch] = useState("");
         const [open, setOpen] = useState(false);
-
         const wrapperRef = useRef(null);
 
         useEffect(() => {
@@ -572,14 +612,14 @@ const ProjectTimelineForm1 = () => {
 
         const filteredEngineers = engineersList.filter((eng) => {
             if (!normalizedSearch) return true;
-
             const text = [eng.username, eng.name, eng.email]
                 .filter(Boolean)
                 .join(" ")
                 .toLowerCase();
-
             return text.includes(normalizedSearch);
         });
+
+        const lockedEngineers = originalEngineers?.[blockIndex]?.[phase] || [];
 
         return (
             <div
@@ -588,18 +628,9 @@ const ProjectTimelineForm1 = () => {
             >
                 <div className="flex items-center gap-2 mb-4">
                     <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <svg
-                            className="w-5 h-5 text-green-700"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
+                        <svg className="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
 
@@ -613,127 +644,119 @@ const ProjectTimelineForm1 = () => {
                         </span>
                     )}
                 </div>
-                {isSaved ? (
-                    <div>
 
-                        {sec.engineers.length === 0 ? (
-                            <div className="text-sm text-gray-500 italic">
-                                No engineers assigned
+                {/* Search */}
+                <div className="relative mb-4">
+                    <input
+                        type="text"
+                        placeholder="Search engineers..."
+                        value={search}
+                        onFocus={() => setOpen(true)}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl"
+                    />
+                    {search && (
+                        <button
+                            type="button"
+                            onClick={() => setSearch("")}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            ✕
+                        </button>
+                    )}
+                </div>
+
+                {/* Dropdown */}
+                {open && (
+                    <div className="mb-4 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg">
+                        {filteredEngineers.length === 0 ? (
+                            <div className="p-4 text-center text-gray-500 text-sm">
+                                No engineers found
                             </div>
                         ) : (
-                            <div className="flex flex-wrap gap-2">
-                                {sec.engineers.map((eid) => (
-                                    <span
-                                        key={eid}
-                                        className="px-4 py-2 rounded-full bg-green-100 border border-green-200
-                  text-green-800 text-sm font-medium"
-                                    >
-                                        {getEngineerName(eid)}
-                                    </span>
-                                ))}
+                            <div className="divide-y divide-gray-100">
+                                {filteredEngineers.map((eng) => {
+                                    const name = eng.username || eng.name || eng.email || "Unknown";
+                                    const checked = (sec.engineers || []).includes(eng._id);
+                                    const isLocked = lockedEngineers.includes(eng._id);
+
+                                    return (
+                                        <label
+                                            key={eng._id}
+                                            className={`flex items-center gap-3 px-4 py-3 transition
+                                            ${checked ? "bg-green-50" : "hover:bg-gray-50"}
+                                            ${isLocked ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+                                        >
+                                            <input
+
+                                                type="checkbox"
+                                                checked={checked}
+                                                disabled={isLocked}
+                                                onChange={() =>
+                                                    handleEngineerToggle(blockIndex, phase, 0, eng._id)
+                                                }
+                                                className="w-4 h-4 text-green-600 rounded"
+                                            />
+                                            <span className={`flex-1 text-sm ${checked ? "text-green-800 font-medium" : "text-gray-700"}`}>
+                                                {name}
+                                            </span>
+                                            {isLocked && (
+                                                <span className="text-[10px] bg-gray-300 text-gray-700 px-2 py-0.5 rounded">
+                                                    Locked
+                                                </span>
+                                            )}
+                                        </label>
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
-                ) : (
-                    <>
-                        <div className="relative mb-4">
-                            <input
-                                type="text"
-                                name="engineer-search"
-                                autoComplete="new-password"
-                                spellCheck={false}
-                                placeholder="Search engineers..."
-                                value={search}
-                                onFocus={() => setOpen(true)}
-                                onChange={(e) => setSearch(e.target.value)}
-                                className="w-full pl-4 pr-4 py-3 border border-gray-300 rounded-xl"
-                            />
+                )}
 
-                            {search && (
-                                <button
-                                    type="button"
-                                    onClick={() => setSearch("")}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                >
-                                    ✕
-                                </button>
-                            )}
-                        </div>
+                {/* Selected Engineers */}
+                {sec.engineers.length > 0 && (
+                    <div>
+                        <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
+                            Selected Engineers
+                        </p>
 
-                        {open && (
-                            <div className="mb-4 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg">
-                                {filteredEngineers.length === 0 ? (
-                                    <div className="p-4 text-center text-gray-500 text-sm">
-                                        No engineers found
-                                    </div>
-                                ) : (
-                                    <div className="divide-y divide-gray-100">
-                                        {filteredEngineers.map((eng) => {
-                                            const name =
-                                                eng.username || eng.name || eng.email || "Unknown";
-                                            const checked = sec.engineers.includes(eng._id);
+                        <div className="flex flex-wrap gap-2">
+                            {sec.engineers.map((eid) => {
+                                const isLocked = lockedEngineers.includes(eid);
+                                return (
+                                    <span
+                                        key={eid}
+                                        className="px-4 py-2 rounded-full bg-green-100 border border-green-200
+                                    text-green-800 text-sm font-medium flex items-center gap-2"
+                                    >
+                                        {getEngineerName(eid)}
 
-                                            return (
-                                                <label
-                                                    key={eng._id}
-                                                    className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition
-                        ${checked ? "bg-green-50" : "hover:bg-gray-50"}`}
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={checked}
-                                                        onChange={() =>
-                                                            handleEngineerToggle(blockIndex, phase, 0, eng._id)
-                                                        }
-                                                        className="w-4 h-4 text-green-600 rounded"
-                                                    />
-                                                    <span
-                                                        className={`flex-1 text-sm ${checked
-                                                            ? "text-green-800 font-medium"
-                                                            : "text-gray-700"
-                                                            }`}
-                                                    >
-                                                        {name}
-                                                    </span>
-                                                </label>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                        {sec.engineers.length > 0 && (
-                            <div>
-                                <p className="text-xs font-semibold text-gray-600 uppercase mb-2">
-                                    Selected Engineers
-                                </p>
-
-                                <div className="flex flex-wrap gap-2">
-                                    {sec.engineers.map((eid) => (
-                                        <span
-                                            key={eid}
-                                            className="px-4 py-2 rounded-full bg-green-100 border border-green-200
-                    text-green-800 text-sm font-medium flex items-center gap-2"
-                                        >
-                                            {getEngineerName(eid)}
+                                        {!isLocked && (
                                             <button
                                                 type="button"
                                                 onClick={() => removeEngineer(blockIndex, phase, 0, eid)}
                                                 className="w-5 h-5 flex items-center justify-center rounded-full
-                      bg-red-100 text-red-600 hover:bg-red-200"
+                                            bg-red-100 text-red-600 hover:bg-red-200"
                                             >
                                                 ✕
                                             </button>
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </>
+                                        )}
+
+                                        {isLocked && (
+                                            <span className="text-[10px] bg-gray-300 text-gray-700 px-2 py-0.5 rounded">
+                                                saved
+                                            </span>
+                                        )}
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    </div>
                 )}
             </div>
         );
     };
+
 
     return (
         <div className="italic w-full min-h-screen bg-gray-100 py-10 px-4">
@@ -1080,7 +1103,6 @@ const ProjectTimelineForm1 = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-6 mb-8">
-
                                     <EngineerSelector
                                         phase="logic"
                                         blockIndex={blockIndex}
@@ -1089,8 +1111,9 @@ const ProjectTimelineForm1 = () => {
                                         handleEngineerToggle={handleEngineerToggle}
                                         removeEngineer={removeEngineer}
                                         getEngineerName={getEngineerName}
-                                        isSaved={blockIndex < savedBlocksCount}
+                                        originalEngineers={originalEngineers}
                                     />
+
                                     <EngineerSelector
                                         phase="scada"
                                         blockIndex={blockIndex}
@@ -1099,7 +1122,7 @@ const ProjectTimelineForm1 = () => {
                                         handleEngineerToggle={handleEngineerToggle}
                                         removeEngineer={removeEngineer}
                                         getEngineerName={getEngineerName}
-                                        isSaved={blockIndex < savedBlocksCount}
+                                        originalEngineers={originalEngineers}
                                     />
 
                                     <EngineerSelector
@@ -1110,8 +1133,9 @@ const ProjectTimelineForm1 = () => {
                                         handleEngineerToggle={handleEngineerToggle}
                                         removeEngineer={removeEngineer}
                                         getEngineerName={getEngineerName}
-                                        isSaved={blockIndex < savedBlocksCount}
+                                        originalEngineers={originalEngineers}
                                     />
+
                                 </div>
 
                                 {/* Notes Section */}
