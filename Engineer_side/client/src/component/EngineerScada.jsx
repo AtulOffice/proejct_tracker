@@ -297,35 +297,6 @@ export default function ScadaDevelopmentExecution() {
             </div>
 
             <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
-
-            {/* Target Progress */}
-            {/* <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
-              <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
-                Target Progress (Day)
-              </label>
-
-              <div className="inline-flex rounded-xl border-2 border-emerald-300 bg-white/80 backdrop-blur-sm px-4 py-4 shadow-lg">
-                <div className="flex items-center gap-2 text-xs">
-                  {Array.from({ length: 25 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 text-xs font-black text-white shadow-md hover:scale-110 transition-transform cursor-pointer"
-                    >
-                      {i + 1}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-3 flex gap-2 text-xs font-semibold text-emerald-700">
-                {Array.from({ length: 26 }).map((_, i) => (
-                  <div key={i} className="w-8 text-center">
-                    {Math.round(((i + 1) / 26) * 100)}%
-                  </div>
-                ))}
-              </div>
-            </div> */}
-
             <PhaseProgress phase={PhaseData} />
 
             {/* SCADA Scope Disclaimer */}
