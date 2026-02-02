@@ -45,11 +45,6 @@ const PhaseProgress = ({ phase }) => {
 
     return (
         <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
-            <label className="mb-4 block text-base font-bold uppercase tracking-wide text-emerald-700">
-                Phase Progress
-            </label>
-
-            {/* Progress Bar */}
             <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden shadow-inner relative">
                 <div
                     className={`h-full bg-gradient-to-r ${progressColor} transition-all duration-500 flex items-center justify-between px-3 text-white text-xs font-bold`}
