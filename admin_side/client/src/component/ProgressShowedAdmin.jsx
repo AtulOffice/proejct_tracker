@@ -437,18 +437,18 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                     <h4 className="uppercase text-sm font-bold text-white tracking-wider">
                                       {type}
                                     </h4>
-                                      {sectionDateMap[section.sectionName]?.phases?.[type] && (
-                                <div className="text-[11px] text-white/90 font-semibold flex items-center gap-2">
-                                    <span>📅</span>
-                                    <span>
-                                    {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}
-                                    </span>
-                                    <span className="text-white/70">→</span>
-                                    <span>
-                                    {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}
-                                    </span>
-                                </div>
-                                )}
+                                    {sectionDateMap[section.sectionName]?.phases?.[type] && (
+                                      <div className="text-[11px] text-white/90 font-semibold flex items-center gap-2">
+                                        <span>📅</span>
+                                        <span>
+                                          {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}
+                                        </span>
+                                        <span className="text-white/70">→</span>
+                                        <span>
+                                          {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}
+                                        </span>
+                                      </div>
+                                    )}
                                   </div>
 
                                   <div className="text-center py-6 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
@@ -476,18 +476,18 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                   <h4 className="uppercase text-sm font-bold text-white tracking-wider">
                                     {type}
                                   </h4>
-                                {sectionDateMap[section.sectionName]?.phases?.[type] && (
-                                <div className="text-[11px] text-white/90 font-semibold flex items-center gap-2">
-                                    <span>📅</span>
-                                    <span>
-                                    {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}
-                                    </span>
-                                    <span className="text-white/70">→</span>
-                                    <span>
-                                    {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}
-                                    </span>
-                                </div>
-                                )}
+                                  {sectionDateMap[section.sectionName]?.phases?.[type] && (
+                                    <div className="text-[11px] text-white/90 font-semibold flex items-center gap-2">
+                                      <span>📅</span>
+                                      <span>
+                                        {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}
+                                      </span>
+                                      <span className="text-white/70">→</span>
+                                      <span>
+                                        {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}
+                                      </span>
+                                    </div>
+                                  )}
                                   <span className="ml-auto bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white">
                                     {engineers.length}{" "}
                                     {engineers.length === 1
@@ -499,10 +499,9 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                   const latestProgress =
                                     engineer.progressReports?.length > 0
                                       ? engineer.progressReports[
-                                          engineer.progressReports.length - 1
-                                        ].actualCompletionPercent
+                                        engineer.progressReports.length - 1
+                                      ].actualCompletionPercent
                                       : 0;
-
                                   return (
                                     <div
                                       key={engineer.engineerId}
@@ -550,6 +549,9 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                 Report Date
                                               </th>
                                               <th className="px-4 py-3 text-center">
+                                                Actual Progress Days
+                                              </th>
+                                              <th className="px-4 py-3 text-center">
                                                 Completion Date
                                               </th>
                                               <th className="px-4 py-3 text-left">
@@ -570,6 +572,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                       <span
                                                         className={`px-3 py-1 rounded-full text-xs font-bold ring-2 ${getCompletionBadgeStyle(row.actualCompletionPercent)}`}
                                                       >
+
                                                         {
                                                           row.actualCompletionPercent
                                                         }
@@ -585,6 +588,11 @@ const ProgressShowed = ({ progressData, onClose }) => {
                                                       {formatDate(
                                                         row.reportDate,
                                                       )}
+                                                    </div>
+                                                  </td>
+                                                  <td className="px-4 py-3 text-center text-gray-700">
+                                                    <div className="flex items-center justify-center gap-1">
+                                                      {row?.actualProgressDay}
                                                     </div>
                                                   </td>
                                                   <td className="px-4 py-3 text-center text-gray-700">
