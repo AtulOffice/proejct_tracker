@@ -1,7 +1,10 @@
-import { differenceInCalendarDays, format, isValid } from "date-fns";
 import React from "react";
+import { differenceInCalendarDays, format, isValid } from "date-fns";
+
+
 
 const PhaseProgress = ({ phase }) => {
+    console.log(phase)
     const startRaw = phase?.phase?.startDate;
     const endRaw = phase?.phase?.endDate;
     const progressDateRaw = phase?.LastphaseProgress?.createdAt;
@@ -42,10 +45,59 @@ const PhaseProgress = ({ phase }) => {
         progressColor = "from-emerald-400 to-teal-600";
     }
 
+    const plannedColor = "from-blue-300 to-blue-500";
+
+    const today = new Date();
+
+    let plannedPercent = 0;
+
+    if (today < start) {
+        plannedPercent = 0;
+    } else if (today > end) {
+        plannedPercent = 100;
+    } else {
+        const totalDays = differenceInCalendarDays(end, start) + 1;
+        const daysFromStart = differenceInCalendarDays(today, start) + 1;
+
+        plannedPercent = Math.min(
+            100,
+            Math.max(0, (daysFromStart / totalDays) * 100)
+        );
+    }
+
+
 
     return (
         <div className="hidden md:block p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border-2 border-emerald-200 shadow-lg">
-            <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden shadow-inner relative">
+
+            <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden shadow-inner relative mt-4">
+                <div
+                    className={`h-full bg-gradient-to-r ${plannedColor} transition-all duration-500 flex items-center justify-between px-3 text-white text-xs font-semibold`}
+                    style={{ width: `${plannedPercent}%` }}
+                >
+                    {plannedPercent > 15 && (
+                        <span>{plannedPercent.toFixed(0)}%</span>
+                    )}
+
+                    {plannedPercent > 25 && (
+                        <span className="whitespace-nowrap text-white/90">
+                            {today > end
+                                ? format(end, "dd MMM")
+                                : format(today, "dd MMM")
+                            }
+                        </span>
+                    )}
+                </div>
+
+
+            </div>
+
+            {/* <div className="flex justify-between text-[11px] font-medium text-slate-700 mt-1 px-1">
+                <span>{format(start, "dd MMM")}</span>
+                <span>{format(end, "dd MMM")}</span>
+            </div> */}
+
+            <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden shadow-inner relative mt-3">
                 <div
                     className={`h-full bg-gradient-to-r ${progressColor} transition-all duration-500 flex items-center justify-between px-3 text-white text-xs font-bold`}
                     style={{ width: `${actualPercent}%` }}
@@ -59,6 +111,7 @@ const PhaseProgress = ({ phase }) => {
                     )}
                 </div>
             </div>
+
 
             <div className="flex justify-end text-sm font-semibold text-emerald-800 mt-3">
                 <span>Today: {daysPassed} days</span>

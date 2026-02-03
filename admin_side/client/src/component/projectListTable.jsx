@@ -206,7 +206,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                 return (
                   <tr
                     key={i}
-                    className={`transition-colors duration-150
+                    className={`transition-colors duration-150 font-mono
     ${isCancelled
                         ? "bg-red-100 text-red-700"
                         : i % 2 === 1
