@@ -425,40 +425,29 @@ const ProgressShowed = ({ progressData, onClose }) => {
                         <div className="p-6 space-y-6">
                           {["logic", "scada", "testing"].map((type) => {
                             const engineers = section[type]?.engineers || [];
+
                             if (engineers.length === 0) {
                               return (
                                 <div key={type} className="space-y-3">
-                                  <div
-                                    className={`flex items-center gap-3 px-4 py-3 bg-linear-to-r ${getTypeColor(type)} rounded-lg shadow-sm`}
-                                  >
-                                    <span className="text-2xl">
-                                      {getTypeIcon(type)}
-                                    </span>
-                                    <h4 className="uppercase text-sm font-bold text-white tracking-wider">
-                                      {type}
-                                    </h4>
+                                  <div className={`flex items-center gap-3 px-4 py-3 bg-linear-to-r ${getTypeColor(type)} rounded-lg shadow-sm`}>
+                                    <span className="text-2xl">{getTypeIcon(type)}</span>
+                                    <h4 className="uppercase text-sm font-bold text-white tracking-wider">{type}</h4>
                                     {sectionDateMap[section.sectionName]?.phases?.[type] && (
                                       <div className="text-[11px] text-white/90 font-semibold flex items-center gap-2">
                                         <span>📅</span>
-                                        <span>
-                                          {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}
-                                        </span>
+                                        <span>{formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}</span>
                                         <span className="text-white/70">→</span>
-                                        <span>
-                                          {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}
-                                        </span>
+                                        <span>{formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}</span>
                                       </div>
                                     )}
                                   </div>
 
                                   <div className="text-center py-6 bg-gray-50 border border-dashed border-gray-300 rounded-lg">
                                     <p className="text-gray-500 font-semibold">
-                                      No assigned engineers have submitted any
-                                      progress yet.
+                                      No assigned engineers have submitted any progress yet.
                                     </p>
                                     <p className="text-gray-400 text-sm mt-1">
-                                      Once assigned engineers submit their
-                                      current progress, it will appear here.
+                                      Once assigned engineers submit their current progress, it will appear here.
                                     </p>
                                   </div>
                                 </div>
@@ -467,160 +456,91 @@ const ProgressShowed = ({ progressData, onClose }) => {
 
                             return (
                               <div key={type} className="space-y-4">
-                                <div
-                                  className={`flex items-center gap-3 px-4 py-3 bg-linear-to-r ${getTypeColor(type)} rounded-lg shadow-sm`}
-                                >
-                                  <span className="text-2xl">
-                                    {getTypeIcon(type)}
-                                  </span>
-                                  <h4 className="uppercase text-sm font-bold text-white tracking-wider">
-                                    {type}
-                                  </h4>
+                                {/* Phase Header */}
+                                <div className={`flex items-center gap-3 px-4 py-3 bg-linear-to-r ${getTypeColor(type)} rounded-lg shadow-sm`}>
+                                  <span className="text-2xl">{getTypeIcon(type)}</span>
+                                  <h4 className="uppercase text-sm font-bold text-white tracking-wider">{type}</h4>
+
                                   {sectionDateMap[section.sectionName]?.phases?.[type] && (
                                     <div className="text-[11px] text-white/90 font-semibold flex items-center gap-2">
                                       <span>📅</span>
-                                      <span>
-                                        {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}
-                                      </span>
+                                      <span>{formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].startDate)}</span>
                                       <span className="text-white/70">→</span>
-                                      <span>
-                                        {formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}
-                                      </span>
+                                      <span>{formatDateDDMMYY(sectionDateMap[section.sectionName].phases[type].endDate)}</span>
                                     </div>
                                   )}
+
                                   <span className="ml-auto bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-white">
-                                    {engineers.length}{" "}
-                                    {engineers.length === 1
-                                      ? "Engineer"
-                                      : "Engineers"}
+                                    {engineers.length} {engineers.length === 1 ? "Engineer" : "Engineers"}
                                   </span>
                                 </div>
-                                {engineers.map((engineer) => {
-                                  const latestProgress =
-                                    engineer.progressReports?.length > 0
-                                      ? engineer.progressReports[
-                                        engineer.progressReports.length - 1
-                                      ].actualCompletionPercent
-                                      : 0;
-                                  return (
-                                    <div
-                                      key={engineer.engineerId}
-                                      className="border border-gray-200 rounded-xl overflow-hidden hover:border-gray-300 transition-all bg-white shadow-sm"
-                                    >
-                                      <div className="bg-linear-to-r from-gray-50 to-white px-5 py-3 border-b border-gray-200">
-                                        <div className="flex items-center justify-between">
-                                          <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-400 to-gray-600 flex items-center justify-center text-white font-bold shadow">
-                                              {engineer.name
-                                                ?.charAt(0)
-                                                ?.toUpperCase() || "?"}
-                                            </div>
-                                            <div>
-                                              <p className="font-semibold text-gray-900">
-                                                {engineer.name}
-                                              </p>
-                                              <p className="text-xs text-gray-500">
-                                                ID: {engineer.empId}
-                                              </p>
-                                            </div>
-                                          </div>
-                                          <div className="flex items-center gap-3">
-                                            <div className="text-right">
-                                              <p className="text-xs text-gray-500 uppercase">
-                                                Latest Progress
-                                              </p>
-                                              <p
-                                                className={`text-lg font-bold ${latestProgress >= 100 ? "text-green-600" : "text-indigo-600"}`}
-                                              >
-                                                {latestProgress}%
-                                              </p>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="overflow-x-auto">
-                                        <table className="w-full text-sm">
-                                          <thead className="bg-gray-100">
-                                            <tr className="text-xs uppercase text-gray-600 font-semibold">
-                                              <th className="px-4 py-3 text-center">
-                                                Progress
-                                              </th>
-                                              <th className="px-4 py-3 text-center">
-                                                Report Date
-                                              </th>
-                                              <th className="px-4 py-3 text-center">
-                                                Actual Progress Days
-                                              </th>
-                                              <th className="px-4 py-3 text-center">
-                                                Completion Date
-                                              </th>
-                                              <th className="px-4 py-3 text-left">
-                                                Notes
-                                              </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody className="divide-y divide-gray-200">
-                                            {[...engineer.progressReports]
-                                              .reverse()
-                                              .map((row, idx) => (
-                                                <tr
-                                                  key={idx}
-                                                  className="hover:bg-gray-50 transition-colors"
-                                                >
-                                                  <td className="px-4 py-3 text-center">
-                                                    <div className="flex items-center justify-center gap-2">
-                                                      <span
-                                                        className={`px-3 py-1 rounded-full text-xs font-bold ring-2 ${getCompletionBadgeStyle(row.actualCompletionPercent)}`}
-                                                      >
 
-                                                        {
-                                                          row.actualCompletionPercent
-                                                        }
-                                                        %
-                                                      </span>
-                                                    </div>
-                                                  </td>
-                                                  <td className="px-4 py-3 text-center text-gray-700">
-                                                    <div className="flex items-center justify-center gap-1">
-                                                      <span className="text-gray-400">
-                                                        📅
-                                                      </span>
-                                                      {formatDate(
-                                                        row.reportDate,
-                                                      )}
-                                                    </div>
-                                                  </td>
-                                                  <td className="px-4 py-3 text-center text-gray-700">
-                                                    <div className="flex items-center justify-center gap-1">
-                                                      {row?.actualProgressDay}
-                                                    </div>
-                                                  </td>
-                                                  <td className="px-4 py-3 text-center text-gray-700">
-                                                    <div className="flex items-center justify-center gap-1">
-                                                      <span className="text-gray-400">
-                                                        🎯
-                                                      </span>
-                                                      {formatDate(
-                                                        row.actualEndDate,
-                                                      )}
-                                                    </div>
-                                                  </td>
-                                                  <td className="px-4 py-3">
-                                                    <p className="text-gray-600 leading-relaxed">
-                                                      {truncate(
-                                                        row.remarks,
-                                                        10,
-                                                      )}
-                                                    </p>
-                                                  </td>
-                                                </tr>
-                                              ))}
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
+                                <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                                  <div className="overflow-x-auto">
+                                    <table className="w-full text-sm">
+                                      <thead className="bg-gray-100">
+                                        <tr className="text-xs uppercase text-gray-600 font-semibold">
+                                          <th className="px-4 py-3 text-left">Engineer</th>
+                                          <th className="px-4 py-3 text-center">Progress</th>
+                                          <th className="px-4 py-3 text-center">Report Date</th>
+                                          <th className="px-4 py-3 text-center">Actual Progress Days</th>
+                                          <th className="px-4 py-3 text-center">Completion Date</th>
+                                          <th className="px-4 py-3 text-left">Notes</th>
+                                        </tr>
+                                      </thead>
+
+                                      <tbody className="divide-y divide-gray-200">
+                                        {engineers.map((engineer) => {
+                                          const sortedReports = [...(engineer.progressReports || [])].sort(
+                                            (a, b) =>
+                                              new Date(b.updatedAt || b.createdAt || b._id) -
+                                              new Date(a.updatedAt || a.createdAt || a._id)
+                                          );
+                                          const latestReport = sortedReports[0];
+
+                                          if (!latestReport) {
+                                            return (
+                                              <tr key={engineer.engineerId}>
+                                                <td className="px-4 py-3 font-semibold text-gray-900">{engineer.name}</td>
+                                                <td colSpan="5" className="px-4 py-3 text-center text-gray-400 italic">
+                                                  No progress reports available
+                                                </td>
+                                              </tr>
+                                            );
+                                          }
+
+                                          return (
+                                            <tr key={engineer.engineerId} className="hover:bg-gray-50 transition-colors">
+                                              <td className="px-4 py-3 font-semibold text-gray-900">{engineer.name}</td>
+
+                                              <td className="px-4 py-3 text-center">
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold ring-2 ${getCompletionBadgeStyle(latestReport.actualCompletionPercent)}`}>
+                                                  {latestReport.actualCompletionPercent}%
+                                                </span>
+                                              </td>
+
+                                              <td className="px-4 py-3 text-center text-gray-700">
+                                                📅 {formatDate(latestReport.reportDate)}
+                                              </td>
+
+                                              <td className="px-4 py-3 text-center text-gray-700">
+                                                {latestReport.actualProgressDay}
+                                              </td>
+
+                                              <td className="px-4 py-3 text-center text-gray-700">
+                                                🎯 {formatDate(latestReport.actualEndDate)}
+                                              </td>
+
+                                              <td className="px-4 py-3 text-gray-600">
+                                                {truncate(latestReport.remarks, 10)}
+                                              </td>
+                                            </tr>
+                                          );
+                                        })}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
                               </div>
                             );
                           })}
