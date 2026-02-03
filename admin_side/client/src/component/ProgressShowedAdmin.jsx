@@ -141,10 +141,9 @@ const ProgressShowed = ({ progressData, onClose }) => {
         </div>
 
         <div className="p-8 max-h-[75vh] overflow-y-auto bg-gray-50">
-          {/* MASTER COLLAPSE HEADER */}
           <div
             onClick={() => toggleSection("all-plan-sections")}
-            className="flex items-center justify-between gap-3 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 rounded-2xl p-4 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 mb-6"
+            className="flex items-center justify-between gap-3 bg-linear-to-r from-cyan-500 via-blue-500 to-indigo-600 rounded-2xl p-4 shadow-lg cursor-pointer hover:shadow-xl transition-all duration-300 mb-6"
           >
             <div className="flex items-center gap-3">
               <span className="text-2xl">📊</span>
@@ -223,9 +222,7 @@ const ProgressShowed = ({ progressData, onClose }) => {
                         </div>
                       </div>
                     </div>
-
-                    {/* MASTER TIMELINE */}
-                    <div className="mt-3 space-y-2">
+                    <div className="mt-4 space-y-3">
                       {PHASES.map(({ key, color }) => {
                         const phase = section.phases?.[key];
                         if (!phase) return null;
@@ -234,15 +231,17 @@ const ProgressShowed = ({ progressData, onClose }) => {
                           phase.startDate,
                           phase.endDate,
                           section.sectionStartDate,
-                          section.sectionEndDate,
+                          section.sectionEndDate
                         );
 
                         return (
-                          <div key={key} className="flex items-center gap-3">
-                            {/* Timeline Bar */}
-                            <div className="relative flex-1 h-4 bg-gray-200 rounded-full overflow-hidden border border-gray-200">
+                          <div key={key} className="flex items-center gap-4">
+                            <div className="w-20 text-sm font-semibold text-gray-700 capitalize">
+                              {key}
+                            </div>
+                            <div className="relative flex-1 h-5 bg-gray-200 rounded-full overflow-hidden border border-gray-200">
                               <div
-                                className={`absolute h-full rounded-full ${color} shadow`}
+                                className={`absolute h-full rounded-full ${color} shadow-md`}
                                 style={{ left, width }}
                                 title={`${key}: ${formatDateDDMMYY(phase.startDate)} → ${formatDateDDMMYY(phase.endDate)}`}
                               />
@@ -250,42 +249,6 @@ const ProgressShowed = ({ progressData, onClose }) => {
                           </div>
                         );
                       })}
-                    </div>
-
-                    {/* show card  */}
-                    <div className="bg-linear-to-br from-white via-gray-50 to-white border border-gray-200 rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {PHASES.map(({ key, color }) => {
-                          const phase = section.phases?.[key];
-                          if (!phase) return null;
-                          return (
-                            <div
-                              key={key}
-                              className="flex items-center gap-3 p-2.5 rounded-lg bg-white/60 backdrop-blur-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200 group"
-                            >
-                              <div
-                                className={`w-3 h-3 rounded-full flex-shrink-0 ${color} shadow-md group-hover:scale-125 transition-transform duration-200`}
-                              />
-                              <div className="flex-1 min-w-0">
-                                <div className="font-semibold text-gray-800 capitalize text-xs mb-0.5">
-                                  {key}
-                                </div>
-                                <div className="text-[11px] text-gray-600 flex items-center gap-1.5">
-                                  <span className="truncate">
-                                    {formatDateDDMMYY(phase.startDate)}
-                                  </span>
-                                  <span className="text-gray-400 flex-shrink-0">
-                                    •
-                                  </span>
-                                  <span className="truncate">
-                                    {formatDateDDMMYY(phase.endDate)}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
                     </div>
                   </div>
 
