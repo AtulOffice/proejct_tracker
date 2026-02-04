@@ -1598,6 +1598,8 @@ export const allProjectsFetch = async (req, res) => {
     return res.status(500).json({ success: false, error: "Server error" });
   }
 };
+
+
 export const allProjectsFetchDev = async (req, res) => {
   const search = req.query.search || "";
   try {

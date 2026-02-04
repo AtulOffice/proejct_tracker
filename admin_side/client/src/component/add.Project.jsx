@@ -223,21 +223,18 @@ const InputForm = () => {
             </h2>
             <div onClick={() => setOpen(true)} className="relative group ml-4">
               <button
-                className="
-      flex items-center justify-center
+                className="flex items-center justify-center
       bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400
       hover:from-emerald-600 hover:via-teal-500 hover:to-cyan-500
       text-white p-2 rounded-full shadow-lg
       transition-all duration-200
       hover:scale-110 hover:-rotate-6
       ring-2 ring-transparent hover:ring-emerald-300
-      focus:outline-none focus:ring-4 focus:ring-emerald-400
-    "
+      focus:outline-none focus:ring-4 focus:ring-emerald-400"
                 aria-label="New Project"
                 type="button"
               >
                 <FaFolderPlus className="w-5 h-5 drop-shadow" />
-
                 {data.length > 0 && (
                   <span
                     className="

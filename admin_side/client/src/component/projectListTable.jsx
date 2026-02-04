@@ -187,11 +187,12 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       View
                     </th>
                     <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
-                      {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
-                    </th>
-                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
                       {onEditFun === "DEVLOPMENT" ? "PLAN" : "Edit"}
                     </th>
+                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+                      {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
+                    </th>
+
                   </>
                 )}
               </tr>
@@ -265,43 +266,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           </button>
                         </td>
 
-                        {/* DOCS */}
-                        {onEditFun === "DEVLOPMENT" ?
-                          <td className="px-6 py-1 text-center">
-                            <button
-                              disabled={isCancelled}
-                              onClick={
-                                isCancelled ? undefined : () => handleShowProgress(row)
-                              }
-                              className={`p-3 rounded-xl transition-all
-                  ${isCancelled
-                                  ? disabledBtn
-                                  : "bg-transparent text-white hover:bg-gray-200"
-                                }`}
-                              title={isCancelled ? "Action not allowed" : "Documents"}
-                            >
-                              <GiProgression size={18} />
-                            </button>
-                          </td>
-                          :
-                          <td className="px-6 py-1 text-center">
-                            <button
-                              disabled={isCancelled}
-                              onClick={
-                                isCancelled ? undefined : () => handleDocsOpen(row)
-                              }
-                              className={`p-3 rounded-xl transition-all
-                  ${isCancelled
-                                  ? disabledBtn
-                                  : "bg-transparent text-white hover:bg-gray-200"
-                                }`}
-                              title={isCancelled ? "Action not allowed" : "Documents"}
-                            >
-                              <SlDocs size={18} />
-                            </button>
-                          </td>}
-
-                        {/* EDIT / ASSIGN */}
                         <td className="px-6 py-1 text-center">
                           {onEditFun === "DEVLOPMENT" ? (
                             <button
@@ -353,6 +317,40 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                             </button>
                           )}
                         </td>
+                        {onEditFun === "DEVLOPMENT" ?
+                          <td className="px-6 py-1 text-center">
+                            <button
+                              disabled={isCancelled}
+                              onClick={
+                                isCancelled ? undefined : () => handleShowProgress(row)
+                              }
+                              className={`p-3 rounded-xl transition-all
+                  ${isCancelled
+                                  ? disabledBtn
+                                  : "bg-transparent text-white hover:bg-gray-200"
+                                }`}
+                              title={isCancelled ? "Action not allowed" : "Documents"}
+                            >
+                              <GiProgression size={18} />
+                            </button>
+                          </td>
+                          :
+                          <td className="px-6 py-1 text-center">
+                            <button
+                              disabled={isCancelled}
+                              onClick={
+                                isCancelled ? undefined : () => handleDocsOpen(row)
+                              }
+                              className={`p-3 rounded-xl transition-all
+                  ${isCancelled
+                                  ? disabledBtn
+                                  : "bg-transparent text-white hover:bg-gray-200"
+                                }`}
+                              title={isCancelled ? "Action not allowed" : "Documents"}
+                            >
+                              <SlDocs size={18} />
+                            </button>
+                          </td>}
                       </>
                     )}
                   </tr>
