@@ -41,7 +41,7 @@ export const menuItems = [
         label: "SRVC DET",
         icon: FaRegSquarePlus,
         roles: ["reception", "admin"],
-        designations: ["coordinator"],
+        designations: [""],
     },
     {
         id: 19,

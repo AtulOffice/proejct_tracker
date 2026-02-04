@@ -1166,7 +1166,7 @@ const UpdateForm = () => {
             </div>
           </div> */}
           {/* <DocumentsSection Docs={Docs} setDocs={setDocs} isDisable={true} /> */}
-          {/* <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-8">
             <button
               type="submit"
               disabled={isLoading}
@@ -1174,7 +1174,7 @@ const UpdateForm = () => {
             >
               Update
             </button>
-          </div> */}
+          </div>
         </form>
       </div >
     </div >

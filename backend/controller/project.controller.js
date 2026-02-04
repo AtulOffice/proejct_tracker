@@ -478,6 +478,7 @@ export const updateRecords = async (req, res) => {
         }
       });
     }
+    project.isDataSavedProject = true;
     await project.save();
 
     const updatedProject = await ProjectModel.findById(project._id).lean();
@@ -1554,6 +1555,8 @@ export const allProjectsFetch = async (req, res) => {
       OrderMongoId: 1,
       createdAt: 1,
       updatedAt: 1,
+      isDataSavedProject: 1,
+      isProjectDocssave: 1,
     })
       .populate({
         path: "OrderMongoId",
@@ -1576,6 +1579,8 @@ export const allProjectsFetch = async (req, res) => {
       bookingDate: p.OrderMongoId?.bookingDate || null,
       endUser: p.OrderMongoId?.endUser || null,
       actualDeleveryDate: p.OrderMongoId?.actualDeleveryDate || null,
+      isDataSavedProject: p.isDataSavedProject,
+      isProjectDocssave: p.isProjectDocssave,
       OrderMongoId: p.OrderMongoId
         ? {
           _id: p.OrderMongoId._id,

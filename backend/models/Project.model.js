@@ -4,29 +4,30 @@ import { dateToJSONTransformer } from "../utils/dateconvert.js";
 const ENUMVAL = ["YES", "NO", "N/A", ""];
 
 const documentFormetFirst = {
-  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  value: { type: String, enum: ENUMVAL, default: "" },
   date: { type: Date, default: null },
 };
 
 const documentFormetSecond = {
-  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  value: { type: String, enum: ENUMVAL, default: "" },
   date: { type: Date, default: null },
   version: { type: String, default: "1.0" },
 };
 
 const documentFormetThird = {
-  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  value: { type: String, enum: ENUMVAL, default: "" },
   date: { type: Date, default: null },
   submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 };
 
 const documentFormetFourth = {
-  value: { type: String, enum: ENUMVAL, default: "N/A" },
+  value: { type: String, enum: ENUMVAL, default: "" },
   date: { type: Date, default: null },
   inputVal: { type: String, default: "" },
   submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   remarks: { type: String, default: "" },
 };
+
 
 const projectSchema = new mongoose.Schema(
   {
@@ -168,7 +169,7 @@ const projectSchema = new mongoose.Schema(
       existingBackup: { type: documentFormetFirst },
       otherDocument: {
         name: { type: String, default: "" },
-        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        value: { type: String, enum: ENUMVAL, default: "" },
         date: { type: Date, default: null },
       },
     },
@@ -181,7 +182,7 @@ const projectSchema = new mongoose.Schema(
       cableSchedule: { type: documentFormetSecond },
       otherDocument: {
         name: { type: String, default: "" },
-        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        value: { type: String, enum: ENUMVAL, default: "" },
         date: { type: Date, default: null },
         version: { type: String, default: "1.0" },
       },
@@ -191,7 +192,7 @@ const projectSchema = new mongoose.Schema(
       scadaBackup: { type: documentFormetSecond },
       otherDocument: {
         name: { type: String, default: "" },
-        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        value: { type: String, enum: ENUMVAL, default: "" },
         date: { type: Date, default: null },
         version: { type: String, default: "1.0" },
       },
@@ -201,7 +202,7 @@ const projectSchema = new mongoose.Schema(
       fat: { type: documentFormetThird },
       otherDocument: {
         name: { type: String, default: "" },
-        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        value: { type: String, enum: ENUMVAL, default: "" },
         date: { type: Date, default: null },
         submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       },
@@ -214,7 +215,7 @@ const projectSchema = new mongoose.Schema(
         DeleveryChallan: { type: documentFormetFirst },
         otherDocument: {
           name: { type: String, default: "" },
-          value: { type: String, enum: ENUMVAL, default: "N/A" },
+          value: { type: String, enum: ENUMVAL, default: "" },
           date: { type: Date, default: null },
         },
       },
@@ -227,7 +228,7 @@ const projectSchema = new mongoose.Schema(
       expenseReport: { type: documentFormetFourth },
       otherDocument: {
         name: { type: String, default: "" },
-        value: { type: String, enum: ENUMVAL, default: "N/A" },
+        value: { type: String, enum: ENUMVAL, default: "" },
         date: { type: Date, default: null },
         inputVal: { type: String, default: "" },
         submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

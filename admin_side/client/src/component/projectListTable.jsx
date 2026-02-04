@@ -200,6 +200,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((row, i) => {
+                { console.log(row) }
                 const isCancelled = row?.isCancelled === true;
                 const disabledBtn =
                   "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed pointer-events-none";
@@ -307,16 +308,21 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                                   ? undefined
                                   : () => handleEditAction(onEditFun, row)
                               }
-                              className={`p-2.5 rounded-lg transition-all
-                    ${isCancelled
+                              className={`p-2.5 rounded-full transition-all text-white
+      ${isCancelled
                                   ? disabledBtn
-                                  : "bg-transparent text-white hover:bg-gray-200"
+                                  : row?.isDataSavedProject
+                                    ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 text-white hover:scale-110"
+                                    : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 text-white hover:scale-110"
+
                                 }`}
                             >
                               <MdEdit size={18} />
                             </button>
                           )}
                         </td>
+
+
                         {onEditFun === "DEVLOPMENT" ?
                           <td className="px-6 py-1 text-center">
                             <button
@@ -341,16 +347,25 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                               onClick={
                                 isCancelled ? undefined : () => handleDocsOpen(row)
                               }
-                              className={`p-3 rounded-xl transition-all
-                  ${isCancelled
+                              className={`p-3 rounded-full transition-all text-white
+      ${isCancelled
                                   ? disabledBtn
-                                  : "bg-transparent text-white hover:bg-gray-200"
+                                  : row?.isProjectDocssave
+                                    ? "bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:scale-110"
+                                    : "bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 hover:scale-110"
                                 }`}
-                              title={isCancelled ? "Action not allowed" : "Documents"}
+                              title={
+                                isCancelled
+                                  ? "Action not allowed"
+                                  : row?.isProjectDocssave
+                                    ? "Project data saved"
+                                    : "Project data not saved"
+                              }
                             >
                               <SlDocs size={18} />
                             </button>
-                          </td>}
+                          </td>
+                        }
                       </>
                     )}
                   </tr>
