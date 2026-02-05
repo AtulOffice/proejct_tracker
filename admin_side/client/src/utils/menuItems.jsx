@@ -122,6 +122,23 @@ export const ProjectTab = [
         head: "Target Delivery",
         val: "actualDeleveryDate",
     },
+    {
+        head: "Po Rec.",
+        val: "",
+    },
+    {
+        head: "Logic",
+        val: "",
+    },
+    {
+        head: "Scada",
+        val: "",
+    },
+    {
+        head: "Comm",
+        val: "",
+    },
+
 
 ];
 export const ProjectTabDev = [

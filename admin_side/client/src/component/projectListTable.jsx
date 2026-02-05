@@ -250,11 +250,8 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                         </td>
                       );
                     })}
-
-                    {/* ACTIONS */}
                     {isEdit && (
                       <>
-                        {/* VIEW */}
                         <td className="px-6 py-1 text-center ">
                           <button
                             onClick={
@@ -372,9 +369,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                 );
               })}
             </tbody>
-
-
-
           </table>
         </div>
       </div>
