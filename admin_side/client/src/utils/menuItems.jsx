@@ -22,7 +22,7 @@ export const menuItems = [
     {
         id: 21,
         key: "twentyone",
-        label: "ORDER",
+        label: "CREATE ORDER",
         icon: FaShoppingCart,
         roles: ["reception", "admin"],
         designations: ["commercial", "marketing"],
@@ -30,7 +30,7 @@ export const menuItems = [
     {
         id: 22,
         key: "twentytwo",
-        label: "ORDERS",
+        label: "ORDER LIST",
         icon: FaClipboardList,
         roles: ["reception", "admin"],
         designations: ["commercial", "marketing"],

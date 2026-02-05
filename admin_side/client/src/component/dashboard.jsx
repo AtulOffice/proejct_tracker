@@ -203,10 +203,10 @@ const AdminDashboard = () => {
             handleActiveBar(item.key);
             setSidebarOpen(false);
           }}
-          className={`flex items-center px-4 py-2.5 text-gray-700 cursor-pointer font-medium rounded-md
+          className={`flex items-center px-4 py-2.5 text-sm text-gray-700 cursor-pointer font-medium rounded-md
           ${activeCard === item.key ? "bg-indigo-50" : "hover:bg-gray-50"}`}
         >
-          <Icon className="mr-3 text-indigo-500" size={20} />
+          {/* <Icon className="mr-3 text-indigo-500" size={20} /> */}
           {item.label}
         </div>
       </li>

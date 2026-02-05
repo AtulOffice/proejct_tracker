@@ -125,6 +125,7 @@ export const getAllOrders = async (req, res) => {
       jobNumber: 1,
       entityType: 1,
       soType: 1,
+      endUser: 1,
       bookingDate: 1,
       deleveryDate: 1,
       actualDeleveryDate: 1,

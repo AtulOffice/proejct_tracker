@@ -132,6 +132,11 @@ const EngineerTable = ({ data }) => {
     }
   };
 
+
+  const sortedEngineers = [...data].sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
+  );
+
   return (
     <div className="relative col-span-full w-full overflow-hidden rounded-2xl shadow-2xl bg-linear-to-b from-white via-blue-50 to-blue-100 border border-blue-200 p-4">
       {deleteFlag && (
@@ -199,7 +204,7 @@ const EngineerTable = ({ data }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-blue-100">
-              {data.map((project, indx) => (
+              {sortedEngineers.map((project, indx) => (
                 <tr
                   key={indx}
                   className={`hover:bg-blue-50/80 transition-colors duration-150 ${indx % 2 === 0
@@ -231,7 +236,7 @@ const EngineerTable = ({ data }) => {
                       {project.name}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-2">
                     <span
                       className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border shadow-sm transition whitespace-nowrap ${!project.isAssigned
                         ? "bg-green-100 text-green-700 border-green-300"
@@ -247,7 +252,7 @@ const EngineerTable = ({ data }) => {
                   <td className="px-6 py-4 text-sm text-blue-700 truncate">
                     {project?.phone}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-2">
                     <div className="flex items-center justify-center gap-2">
                       <button
                         onClick={(e) => handleEdit(e, project)}
@@ -280,7 +285,7 @@ const EngineerTable = ({ data }) => {
       )
       }
       <div className="md:hidden mt-4 space-y-4">
-        {data.map((project) => (
+        {sortedEngineers.map((project) => (
           <div
             key={project._id}
             className="bg-linear-to-br from-blue-50 via-white to-indigo-50 shadow-xl rounded-xl p-4 border border-blue-200 transition-transform hover:scale-[1.02]"
