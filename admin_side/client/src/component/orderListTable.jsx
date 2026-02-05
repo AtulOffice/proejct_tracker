@@ -101,18 +101,19 @@ const OrderTableAll = ({ data }) => {
                   <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Svc Sts</th>
                   <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Bill Sts</th>
 
-                  <th className="w-[60px] px-1 py-0.5 text-center font-semibold text-sm !text-white bg-gray-900 sticky right-[200px] z-30">
+                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[126px] z-30">
                     View
                   </th>
-                  <th className="w-[60px] px-1 py-0.5 text-center font-semibold text-sm !text-white bg-gray-900 sticky right-[140px] z-30">
+                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[84px] z-30">
                     Edit
                   </th>
-                  <th className="w-[70px] px-1 py-0.5 text-center font-semibold text-sm !text-white bg-gray-900 sticky right-[70px] z-30">
+                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[42px] z-30">
                     Cancel
                   </th>
-                  <th className="w-[70px] px-1 py-0.5 text-center font-semibold text-sm !text-white bg-gray-900 sticky right-0 z-30">
+                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-0 z-30">
                     Approve
                   </th>
+
                 </tr>
 
               </thead>
@@ -178,27 +179,27 @@ const OrderTableAll = ({ data }) => {
                       </td>
 
                       {/* RIGHT STICKY ACTIONS */}
-                      <td className="px-6 py-0.5 text-center sticky right-[200px] bg-inherit z-20">
+                      <td className="px-1 py-0.5 text-center sticky right-[144px] bg-inherit z-20">
                         <button
                           onClick={() => hadleOpenPopup(order._id)}
-                          className="p-1.5 rounded-lg transition-all bg-transparent text-white hover:bg-gray-200"
+                          className="p-0.5 rounded transition-all bg-transparent text-white hover:bg-gray-200"
                         >
-                          <FaEye size={16} />
+                          <FaEye size={14} />
                         </button>
                       </td>
 
-                      <td className="px-6 py-0.5 text-center sticky right-[140px] bg-inherit z-20">
+                      <td className="px-1 py-0.5 text-center sticky right-[84px] bg-inherit z-20">
                         <button
                           disabled={isCancelled}
                           onClick={() => !isCancelled && handleUpdate(order._id)}
-                          className={`p-1.5 rounded-lg transition-all ${isCancelled ? disabledBtn : "text-emerald-600 hover:bg-gray-200"
+                          className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-emerald-600 hover:bg-gray-200"
                             }`}
                         >
-                          <MdEdit size={16} />
+                          <MdEdit size={14} />
                         </button>
                       </td>
 
-                      <td className="px-6 py-0.5 text-center sticky right-[70px] bg-inherit z-20">
+                      <td className="px-1 py-0.5 text-center sticky right-[42px] bg-inherit z-20">
                         <button
                           disabled={isCancelled}
                           onClick={() => {
@@ -206,21 +207,22 @@ const OrderTableAll = ({ data }) => {
                             seId(order?._id);
                             setCancelflag(true);
                           }}
-                          className={`p-1.5 rounded-lg transition-all ${isCancelled ? disabledBtn : "text-red-600 hover:bg-gray-200"
+                          className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-red-600 hover:bg-gray-200"
                             }`}
                         >
-                          <MdCancel size={16} />
+                          <MdCancel size={14} />
                         </button>
                       </td>
 
-                      <td className="px-6 py-0.5 text-center sticky right-0 bg-inherit z-20">
+                      <td className="px-1 py-0.5 text-center sticky right-0 bg-inherit z-20">
                         <button
-                          className={`p-1.5 rounded-lg transition-all ${isCancelled ? disabledBtn : "text-blue-600 hover:bg-gray-200"
+                          className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-blue-600 hover:bg-gray-200"
                             }`}
                         >
-                          <FaCheckCircle size={16} />
+                          <FaCheckCircle size={14} />
                         </button>
                       </td>
+
                     </tr>
                   );
                 })}
