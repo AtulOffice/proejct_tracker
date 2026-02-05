@@ -9,13 +9,14 @@ import { LuNotepadText } from "react-icons/lu";
 import ProgressShowedAdmin from "./ProgressShowedAdmin";
 import { FaEye } from "react-icons/fa";
 import { SlDocs } from "react-icons/sl";
-import { middleEllipsis } from "../utils/middleEliminator";
+import { limitText, middleEllipsis } from "../utils/middleEliminator";
 import { GiProgression } from "react-icons/gi";
 import toast from "react-hot-toast";
 import { fetchOrderById } from "../apiCall/orders.Api";
 import { fetchbyProjectbyId } from "../apiCall/project.api";
 import { getAdminProjectProgressByPlanning } from "../apiCall/workProgress.Api";
 import ProjectTimelineForm from "./project.Planning";
+import { formatDateDDMMYY } from "../utils/formatter";
 
 
 
@@ -227,7 +228,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       const display = Array.isArray(val)
                         ? val.join(", ")
                         : col.val.toLowerCase().includes("date") && val
-                          ? new Date(val).toISOString().split("T")[0]
+                          ? formatDateDDMMYY(val)
                           : val || "—";
 
                       const hideFull =
@@ -245,7 +246,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                                 : ""
                               }`}
                           >
-                            {hideFull ? middleEllipsis(display, 4, 3) : display}
+                            {hideFull ? limitText(display, 8) : display}
                           </div>
                         </td>
                       );

@@ -1557,6 +1557,7 @@ export const allProjectsFetch = async (req, res) => {
       updatedAt: 1,
       isDataSavedProject: 1,
       isProjectDocssave: 1,
+      Development: 1,
     })
       .populate({
         path: "OrderMongoId",
@@ -1575,7 +1576,9 @@ export const allProjectsFetch = async (req, res) => {
       visitDate: p.visitDate || null,
       createdAt: p.createdAt,
       updatedAt: p.updatedAt,
+      Development: p.Development,
       deleveryDate: p.OrderMongoId?.deleveryDate || null,
+      poReceived: p.OrderMongoId?.poReceived || null,
       bookingDate: p.OrderMongoId?.bookingDate || null,
       endUser: p.OrderMongoId?.endUser || null,
       actualDeleveryDate: p.OrderMongoId?.actualDeleveryDate || null,
