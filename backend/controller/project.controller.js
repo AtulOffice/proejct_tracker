@@ -1633,13 +1633,14 @@ export const allProjectsFetchDev = async (req, res) => {
       OrderMongoId: 1,
       isPlanRecord: 1,
       service: 1,
-      Development: 1,
       LogicPlace: 1,
       ScadaPlace: 1,
       PlanDetails: 1,
       devScope: 1,
       commScope: 1,
       client: 1,
+      isDataSavedProject: 1,
+      isProjectDocssave: 1,
     };
 
     const projects = await ProjectModel.find(filter, projectSelectFields)
@@ -1675,8 +1676,9 @@ export const allProjectsFetchDev = async (req, res) => {
       endUser: p.OrderMongoId?.endUser || null,
       actualDeleveryDate: p.OrderMongoId?.actualDeleveryDate || null,
       isDataSavedProject: p.isDataSavedProject,
-      client: p.client,
+      client: p.OrderMongoId?.client || null,
       isPlanRecord: p.isPlanRecord,
+      PlanDetails: p.PlanDetails,
       isProjectDocssave: p.isProjectDocssave,
       COMMISSIONING: ["COMMISSIONING", "DEVCOM"].includes(p.service) ? "Y" : "N",
       OrderMongoId: p.OrderMongoId
