@@ -81,7 +81,7 @@ const OrderTableAll = ({ data }) => {
         <div className="max-h-[560px] overflow-y-auto">
           <div className="overflow-x-auto hide-scrollbar">
             <table className="w-full table-fixed">
-              <thead className="sticky top-0 z-30">
+              <thead className="sticky top-0 z-20">
                 <tr className="bg-gray-900">
                   <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white bg-gray-900 sticky left-0 z-30">
                     Sr No

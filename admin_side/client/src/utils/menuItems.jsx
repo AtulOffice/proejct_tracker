@@ -124,15 +124,11 @@ export const ProjectTab = [
     },
     {
         head: "Po Rec.",
-        val: "",
+        val: "poReceived",
     },
     {
-        head: "Logic",
-        val: "",
-    },
-    {
-        head: "Scada",
-        val: "",
+        head: "L/S",
+        val: "Development",
     },
     {
         head: "Comm",
