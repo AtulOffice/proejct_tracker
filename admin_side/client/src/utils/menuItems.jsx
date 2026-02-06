@@ -131,8 +131,8 @@ export const ProjectTab = [
         val: "Development",
     },
     {
-        head: "Comm",
-        val: "",
+        head: "COMMISSIONING",
+        val: "COMMISSIONING",
     },
 
 

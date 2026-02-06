@@ -47,7 +47,6 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
   }, []);
 
 
-  // this funciton make some change
   const handleShowProgress = async (entry) => {
     try {
       if (!entry?.PlanDetails) {
@@ -165,18 +164,24 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           />
         ))}
       <div className="overflow-x-auto hidden md:block">
-        <div ref={printRef} className="max-h-[560px] overflow-y-auto">
-          <table className="w-full table-fixed">
-            <thead className="sticky top-0">
-              <tr className="bg-gray-900 ">
-                <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+        <div ref={printRef} className="max-h-[560px] overflow-x-auto hide-scrollbar">
+          <table className="min-w-full w-max table-fixed">
+            <thead className="sticky top-0 z-30">
+              <tr className="bg-gray-900">
+                <th className="w-20 px-3 py-1 text-center font-semibold text-xs text-white bg-gray-900 sticky left-0 z-30">
                   SR NO
                 </th>
 
-                {tableVal.map((col, idx) => (
+                {tableVal.length > 0 && (
+                  <th className="px-3 py-1 text-left font-semibold text-xs text-white! bg-gray-900 sticky left-20 z-30">
+                    {tableVal[0].head}
+                  </th>
+                )}
+
+                {tableVal.slice(1).map((col, idx) => (
                   <th
                     key={idx}
-                    className="px-4 py-1.5 text-left font-semibold text-white!"
+                    className="px-3 py-1 text-left font-semibold text-xs text-white! bg-gray-900"
                   >
                     {col.head}
                   </th>
@@ -184,13 +189,13 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
                 {isEdit && (
                   <>
-                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-[96px] z-30">
                       View
                     </th>
-                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-[48px] z-30">
                       {onEditFun === "DEVLOPMENT" ? "PLAN" : "Edit"}
                     </th>
-                    <th className="w-20 px-4 py-1.5 text-center font-semibold text-white!">
+                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-0 z-30">
                       {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
                     </th>
 
@@ -199,9 +204,9 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
               </tr>
             </thead>
 
+
             <tbody className="divide-y divide-gray-100 bg-white">
               {data.map((row, i) => {
-                { console.log(row) }
                 const isCancelled = row?.isCancelled === true;
                 const disabledBtn =
                   "bg-gray-200 text-gray-400 border border-gray-300 cursor-not-allowed pointer-events-none";
@@ -210,20 +215,24 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                   <tr
                     key={i}
                     className={`transition-colors duration-150 font-mono
-    ${isCancelled
+        ${isCancelled
                         ? "bg-red-100 text-red-700"
                         : i % 2 === 1
                           ? "bg-gray-200 hover:bg-slate-100"
                           : "bg-white hover:bg-slate-50"
                       }`}
                   >
-
-                    {/* SR NO */}
-                    <td className="px-4 py-1 text-center text-sm font-semibold">
+                    <td className="px-3 py-0.5 text-center text-xs font-semibold sticky left-0 bg-inherit z-20 font-mono">
                       {i + 1}
                     </td>
 
-                    {tableVal.map((col, j) => {
+                    {tableVal.length > 0 && (
+                      <td className="px-2 py-0.5 text-sm whitespace-nowrap sticky left-20 bg-inherit z-20 font-bold font-mono">
+                        {row[tableVal[0].val] || "—"}
+                      </td>
+                    )}
+
+                    {tableVal.slice(1).map((col, j) => {
                       const val = row[col.val];
                       const display = Array.isArray(val)
                         ? val.join(", ")
@@ -235,15 +244,11 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                         col.val === "projectName" || col.val === "endUser";
 
                       return (
-                        <td
-                          key={j}
-                          className="px-2 py-1 text-base whitespace-nowrap"
-                        >
+                        <td key={j} className="px-2 py-0.5 text-xs whitespace-nowrap font-mono">
                           <div
-                            className={`
-                  ${col.val === "projectName" && !isCancelled
-                                ? "cursor-pointer hover:text-indigo-600"
-                                : ""
+                            className={`${col.val === "projectName" && !isCancelled
+                              ? "cursor-pointer hover:text-indigo-600"
+                              : ""
                               }`}
                           >
                             {hideFull ? limitText(display, 8) : display}
@@ -251,125 +256,88 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                         </td>
                       );
                     })}
+
+
+
                     {isEdit && (
                       <>
-                        <td className="px-6 py-1 text-center ">
+                        <td className="w-12 px-1 py-0.5 text-center sticky right-[96px] bg-inherit z-20">
                           <button
-                            onClick={
-                              () => hadleOpenPopup(row)
-                            }
-                            className={`p-3 rounded-xl transition-all bg-transparent text-white hover:bg-gray-200 cursor-pointer`}
-                            title={isCancelled ? "Action not allowed" : "View"}
+                            onClick={() => hadleOpenPopup(row)}
+                            className="p-0.5 rounded-md transition-all bg-transparent text-white hover:bg-gray-200"
                           >
-                            <FaEye size={18} />
+                            <FaEye size={14} />
                           </button>
                         </td>
 
-                        <td className="px-6 py-1 text-center">
+                        <td className="w-12 px-1 py-0.5 text-center sticky right-[48px] bg-inherit z-20">
                           {onEditFun === "DEVLOPMENT" ? (
                             <button
                               disabled={isCancelled}
-                              onClick={
-                                isCancelled ? undefined : () => handlAssignedDev(row)
-                              }
-                              className={`p-2 rounded-full shadow-lg transition-all
-                    ${isCancelled
+                              onClick={isCancelled ? undefined : () => handlAssignedDev(row)}
+                              className={`p-0.5 rounded-md transition-all
+            ${isCancelled
                                   ? disabledBtn
                                   : row?.isPlanRecord
-                                    ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 text-white hover:scale-110"
-                                    : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 text-white hover:scale-110"
+                                    ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 text-white hover:scale-105"
+                                    : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 text-white hover:scale-105"
                                 }`}
                             >
-                              <LuNotepadText className="w-5 h-5" />
-                            </button>
-                          ) : onEditFun === "URGENT" ? (
-                            <button
-                              disabled={isCancelled}
-                              onClick={
-                                isCancelled
-                                  ? undefined
-                                  : () => handleEditAction(onEditFun, row)
-                              }
-                              className={`p-2 rounded-full transition-all
-                    ${isCancelled
-                                  ? disabledBtn
-                                  : "bg-transparent text-white hover:scale-110"
-                                }`}
-                            >
-                              <MdEngineering className="w-5 h-5" />
+                              <LuNotepadText className="w-3.5 h-3.5" />
                             </button>
                           ) : (
                             <button
                               disabled={isCancelled}
-                              onClick={
-                                isCancelled
-                                  ? undefined
-                                  : () => handleEditAction(onEditFun, row)
-                              }
-                              className={`p-2.5 rounded-full transition-all text-white
-      ${isCancelled
+                              onClick={isCancelled ? undefined : () => handleEditAction(onEditFun, row)}
+                              className={`p-0.5 rounded-md transition-all text-white
+            ${isCancelled
                                   ? disabledBtn
                                   : row?.isDataSavedProject
-                                    ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 text-white hover:scale-110"
-                                    : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 text-white hover:scale-110"
-
+                                    ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:scale-105"
+                                    : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 hover:scale-105"
                                 }`}
                             >
-                              <MdEdit size={18} />
+                              <MdEdit size={14} />
                             </button>
                           )}
                         </td>
 
-
-                        {onEditFun === "DEVLOPMENT" ?
-                          <td className="px-6 py-1 text-center">
+                        <td className="w-12 px-1 py-0.5 text-center sticky right-0 bg-inherit z-20">
+                          {onEditFun === "DEVLOPMENT" ? (
                             <button
                               disabled={isCancelled}
-                              onClick={
-                                isCancelled ? undefined : () => handleShowProgress(row)
-                              }
-                              className={`p-3 rounded-xl transition-all
-                  ${isCancelled
+                              onClick={isCancelled ? undefined : () => handleShowProgress(row)}
+                              className={`p-0.5 rounded-md transition-all
+            ${isCancelled
                                   ? disabledBtn
                                   : "bg-transparent text-white hover:bg-gray-200"
                                 }`}
-                              title={isCancelled ? "Action not allowed" : "Documents"}
                             >
-                              <GiProgression size={18} />
+                              <GiProgression size={14} />
                             </button>
-                          </td>
-                          :
-                          <td className="px-6 py-1 text-center">
+                          ) : (
                             <button
                               disabled={isCancelled}
-                              onClick={
-                                isCancelled ? undefined : () => handleDocsOpen(row)
-                              }
-                              className={`p-3 rounded-full transition-all text-white
-      ${isCancelled
+                              onClick={isCancelled ? undefined : () => handleDocsOpen(row)}
+                              className={`p-0.5 rounded-md transition-all text-white
+            ${isCancelled
                                   ? disabledBtn
                                   : row?.isProjectDocssave
-                                    ? "bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:scale-110"
-                                    : "bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 hover:scale-110"
+                                    ? "bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:scale-105"
+                                    : "bg-gradient-to-tr from-rose-400 via-pink-300 to-red-400 hover:scale-105"
                                 }`}
-                              title={
-                                isCancelled
-                                  ? "Action not allowed"
-                                  : row?.isProjectDocssave
-                                    ? "Project data saved"
-                                    : "Project data not saved"
-                              }
                             >
-                              <SlDocs size={18} />
+                              <SlDocs size={14} />
                             </button>
-                          </td>
-                        }
+                          )}
+                        </td>
                       </>
                     )}
                   </tr>
                 );
               })}
             </tbody>
+
           </table>
         </div>
       </div>

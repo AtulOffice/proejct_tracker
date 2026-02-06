@@ -1558,6 +1558,7 @@ export const allProjectsFetch = async (req, res) => {
       isDataSavedProject: 1,
       isProjectDocssave: 1,
       Development: 1,
+      service: 1,
     })
       .populate({
         path: "OrderMongoId",
@@ -1584,6 +1585,7 @@ export const allProjectsFetch = async (req, res) => {
       actualDeleveryDate: p.OrderMongoId?.actualDeleveryDate || null,
       isDataSavedProject: p.isDataSavedProject,
       isProjectDocssave: p.isProjectDocssave,
+      COMMISSIONING: ["COMMISSIONING", "DEVCOM"].includes(p.service) ? "Y" : "N",
       OrderMongoId: p.OrderMongoId
         ? {
           _id: p.OrderMongoId._id,
