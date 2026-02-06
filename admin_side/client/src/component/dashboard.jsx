@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import logimg from "../assets/logo_image.png";
 import { RiNotification3Line } from "react-icons/ri";
+import { MdEngineering } from "react-icons/md";
 import {
   RiMenu4Line,
   RiCloseLine,
@@ -30,6 +31,7 @@ import { LogOut, Settings, User } from "lucide-react";
 import apiClient from "../api/axiosClient.js";
 import { setUser } from "../redux/slices/authSlice.js";
 import InputForm from "./add.Project";
+import { FaHardHat, FaTools } from "react-icons/fa";
 
 const AdminDashboard = () => {
 
@@ -277,10 +279,19 @@ const AdminDashboard = () => {
 
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => setOpen(true)}
+
               className="text-gray-600 relative cursor-pointer"
             >
               <RiNotification3Line size={20} />
+              {/* <span className="absolute -top-1 -right-1 bg-red-500 text-white! rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                {overvew?.todayNotice ?? 0}
+              </span> */}
+            </button>
+            <button
+              onClick={() => setOpen(true)}
+              className="text-gray-600 relative cursor-pointer"
+            >
+              <MdEngineering size={20} />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white! rounded-full w-4 h-4 flex items-center justify-center text-xs">
                 {overvew?.todayNotice ?? 0}
               </span>

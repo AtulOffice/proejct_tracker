@@ -108,28 +108,27 @@ const NotificationForm = ({ setOpen, formRef }) => {
 
         <div className="relative w-full overflow-x-auto rounded-2xl shadow-xl border border-indigo-400 bg-linear-to-b from-white/80 via-blue-50 to-blue-100">
           <div ref={printRef}>
-            <table className="w-full table-fixed text-sm sm:text-base">
+            <table className="w-full table-fixed text-xs sm:text-sm font-mono">
               <thead>
                 <tr className="bg-linear-to-r from-blue-800 via-indigo-700 to-blue-600 text-white shadow-lg text-xs sm:text-sm">
-                  <th className="px-4 sm:px-6 py-3 text-left font-bold tracking-wide uppercase">
+                  <th className="px-4 sm:px-6 py-1.5 text-left font-bold tracking-wide uppercase">
                     Engineer
                   </th>
-                  <th className="px-4 sm:px-6 py-3 text-left font-bold tracking-wide uppercase">
+                  <th className="px-4 sm:px-6 py-1.5 text-left font-bold tracking-wide uppercase">
                     Job No.
                   </th>
-                  <th className="px-4 sm:px-6 py-3 text-left font-bold tracking-wide uppercase">
+                  <th className="px-4 sm:px-6 py-1.5 text-left font-bold tracking-wide uppercase">
                     Project
                   </th>
-                  <th className="px-4 sm:px-6 py-3 text-left font-bold tracking-wide uppercase">
-                    From{" "}
-                    <FaCalendar className="inline-block text-yellow-300 ml-1 sm:ml-2" />
+                  <th className="px-4 sm:px-6 py-1.5 text-left font-bold tracking-wide uppercase">
+                    From <FaCalendar className="inline-block text-yellow-300 ml-1 sm:ml-2" />
                   </th>
-                  <th className="px-4 sm:px-6 py-3 text-left font-bold tracking-wide uppercase">
-                    To{" "}
-                    <FaCalendar className="inline-block text-green-300 ml-1 sm:ml-2" />
+                  <th className="px-4 sm:px-6 py-1.5 text-left font-bold tracking-wide uppercase">
+                    To <FaCalendar className="inline-block text-green-300 ml-1 sm:ml-2" />
                   </th>
                 </tr>
               </thead>
+
               <tbody>
                 {notifications.map((note, i) => (
                   <tr
@@ -139,43 +138,39 @@ const NotificationForm = ({ setOpen, formRef }) => {
                       : "bg-linear-to-r from-white via-blue-100 to-white"
                       }`}
                   >
-                    <td className="px-4 sm:px-6 py-3 text-indigo-900 font-medium truncate">
+                    <td className="px-4 sm:px-6 py-1.5 text-indigo-900 font-medium truncate">
                       {note?.name}
                     </td>
-                    <td className="px-4 sm:px-6 py-3 text-blue-800 font-semibold truncate">
-                      {note?.assignments &&
-                        note?.assignments[note?.assignments.length - 1]
-                          ?.jobNumber}
+
+                    <td className="px-4 sm:px-6 py-1.5 text-blue-800 font-semibold truncate">
+                      {note?.assignments?.at(-1)?.jobNumber}
                     </td>
+
                     <td
-                      className={`px-4 sm:px-6 py-3 font-bold truncate ${note.priority === "High"
+                      className={`px-4 sm:px-6 py-1.5 font-bold truncate ${note.priority === "High"
                         ? "text-red-600"
                         : note.priority === "Medium"
                           ? "text-orange-500"
                           : "text-green-600"
                         }`}
                     >
-                      {note?.assignments &&
-                        note?.assignments[note?.assignments.length - 1]
-                          ?.projectName}
-                    </td>
-                    <td className="px-4 sm:px-6 py-3 text-gray-700 text-sm wrap-break-words">
-                      {note?.assignments?.length > 0 &&
-                        toLocaltimeString(
-                          new Date(note.assignments.at(-1)?.assignedAt)
-                        )}
+                      {note?.assignments?.at(-1)?.projectName}
                     </td>
 
-                    <td className="px-4 sm:px-6 py-3 text-gray-700 text-sm wrap-break-words">
+                    <td className="px-4 sm:px-6 py-1.5 text-gray-700 text-xs sm:text-sm break-words">
                       {note?.assignments?.length > 0 &&
-                        toLocaltimeString(
-                          new Date(note.assignments.at(-1)?.endTime)
-                        )}
+                        toLocaltimeString(new Date(note.assignments.at(-1)?.assignedAt))}
+                    </td>
+
+                    <td className="px-4 sm:px-6 py-1.5 text-gray-700 text-xs sm:text-sm break-words">
+                      {note?.assignments?.length > 0 &&
+                        toLocaltimeString(new Date(note.assignments.at(-1)?.endTime))}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
           </div>
 
           {/* Footer */}
