@@ -139,23 +139,29 @@ export const ProjectTab = [
 ];
 export const ProjectTabDev = [
     {
-        head: "Project",
-        val: "projectName",
-    },
-    {
         head: "JOB ID",
         val: "jobNumber",
     },
     {
-        head: "Status",
-        val: "status",
+        head: "Client",
+        val: "client",
     },
+    {
+        head: "EndUser",
+        val: "endUser",
+    },
+    {
+        head: "BookingDate",
+        val: "bookingDate",
+    },
+    { head: "LOGIC/SCADA", val: "Development" },
+    { head: "COMMISSIONING", val: "COMMISSIONING" },
     {
         head: "Delivery",
         val: "deleveryDate",
     },
     { head: "Visit", val: "visitDate" },
-    { head: "LOGIC/SCADA", val: "Development" },
+
 ];
 export const worktActionTab = [
     {

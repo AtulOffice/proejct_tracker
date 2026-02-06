@@ -1639,6 +1639,7 @@ export const allProjectsFetchDev = async (req, res) => {
       PlanDetails: 1,
       devScope: 1,
       commScope: 1,
+      client: 1,
     };
 
     const projects = await ProjectModel.find(filter, projectSelectFields)
@@ -1658,11 +1659,42 @@ export const allProjectsFetchDev = async (req, res) => {
         updatedAt: -1,
         createdAt: -1,
       });
+
+    const data = projects.map((p) => ({
+      _id: p._id,
+      projectName: p.projectName,
+      jobNumber: p.jobNumber,
+      status: p.status,
+      visitDate: p.visitDate || null,
+      createdAt: p.createdAt,
+      updatedAt: p.updatedAt,
+      Development: p.Development,
+      deleveryDate: p.OrderMongoId?.deleveryDate || null,
+      poReceived: p.OrderMongoId?.poReceived || null,
+      bookingDate: p.OrderMongoId?.bookingDate || null,
+      endUser: p.OrderMongoId?.endUser || null,
+      actualDeleveryDate: p.OrderMongoId?.actualDeleveryDate || null,
+      isDataSavedProject: p.isDataSavedProject,
+      client: p.client,
+      isPlanRecord: p.isPlanRecord,
+      isProjectDocssave: p.isProjectDocssave,
+      COMMISSIONING: ["COMMISSIONING", "DEVCOM"].includes(p.service) ? "Y" : "N",
+      OrderMongoId: p.OrderMongoId
+        ? {
+          _id: p.OrderMongoId._id,
+          deleveryDate: p.OrderMongoId.deleveryDate || null,
+          bookingDate: p.OrderMongoId.bookingDate || null,
+          endUser: p.OrderMongoId.endUser || null,
+          actualDeleveryDate: p.OrderMongoId.actualDeleveryDate || null,
+        }
+        : null,
+    }));
+
     return res.json({
       success: true,
       message: "Data fetched successfully",
       totalItems: projects.length,
-      data: projects,
+      data: data,
     });
   } catch (err) {
     return res.status(500).json({ success: false, error: "Server error" });

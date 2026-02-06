@@ -166,7 +166,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
       <div className="overflow-x-auto hidden md:block">
         <div ref={printRef} className="max-h-[560px] overflow-x-auto hide-scrollbar">
           <table className="min-w-full w-max table-fixed">
-            <thead className="sticky top-0 z-30">
+            <thead className="sticky top-0 z-20">
               <tr className="bg-gray-900">
                 <th className="w-20 px-3 py-1 text-center font-semibold text-xs text-white bg-gray-900 sticky left-0 z-30">
                   SR NO
@@ -241,8 +241,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           : val || "—";
 
                       const hideFull =
-                        col.val === "projectName" || col.val === "endUser";
-
+                        col.val === "projectName" || col.val === "endUser" || col.val === "client";
                       return (
                         <td key={j} className="px-2 py-0.5 text-xs whitespace-nowrap font-mono">
                           <div
@@ -251,7 +250,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                               : ""
                               }`}
                           >
-                            {hideFull ? limitText(display, 8) : display}
+                            {hideFull ? limitText(display, 15) : display}
                           </div>
                         </td>
                       );

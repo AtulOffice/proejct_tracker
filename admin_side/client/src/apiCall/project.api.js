@@ -111,6 +111,7 @@ export const fetfchProejctAll = async ({ search }) => {
 export const fetfchProejctADev = async ({ search }) => {
     try {
         const res = await apiClient.get(`/allProjectsfetchdev?search=${search}`);
+        console.log(res.data.data)
         return res.data.data;
     } catch (err) {
         console.error("Failed to fetch projects:", err);
