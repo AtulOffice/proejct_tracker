@@ -77,8 +77,6 @@ const NotificationForm = ({ setOpen, formRef }) => {
         ref={formRef}
         className="bg-white/60 backdrop-blur-xl rounded-3xl shadow-2xl w-full sm:max-w-3xl md:max-w-5xl max-h-[90vh] overflow-y-auto border border-blue-200 scrollbar-glass p-4 sm:p-8"
       >
-
-
         <div className="flex flex-row justify-center items-center space-x-2 sm:space-x-4 pb-6">
           <button
             type="button"
