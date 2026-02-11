@@ -1373,10 +1373,16 @@ export const UrgentProjectAction = async (req, res) => {
     });
     pipeline.push({
       $addFields: {
+        isCancelled: { $ifNull: ["$OrderMongoId.isCancelled", false] }
+      }
+    });
+    pipeline.push({
+      $addFields: {
         deliveryDateObj: "$OrderMongoId.actualDeleveryDate",
         visitDateObj: "$visitDate",
       },
     });
+
 
     pipeline.push({
       $addFields: {
@@ -1430,6 +1436,7 @@ export const UrgentProjectAction = async (req, res) => {
         updatedAt: 1,
         deleveryDate: "$OrderMongoId.deleveryDate",
         service: 1,
+        isCancelled: 1,
         OrderMongoId: {
           _id: "$OrderMongoId._id",
         },
@@ -1437,6 +1444,7 @@ export const UrgentProjectAction = async (req, res) => {
     });
 
     const data = await ProjectModel.aggregate(pipeline);
+
 
     return res.json({
       success: true,
@@ -1562,7 +1570,7 @@ export const allProjectsFetch = async (req, res) => {
     })
       .populate({
         path: "OrderMongoId",
-        select: "deleveryDate bookingDate endUser actualDeleveryDate",
+        select: "deleveryDate bookingDate endUser actualDeleveryDate isCancelled",
       })
       .sort({
         updatedAt: -1,
@@ -1586,6 +1594,7 @@ export const allProjectsFetch = async (req, res) => {
       isDataSavedProject: p.isDataSavedProject,
       isProjectDocssave: p.isProjectDocssave,
       COMMISSIONING: ["COMMISSIONING", "DEVCOM"].includes(p.service) ? "Y" : "N",
+      isCancelled: p?.OrderMongoId?.isCancelled,
       OrderMongoId: p.OrderMongoId
         ? {
           _id: p.OrderMongoId._id,
@@ -1641,6 +1650,7 @@ export const allProjectsFetchDev = async (req, res) => {
       client: 1,
       isDataSavedProject: 1,
       isProjectDocssave: 1,
+      isCancelled: 1
     };
 
     const projects = await ProjectModel.find(filter, projectSelectFields)
@@ -1681,6 +1691,7 @@ export const allProjectsFetchDev = async (req, res) => {
       PlanDetails: p.PlanDetails,
       isProjectDocssave: p.isProjectDocssave,
       COMMISSIONING: ["COMMISSIONING", "DEVCOM"].includes(p.service) ? "Y" : "N",
+      isCancelled: p?.OrderMongoId?.isCancelled,
       OrderMongoId: p.OrderMongoId
         ? {
           _id: p.OrderMongoId._id,
