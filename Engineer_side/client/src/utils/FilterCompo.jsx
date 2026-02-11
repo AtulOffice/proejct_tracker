@@ -114,7 +114,7 @@ const FilterCompo = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 z-10 w-44 mt-2 bg-white rounded-lg shadow-xl border border-gray-200"
+                  className="absolute right-0 z-40 w-44 mt-2 bg-white rounded-lg shadow-xl border border-gray-200"
                 >
                   <ul className="p-2 space-y-1 text-sm text-gray-700">
                     {["all", "today", "thisWeek", "thisMonth", "thisYear"].map((filter) => (
