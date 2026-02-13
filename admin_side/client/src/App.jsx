@@ -22,6 +22,14 @@ const ProtectedRoute = ({ children }) => {
   return user?.username ? children : <Navigate to="/login" />;
 };
 
+
+const PublicRoute = ({ children }) => {
+  const { user, userLoading } = useSelector((state) => state.auth);
+
+  if (userLoading) return null;
+
+  return user?.username ? <Navigate to="/" /> : children;
+};
 const AppRoutes = () => {
   const dispatch = useDispatch();
 
@@ -72,7 +80,7 @@ const AppRoutes = () => {
 
       <Route path="/newPage" element={<OrderForm />} />
 
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
 
       <Route
         path="/update/:id"
