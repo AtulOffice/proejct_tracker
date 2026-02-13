@@ -298,7 +298,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                               className={`p-0.5 rounded-md transition-all text-white
             ${isCancelled
                                   ? disabledBtn
-                                  : "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:scale-105"
+                                  : row?.EngineerDetails.length > 0 ? "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:scale-105" : "bg-linear-to-tr from-rose-500 via-pink-400 to-red-400 text-white hover:scale-105"
                                 }`}
                             >
                               <MdEngineering size={14} />
