@@ -77,159 +77,155 @@ const OrderTableAll = ({ data }) => {
           onClose={() => setSelectedProjectForPopup(null)}
         />
       )}
-      <div className="overflow-x-auto hidden md:block">
-        <div className="max-h-[560px] overflow-y-auto">
-          <div className="overflow-x-auto hide-scrollbar">
-            <table className="w-full table-fixed">
-              <thead className="sticky top-0 z-20">
-                <tr className="bg-gray-900">
-                  <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white bg-gray-900 sticky left-0 z-30">
-                    Sr No
-                  </th>
-                  <th className="w-25 px-3 py-0.5 text-left font-semibold text-sm !text-white bg-gray-900 sticky left-16 z-30">
-                    Job ID
-                  </th>
+      <div className="hidden md:block">
+        <div className="max-h-[760px] overflow-auto hide-scrollbar">
+          <table className="w-full table-fixed border-collapse">
+            <thead className="sticky top-0 z-20">
+              <tr className="bg-gray-900">
+                <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white bg-gray-900 sticky left-0 z-30">
+                  Sr No
+                </th>
+                <th className="w-25 px-3 py-0.5 text-left font-semibold text-sm !text-white bg-gray-900 sticky left-16 z-30">
+                  Job ID
+                </th>
+                <th className="w-32 px-3 py-0.5 text-left font-semibold text-sm !text-white">Client</th>
+                <th className="w-32 px-3 py-0.5 text-left font-semibold text-sm !text-white">Booking Date</th>
+                <th className="w-32 px-2 py-0.5 text-left font-semibold text-sm !text-white">Target Del Date</th>
+                <th className="w-28 px-3 py-0.5 text-left font-semibold text-sm !text-white">End User</th>
+                <th className="w-28 px-3 py-0.5 text-left font-semibold text-sm !text-white">Acc. M.</th>
+                <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Po Rec.</th>
+                <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Amnd.</th>
+                <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Dis. Sts</th>
+                <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Svc Sts</th>
+                <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Bill Sts</th>
 
-                  <th className="w-32 px-3 py-0.5 text-left font-semibold text-sm !text-white">Client</th>
-                  <th className="w-32 px-3 py-0.5 text-left font-semibold text-sm !text-white">Booking Date</th>
-                  <th className="w-32 px-2 py-0.5 text-left font-semibold text-sm !text-white">Target Del Date</th>
-                  <th className="w-28 px-3 py-0.5 text-left font-semibold text-sm !text-white">End User</th>
-                  <th className="w-28 px-3 py-0.5 text-left font-semibold text-sm !text-white">Acc. M.</th>
-                  <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Po Rec.</th>
-                  <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Amnd.</th>
-                  <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Dis. Sts</th>
-                  <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Svc Sts</th>
-                  <th className="w-16 px-2 py-0.5 text-center font-semibold text-sm !text-white">Bill Sts</th>
+                <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[126px] z-30">
+                  View
+                </th>
+                <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[84px] z-30">
+                  Edit
+                </th>
+                <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[42px] z-30">
+                  Cancel
+                </th>
+                <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-0 z-30">
+                  Approve
+                </th>
 
-                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[126px] z-30">
-                    View
-                  </th>
-                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[84px] z-30">
-                    Edit
-                  </th>
-                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-[42px] z-30">
-                    Cancel
-                  </th>
-                  <th className="w-[48px] px-0.5 py-0.5 text-center font-semibold text-xs !text-white bg-gray-900 sticky right-0 z-30">
-                    Approve
-                  </th>
+              </tr>
 
-                </tr>
+            </thead>
 
-              </thead>
+            <tbody className="divide-y divide-gray-100 bg-white">
+              {data.map((order, indx) => {
+                const isCancelled = order?.isCancelled === true;
+                const disabledBtn = "text-gray-400 cursor-not-allowed";
 
-              <tbody className="divide-y divide-gray-100 bg-white">
-                {data.map((order, indx) => {
-                  const isCancelled = order?.isCancelled === true;
-                  const disabledBtn = "text-gray-400 cursor-not-allowed";
-
-                  return (
-                    <tr
-                      key={indx}
-                      className={`transition-colors duration-150 font-mono
+                return (
+                  <tr
+                    key={indx}
+                    className={`transition-colors duration-150 font-mono
               ${isCancelled
-                          ? "bg-red-100 text-red-700"
-                          : indx % 2 === 1
-                            ? "bg-gray-200 hover:bg-slate-100"
-                            : "bg-white hover:bg-slate-50"
-                        }`}
-                    >
-                      {/* LEFT STICKY */}
-                      <td className="px-4 py-0.5 text-center text-sm font-semibold sticky left-0 bg-inherit z-20">
-                        {indx + 1}
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap sticky left-16 bg-inherit z-20">
-                        {order.jobNumber}
-                      </td>
+                        ? "bg-red-100 text-red-700"
+                        : indx % 2 === 1
+                          ? "bg-gray-200 hover:bg-slate-100"
+                          : "bg-white hover:bg-slate-50"
+                      }`}
+                  >
+                    {/* LEFT STICKY */}
+                    <td className="px-4 py-0.5 text-center text-sm font-semibold sticky left-0 bg-inherit z-10">
+                      {indx + 1}
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap sticky left-16 bg-inherit z-10">
+                      {order.jobNumber}
+                    </td>
 
-                      {/* SCROLLABLE MIDDLE */}
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        <div className="truncate text-sm" title={order.client}>
-                          {limitText(order.client, 10)}
-                        </div>
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        {formatDateDDMMYY(order?.bookingDate)}
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        {formatDateDDMMYY(order?.actualDeleveryDate)}
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        <div className="truncate text-sm" title={order.site}>
-                          {limitText(order.endUser, 10)}
-                        </div>
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        {firstNameWithInitial(order?.concerningSalesManager?.name)}
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        {formatYesNo(order?.poReceived)}
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        {formatYesNo(order?.amndReqrd)}
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        -
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        -
-                      </td>
-                      <td className="px-2 py-0.5 text-base whitespace-nowrap">
-                        -
-                      </td>
+                    {/* SCROLLABLE MIDDLE */}
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      <div className="truncate text-sm" title={order.client}>
+                        {limitText(order.client, 10)}
+                      </div>
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      {formatDateDDMMYY(order?.bookingDate)}
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      {formatDateDDMMYY(order?.actualDeleveryDate)}
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      <div className="truncate text-sm" title={order.site}>
+                        {limitText(order.endUser, 10)}
+                      </div>
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      {firstNameWithInitial(order?.concerningSalesManager?.name)}
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      {formatYesNo(order?.poReceived)}
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      {formatYesNo(order?.amndReqrd)}
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      -
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      -
+                    </td>
+                    <td className="px-2 py-0.5 text-base whitespace-nowrap">
+                      -
+                    </td>
 
-                      {/* RIGHT STICKY ACTIONS */}
-                      <td className="px-1 py-0.5 text-center sticky right-[144px] bg-inherit z-20">
-                        <button
-                          onClick={() => hadleOpenPopup(order._id)}
-                          className="p-0.5 rounded transition-all bg-transparent text-white hover:bg-gray-200"
-                        >
-                          <FaEye size={14} />
-                        </button>
-                      </td>
+                    {/* RIGHT STICKY ACTIONS */}
+                    <td className="px-1 py-0.5 text-center sticky right-[144px] bg-inherit z-10">
+                      <button
+                        onClick={() => hadleOpenPopup(order._id)}
+                        className="p-0.5 rounded transition-all bg-transparent text-white hover:bg-gray-200"
+                      >
+                        <FaEye size={14} />
+                      </button>
+                    </td>
 
-                      <td className="px-1 py-0.5 text-center sticky right-[84px] bg-inherit z-20">
-                        <button
-                          disabled={isCancelled}
-                          onClick={() => !isCancelled && handleUpdate(order._id)}
-                          className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-emerald-600 hover:bg-gray-200"
-                            }`}
-                        >
-                          <MdEdit size={14} />
-                        </button>
-                      </td>
+                    <td className="px-1 py-0.5 text-center sticky right-[84px] bg-inherit z-10">
+                      <button
+                        disabled={isCancelled}
+                        onClick={() => !isCancelled && handleUpdate(order._id)}
+                        className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-emerald-600 hover:bg-gray-200"
+                          }`}
+                      >
+                        <MdEdit size={14} />
+                      </button>
+                    </td>
 
-                      <td className="px-1 py-0.5 text-center sticky right-[42px] bg-inherit z-20">
-                        <button
-                          disabled={isCancelled}
-                          onClick={() => {
-                            if (isCancelled) return;
-                            seId(order?._id);
-                            setCancelflag(true);
-                          }}
-                          className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-red-600 hover:bg-gray-200"
-                            }`}
-                        >
-                          <MdCancel size={14} />
-                        </button>
-                      </td>
+                    <td className="px-1 py-0.5 text-center sticky right-[42px] bg-inherit z-10">
+                      <button
+                        disabled={isCancelled}
+                        onClick={() => {
+                          if (isCancelled) return;
+                          seId(order?._id);
+                          setCancelflag(true);
+                        }}
+                        className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-red-600 hover:bg-gray-200"
+                          }`}
+                      >
+                        <MdCancel size={14} />
+                      </button>
+                    </td>
 
-                      <td className="px-1 py-0.5 text-center sticky right-0 bg-inherit z-20">
-                        <button
-                          className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-blue-600 hover:bg-gray-200"
-                            }`}
-                        >
-                          <FaCheckCircle size={14} />
-                        </button>
-                      </td>
+                    <td className="px-1 py-0.5 text-center sticky right-0 bg-inherit z-10">
+                      <button
+                        className={`p-0.5 rounded transition-all ${isCancelled ? disabledBtn : "text-blue-600 hover:bg-gray-200"
+                          }`}
+                      >
+                        <FaCheckCircle size={14} />
+                      </button>
+                    </td>
 
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
 

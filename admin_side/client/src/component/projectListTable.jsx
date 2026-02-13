@@ -164,16 +164,16 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
           />
         ))}
       <div className="overflow-x-auto hidden md:block">
-        <div ref={printRef} className="max-h-[560px] overflow-x-auto hide-scrollbar">
+        <div ref={printRef} className="max-h-[760px] overflow-x-auto hide-scrollbar">
           <table className="min-w-full w-max table-fixed">
             <thead className="sticky top-0 z-20">
               <tr className="bg-gray-900">
-                <th className="w-20 px-3 py-1 text-center font-semibold text-xs text-white bg-gray-900 sticky left-0 z-30">
+                <th className="w-20 px-3 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky left-0 z-20">
                   SR NO
                 </th>
 
                 {tableVal.length > 0 && (
-                  <th className="px-3 py-1 text-left font-semibold text-xs text-white! bg-gray-900 sticky left-20 z-30">
+                  <th className="px-3 py-1 text-left font-semibold text-xs text-white! bg-gray-900 sticky left-20 z-20">
                     {tableVal[0].head}
                   </th>
                 )}
@@ -189,13 +189,13 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
                 {isEdit && (
                   <>
-                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-[96px] z-30">
+                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-[96px] z-20">
                       View
                     </th>
-                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-[48px] z-30">
+                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-[48px] z-20">
                       {onEditFun === "DEVLOPMENT" ? "PLAN" : "Edit"}
                     </th>
-                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-0 z-30">
+                    <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-0 z-20">
                       {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
                     </th>
 
@@ -222,12 +222,12 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           : "bg-white hover:bg-slate-50"
                       }`}
                   >
-                    <td className="px-3 py-0.5 text-center text-xs font-semibold sticky left-0 bg-inherit z-20 font-mono">
+                    <td className="px-3 py-0.5 text-center text-xs font-semibold sticky left-0 bg-inherit z-10 font-mono">
                       {i + 1}
                     </td>
 
                     {tableVal.length > 0 && (
-                      <td className="px-2 py-0.5 text-sm whitespace-nowrap sticky left-20 bg-inherit z-20 font-bold font-mono">
+                      <td className="px-2 py-0.5 text-sm whitespace-nowrap sticky left-20 bg-inherit z-10 font-bold font-mono">
                         {row[tableVal[0].val] || "—"}
                       </td>
                     )}
@@ -260,7 +260,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
                     {isEdit && (
                       <>
-                        <td className="w-12 px-1 py-0.5 text-center sticky right-[96px] bg-inherit z-20">
+                        <td className="w-12 px-1 py-0.5 text-center sticky right-[96px] bg-inherit z-10">
                           <button
                             onClick={() => hadleOpenPopup(row)}
                             className="p-0.5 rounded-md transition-all bg-transparent text-white hover:bg-gray-200"
@@ -269,7 +269,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           </button>
                         </td>
 
-                        <td className="w-12 px-1 py-0.5 text-center sticky right-[48px] bg-inherit z-20">
+                        <td className="w-12 px-1 py-0.5 text-center sticky right-[48px] bg-inherit z-10">
                           {onEditFun === "DEVLOPMENT" ? (
                             <button
                               disabled={isCancelled}
@@ -301,7 +301,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           )}
                         </td>
 
-                        <td className="w-12 px-1 py-0.5 text-center sticky right-0 bg-inherit z-20">
+                        <td className="w-12 px-1 py-0.5 text-center sticky right-0 bg-inherit z-10">
                           {onEditFun === "DEVLOPMENT" ? (
                             <button
                               disabled={isCancelled}

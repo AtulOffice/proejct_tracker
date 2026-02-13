@@ -2,11 +2,13 @@ import mongoose from "mongoose";
 import Order from "../models/orderSheet.model.js";
 import ProjectModel from "../models/Project.model.js";
 import { docsVal } from "../utils/docsDummy.js";
+import { sendMail } from "../utils/mailer.js";
+import { newOrderCreatedHtml } from "../utils/order.html.js";
+import MarketingMemberRecord from "../models/marketing.team.model.js";
 
 export const createOrder = async (req, res) => {
   try {
     const data = req.body;
-
     if (!data.entityType || !data.soType || !data.jobNumber || !data.client) {
       return res.status(400).json({
         success: false,
@@ -15,6 +17,13 @@ export const createOrder = async (req, res) => {
       });
     }
 
+    const marketingData = await MarketingMemberRecord.findById(data?.concerningSalesManager);
+    await sendMail({
+      to: marketingData?.email,
+      //   to: req?.user?.email,
+      subject: "NEW ORDER",
+      html: newOrderCreatedHtml({ ...data, createdBy: req?.user?.email }),
+    });
     const totalPercent =
       Number(data.paymentPercent1 || 0) +
       Number(data.paymentPercent2 || 0 + Number(data.retentionPercent || 0));
@@ -218,7 +227,6 @@ export const getAllOrdersnew = async (req, res) => {
 export const updateOrder = async (req, res) => {
   try {
     const { _id, ...data } = req.body;
-
     if (!_id) {
       return res.status(400).json({
         success: false,

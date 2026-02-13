@@ -80,7 +80,6 @@ export const refreshTokenMiddleware = async (req, res) => {
     delete safeUser.refreshTokens;
 
     const newAccessToken = createAccessToken(safeUser);
-
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",

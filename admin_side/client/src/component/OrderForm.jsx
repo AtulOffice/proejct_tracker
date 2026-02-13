@@ -227,6 +227,12 @@ export default function OrderForm({ setActiveCard }) {
 
     if (isEmpty(formData.mileStone)) newErrors.mileStone = "Milestone is required";
 
+    if (isEmpty(formData.concerningSalesManager)) {
+      newErrors.concerningSalesManager = "concerningSalesManager is required";
+      console.log("concerningSalesManager is required")
+      toast.error("concerningSalesManager is required")
+    }
+
     if (formData.mileStone === "OTHER" && isEmpty(formData.invoicemileStoneOther)) {
       newErrors.invoicemileStoneOther = "Please specify other milestone";
     }
