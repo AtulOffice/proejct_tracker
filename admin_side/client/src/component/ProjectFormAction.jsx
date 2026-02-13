@@ -57,6 +57,7 @@ const EngineerForm = ({ setOpen, formRef, selectedProject }) => {
           <EngineerAssignment
             engineerData={engineerData}
             setEngineerData={setEngineerData}
+            AssingnedEngieer={selectedProject?.EngineerDetails ?? []}
           />
 
           <div className="flex flex-col sm:flex-row justify-end sm:space-x-2 space-y-2 sm:space-y-0 mt-6 sticky bottom-0 bg-white pt-2 sm:pt-0">

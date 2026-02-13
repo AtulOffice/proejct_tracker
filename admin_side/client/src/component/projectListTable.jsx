@@ -35,6 +35,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
 
 
   useEffect(() => {
+
     const handleClickOutside = (event) => {
       if (formRef.current && !formRef.current.contains(event.target)) {
         setOpen(false);
@@ -193,7 +194,13 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                       View
                     </th>
                     <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-[48px] z-20">
-                      {onEditFun === "DEVLOPMENT" ? "PLAN" : "Edit"}
+                      {
+                        onEditFun === "DEVLOPMENT"
+                          ? "PLAN"
+                          : onEditFun === "URGENT"
+                            ? "ENGINEER"
+                            : "Edit"
+                      }
                     </th>
                     <th className="w-12 px-1 py-1 text-center font-semibold text-xs text-white! bg-gray-900 sticky right-0 z-20">
                       {onEditFun === "DEVLOPMENT" ? "Progress" : "Docs"}
@@ -284,6 +291,18 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                             >
                               <LuNotepadText className="w-3.5 h-3.5" />
                             </button>
+                          ) : onEditFun === "URGENT" ? (
+                            <button
+                              disabled={isCancelled}
+                              onClick={isCancelled ? undefined : () => handleEditAction(onEditFun, row)}
+                              className={`p-0.5 rounded-md transition-all text-white
+            ${isCancelled
+                                  ? disabledBtn
+                                  : "bg-linear-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:scale-105"
+                                }`}
+                            >
+                              <MdEngineering size={14} />
+                            </button>
                           ) : (
                             <button
                               disabled={isCancelled}
@@ -317,7 +336,7 @@ const ProjectTableAll = ({ data, tableVal, isEdit, onEditFun, printTitle, editTy
                           ) : (
                             <button
                               disabled={isCancelled}
-                              onClick={isCancelled ? undefined : () => handleDocsOpen(row)}
+                              onClick={(isCancelled || onEditFun === "URGENT") ? undefined : () => handleDocsOpen(row)}
                               className={`p-0.5 rounded-md transition-all text-white
             ${isCancelled
                                   ? disabledBtn

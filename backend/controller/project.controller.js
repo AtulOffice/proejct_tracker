@@ -1397,15 +1397,21 @@ export const UrgentProjectAction = async (req, res) => {
 
     const endDate = new Date(today);
     endDate.setDate(today.getDate() + 180);
+    // pipeline.push({
+    //   $match: {
+    //     status: { $ne: "completed" },
+    //     $or: [
+    //       { EngineerDetails: { $exists: false } },
+    //       { EngineerDetails: { $size: 0 } },
+    //     ],
+    //   },
+    // });
     pipeline.push({
       $match: {
         status: { $ne: "completed" },
-        $or: [
-          { EngineerDetails: { $exists: false } },
-          { EngineerDetails: { $size: 0 } },
-        ],
       },
     });
+
     pipeline.push({
       $match: {
         $or: [
@@ -1437,6 +1443,7 @@ export const UrgentProjectAction = async (req, res) => {
         deleveryDate: "$OrderMongoId.deleveryDate",
         service: 1,
         isCancelled: 1,
+        EngineerDetails: 1,
         OrderMongoId: {
           _id: "$OrderMongoId._id",
         },
