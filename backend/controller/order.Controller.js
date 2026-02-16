@@ -5,6 +5,7 @@ import { docsVal } from "../utils/docsDummy.js";
 import { sendMail } from "../utils/mailer.js";
 import { newOrderCreatedHtml } from "../utils/order.html.js";
 import MarketingMemberRecord from "../models/marketing.team.model.js";
+import { sendNotification } from "../utils/notification.js";
 
 export const createOrder = async (req, res) => {
   try {
@@ -272,6 +273,24 @@ export const updateOrder = async (req, res) => {
         message: "Order not found",
       });
     }
+
+
+    // io.emit("orderUpdated", {
+    //   message: "Order Updated Successfully",
+    //   orderId: order._id,
+    //   jobNumber: order.jobNumber,
+    //   status: order.status,
+    // });
+
+
+    await sendNotification({
+      type: "order_update",
+      title: "Order Updated",
+      message: `Order ${order.jobNumber} was updated`,
+      targetRole: "admin"
+    });
+
+
 
     return res.status(200).json({
       success: true,

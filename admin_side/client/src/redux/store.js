@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import uiReducer from "./slices/uiSlice";
+import notificationReducer from "./slices/notificationSlice"
 import { createTransform } from "redux-persist";
 
 import {
@@ -19,6 +20,7 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
     auth: authReducer,
     ui: uiReducer,
+    notifications: notificationReducer,
 });
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import LoginPage from "./component/LoginPage.jsx";
@@ -15,9 +15,16 @@ import { UserCall } from "./apiCall/authApicall";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, setUserLoading } from "./redux/slices/authSlice";
 import ProjectDetailsForm from "./component/testCompo.jsx";
+import socket from "./socket/socket.js";
+import { addNotification } from "./redux/slices/notificationSlice.js";
+import toast from "react-hot-toast";
+import { useRef } from "react";
+import { fetchNotifications } from "./apiCall/notefication.Api.js";
+import notificationMp3 from "../sounds/dragon.mp3";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useSelector((state) => state.auth);
+
   if (userLoading) return null;
   return user?.username ? children : <Navigate to="/login" />;
 };
@@ -30,6 +37,8 @@ const PublicRoute = ({ children }) => {
 
   return user?.username ? <Navigate to="/" /> : children;
 };
+
+
 const AppRoutes = () => {
   const dispatch = useDispatch();
 
@@ -133,6 +142,72 @@ const AppRoutes = () => {
 };
 
 const App = () => {
+  const { user, userLoading } = useSelector((state) => state.auth);
+  const notificationSound = new Audio(notificationMp3);
+  const notificationSoundRef = useRef(null);
+  const hasJoined = useRef(false);
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    notificationSoundRef.current = new Audio(notificationMp3);
+  }, []);
+
+
+  // useEffect(() => {
+  //   socket.on("orderUpdated", (data) => {
+  //     console.log("Order updated event:", data);
+  //     console.log(data)
+  //     toast.success(
+  //       `🔔 ${data.message} - ${data.jobNumber}`
+  //     );
+  //   });
+  //   return () => {
+  //     socket.off("orderUpdated");
+  //   };
+  // }, []);
+
+
+  useEffect(() => {
+    if (!user?._id || hasJoined.current) return;
+
+    socket.emit("join_user", {
+      userId: user._id,
+      role: user.role
+    });
+
+    hasJoined.current = true;
+
+  }, [user?._id]);
+
+
+  useEffect(() => {
+
+    const handleNotification = (data) => {
+      dispatch(addNotification(data));
+      if (notificationSoundRef.current) {
+        notificationSoundRef.current.currentTime = 0;
+        notificationSoundRef.current.play().catch(() => { });
+      }
+    };
+
+    socket.on("notification", handleNotification);
+
+    return () => {
+      socket.off("notification", handleNotification);
+    };
+
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user?._id) {
+      dispatch(fetchNotifications());
+    }
+  }, [user?._id, dispatch]);
+
+
+
+
   return (
     <BrowserRouter>
       <AppRoutes />

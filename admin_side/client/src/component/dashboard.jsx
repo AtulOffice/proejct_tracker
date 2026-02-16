@@ -32,6 +32,8 @@ import apiClient from "../api/axiosClient.js";
 import { setUser } from "../redux/slices/authSlice.js";
 import InputForm from "./add.Project";
 import { FaHardHat, FaTools } from "react-icons/fa";
+import socket from "../socket/socket.js";
+import NotificationBell from "./notificationBell.jsx";
 
 const AdminDashboard = () => {
 
@@ -41,8 +43,10 @@ const AdminDashboard = () => {
 
   const { toggle, toggleDev } = useSelector((state) => state.ui);
   const { user, userLoading } = useSelector((state) => state.auth);
+  const { notificationlist } = useSelector((state) => state.notifications)
 
   const [overvew, setOverview] = useState();
+  const [opeNotification, setOpenNotification] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
@@ -182,6 +186,8 @@ const AdminDashboard = () => {
 
   const sidebarRef = useRef();
 
+
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -245,6 +251,24 @@ const AdminDashboard = () => {
     switchNow();
   }, [selectedDesignation]);
 
+  // useEffect(() => {
+  //   socket.on("notification", (data) => {
+  //     console.log("Notification received:");
+  //     setNotifications((prev) => [data, ...prev])
+  //     console.log(data)
+
+  //     // handleNotification(data);
+  //   });
+
+  //   return () => {
+  //     socket.off("notification");
+  //   };
+
+  // }, []);
+
+  // console.log(notifications)
+
+
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-blue-100 to-indigo-100">
       {open && <NotificationForm formRef={formRef} setOpen={setOpen} />}
@@ -278,14 +302,13 @@ const AdminDashboard = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <button
-
+            <button onClick={() => setOpenNotification((prev) => !prev)}
               className="text-gray-600 relative cursor-pointer"
             >
               <RiNotification3Line size={20} />
-              {/* <span className="absolute -top-1 -right-1 bg-red-500 text-white! rounded-full w-4 h-4 flex items-center justify-center text-xs">
-                {overvew?.todayNotice ?? 0}
-              </span> */}
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white! rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                {notificationlist?.length ?? 0}
+              </span>
             </button>
             <button
               onClick={() => setOpen(true)}
@@ -304,6 +327,8 @@ const AdminDashboard = () => {
                   {getInitials(user?.name || user?.username || "User")}
                 </div>
               </button>
+
+              {opeNotification && <NotificationBell setOpenNotification={setOpenNotification} notificationlist={notificationlist} />}
 
               {isOpen && (
                 <div className="absolute top-full right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in slide-in-from-top-2 duration-200 z-50">
@@ -369,20 +394,20 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     {/*
-      <div className="py-2">
-        <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
-          <User className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
-          <span className="font-medium text-gray-900">Profile</span>
-        </button>
-      </div>
+                  <div className="py-2">
+                    <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
+                      <User className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
+                      <span className="font-medium text-gray-900">Profile</span>
+                    </button>
+                  </div>
 
-      <div className="py-2">
-        <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
-          <Settings className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
-          <span className="font-medium text-gray-900">Settings</span>
-        </button>
-      </div>
-      */}
+                  <div className="py-2">
+                    <button className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 transition-all duration-150 text-left group">
+                      <Settings className="h-4.5 w-4.5 text-gray-500 group-hover:text-indigo-600 flex-shrink-0" />
+                      <span className="font-medium text-gray-900">Settings</span>
+                    </button>
+                  </div>
+                  */}
                     <div className="py-2">
                       <button
                         onClick={handleLogOut}

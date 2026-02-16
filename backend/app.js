@@ -20,13 +20,18 @@ import { StartRouter } from "./routes/startCheckList.routes.js";
 import { EndRouter } from "./routes/endCheckList.routes.js";
 import { MarketRouter } from "./routes/marketing.route.js";
 import { connectRedis } from "./utils/redis.js";
+import http from "http"
+import { initSocket } from "./socket/socket.js";
+import { NoteficationRouter } from "./routes/notification.route.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
 const app = express();
+const server = http.createServer(app);
 app.use(express.json({ limit: "110mb" }));
 
 // engineerStatus();
+
 
 const corsOptions = {
   origin: [
@@ -41,6 +46,14 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// export const io = new Server(server, {
+//   cors: corsOptions,
+// });
+
+
+initSocket(server, corsOptions);
+
 const limiter = rateLimit({
   windowMs: 2 * 60 * 1000,
   max: 240,
@@ -49,6 +62,21 @@ const limiter = rateLimit({
     message: "You hit too many requests. Please wait 2 minutes.",
   },
 });
+
+
+
+// io.on("connection", (socket) => {
+//   console.log("User connected:", socket.id);
+
+//   socket.onAny((event, ...args) => {
+//     console.log("Received event:", event);
+//   });
+
+//   socket.on("disconnect", () => {
+//     console.log("User disconnected:", socket.id);
+//   });
+// });
+
 // app.use(limiter);
 app.use(express.json());
 app.use(cookieParser());
@@ -72,6 +100,7 @@ app.use("/api/v1/worksts", WorkstsRouter);
 app.use("/api/v1/startCheck", StartRouter);
 app.use("/api/v1/endCheck", EndRouter);
 app.use("/api/v1/market", MarketRouter);
+app.use("/api/v1/notifications", NoteficationRouter);
 
 app.use((req, res) => {
   res.status(404).json({
@@ -80,7 +109,7 @@ app.use((req, res) => {
   });
 });
 
-app.listen(port, async () => {
+server.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
   await connectRedis();
   console.log(`server is linsten on port ${port}`);
