@@ -11,7 +11,11 @@ const notificationSchema = new mongoose.Schema({
             userId: mongoose.Schema.Types.ObjectId,
             readAt: Date
         }
-    ]
+    ],
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
 }, { timestamps: true });
 
 export default mongoose.model("Notification", notificationSchema);

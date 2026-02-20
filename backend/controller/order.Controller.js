@@ -290,8 +290,6 @@ export const updateOrder = async (req, res) => {
       targetRole: "admin"
     });
 
-
-
     return res.status(200).json({
       success: true,
       message: "Order updated successfully",
