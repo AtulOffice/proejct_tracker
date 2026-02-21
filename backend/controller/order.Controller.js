@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Order from "../models/orderSheet.model.js";
 import ProjectModel from "../models/Project.model.js";
-import { docsVal } from "../utils/docsDummy.js";
+import { docsVal, docsValForR } from "../utils/docsDummy.js";
 import { sendMail } from "../utils/mailer.js";
 import { newOrderCreatedHtml } from "../utils/order.html.js";
 import MarketingMemberRecord from "../models/marketing.team.model.js";
@@ -91,7 +91,9 @@ export const createOrder = async (req, res) => {
       swname: order.name || "",
       swtechnicalEmail: order.technicalEmail || "",
       swphone: order.phone || "",
-      ...docsVal,
+      ...(order.jobNumber[1]?.toLowerCase() === "r"
+        ? docsValForR
+        : docsVal),
     })
 
     // by pass new Order Notification middle tab
