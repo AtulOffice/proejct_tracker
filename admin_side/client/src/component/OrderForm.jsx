@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AlertCircle, Save, Loader } from "lucide-react";
 import toast from "react-hot-toast";
+
 import { fields } from "../utils/FieldConstant";
 // import { toWords } from "number-to-words";
 import { numberToIndianWords } from "../utils/numberToword";
@@ -54,6 +55,37 @@ export default function OrderForm({ setActiveCard }) {
       }
     }
   }, [debounceJobnumber]);
+
+  useEffect(() => {
+    let isActive = true;
+    const checkOrderExist = async () => {
+      if (!debounceJobnumber || debounceJobnumber.length <= 2) return;
+      try {
+        const res = await apiClient.get(
+          `/order/exist/${debounceJobnumber}`
+        );
+        const data = res.data;
+        if (!isActive) return;
+
+        if (data?.exists) {
+          toast(`${debounceJobnumber} already exists`, {
+            icon: '👏',
+          });
+          setFormData(prev => ({
+            ...prev,
+            jobNumber: ""
+          }));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    checkOrderExist();
+    return () => {
+      isActive = false;
+    };
+  }, [debounceJobnumber]);
+
 
   useEffect(() => {
     const msgs = {};

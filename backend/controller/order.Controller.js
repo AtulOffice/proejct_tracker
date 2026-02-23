@@ -7,6 +7,38 @@ import { newOrderCreatedHtml } from "../utils/order.html.js";
 import MarketingMemberRecord from "../models/marketing.team.model.js";
 import { sendNotification } from "../utils/notification.js";
 
+
+
+export const isOrderExist = async (req, res) => {
+  try {
+    const { jobNumber } = req.params;
+
+    if (!jobNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Job number is required",
+      });
+    }
+
+    const dataExist = await Order.findOne({
+      jobNumber: { $regex: `^${jobNumber}$`, $options: "i" }
+    });
+
+    return res.status(200).json({
+      success: true,
+      exists: !!dataExist,
+      data: dataExist || null,
+    });
+
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
+      success: false,
+      message: e.message || "Server error",
+    });
+  }
+};
+
 export const createOrder = async (req, res) => {
   try {
     const data = req.body;
