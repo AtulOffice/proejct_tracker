@@ -1376,21 +1376,22 @@ export const UrgentProjectAction = async (req, res) => {
         isCancelled: { $ifNull: ["$OrderMongoId.isCancelled", false] }
       }
     });
-    pipeline.push({
-      $addFields: {
-        deliveryDateObj: "$OrderMongoId.actualDeleveryDate",
-        visitDateObj: "$visitDate",
-      },
-    });
+    // pipeline.push({
+    //   $addFields: {
+    //     deliveryDateObj: "$OrderMongoId.actualDeleveryDate",
+    //     visitDateObj: "$visitDate",
+    //   },
+    // });
 
 
-    pipeline.push({
-      $addFields: {
-        compareDate: {
-          $ifNull: ["$visitDateObj", "$deliveryDateObj"],
-        },
-      },
-    });
+    // pipeline.push({
+    //   $addFields: {
+    //     compareDate: {
+    //       $ifNull: ["$visitDateObj", "$deliveryDateObj"],
+    //     },
+    //   },
+    // });
+
     const today = new Date();
     const startDate = new Date(today);
     startDate.setDate(today.getDate() - 30);
@@ -1412,17 +1413,21 @@ export const UrgentProjectAction = async (req, res) => {
       },
     });
 
-    pipeline.push({
-      $match: {
-        $or: [
-          { compareDate: { $gte: startDate, $lte: endDate } },
-          { visitDateObj: { $gte: startDate, $lte: endDate } },
-        ],
-      },
-    });
+    // pipeline.push({
+    //   $match: {
+    //     $or: [
+    //       { compareDate: { $gte: startDate, $lte: endDate } },
+    //       { visitDateObj: { $gte: startDate, $lte: endDate } },
+    //     ],
+    //   },
+    // });
+
+    // pipeline.push({
+    //   $sort: { compareDate: -1, updatedAt: -1, createdAt: -1 },
+    // });
 
     pipeline.push({
-      $sort: { compareDate: -1, updatedAt: -1, createdAt: -1 },
+      $sort: { updatedAt: -1, createdAt: -1 },
     });
 
     pipeline.push({
