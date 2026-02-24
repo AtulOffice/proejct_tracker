@@ -17,7 +17,7 @@ export const menuItems = [
         label: "DASHBOARD",
         icon: RiDashboardLine,
         roles: ["reception", "admin"],
-        designations: ["marketing", "commercial", "coordinator", "development"],
+        designations: ["marketing", "commercial", "coordinator", "development", "commissioning"],
     },
     {
         id: 21,
