@@ -3,7 +3,7 @@ import {
     authenticate,
 } from "../middlware/authaticate.js";
 import { authorizeRole } from "../middlware/authRole.js";
-import { getGlobalNotifications } from "../controller/noteficaiton.controller.js";
+import { getGlobalNotifications, markAllAsRead, markAsRead } from "../controller/noteficaiton.controller.js";
 
 export const NoteficationRouter = express.Router();
 
@@ -13,3 +13,5 @@ NoteficationRouter.get(
     authorizeRole("admin"),
     getGlobalNotifications
 );
+NoteficationRouter.patch("/read/:id", authenticate, markAsRead);
+NoteficationRouter.patch("/read-all", authenticate, markAllAsRead);

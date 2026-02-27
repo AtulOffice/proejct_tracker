@@ -20,7 +20,8 @@ import { addNotification } from "./redux/slices/notificationSlice.js";
 import toast from "react-hot-toast";
 import { useRef } from "react";
 import { fetchNotifications } from "./apiCall/notefication.Api.js";
-import notificationMp3 from "../sounds/dragon.mp3";
+import notificationMp3new from "../sounds/dragon.mp3";
+import notificationMp3read from "../sounds/read.mp3";
 
 const ProtectedRoute = ({ children }) => {
   const { user, userLoading } = useSelector((state) => state.auth);
@@ -143,14 +144,22 @@ const AppRoutes = () => {
 
 const App = () => {
   const { user, userLoading } = useSelector((state) => state.auth);
-  const notificationSound = new Audio(notificationMp3);
-  const notificationSoundRef = useRef(null);
+  const newSoundRef = useRef(null);
+  const readSoundRef = useRef(null);
   const hasJoined = useRef(false);
   const dispatch = useDispatch();
 
+  const playSound = (soundRef) => {
+    if (!soundRef.current) return;
+
+    soundRef.current.currentTime = 0;
+    soundRef.current.play().catch(() => { });
+  };
+
 
   useEffect(() => {
-    notificationSoundRef.current = new Audio(notificationMp3);
+    newSoundRef.current = new Audio(notificationMp3new);
+    readSoundRef.current = new Audio(notificationMp3read);
   }, []);
 
 
@@ -182,13 +191,9 @@ const App = () => {
 
 
   useEffect(() => {
-
     const handleNotification = (data) => {
       dispatch(addNotification(data));
-      if (notificationSoundRef.current) {
-        notificationSoundRef.current.currentTime = 0;
-        notificationSoundRef.current.play().catch(() => { });
-      }
+      playSound(newSoundRef);
     };
 
     socket.on("notification", handleNotification);
@@ -198,6 +203,16 @@ const App = () => {
     };
 
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleNotificationRead = () => {
+      playSound(readSoundRef);
+    };
+    socket.on("notification_read", handleNotificationRead);
+    return () => {
+      socket.off("notification_read", handleNotificationRead);
+    };
+  }, []);
 
   useEffect(() => {
     if (user?._id) {

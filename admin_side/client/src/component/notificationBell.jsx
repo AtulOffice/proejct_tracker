@@ -1,7 +1,34 @@
 import React from "react";
 import { Bell, X, Check, AlertCircle, Info } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { fetchNotifications } from "../apiCall/notefication.Api";
+import apiClient from "../api/axiosClient";
 
 const NotificationBell = ({ setOpenNotification, notificationlist }) => {
+    const dispatch = useDispatch();
+    const handleMarkAsRead = async (notificationId) => {
+        try {
+            await apiClient.patch(
+                `/notifications/read/${notificationId}`
+            );
+            dispatch(fetchNotifications());
+        } catch (error) {
+            console.error("Error marking notification as read", error);
+        }
+    };
+
+    const handleMarkAsReadAll = async () => {
+        try {
+            await apiClient.patch(
+                `/notifications/read-all`
+            );
+            dispatch(fetchNotifications());
+        } catch (error) {
+            console.error("Error marking notification as read", error);
+        }
+    };
+
+
     const getNotificationIcon = (type) => {
         switch (type) {
             case 'success':
@@ -80,12 +107,25 @@ const NotificationBell = ({ setOpenNotification, notificationlist }) => {
                                         </div>
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className="flex items-start justify-between gap-2 mb-1">
-                                            <h4 className="font-semibold text-sm text-gray-800 truncate">
-                                                {n.title}
-                                            </h4>
+                                        <div className="flex items-start justify-between gap-3 mb-2">
+                                            <div className="flex items-center gap-2 min-w-0">
+                                                {!n.isRead && (
+                                                    <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.7)] mt-0.5" />
+                                                )}
+                                                <h4
+                                                    className={`text-sm font-semibold truncate transition-colors duration-200 ${n.isRead ? "text-gray-400" : "text-gray-900"
+                                                        }`}
+                                                >
+                                                    {n.title}
+                                                </h4>
+                                            </div>
                                             {!n.isRead && (
-                                                <span className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-1.5" />
+                                                <button
+                                                    onClick={() => handleMarkAsRead(n._id)}
+                                                    className="flex-shrink-0 text-[11px] font-medium text-blue-500 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 px-2 py-0.5 rounded-full transition-all duration-150 leading-5"
+                                                >
+                                                    Mark read
+                                                </button>
                                             )}
                                         </div>
 
@@ -106,14 +146,14 @@ const NotificationBell = ({ setOpenNotification, notificationlist }) => {
                 )}
             </div>
             {notificationlist.length > 0 && (
-                <div className="p-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
-                    <button className="w-full text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-200">
+                <div onClick={() => false ? handleMarkAsReadAll() : null} className="p-3 border-t border-gray-100 bg-gray-50 rounded-b-2xl">
+                    <button className="w-full text-sm font-medium cursor-pointer text-blue-600 hover:text-blue-700 transition-colors duration-200">
                         Mark all as read
                     </button>
                 </div>
             )}
 
-            <style jsx>{`
+            {/* <style jsx>{`
                 .custom-scrollbar::-webkit-scrollbar {
                     width: 6px;
                 }
@@ -143,7 +183,7 @@ const NotificationBell = ({ setOpenNotification, notificationlist }) => {
                 .animate-in {
                     animation: slide-in-from-top-2 0.2s ease-out;
                 }
-            `}</style>
+            `}</style> */}
         </div>
     );
 };
