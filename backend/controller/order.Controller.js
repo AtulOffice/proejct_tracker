@@ -43,6 +43,7 @@ export const isOrderExist = async (req, res) => {
 export const createOrder = async (req, res) => {
   try {
     const data = req.body;
+    const userId = req?.user?._id
     if (!data.entityType || !data.soType || !data.jobNumber || !data.client) {
       return res.status(400).json({
         success: false,
@@ -106,9 +107,6 @@ export const createOrder = async (req, res) => {
 
     const order = await Order.create(data);
 
-
-
-
     const project = await ProjectModel.create({
       OrderMongoId: order._id,
       entityType: order.entityType,
@@ -138,6 +136,14 @@ export const createOrder = async (req, res) => {
       },
       { new: true }
     );
+
+    await sendNotification({
+      type: "order_created",
+      title: "New Order Created",
+      message: `Order ${order.jobNumber} was created`,
+      targetRole: "admin",
+      createdBy: userId
+    });
 
     return res.status(201).json({
       success: true,
