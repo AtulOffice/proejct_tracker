@@ -172,8 +172,8 @@ const OrderSchema = new mongoose.Schema(
     mileStone: { type: String, trim: true },
     invoicemileStoneOther: { type: String, trim: true },
 
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     isCancelled: {
       type: Boolean,
       default: false,

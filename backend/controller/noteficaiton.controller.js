@@ -54,7 +54,7 @@ export const getGlobalNotifications = async (req, res) => {
                     { targetRole: role }
                 ],
                 "readBy.userId": { $ne: userId }
-            })
+            }).populate("createdBy", "_id username email")
             .sort({ createdAt: -1 });
 
         res.status(200).json({

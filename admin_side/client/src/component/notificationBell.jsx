@@ -1,5 +1,5 @@
 import React from "react";
-import { Bell, X, Check, AlertCircle, Info } from "lucide-react";
+import { Bell, X, Check, AlertCircle, Info, User } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { fetchNotifications } from "../apiCall/notefication.Api";
 import apiClient from "../api/axiosClient";
@@ -91,7 +91,7 @@ const NotificationBell = ({ setOpenNotification, notificationlist }) => {
                         {notificationlist.map((n, index) => (
                             <div
                                 key={n._id}
-                                className="p-4 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 cursor-pointer group relative overflow-hidden"
+                                className="p-4 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 group relative overflow-hidden"
                                 style={{
                                     animationDelay: `${index * 50}ms`
                                 }}
@@ -122,7 +122,7 @@ const NotificationBell = ({ setOpenNotification, notificationlist }) => {
                                             {!n.isRead && (
                                                 <button
                                                     onClick={() => handleMarkAsRead(n._id)}
-                                                    className="flex-shrink-0 text-[11px] font-medium text-blue-500 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 px-2 py-0.5 rounded-full transition-all duration-150 leading-5"
+                                                    className="flex-shrink-0 text-[11px] font-medium cursor-pointer text-blue-500 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 px-2 py-0.5 rounded-full transition-all duration-150 leading-5"
                                                 >
                                                     Mark read
                                                 </button>
@@ -132,11 +132,21 @@ const NotificationBell = ({ setOpenNotification, notificationlist }) => {
                                         <p className="text-sm text-gray-600 line-clamp-2 mb-2">
                                             {n.message}
                                         </p>
+                                        <div className="flex items-center justify-between px-1 py-0.5">
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-50 ring-1 ring-indigo-100">
+                                                    <User size={10} className="text-indigo-400" />
+                                                </div>
+                                                <span className="text-xs font-medium text-gray-600 tracking-tight">
+                                                    {n.createdBy?.username}
+                                                </span>
+                                            </div>
 
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs text-gray-400 font-medium">
-                                                {getTimeAgo(n.createdAt)}
-                                            </span>
+                                            <div className="flex items-center gap-1">
+                                                <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-500 leading-none">
+                                                    {getTimeAgo(n.createdAt)}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

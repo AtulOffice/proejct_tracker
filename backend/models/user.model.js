@@ -34,7 +34,7 @@ const Userschema = new mongoose.Schema(
 
     activeDesignation: {
       type: String,
-      enum: ["marketing", "commercial", "coordinator", "development","commissioning"],
+      enum: ["marketing", "commercial", "coordinator", "development", "commissioning"],
       default: null,
     },
     email: {

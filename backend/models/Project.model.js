@@ -17,14 +17,14 @@ const documentFormetSecond = {
 const documentFormetThird = {
   value: { type: String, enum: ENUMVAL, default: "" },
   date: { type: Date, default: null },
-  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
 };
 
 const documentFormetFourth = {
   value: { type: String, enum: ENUMVAL, default: "" },
   date: { type: Date, default: null },
   inputVal: { type: String, default: "" },
-  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
   remarks: { type: String, default: "" },
 };
 
@@ -204,7 +204,7 @@ const projectSchema = new mongoose.Schema(
         name: { type: String, default: "" },
         value: { type: String, enum: ENUMVAL, default: "" },
         date: { type: Date, default: null },
-        submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
       },
     },
     dispatchDocuments: [
@@ -231,7 +231,7 @@ const projectSchema = new mongoose.Schema(
         value: { type: String, enum: ENUMVAL, default: "" },
         date: { type: Date, default: null },
         inputVal: { type: String, default: "" },
-        submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
         remarks: { type: String, default: "" },
       },
     },

@@ -6,6 +6,7 @@ import { sendMail } from "../utils/mailer.js";
 import { newOrderCreatedHtml } from "../utils/order.html.js";
 import MarketingMemberRecord from "../models/marketing.team.model.js";
 import { sendNotification } from "../utils/notification.js";
+import { read } from "fs";
 
 
 
@@ -262,6 +263,7 @@ export const getAllOrdersnew = async (req, res) => {
 export const updateOrder = async (req, res) => {
   try {
     const { _id, ...data } = req.body;
+    const userId = req?.user?._id
     if (!_id) {
       return res.status(400).json({
         success: false,
@@ -269,8 +271,20 @@ export const updateOrder = async (req, res) => {
       });
     }
 
-    const totalPercent =
-      Number(data.paymentPercent1 || 0) + Number(data.paymentPercent2 || 0);
+    const existingOrder = await Order.findById(_id);
+
+    if (!existingOrder) {
+      return res.status(404).json({ success: false, message: "Order not found", });
+    }
+
+    const payment1 =
+      data.paymentPercent1 ?? existingOrder.paymentPercent1 ?? 0;
+
+    const payment2 =
+      data.paymentPercent2 ?? existingOrder.paymentPercent2 ?? 0;
+
+    const totalPercent = Number(payment1) + Number(payment2);
+
     if (totalPercent > 100) {
       return res.status(400).json({
         success: false,
@@ -278,7 +292,8 @@ export const updateOrder = async (req, res) => {
       });
     }
 
-    const { bookingDate, orderDate, deleveryDate } = data;
+
+    // const { bookingDate, orderDate, deleveryDate } = data;
     // if (
     //   bookingDate &&
     //   orderDate &&
@@ -321,7 +336,8 @@ export const updateOrder = async (req, res) => {
       type: "order_update",
       title: "Order Updated",
       message: `Order ${order.jobNumber} was updated`,
-      targetRole: "admin"
+      targetRole: "admin",
+      createdBy: userId
     });
 
     return res.status(200).json({

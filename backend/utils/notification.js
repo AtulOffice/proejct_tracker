@@ -6,16 +6,23 @@ export const sendNotification = async ({
     title,
     message,
     targetRole,
-    recipientId
+    recipientId,
+    createdBy
 }) => {
 
-    const notification = await Notification.create({
+    let notification = await Notification.create({
         type,
         title,
         message,
         targetRole,
-        recipients: recipientId ? [recipientId] : []
+        recipients: recipientId ? [recipientId] : [],
+        createdBy
     });
+
+    notification = await notification.populate(
+        "createdBy",
+        "username email"
+    );
 
     const io = getIO();
     if (recipientId) {
