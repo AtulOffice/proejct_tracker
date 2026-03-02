@@ -8,6 +8,8 @@ import EndChecklistsModel from "../models/endCheckList.js";
 import Order from "../models/orderSheet.model.js";
 import PlanningModel from "../models/dev.Planning.model.js";
 import EngineerProgressReport from "../models/devProgressReport.models.js"
+import { sendMail } from "../utils/mailer.js";
+import { engineerAssignedHtml } from "../utils/projectAssigned.html.js";
 
 export const RecordsformaveNew = async (req, res) => {
   try {
@@ -576,6 +578,23 @@ export const updateRecords = async (req, res) => {
         }
 
         updatedCount++;
+
+        try {
+          await sendMail({
+            to: engineer.email,
+            subject: "Project Assigned",
+            html: engineerAssignedHtml({
+              engineerName: engineer.name,
+              assignedAt: eng.assignedAt,
+              durationDays: eng.durationDays,
+              endTime: eng.endTime,
+              projectName: project.projectName,
+              jobNumber: project.jobNumber,
+            }),
+          });
+        } catch (mailError) {
+          console.error("Mail sending failed:", mailError.message);
+        }
       } catch (err) {
         console.error(
           `Error updating engineer ${eng.engineerId}:`,
