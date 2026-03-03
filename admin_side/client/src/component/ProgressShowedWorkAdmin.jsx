@@ -117,12 +117,12 @@ const ProgressShowedWorkAdmin = ({ progressData, onClose }) => {
                                                             inline-flex items-center justify-center
                                                             px-3 py-1.5 rounded-md text-xs font-semibold
                                                             transition-all duration-200 cursor-pointer
-                                                            ${row.progressPercent >= 75
-                                                                    ? 'bg-gray-900 text-white hover:bg-gray-800'
+                                                          ${row.progressPercent >= 75
+                                                                    ? 'bg-green-600 text-white! hover:bg-green-700'
                                                                     : row.progressPercent >= 50
-                                                                        ? 'bg-gray-700 text-white hover:bg-gray-600'
+                                                                        ? 'bg-blue-600 text-white! hover:bg-blue-700'
                                                                         : row.progressPercent >= 25
-                                                                            ? 'bg-gray-500 text-white hover:bg-gray-400'
+                                                                            ? 'bg-yellow-500 text-white! hover:bg-yellow-600'
                                                                             : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
                                                                 }
                                                         `}
