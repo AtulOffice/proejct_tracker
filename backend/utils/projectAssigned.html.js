@@ -149,7 +149,7 @@ export const engineerAssignedHtml = (details = {}) => {
 
   <div class="footer">
     <p>This is an automated notification. Please do not reply.</p>
-    <p>© ${new Date().getFullYear()} Your Company Name</p>
+    <p>© ${new Date().getFullYear()} SI ENERGY VENTURES PVT. LTD.</p>
   </div>
 
 </div>

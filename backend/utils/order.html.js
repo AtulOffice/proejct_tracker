@@ -186,7 +186,7 @@ export const newOrderCreatedHtml = (orderDetails = {}) => {
 
     <div class="footer">
       <p>This is an automated notification. Please do not reply to this email.</p>
-      <p>© ${new Date().getFullYear()} Your Company Name</p>
+      <p>© ${new Date().getFullYear()} SI ENERGY VENTURES PVT. LTD.</p>
     </div>
 
   </div>
