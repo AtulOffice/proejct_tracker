@@ -13,7 +13,7 @@ const resetOtpSchema = new mongoose.Schema(
 const engineerSchema = new mongoose.Schema(
   {
     name: { type: String, trim: true, required: true },
-    email: { type: String, required: true, unique: true, trim: true },
+    email: { type: String, required: true, lowercase: true, unique: true, trim: true },
     phone: { type: String, trim: true, default: "" },
     empId: { type: String, trim: true, unique: true },
     password: { type: String, select: false },

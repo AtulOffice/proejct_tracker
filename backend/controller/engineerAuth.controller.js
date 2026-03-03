@@ -17,7 +17,7 @@ export const loginEngineer = async (req, res) => {
       });
     }
 
-    const engineer = await EngineerReocord.findOne({ email }).select(
+    const engineer = await EngineerReocord.findOne({ email: email.toLowerCase() }).select(
       "+password +refreshTokens"
     );
 
