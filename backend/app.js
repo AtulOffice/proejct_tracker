@@ -6,7 +6,7 @@ import { userRouter } from "./routes/user.route.js";
 import cors from "cors";
 import { WorkstsRouter } from "./routes/WorkStatus.route.js";
 import rateLimit from "express-rate-limit";
-import { engineerStatus } from "./cronJobs.js";
+import { engineerStatus } from "./crons/cronJobs.js";
 import { ProjectDevRouter } from "./routes/projectDev.route.js";
 import cookieParser from "cookie-parser";
 import { EngineerRouter } from "./routes/engineer.route.js";
@@ -23,6 +23,7 @@ import { connectRedis } from "./utils/redis.js";
 import http from "http"
 import { initSocket } from "./socket/socket.js";
 import { NoteficationRouter } from "./routes/notification.route.js";
+import { startPhaseReminderCron } from "./crons/MailReminderCorns.js";
 dotenv.config();
 
 const port = process.env.PORT || 9000;
@@ -111,6 +112,7 @@ app.use((req, res) => {
 
 server.listen(port, async () => {
   await ConnDB({ str: process.env.DBSTR });
+  await startPhaseReminderCron()
   await connectRedis();
   console.log(`server is linsten on port ${port}`);
 });

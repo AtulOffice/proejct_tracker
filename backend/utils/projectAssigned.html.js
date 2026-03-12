@@ -1,27 +1,27 @@
 export const engineerAssignedHtml = (details = {}) => {
-    const {
-        engineerName,
-        assignedAt,
-        durationDays,
-        endTime,
-        projectName,
-        jobNumber,
-    } = details;
+  const {
+    engineerName,
+    assignedAt,
+    durationDays,
+    endTime,
+    projectName,
+    jobNumber,
+  } = details;
 
-    const formatDate = (date) =>
-        date ? new Date(date).toLocaleDateString("en-IN") : null;
+  const formatDate = (date) =>
+    date ? new Date(date).toLocaleDateString("en-IN") : null;
 
-    const row = (label, value, isHtml = false) => {
-        if (!value) return "";
-        return `
+  const row = (label, value, isHtml = false) => {
+    if (!value) return "";
+    return `
       <div class="detail-row">
         <div class="detail-label">${label}</div>
         <div class="detail-value">${isHtml ? value : String(value)}</div>
       </div>
     `;
-    };
+  };
 
-    return `
+  return `
 <!DOCTYPE html>
 <html>
 <head>

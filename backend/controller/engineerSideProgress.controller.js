@@ -77,14 +77,17 @@ export const createProgressReport = async (req, res) => {
                 { _id: req.user._id },
                 {
                     $set: {
-                        "developmentProjectList.documents.$[].phases.$[phase].CompletionPercentage":
-                            completion,
-                        "developmentProjectList.logic.$[].phases.$[phase].CompletionPercentage":
-                            completion,
-                        "developmentProjectList.scada.$[].phases.$[phase].CompletionPercentage":
-                            completion,
-                        "developmentProjectList.testing.$[].phases.$[phase].CompletionPercentage":
-                            completion,
+                        "developmentProjectList.documents.$[].phases.$[phase].CompletionPercentage": completion,
+                        "developmentProjectList.documents.$[].phases.$[phase].lastProgressUpdate": new Date(),
+
+                        "developmentProjectList.logic.$[].phases.$[phase].CompletionPercentage": completion,
+                        "developmentProjectList.logic.$[].phases.$[phase].lastProgressUpdate": new Date(),
+
+                        "developmentProjectList.scada.$[].phases.$[phase].CompletionPercentage": completion,
+                        "developmentProjectList.scada.$[].phases.$[phase].lastProgressUpdate": new Date(),
+
+                        "developmentProjectList.testing.$[].phases.$[phase].CompletionPercentage": completion,
+                        "developmentProjectList.testing.$[].phases.$[phase].lastProgressUpdate": new Date(),
                     },
                 },
                 {

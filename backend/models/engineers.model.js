@@ -81,6 +81,7 @@ const engineerSchema = new mongoose.Schema(
                 max: 100,
                 default: 0,
               },
+              lastProgressUpdate: { type: Date, default: Date.now },
               engineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
@@ -107,6 +108,7 @@ const engineerSchema = new mongoose.Schema(
                 max: 100,
                 default: 0,
               },
+              lastProgressUpdate: { type: Date, default: Date.now },
               sectionStartDate: Date,
               sectionEndDate: Date,
               startDate: Date,
@@ -141,6 +143,7 @@ const engineerSchema = new mongoose.Schema(
                 max: 100,
                 default: 0,
               },
+              lastProgressUpdate: { type: Date, default: Date.now },
               engineers: [
                 { type: mongoose.Schema.Types.ObjectId, ref: "EngineerRecord" },
               ],
@@ -169,6 +172,7 @@ const engineerSchema = new mongoose.Schema(
                 max: 100,
                 default: 0,
               },
+              lastProgressUpdate: { type: Date, default: Date.now },
               startDate: Date,
               endDate: Date,
               engineers: [
@@ -194,6 +198,23 @@ const engineerSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// engineerSchema.pre("save", function (next) {
+
+//   this.developmentProjectList.logic.forEach(project => {
+
+//     project.phases.forEach(phase => {
+
+//       if (phase.isModified("CompletionPercentage")) {
+//         phase.lastProgressUpdate = new Date();
+//       }
+
+//     });
+
+//   });
+
+//   next();
+// });
 
 dateToJSONTransformer(engineerSchema);
 const EngineerReocord = mongoose.model("EngineerRecord", engineerSchema);

@@ -1,6 +1,6 @@
 import cron from "node-cron";
-import workStatusModel from "./models/WorkStatus.model.js";
-import { updateEngineerAssignmentStatusCrons } from "./controller/engineer.controller.js";
+import workStatusModel from "../models/WorkStatus.model.js";
+import { updateEngineerAssignmentStatusCrons } from "../controller/engineer.controller.js";
 
 export const setupCronJobs = () => {
   cron.schedule("0 0 * * *", async () => {
